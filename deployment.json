@@ -1,15 +1,15 @@
 {
-  "source_commit": "bb9a149",
+  "source_commit": "cf93356",
+  "architecture": "MobileNetV3-Large",
+  "model_sha256": "9f330bb88adffa64460c4e84faf808529a1a1fdc667977766f648cb28b51fa63",
   "languages": [
     "en",
     "kn",
     "hi"
   ],
-  "model_sha256": "4a0c82796188dce8c81d3840ec2817ee27cf29e9c148eeeefeb90662aa888b03",
   "source_acceptance_qualified": true,
   "diagnosis_validated": false,
-  "app": "Offline Crop Health",
-  "version": "0.3.0-trained-review2",
-  "prototype_low_confidence_predictions": true,
-  "explicit_crop_mismatch_predictions": true
+  "version": "0.4.0-field-prototype",
+  "field_benchmark_accuracy": 0.3875,
+  "field_benchmark_reused": true
 }

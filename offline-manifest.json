@@ -1,5 +1,5 @@
 {
-  "version": "a8284e8fe4951fb0",
+  "version": "14dd5e1e6836c7cd",
   "files": [
     "assets/audio/en/maize_common_rust.ogg",
     "assets/audio/en/maize_gray_leaf_spot.ogg",
@@ -94,7 +94,7 @@
     "assets/content/audio_manifest.json",
     "assets/content/catalog.json",
     "assets/content/hindi_ui.json",
-    "assets/index-ZICuSFAY.js",
+    "assets/index-D0oXNk2e.js",
     "assets/index-qfGVXGjL.css",
     "assets/model/MODEL_CARD.md",
     "assets/model/crop_model.onnx",

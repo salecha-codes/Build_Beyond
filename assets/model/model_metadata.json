@@ -1,11 +1,10 @@
 {
   "schema_version": 1,
-  "model_version": "mnv4-conv-small-supervised_from_scratch_mixed_domain_continuation-4a0c82796188",
-  "architecture": "MobileNetV4-Conv-Small",
-  "timm_model": "mobilenetv4_conv_small.e2400_r224_in1k",
+  "model_version": "mnv3-large-imagenet-v2-field-head-9f330bb88adf",
+  "architecture": "MobileNetV3-Large",
   "model_file": "crop_model.onnx",
-  "model_sha256": "4a0c82796188dce8c81d3840ec2817ee27cf29e9c148eeeefeb90662aa888b03",
-  "model_size_bytes": 10032309,
+  "model_sha256": "9f330bb88adffa64460c4e84faf808529a1a1fdc667977766f648cb28b51fa63",
+  "model_size_bytes": 11950683,
   "class_count": 17,
   "embedding_dimension": 960,
   "input": {
@@ -67,10 +66,13 @@
   "training_status": "trained_prototype",
   "diagnosis_validated": false,
   "test_scope": "Full original source-domain test with frozen CAL gates; no field diagnosis or phone-performance validation.",
+  "torchvision_model": "mobilenet_v3_large",
+  "pretrained_weights": "IMAGENET1K_V2",
+  "pretrained_weights_sha256": "5c1a416349c4cf298f2a6a5e2600ed0ee55e604713578f5e74e6bc8bcaef7997",
   "source_evaluated": true,
   "source_thresholds_calibrated": true,
   "source_acceptance_qualified": true,
   "source_acceptance_enabled": true,
   "source_evaluation_file": "source_evaluation.json",
-  "source_evaluation_sha256": "6d075f9796dfb819843a428df22d68a4114734acafa0e81cb13ff328e3a495b1"
+  "source_evaluation_sha256": "4d4d846663b02920479acee9150f61c3492168441ebb388bc9fa217e9abd42ed"
 }
