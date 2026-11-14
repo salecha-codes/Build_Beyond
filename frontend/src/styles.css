@@ -1133,6 +1133,26 @@ html[lang="hi"] .heading-copy h1,html[lang="hi"] .question-title{letter-spacing:
 .advisory-reasons summary{cursor:pointer;font-weight:600}.advisory-reasons li{margin:9px 0;line-height:1.5}
 .advisory-panel .guidance-card p{line-height:1.6;font-size:14px}.advisory-panel a{color:#56349b;overflow-wrap:anywhere}
 
+/* Detailed offline treatment information keeps one readable column on phones. */
+.treatment-plan { display:flex; flex-direction:column; gap:14px; margin:16px 0; }
+.treatment-plan .heading-copy { margin:0; }
+.treatment-plan h2 { font-size:22px; line-height:1.25; }
+.treatment-plan h3 { font-size:16px; line-height:1.4; }
+.treatment-plan ol,.treatment-plan ul { padding-left:21px; }
+.treatment-plan li { margin:8px 0; line-height:1.55; }
+.treatment-plan p { line-height:1.55; overflow-wrap:anywhere; }
+.treatment-option h3 { display:flex; align-items:flex-start; gap:9px; }
+.treatment-number { flex:none; width:24px; height:24px; display:inline-grid; place-items:center; background:#e8def5; color:#4e2c99; border-radius:50%; font-size:13px; }
+.follow-up-list p { margin:5px 0; }
+.care-search { box-sizing:border-box; width:100%; padding:13px 15px; border:1px solid #d8cce8; border-radius:13px; background:#fff; color:#2c174a; font:inherit; }
+.care-library-entry { width:100%; margin-top:14px; }
+.care-library-list { display:flex; flex-direction:column; gap:10px; }
+.care-library-card { width:100%; padding:13px; display:flex; gap:12px; align-items:center; text-align:left; border:1px solid #e5dcef; background:#f7f3fb; border-radius:15px; }
+.care-library-card>span:nth-child(2) { flex:1; min-width:0; }
+.care-library-card strong,.care-library-card small { display:block; }
+.care-library-card strong { font-size:14px; line-height:1.4; font-weight:600; }
+.care-library-card small { font-size:12px; margin-top:4px; color:#84778f; }
+.manual-care-notice { border-left:3px solid #a57929; background:#fff8e8; padding:13px; border-radius:10px; font-size:13px; line-height:1.5; }
 /* Welcome / Onboarding Screen */
 .welcome-page {
   display: flex;

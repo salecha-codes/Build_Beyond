@@ -6,7 +6,7 @@ Android application and interactive browser preview for **PS 4.1**, built for Te
 
 **Team Debuggers · Team 8 · Problem Statement 4.1**
 
-Current prototype: **v0.5.0**, with an offline MobileNetV3-Large disease model, a leaf/object check and a separate offline care-and-urgency decision model. It supports tomato, potato and maize, English/Kannada/Hindi audio, six observation questions, condition-specific care plans and local history.
+Current prototype: **v0.6.0**, with an offline MobileNetV3-Large disease model, a leaf/object check and separate care/urgency and treatment/recovery models. It supports tomato, potato and maize, English/Kannada/Hindi audio, six observation questions, detailed condition-specific protocols and local history.
 
 [Open the browser demo](https://salecha-codes.github.io/Build_Beyond/) · [Review 2 implementation and checks](docs/REVIEW2_SUBMISSION.md)
 
@@ -61,7 +61,9 @@ The first browser visit downloads the model, WASM runtime, content and audio. Wa
 - Photo-quality checks, real ranked scores, and explicit uncertain results.
 - Six questions about visible damage, spread, affected plants, wilting, fruit/stem symptoms and wet weather. The separate advisory model produces reported damage and action urgency, including unknown, mild, moderate, severe, routine monitoring, advice within 48 hours, same-day advice and urgent help.
 - A conditional care profile for every dataset category: what to do now, management, prevention, escalation and whether a cure is possible. Viral profiles explain the lack of a curative treatment; spider mites are treated as pests rather than fungal disease.
-- English, Kannada and Hindi interface and care, with 165 bundled neural narration clips: AI4Bharat Indic-TTS for Kannada and Piper for English/Hindi. Playback requires no speech API, installed language pack or phone TTS model. The selected language is remembered locally.
+- A searchable offline Care library for all 17 categories without requiring a successful diagnosis. Manual selections are labeled and never relabel a saved photo.
+- Detailed treatment options with numbered steps, use cases, limitations, mistakes to avoid, improvement/failure signs and follow-up checkpoints. Actual action plans differ for mild, moderate and severe reports; unknown severity does not default to mild.
+- English, Kannada and Hindi interface and care, with 228 bundled neural narration clips: AI4Bharat Indic-TTS for Kannada and Piper for English/Hindi. Playback requires no speech API, installed language pack or phone TTS model. The selected language is remembered locally.
 - Room-backed Android history and IndexedDB-backed browser history, with crop filters and targeted deletion.
 - Offline help and model status. The installed Android app requests camera permission and has **no Internet permission**; the browser downloads assets on its first visit.
 
@@ -74,6 +76,29 @@ The [offline advisory model](models/advisory/README.md) is a transparent expert 
 Damage and urgency are different: a few spots on suspected potato late blight can warrant same-day advice; a healthy-looking photo accompanied by reported wilting prompts urgent help rather than reassurance. Disease-model confidence never becomes a severity measurement. Unanswered questions remain unknown, and a mouse/object photo cannot receive a disease-specific care plan.
 
 This model is **authored, not trained on PlantVillage severity labels**: those labels are absent from our dataset. Its rules, care text, translations and urgency intervals are prototypes requiring agronomist and language review. Source-reference access limitations are recorded honestly. It does not improve the image classifier's field accuracy, guarantee cures or generate pesticide doses. See the [advisory model card](docs/ADVISORY_MODEL_CARD.md) and [research notes](docs/ADVISORY_RESEARCH.md).
+
+### Treatment and recovery expansion
+
+Version 2 adds [treatment protocols](models/advisory/TREATMENT_MODEL.md) for all
+17 conditions in all three languages. The earlier advisory changed the urgency
+badge while its care arrays stayed static; now the selected severity changes
+the action pathway too. Each option explains when it applies, the steps, its
+limits and its references. Recovery checks focus on new growth, new lesions,
+spread and the affected crop parts rather than promising dead tissue will heal.
+
+Use **Care library** from Home to read a protocol without scanning. Manual
+questionnaire answers remain separate from actual scan answers and classifier
+results. The ordinary scan care screen displays the same complete protocol.
+Both screens show loading failures and offer retry rather than silently
+displaying an empty plan. Completed known answers are prefilled when edited.
+
+The new canonical artifact is `content/care_protocols.json`; package it with
+`python3 tools/build_care_protocols.py`. Treatment speech has its own provenance
+manifest. The original 165 recordings retain their original hashes.
+[Source and dataset research](docs/CARE_V2_RESEARCH.md) records what was actually
+retrieved, including the limited secondary Spanish IPM data inspected for potato.
+No verified treatment-outcome dataset for all three crops was found, and no
+treatment efficacy or registered pesticide dose is inferred from the image dataset.
 
 ## Dataset used — 17 categories
 

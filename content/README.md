@@ -33,6 +33,29 @@ are separate; a fixed disease summary never invents a severity measurement.
 Only audio files ship, not the speech-model weights. See the generator's `--help`
 for staging and installation commands.
 
+## Detailed treatment and recovery protocols
+
+`care_protocols.json` adds all 17 conditions in all three languages with distinct
+severity action paths, treatment use cases and ordered steps, identification
+checks, look-alikes, recovery/failure signs and follow-up checkpoints. It is
+separate from the original advisory artifact so its older recordings keep their
+original source hashes. Run `python3 tools/build_care_protocols.py` after editing
+protocols or their runtime selectors; stale source/package pairs fail web asset sync.
+
+`generate_treatment_voice.py` adds 63 independent clips: 17 condition-specific
+treatment overviews and four severity-stage summaries per language. The app
+therefore packages 228 clips across the three manifests. Summaries explain the
+main care and recovery steps; their labels do not claim to read every bullet.
+The new manifest records both canonical summary hashes and actual spoken text,
+including Kannada number normalization. Speech character validation, full
+decoding and peak checks address dropped timing numerals and codec clipping.
+These technical checks do not validate native pronunciation or treatment efficacy.
+
+The care library is educational and explicitly selected by the user. It cannot
+relabel an image prediction. [Source research](../docs/CARE_V2_RESEARCH.md) records
+the limited retrieved secondary IPM data and blocked primary references. No
+registered medicine dose or treatment-outcome accuracy is fabricated.
+
 ## Regenerate
 
 The already-bundled assets do not need regeneration to build or run the app. Speech generation is an optional development task, separate from normal Android/web builds. Use separate Python environments for the providers, with FFmpeg on PATH.

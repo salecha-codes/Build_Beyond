@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "version": "care-protocols-v2",
+  "protocol_sha256": "a78b8b8bedb6836b1aa033c32089e846de3be20d583791075de515fc2d0e477a",
+  "protocol_count": 17,
+  "languages": [
+    "en",
+    "kn",
+    "hi"
+  ],
+  "agronomist_reviewed": false,
+  "field_validated": false,
+  "trained": false,
+  "model_type": "conditional_treatment_knowledge_and_stage_selection",
+  "implementation_sha256": {
+    "frontend/src/lib/careProtocols.ts": "2e4ce38defa6b1aa19c8035fe5f4527984e1213e108d33948b046ca62d943cc7",
+    "android/app/src/main/java/com/debuggers/crophealth/domain/CarePlanSelection.kt": "41bf23b3acabaae2f33bbfbd4f31e4d8c01b9a3facc9df338dfeee48809f3390"
+  },
+  "scope": "Engineering coverage/provenance, not treatment efficacy, crop registration or measured image severity."
+}

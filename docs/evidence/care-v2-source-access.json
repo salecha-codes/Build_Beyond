@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "checked_at_utc": "2026-11-14T16:31:13.363243+00:00",
+  "purpose": "source access/provenance audit, not model training or efficacy validation",
+  "third_party_ipm_commit": "f4a93ab472002bebb9168e2156fe28705822fb29",
+  "third_party_ipm_license": "GPL-3.0",
+  "sources": [
+    {
+      "id": "tnau-tomato",
+      "url": "https://agritech.tnau.ac.in/crop_protection/tomato_diseases.html",
+      "provenance": "primary_reference_lead",
+      "agronomist_reviewed": false,
+      "india_registration_verified": false,
+      "access_status": "not_retrieved",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "umn-early-blight",
+      "url": "https://extension.umn.edu/disease-management/early-blight-tomato-and-potato",
+      "provenance": "primary_reference_lead",
+      "agronomist_reviewed": false,
+      "india_registration_verified": false,
+      "access_status": "not_retrieved",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "ucipm-bacterial-spot",
+      "url": "https://ipm.ucanr.edu/agriculture/tomato/bacterial-spot/",
+      "provenance": "primary_reference_lead",
+      "agronomist_reviewed": false,
+      "india_registration_verified": false,
+      "access_status": "not_retrieved",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "plantvillage-readme",
+      "url": "https://raw.githubusercontent.com/spMohanty/PlantVillage-Dataset/master/README.md",
+      "provenance": "disease_taxonomy_only",
+      "agronomist_reviewed": false,
+      "india_registration_verified": false,
+      "http_status": 200,
+      "bytes": 3887,
+      "sha256": "2c5b7ead9a632ffa11df28177e6e52979825ab727eb23faf0b31636954ee2658",
+      "access_status": "retrieved_not_automatically_validated"
+    },
+    {
+      "id": "derived-ipm-README.md",
+      "url": "https://raw.githubusercontent.com/BioPabloCG/ipm_pest_identifier/f4a93ab472002bebb9168e2156fe28705822fb29/README.md",
+      "provenance": "third_party_transcription_not_primary_verified",
+      "agronomist_reviewed": false,
+      "india_registration_verified": false,
+      "http_status": 200,
+      "bytes": 13322,
+      "sha256": "aeac6cf10ffec38eccf662d6e9216122fa9405094be6e1e3a8b9736ae0feec99",
+      "access_status": "retrieved_not_automatically_validated"
+    },
+    {
+      "id": "derived-ipm-LICENSE",
+      "url": "https://raw.githubusercontent.com/BioPabloCG/ipm_pest_identifier/f4a93ab472002bebb9168e2156fe28705822fb29/LICENSE",
+      "provenance": "third_party_transcription_not_primary_verified",
+      "agronomist_reviewed": false,
+      "india_registration_verified": false,
+      "http_status": 200,
+      "bytes": 35149,
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "access_status": "retrieved_not_automatically_validated"
+    },
+    {
+      "id": "derived-ipm-species_data.csv",
+      "url": "https://raw.githubusercontent.com/BioPabloCG/ipm_pest_identifier/f4a93ab472002bebb9168e2156fe28705822fb29/Database/species_data.csv",
+      "provenance": "third_party_transcription_not_primary_verified",
+      "agronomist_reviewed": false,
+      "india_registration_verified": false,
+      "http_status": 200,
+      "bytes": 17498,
+      "sha256": "fbe1e23cb626bf12ec80c262f0e716031c8d57e0ac39ec5efbbdb87d65730227",
+      "access_status": "retrieved_not_automatically_validated",
+      "row_count": 269,
+      "potato_early_late_blight_row_ids": [
+        "109",
+        "111"
+      ]
+    },
+    {
+      "id": "derived-ipm-control_data.csv",
+      "url": "https://raw.githubusercontent.com/BioPabloCG/ipm_pest_identifier/f4a93ab472002bebb9168e2156fe28705822fb29/Database/control_data.csv",
+      "provenance": "third_party_transcription_not_primary_verified",
+      "agronomist_reviewed": false,
+      "india_registration_verified": false,
+      "http_status": 200,
+      "bytes": 136400,
+      "sha256": "6621291b3c5712bc04f9fc70f5c5b64eec50469f30689dcd83fae09fcc2fdd6d",
+      "access_status": "retrieved_not_automatically_validated",
+      "row_count": 269,
+      "potato_early_late_blight_row_ids": [
+        "109",
+        "111"
+      ]
+    },
+    {
+      "id": "derived-ipm-monitoring_data.csv",
+      "url": "https://raw.githubusercontent.com/BioPabloCG/ipm_pest_identifier/f4a93ab472002bebb9168e2156fe28705822fb29/Database/monitoring_data.csv",
+      "provenance": "third_party_transcription_not_primary_verified",
+      "agronomist_reviewed": false,
+      "india_registration_verified": false,
+      "http_status": 200,
+      "bytes": 189336,
+      "sha256": "d8fb26c3c246518e05ccfa9ed7bc625368afa97a87d3c0901efa8ad12897a6ee",
+      "access_status": "retrieved_not_automatically_validated",
+      "row_count": 269,
+      "potato_early_late_blight_row_ids": [
+        "109",
+        "111"
+      ]
+    }
+  ]
+}

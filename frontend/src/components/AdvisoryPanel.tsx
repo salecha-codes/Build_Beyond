@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { AlertCircle, ShieldCheck } from 'lucide-react';
 import { AudioPlayer } from './AudioPlayer';
 import { assetUrl } from '../lib/content';
@@ -5,8 +6,8 @@ import { advisoryReason, advisoryText } from '../lib/advisory';
 import type { AdvisoryModel, AdvisoryResult, AdvisoryTextKey } from '../lib/advisory';
 import type { Language } from '../lib/types';
 
-export function AdvisoryPanel({ result, language, model, onQuestions, detailed = false }:
-  { result: AdvisoryResult; language: Language; model: AdvisoryModel; onQuestions?: () => void; detailed?: boolean }) {
+export function AdvisoryPanel({ result, language, model, onQuestions, detailed = false, treatmentContent, showPriorityAudio = false }:
+  { result: AdvisoryResult; language: Language; model: AdvisoryModel; onQuestions?: () => void; detailed?: boolean; treatmentContent?: ReactNode; showPriorityAudio?: boolean }) {
   const a = (key: AdvisoryTextKey) => advisoryText(key, language);
   const copy = result.profile?.translations[language];
   const color = result.urgency === 'URGENT' ? 'urgent' : result.urgency === 'SAME_DAY' ? 'today' : result.urgency === 'SOON' ? 'soon' : 'monitor';
@@ -26,8 +27,9 @@ export function AdvisoryPanel({ result, language, model, onQuestions, detailed =
       <summary>{a('why')}</summary>
       <ul>{result.reasonCodes.map(code => <li key={code}>{advisoryReason(code, language)}</li>)}</ul>
     </details>
+    {(detailed || showPriorityAudio) && <AudioPlayer language={language} src={assetUrl(`audio/${language}/advisory_${result.urgency.toLowerCase()}.ogg`)} label={a('urgency')} compact />}
     {detailed && <>
-      <AudioPlayer language={language} src={assetUrl(`audio/${language}/advisory_${result.urgency.toLowerCase()}.ogg`)} label={a('urgency')} compact />
+      {treatmentContent}
       {copy ? <>
         <section className="guidance-card" data-testid="conditional-care">
           <h3>{a('conditional')}</h3><p>{copy.overview}</p>

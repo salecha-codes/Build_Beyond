@@ -9,6 +9,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.debuggers.crophealth.content.ContentCatalog
 import com.debuggers.crophealth.content.AdvisoryCatalog
+import com.debuggers.crophealth.content.CareProtocolCatalog
 import com.debuggers.crophealth.content.Prompt
 import com.debuggers.crophealth.data.*
 import com.debuggers.crophealth.domain.*
@@ -21,11 +22,12 @@ import java.util.UUID
 class CropHealthViewModel(application: Application) : AndroidViewModel(application) {
     private val catalog = runCatching { ContentCatalog(application) }.getOrNull()
     private val advisoryCatalog = runCatching { AdvisoryCatalog(application) }.getOrNull()
+    private var careCatalog = runCatching { CareProtocolCatalog(application) }.getOrNull()
     private val preferences = UserPreferences(application)
     private val history = ObservationStore(application)
     private val photos = PhotoStore(application)
     private val engine = LocalModelEngine(application)
-    private val mutableState = MutableStateFlow(AppUiState())
+    private val mutableState = MutableStateFlow(AppUiState(careCatalogAvailable = careCatalog != null))
     val state: StateFlow<AppUiState> = mutableState.asStateFlow()
     private var analysisJob: Job? = null
 
@@ -64,12 +66,29 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
                     mutableState.update { it.copy(processing = false) }
                 }
                 mutableState.update {
-                    if (action.screen == Screen.CONCERN && it.screen != Screen.CONCERN) {
-                        val symptoms = ReportedSymptoms()
-                        it.copy(screen = action.screen, error = null, symptoms = symptoms,
-                            concern = ConcernGuidance.summarize(symptoms), symptomsComplete = false)
-                    } else it.copy(screen = action.screen, error = null)
+                    it.copy(screen = action.screen, error = null,
+                        manualCare = it.manualCare.takeIf { action.screen in setOf(Screen.GUIDANCE, Screen.CONCERN) })
                 }
+                refreshCopy()
+            }
+            AppAction.OpenCareLibrary -> {
+                mutableState.update { it.copy(screen = Screen.CARE_LIBRARY, manualCare = null,
+                    careLibraryReturn = when {
+                        it.screen == Screen.RESULT -> Screen.RESULT
+                        it.manualCare != null || it.screen == Screen.CARE_LIBRARY -> it.careLibraryReturn
+                        else -> Screen.HOME
+                    }, error = null) }
+                refreshCopy()
+            }
+            is AppAction.SelectCareCondition -> {
+                if (Conditions.byId(action.conditionId) != null) {
+                    mutableState.update { it.selectManualCare(action.conditionId) }
+                    refreshCopy()
+                }
+            }
+            AppAction.ReloadCareProtocols -> {
+                careCatalog = runCatching { CareProtocolCatalog(getApplication()) }.getOrNull()
+                mutableState.update { it.copy(careCatalogAvailable = careCatalog != null) }
                 refreshCopy()
             }
             is AppAction.SelectCrop -> if (!state.value.processing) mutableState.update {
@@ -96,8 +115,12 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
                 mutableState.update { it.copy(openedObservation = null, savedObservationId = null, photoPath = null, assessment = null, guidance = null) }
             }
             is AppAction.ReportSymptoms -> {
-                mutableState.update { it.copy(symptoms = action.symptoms, concern = ConcernGuidance.summarize(action.symptoms),
-                    symptomsComplete = action.completed) }
+                if (state.value.manualCare != null) {
+                    mutableState.update { it.reportCareSymptoms(action.symptoms, action.completed) }
+                    refreshCopy()
+                    return
+                }
+                mutableState.update { it.reportCareSymptoms(action.symptoms, action.completed) }
                 if (action.completed) state.value.savedObservationId?.let { id -> viewModelScope.launch(Dispatchers.IO) {
                     history.updateSymptoms(id, action.symptoms)
                     mutableState.update { current -> current.copy(openedObservation = current.openedObservation?.copy(reportedSymptoms = action.symptoms)) }
@@ -202,14 +225,15 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
             val storedEligible = savedRecord != null && savedRecord.resultType in setOf("likely_condition", "healthy_looking", "uncertain") &&
                 !savedRecord.hidesUnsupportedCandidate() && (savedRecord.validated || savedRecord.isLeafCheckedCandidate() ||
                 (current.model.sourceEvaluated && savedRecord.modelVersion == current.model.version))
-            val advisoryId = if (current.assessment != null) liveId else savedRecord?.conditionId?.takeIf { storedEligible }
+            val advisoryId = current.manualCare?.conditionId ?: if (current.assessment != null) liveId else savedRecord?.conditionId?.takeIf { storedEligible }
             val profile = advisoryId?.let { advisoryCatalog?.profile(it, current.language) }
-            val rawAdvisory = AdvisoryDecisionModel.assess(profile?.risk, profile?.kind, current.symptoms.takeIf { current.symptomsComplete })
-            val blocked = current.assessment is AssessmentResult.Retake || current.assessment is AssessmentResult.ModelUnavailable ||
-                current.assessment is AssessmentResult.CropMismatch || savedRecord?.resultType in setOf("retake", "model_unavailable", "crop_mismatch")
+            val rawAdvisory = AdvisoryDecisionModel.assess(profile?.risk, profile?.kind, current.careSymptoms.takeIf { current.careSymptomsComplete })
+            val blocked = current.manualCare == null && (current.assessment is AssessmentResult.Retake || current.assessment is AssessmentResult.ModelUnavailable ||
+                current.assessment is AssessmentResult.CropMismatch || savedRecord?.resultType in setOf("retake", "model_unavailable", "crop_mismatch"))
             val advisory = if (blocked) rawAdvisory.copy(reasonCodes = rawAdvisory.reasonCodes.map { if (it == "confirm_cause") "blocked_prediction" else it }) else rawAdvisory
             current.copy(guidance = if (adviceAllowed) (condition?.id ?: saved)?.let { catalog?.guidance(it, current.language) } else null,
-                advisoryProfile = profile.takeUnless { advisory.healthyConflict }, advisory = advisory,
+                advisoryProfile = profile.takeUnless { advisory.healthyConflict && current.manualCare == null }, advisory = advisory,
+                careProtocol = advisoryId?.let { careCatalog?.protocol(it, current.language) },
                 prompt = catalog?.prompt(key, current.language))
         }
     }
