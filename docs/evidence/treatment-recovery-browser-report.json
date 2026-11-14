@@ -1,6 +1,6 @@
 {
   "audioChecksSkipped": false,
-  "startedAt": "2026-11-14T16:56:10.725Z",
+  "startedAt": "2026-11-14T17:00:50.755Z",
   "baseURL": "http://127.0.0.1:3000/",
   "scope": "Software behavior and artifact coverage, not agronomic validation",
   "checks": [
@@ -11,6 +11,10 @@
       "profileTranslations": 51,
       "differingPlans": 42,
       "automaticBlockedStates": 3
+    },
+    {
+      "name": "actual first-run welcome completes through Get started without storage bypass",
+      "status": "passed"
     },
     {
       "name": "all17 complete care protocols accessible without photo, diagnosis or saved scan",
@@ -65,14 +69,24 @@
       }
     },
     {
+      "name": "user share/export fallback downloads the real summary and leaf photo without changing the observation",
+      "status": "passed",
+      "summaryFilename": "crop-observation-1794675657814.txt",
+      "photoBytes": 56457
+    },
+    {
       "name": "real saved leaf diagnosis/photo remain unchanged after manual selection and severe questionnaire",
       "status": "passed",
       "resultType": "uncertain",
       "originalHeading": "Common rust",
-      "savedId": "e05d71d9-af14-4c05-aab4-abe710f8e1fa"
+      "savedId": "49e7fcd2-8b5d-494c-b3a8-da32a70c2570"
     },
     {
       "name": "real mouse still returns retake without automatic disease treatment",
+      "status": "passed"
+    },
+    {
+      "name": "actual first-run welcome completes through Get started without storage bypass",
       "status": "passed"
     },
     {
@@ -82,8 +96,8 @@
   ],
   "pageErrors": [],
   "artifacts": {
-    "script": "http://127.0.0.1:3000/assets/index-BDiROGV3.js",
-    "offlineCacheVersion": "4c5917c71429657e",
+    "script": "http://127.0.0.1:3000/assets/index-k_A7exTO.js",
+    "offlineCacheVersion": "93c76310315a7dd4",
     "careReceipt": {
       "schema_version": 1,
       "version": "care-protocols-v2",
@@ -106,5 +120,5 @@
     }
   },
   "status": "passed",
-  "finishedAt": "2026-11-14T16:56:19.819Z"
+  "finishedAt": "2026-11-14T17:01:00.139Z"
 }

@@ -60,6 +60,42 @@ async function records(page) {
       read.onsuccess = () => { const rows = read.result.map(({ photoBlob, ...row }) => ({ ...row, photoBytes: photoBlob?.size || 0 })); db.close(); resolve(rows); }; };
   }));
 }
+async function enterApp(page, expectWelcome = false) {
+  const welcome = page.getByTestId('welcome-get-started');
+  if (expectWelcome) await welcome.waitFor();
+  else await page.locator('[data-testid="welcome-get-started"], [data-testid="home-scan"]').first().waitFor();
+  if (await welcome.isVisible()) {
+    await welcome.click();
+    await page.getByTestId('home-scan').waitFor();
+    assert.equal(await page.evaluate(() => localStorage.getItem('crophealth.onboarded')), 'true');
+    check('actual first-run welcome completes through Get started without storage bypass');
+  }
+  await page.getByTestId('home-scan').waitFor();
+}
+async function exportObservation(page, expectedHeading, unchangedRows) {
+  if (await page.evaluate(() => typeof navigator.share === 'function')) {
+    report.nativeShareAutomation = 'Not attempted: native OS share UI is outside the desktop fallback test';
+    return;
+  }
+  await page.getByTestId('share-observation').click();
+  const dialog = page.getByRole('dialog', { name: 'Share or export observation' }); await dialog.waitFor();
+  const preview = await dialog.locator('.share-preview-text').innerText();
+  assert.ok(preview.includes(expectedHeading));
+  assert.match(preview, /not a confirmed diagnosis|Dataset-tested prototype|expert confirmation/i);
+  const textPending = page.waitForEvent('download');
+  await dialog.getByRole('button', { name: 'Download summary (.txt)', exact: true }).click();
+  const textDownload = await textPending; const textPath = path.join(out, 'exported-observation.txt'); await textDownload.saveAs(textPath);
+  assert.match(textDownload.suggestedFilename(), /^crop-observation-.*\.txt$/);
+  assert.equal(fs.readFileSync(textPath, 'utf8'), preview);
+  const photoPending = page.waitForEvent('download');
+  await dialog.getByRole('button', { name: 'Download leaf photo', exact: true }).click();
+  const photoDownload = await photoPending; const photoPath = path.join(out, 'exported-leaf.jpg'); await photoDownload.saveAs(photoPath);
+  const bytes = fs.readFileSync(photoPath); assert.ok(bytes.length > 100);
+  assert.ok((bytes[0] === 0xff && bytes[1] === 0xd8) || (bytes[0] === 0x89 && bytes[1] === 0x50), 'Export must contain real JPEG/PNG bytes');
+  await dialog.getByRole('button', { name: 'Close', exact: true }).click();
+  assert.deepEqual(await records(page), unchangedRows, 'Export must not alter the saved record');
+  check('user share/export fallback downloads the real summary and leaf photo without changing the observation', { summaryFilename: textDownload.suggestedFilename(), photoBytes: bytes.length });
+}
 async function back(page) { await page.locator('.top-bar').getByRole('button').first().click(); }
 async function openManual(page, id) {
   await page.getByTestId(`care-condition-${id}`).click();
@@ -81,6 +117,7 @@ async function answer(page, values, previousAnswers = null) {
 async function analyze(page, filename, cropId) {
   assert.ok(fs.existsSync(filename), `Real photo missing: set QA_LEAF/QA_MOUSE: ${filename}`);
   await page.goto(baseURL, { waitUntil: 'domcontentloaded' });
+  await enterApp(page);
   await page.getByTestId('home-scan').waitFor(); await page.getByTestId(`crop-${cropId}`).click();
   await page.getByTestId('home-scan').click(); await page.getByTestId('upload-input').setInputFiles(filename);
   await page.getByTestId('analyze-photo').click(); await page.getByTestId('result-status').waitFor({ timeout: 90_000 });
@@ -99,6 +136,7 @@ async function browserChecks(model) {
     const context = await browser.newContext({ viewport: { width: 390, height: 844 } }); const page = await context.newPage();
     page.on('pageerror', e => report.pageErrors.push(e.message));
     await page.goto(baseURL, { waitUntil: 'domcontentloaded' });
+    await enterApp(page, true);
     report.artifacts = await page.evaluate(async () => ({ script: document.querySelector('script[type=module]')?.src, offlineCacheVersion: (await (await fetch('./offline-manifest.json')).json()).version, careReceipt: await (await fetch('./assets/content/care_protocols_receipt.json')).json() }));
     await page.getByTestId('open-care-library').click();
     assert.equal(await page.getByTestId('care-library-list').getByRole('button').count(), 17);
@@ -150,6 +188,7 @@ async function browserChecks(model) {
     const originalHeading = await page.locator('.result-heading h2').innerText();
     await page.getByTestId('save-scan').click(); await page.waitForFunction(() => document.querySelector('[data-testid="save-scan"]')?.textContent.includes('Saved on this device'));
     const originalRows = await records(page); assert.equal(originalRows.length, 1); assert.ok(originalRows[0].photoBytes > 0);
+    await exportObservation(page, originalHeading, originalRows);
     await page.getByTestId('result-care-library').click(); await openManual(page, 'potato_late_blight');
     await answer(page, [1, 3, 1, 0, 1, 0]);
     assert.deepEqual(await records(page), originalRows, 'Manual disease or answers must not relabel the saved scan');
@@ -167,6 +206,7 @@ async function browserChecks(model) {
     const failureContext = await browser.newContext({ serviceWorkers: 'block', viewport: { width: 390, height: 844 } });
     await failureContext.route('**/assets/content/care_protocols.json', route => route.fulfill({ status: 404, contentType: 'application/json', body: '{}' }));
     const failed = await failureContext.newPage(); await failed.goto(baseURL, { waitUntil: 'domcontentloaded' });
+    await enterApp(failed, true);
     await failed.getByTestId('open-care-library').click(); await failed.getByTestId('care-condition-tomato_early_blight').click();
     await failed.getByTestId('treatment-load-error').waitFor(); assert.equal(await failed.getByTestId('treatment-plan').count(), 0);
     await failureContext.unroute('**/assets/content/care_protocols.json');
