@@ -17,6 +17,7 @@ if (!treatmentSource.equals(treatmentPackaged) || createHash('sha256').update(tr
   throw new Error('Treatment protocols are stale. Run python3 tools/build_care_protocols.py.');
 const destination = path.join(root, 'frontend/public/assets');
 await mkdir(destination, { recursive: true });
+await cp(path.join(root, 'frontend/public/app-logo.png'), path.join(destination, 'app-logo.png'));
 for (const [source, name] of [
   ['models/assets/model', 'model'],
   ['android/app/src/main/assets/content', 'content'],

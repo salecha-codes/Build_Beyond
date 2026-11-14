@@ -220,6 +220,7 @@ export default function App() {
   const [copyFeedback, setCopyFeedback] = useState(false);
   const upload = useRef<HTMLInputElement>(null);
   const analysisRequest = useRef(0);
+  const welcomeTransitionStarted = useRef(false);
   const screenHistoryInitialized = useRef(false);
   const restoringScreenFromHistory = useRef(false);
   const offlineReady = useOfflineReady();
@@ -261,6 +262,11 @@ export default function App() {
     const timer = window.setTimeout(() => setStartupStarting(false), 1120);
     return () => window.clearTimeout(timer);
   }, [startupStarting]);
+  useEffect(() => {
+    if (screen !== 'welcome') return;
+    const timer = window.setTimeout(() => startFromWelcome(), 1100);
+    return () => window.clearTimeout(timer);
+  }, []);
   useEffect(() => {
     void loadAdvisoryModel().then(setAdvisoryModel).catch(() => setAdvisoryFailed(true));
     void loadCareProtocols().then(setCareProtocols).catch(() => setProtocolsFailed(true));
@@ -304,7 +310,8 @@ export default function App() {
     setScreen(next);
   }
   function startFromWelcome() {
-    if (welcomeStarting) return;
+    if (welcomeTransitionStarted.current) return;
+    welcomeTransitionStarted.current = true;
     setWelcomeStarting(true);
     window.setTimeout(() => {
       try {
@@ -314,6 +321,7 @@ export default function App() {
       }
       setScreen('home');
       setWelcomeStarting(false);
+      welcomeTransitionStarted.current = false;
     }, 1120);
   }
   function startCameraTransition() {
@@ -853,7 +861,7 @@ export default function App() {
       <main className="app-page welcome-page">
         <div className="welcome-content">
           <div className="welcome-icon">
-            <img src={`${import.meta.env.BASE_URL}app-logo.png`} alt="" />
+            <img src={assetUrl('app-logo.png')} alt="" />
           </div>
           <h1 className="welcome-title">AgriScan</h1>
           <p className="welcome-subtitle">
@@ -1588,7 +1596,7 @@ export default function App() {
       <aside className="preview-context">
         <div className="preview-brand">
           <span>
-            <img src={`${import.meta.env.BASE_URL}app-logo.png`} alt="" />
+            <img src={assetUrl('app-logo.png')} alt="" />
           </span>
           AgriScan · Debuggers
         </div>
