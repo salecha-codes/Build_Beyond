@@ -1,7 +1,12 @@
 {
-  "source_commit": "0aa92322a16b0c24e050d124aadca8477fc76a75",
+  "source_commit": "a24c7eef8f641453391eef35594d80fb76595855",
+  "languages": [
+    "en",
+    "kn",
+    "hi"
+  ],
   "model_sha256": "d157e7c8401319a700039de467caba6728b7bdbf35b4cdae1818757cf0ba7e3c",
-  "voice_version": "review2-clear-speech-1",
+  "voice_version": "review2-clear-speech-2-hi",
   "app": "Offline Crop Health",
   "version": "0.2.0-review2"
 }
