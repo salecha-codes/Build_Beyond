@@ -1,5 +1,5 @@
 {
-  "source_commit": "446f4bf",
+  "source_commit": "313e820",
   "version": "0.6.0-treatment-recovery",
   "model_architecture": "MobileNetV3-Large",
   "model_sha256": "31b29158cc1fc1c07bdf3acc07cb6bb6da39eccb1050ffe6ed1d499811179fba",
@@ -14,5 +14,5 @@
   ],
   "diagnosis_validated": false,
   "treatment_field_validated": false,
-  "browser_workflow_test": "production bundle rebuilt from source commit 446f4bf; offline asset manifest refreshed and care flow changes included"
+  "browser_workflow_test": "production web bundle rebuilt from current source commit 313e820; offline asset manifest refreshed"
 }
