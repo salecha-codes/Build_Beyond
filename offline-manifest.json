@@ -1,5 +1,5 @@
 {
-  "version": "a9d7eff8aac37e9a",
+  "version": "80dc2c51e2f682c6",
   "files": [
     "app-logo.png",
     "assets/app-logo.png",
@@ -240,8 +240,8 @@
     "assets/content/catalog.json",
     "assets/content/hindi_ui.json",
     "assets/content/treatment_audio_manifest.json",
-    "assets/index-B2XSkLrd.css",
-    "assets/index-BxwKochu.js",
+    "assets/index-B5uQHrDR.js",
+    "assets/index-Brhqg5sP.css",
     "assets/model/MODEL_CARD.md",
     "assets/model/crop_model.onnx",
     "assets/model/decision_policy.json",
@@ -253,6 +253,8 @@
     "assets/model/source_evaluation.json",
     "assets/ort-wasm-simd-threaded-BFiwp6Xy.mjs",
     "assets/ort-wasm-simd-threaded-CxTQ5xH-.wasm",
+    "assets/samples/README.md",
+    "assets/samples/demo-potato-late-blight.jpg",
     "favicon.svg",
     "index.html"
   ]
