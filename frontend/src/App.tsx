@@ -184,7 +184,7 @@ export default function App() {
   const [welcomeStarting, setWelcomeStarting] = useState(false);
   const [cameraStarting, setCameraStarting] = useState(false);
   const [language, setLanguage] = useState<Language>(getLanguage);
-  const [crop, setCrop] = useState<CropId>('tomato');
+  const [crop, setCrop] = useState<CropId>('maize');
   const [photo, setPhoto] = useState<File | null>(null);
   const [assessment, setAssessment] = useState<AssessmentResult | null>(null);
   const [opened, setOpened] = useState<ObservationRecord | null>(null);
