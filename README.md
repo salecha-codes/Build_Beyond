@@ -6,7 +6,7 @@ AgriScan is an Android and browser prototype for checking leaf photos and readin
 
 ## Try AgriScan
 
-- **Android APK:** [Download the hackathon preview APK](https://github.com/salecha-codes/Build_Beyond/releases/download/v0.6.0-preview.3/crop-health-universal-debug.apk) · [Open the GitHub release page](https://github.com/salecha-codes/Build_Beyond/releases/tag/v0.6.0-preview.3)
+- **Android APK:** [Download the hackathon preview APK](https://github.com/salecha-codes/Build_Beyond/releases/download/v0.6.0-preview.2/crop-health-universal-debug.apk) · [Open the GitHub release page](https://github.com/salecha-codes/Build_Beyond/releases/tag/v0.6.0-preview.2)
 - **Browser app:** [Open AgriScan](https://salecha-codes.github.io/Build_Beyond/)
 - **Source code:** [github.com/salecha-codes/Build_Beyond](https://github.com/salecha-codes/Build_Beyond)
 - **Project report:** [Hackathon Final Report PDF](https://salecha-codes.github.io/Build_Beyond/downloads/Hackathon_Final_Report.pdf)
