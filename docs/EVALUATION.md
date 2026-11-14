@@ -1,6 +1,6 @@
-# Evaluation and release criteria
+# Historical evaluation and release-planning checklist
 
-No trained model or performance result exists yet. All numerical engineering goals below are targets, not measurements.
+This document is an early planning checklist, not the current model card or status report. The project now has a trained MobileNetV3-Large model and recorded evaluations. For current artifacts and measured results, see [the model card](../models/assets/model/MODEL_CARD.md), [model retraining validation](MODEL_RETRAINING_VALIDATION.md), and [the root README](../README.md). The targets below remain planning criteria unless a current receipt explicitly records a measurement.
 
 ## Data integrity
 
