@@ -1,15 +1,14 @@
 {
-  "source_commit": "cf93356",
+  "source_commit": "9599267",
   "architecture": "MobileNetV3-Large",
-  "model_sha256": "9f330bb88adffa64460c4e84faf808529a1a1fdc667977766f648cb28b51fa63",
+  "model_sha256": "3332b5634fcb1a8bea17317a0a9db4d6e44f9c0da24e7b03718b3ced5d6b2d1e",
+  "version": "0.4.1-leaf-guard",
+  "leaf_check_enabled": true,
   "languages": [
     "en",
     "kn",
     "hi"
   ],
   "source_acceptance_qualified": true,
-  "diagnosis_validated": false,
-  "version": "0.4.0-field-prototype",
-  "field_benchmark_accuracy": 0.3875,
-  "field_benchmark_reused": true
+  "diagnosis_validated": false
 }

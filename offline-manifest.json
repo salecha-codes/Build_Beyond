@@ -1,5 +1,5 @@
 {
-  "version": "14dd5e1e6836c7cd",
+  "version": "bcecc67a4cda8fa6",
   "files": [
     "assets/audio/en/maize_common_rust.ogg",
     "assets/audio/en/maize_gray_leaf_spot.ogg",
@@ -94,7 +94,7 @@
     "assets/content/audio_manifest.json",
     "assets/content/catalog.json",
     "assets/content/hindi_ui.json",
-    "assets/index-D0oXNk2e.js",
+    "assets/index-DoWLz-MJ.js",
     "assets/index-qfGVXGjL.css",
     "assets/model/MODEL_CARD.md",
     "assets/model/crop_model.onnx",
@@ -102,6 +102,7 @@
     "assets/model/embedding_centroids.json",
     "assets/model/export_receipt.json",
     "assets/model/labels.json",
+    "assets/model/leaf_validation.json",
     "assets/model/model_metadata.json",
     "assets/model/source_evaluation.json",
     "assets/ort-wasm-simd-threaded-BFiwp6Xy.mjs",

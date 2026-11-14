@@ -1,24 +1,14 @@
-# MobileNetV3-Large field prototype
+# Leaf-guarded MobileNetV3 release
 
-This release uses official ImageNet-pretrained torchvision MobileNetV3-Large visual features and a TRAIN-only fitted 17-class linear head. Feature standardization fitted on TRAIN is embedded in ONNX. It replaces the weaker from-scratch MobileNetV4 model following tuning-only candidate selection.
+New binary leaf input head precedes the unchanged crop classifier. See leaf_validation.json for frozen TRAIN/TUNE protocol and held-out negative results. Exact-graph source qualification passed after frozen calibration and testing. Classifier-only accuracy is92.11% on source3674 and38.75% on the reused80-photo field comparison; these classifier figures exclude leaf rejection.
 
-## Exact artifact
 
-Model: `mnv3-large-imagenet-v2-field-head-9f330bb88adf`. ONNX SHA-256: `9f330bb88adffa64460c4e84faf808529a1a1fdc667977766f648cb28b51fa63`. Size: 11,950,683 bytes. Inputs: RGB FP32 NCHW224×224, identical letterbox/ImageNet normalization contract. Outputs:17 logits and960 pooled visual features. Both apps verify the actual graph and bound evaluation/centroid sidecars.
+Model SHA-256: `3332b5634fcb1a8bea17317a0a9db4d6e44f9c0da24e7b03718b3ced5d6b2d1e`. Graph size:11,965,503bytes. Outputs17disease logits,960features and1leaf logit.
 
-## Frozen evaluation
+## Input leaf check
 
-| Domain | Images | Raw accuracy | Accepted precision | Coverage |
-|---|---:|---:|---:|---:|
-| PlantVillage source | 3674 | 92.11% | 96.47% | 87.02% |
-| PlantDoc external field-like | 80 | 38.75% | 50.00% | 47.50% |
+This graph adds a trained binary leaf-versus-object head sharing the same V3 features. It checks the image before presenting disease candidates; a rejected input returns a retake with no disease name or score. Threshold0.7736096007959162 was frozen on TUNE before opening the125-image negative test.
 
-Field accuracy improves from V4's22.50% to38.75% on the same80-photo comparison benchmark (+16.25percentage points). This set was already evaluated for V4; it is a reused comparison benchmark, not newly blind independent data. New model selection used TRAIN/TUNE only; CAL fitted gates, and the frozen candidate was evaluated once. Source macro F1 0.9087.
+It rejected125/125 non-leaf test photos, including the held-out computer mouse, hamster, cat, laptop and monitor. This is a measured sample result, not a universal guarantee. The negatives are objects/mammals/electronics from a pinned ImageNet sample repository; ambiguous nature/plant classes were excluded. Test objects were excluded from leaf-head training; broader ImageNet pretraining is disclosed. Images are external research inputs and are not shipped in the app.
 
-Field performance remains poor. The model is a prototype and does not establish reliable farmer-photo diagnosis. External labels are mostly unreviewed and80images is small. No chemical prescriptions are enabled. `diagnosis_validated=false` and `allow_condition_specific_advice=false` remain explicit. Low-confidence results display a real predicted condition with uncertainty; crop mismatch retains selected/predicted crop comparison. Scores are model outputs, not field accuracy.
-
-## Training/data scope
-
-A frozen pretrained backbone and17-class head used the audited source TRAIN cap400/class plus632PlantDoc TRAIN photos. Exact counts, weighting, selected iteration and official weight SHA are in training_receipt.json/export receipts. Source TUNE2228 and field TUNE138 selected the candidate. Source CAL1392+field CAL137 fit temperature, score/margin and training-centroid distance gates. Source full TEST3674 and external80 were not used to train or choose the candidate. Historical exposure and source physical-leaf grouping limits remain in the evaluation receipt.
-
-Deployment remains entirely offline: the pretrained teacher weights and training tools are not required by the phone. ONNX checker and zero/nonzero/real-photo PyTorch parity passed. Actual ARM-phone latency and peak RAM have not been measured. See source_evaluation.json for full errors/support/intervals and protocol identities.
+Source positive leaf recall3668/3674 (99.84%); source correct disease predictions retained3378/3674=91.94% end-to-end. Field leaf recall76/80 (95%); all31 previously correct field disease cases pass the leaf check, preserving31/80=38.75% end-to-end on the reused field set. See leaf_validation.json and the separate positive_pipeline_evaluation receipt. The leaf check does not certify the crop species or every unseen object/plant.

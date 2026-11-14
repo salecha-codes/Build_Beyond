@@ -366,5 +366,10 @@
   "Running the crop model on this device. The first check may take a little longer.": "इस फ़ोन पर फसल का मॉडल चल रहा है। पहली जाँच में थोड़ा अधिक समय लग सकता है।",
   "Crop disease model": "फसल रोग का मॉडल",
   "Installed": "तैयार",
-  "On-device disease model. No photo upload.": "रोग का मॉडल फ़ोन पर चलता है। तस्वीर अपलोड नहीं होती।"
+  "On-device disease model. No photo upload.": "रोग का मॉडल फ़ोन पर चलता है। तस्वीर अपलोड नहीं होती।",
+  "No crop leaf detected": "फसल की पत्ती नहीं मिली",
+  "Please photograph a crop leaf": "कृपया फसल की पत्ती की तस्वीर लें",
+  "No supported crop leaf was detected. Take a close-up of one tomato, potato or maize leaf.": "समर्थित फसल की पत्ती नहीं मिली। टमाटर, आलू या मक्के की एक पत्ती की नज़दीकी तस्वीर लें।",
+  "No clear leaf detected": "साफ़ पत्ती नहीं मिली",
+  "This does not look like a clear leaf photo. Take a close-up of one tomato, potato or maize leaf.": "यह पत्ती की साफ़ तस्वीर जैसी नहीं लगती। टमाटर, आलू या मक्के की एक पत्ती की नज़दीकी तस्वीर लें।"
 }
