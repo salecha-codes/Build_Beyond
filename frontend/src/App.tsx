@@ -12,11 +12,13 @@ import {
   HelpCircle,
   History,
   Home,
+  Copy,
   ImagePlus,
   Leaf,
   LoaderCircle,
   Phone,
   Settings,
+  Share2,
   ShieldCheck,
   Smartphone,
   Sprout,
@@ -66,6 +68,7 @@ import type {
 import { useOfflineReady } from './lib/offline';
 
 type Screen =
+  | 'welcome'
   | 'home'
   | 'capture'
   | 'photo'
@@ -142,7 +145,15 @@ async function historyPhoto(file: Blob): Promise<Blob> {
 }
 
 export default function App() {
-  const [screen, setScreen] = useState<Screen>('home');
+  const [screen, setScreen] = useState<Screen>(() => {
+    try {
+      return globalThis.localStorage?.getItem('crophealth.onboarded') === 'true'
+        ? 'home'
+        : 'welcome';
+    } catch {
+      return 'home';
+    }
+  });
   const [language, setLanguage] = useState<Language>(getLanguage);
   const [crop, setCrop] = useState<CropId>('tomato');
   const [photo, setPhoto] = useState<File | null>(null);
@@ -176,6 +187,8 @@ export default function App() {
   const [expertOpen, setExpertOpen] = useState(false);
   const [expertNumber, setExpertNumber] = useState('');
   const [deleteTarget, setDeleteTarget] = useState<ObservationRecord | null>(null);
+  const [shareModalOpen, setShareModalOpen] = useState(false);
+  const [copyFeedback, setCopyFeedback] = useState(false);
   const upload = useRef<HTMLInputElement>(null);
   const analysisRequest = useRef(0);
   const offlineReady = useOfflineReady();
@@ -436,6 +449,128 @@ export default function App() {
     finally { setSaving(false); }
   }
 
+  function buildShareSummary(): string {
+    const cropStr = cropName(hasPrediction ? predictedCrop : activeCrop, language);
+    const condStr = conditionId
+      ? conditionName(conditionId, language)
+      : nonLeaf
+        ? t('No clear leaf detected', 'ಸ್ಪಷ್ಟ ಎಲೆ ಪತ್ತೆಯಾಗಲಿಲ್ಲ')
+        : t('Uncertain observation', 'ಅನಿಶ್ಚಿತ ವೀಕ್ಷಣೆ');
+    const lines: string[] = [
+      t('Crop Health — observation', 'ಬೆಳೆ ಆರೋಗ್ಯ — ವೀಕ್ಷಣೆ'),
+      `${t('Crop', 'ಬೆಳೆ')}: ${cropStr}`,
+      `${t('Model candidate', 'ಮಾದರಿಯ ಸಾಧ್ಯತೆ')}: ${condStr}`,
+    ];
+    if (score !== null) {
+      lines.push(`${t('Score', 'ಅಂಕ')}: ${Math.round(score * 100)}%`);
+    }
+    if (validated) {
+      lines.push(
+        t(
+          'Model assessment; expert confirmation may be needed.',
+          'ಮಾದರಿಯ ಪರಿಶೀಲನೆ; ತಜ್ಞರ ದೃಢೀಕರಣ ಬೇಕಾಗಬಹುದು.',
+        ),
+      );
+    } else if (accepted) {
+      lines.push(
+        t(
+          'Dataset-tested prototype estimate. Confirm the condition with a local crop expert.',
+          'ಡೇಟಾಸೆಟ್‌ನಲ್ಲಿ ಪರೀಕ್ಷಿಸಿದ ಪ್ರಾಯೋಗಿಕ ಅಂದಾಜು. ಸ್ಥಳೀಯ ಕೃಷಿ ತಜ್ಞರಿಂದ ಸ್ಥಿತಿಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.',
+        ),
+      );
+    } else {
+      lines.push(
+        t(
+          'Prototype / uncertain output. This is not a confirmed diagnosis or treatment recommendation.',
+          'ಪ್ರಾಯೋಗಿಕ / ಅನಿಶ್ಚಿತ ಫಲಿತಾಂಶ. ಇದು ದೃಢಪಟ್ಟ ರೋಗನಿರ್ಣಯ ಅಥವಾ ಚಿಕಿತ್ಸೆಯ ಸಲಹೆಯಲ್ಲ.',
+        ),
+      );
+    }
+    lines.push(
+      `${t('Model', 'ಮಾದರಿ')}: ${opened?.modelVersion || assessment?.modelVersion || model?.version || 'unavailable'}`,
+    );
+    if (currentConcern) {
+      lines.push(
+        `${t('Concern level', 'ಆತಂಕದ ಮಟ್ಟ')}: ${
+          currentConcern.level === 'SEEK_LOCAL_EXPERT'
+            ? t('Ask a local expert', 'ಸ್ಥಳೀಯ ತಜ್ಞರನ್ನು ಕೇಳಿ')
+            : t('Observe and recheck', 'ಗಮನಿಸಿ ಮರುಪರಿಶೀಲಿಸಿ')
+        }`,
+      );
+    }
+    lines.push(
+      t(
+        'Please review the original leaf photo and observed symptoms with a qualified local expert.',
+        'ಮೂಲ ಎಲೆಯ ಫೋಟೋ ಮತ್ತು ಗಮನಿಸಿದ ಲಕ್ಷಣಗಳನ್ನು ಅರ್ಹ ಸ್ಥಳೀಯ ತಜ್ಞರೊಂದಿಗೆ ಪರಿಶೀಲಿಸಿ.',
+      ),
+    );
+    return lines.join('\n');
+  }
+
+  async function handleShare() {
+    const text = buildShareSummary();
+    const shareTitle = t('Crop Health — observation', 'ಬೆಳೆ ಆರೋಗ್ಯ — ವೀಕ್ಷಣೆ');
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      try {
+        const shareData: ShareData = {
+          title: shareTitle,
+          text,
+        };
+        if (activePhoto && navigator.canShare) {
+          try {
+            const photoFile = new File(
+              [activePhoto],
+              `leaf-observation-${Date.now()}.jpg`,
+              { type: activePhoto.type || 'image/jpeg' },
+            );
+            if (navigator.canShare({ files: [photoFile] })) {
+              shareData.files = [photoFile];
+            }
+          } catch {
+            /* Fall back to text share */
+          }
+        }
+        await navigator.share(shareData);
+        return;
+      } catch (err) {
+        if ((err as Error)?.name === 'AbortError') return;
+      }
+    }
+    setShareModalOpen(true);
+  }
+
+  async function copyShareText() {
+    const text = buildShareSummary();
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopyFeedback(true);
+      setTimeout(() => setCopyFeedback(false), 2500);
+    } catch {
+      setError(t('Could not copy to clipboard.', 'ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ಗೆ ನಕಲಿಸಲಾಗಲಿಲ್ಲ.'));
+    }
+  }
+
+  function downloadShareText() {
+    const text = buildShareSummary();
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `crop-observation-${Date.now()}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function downloadPhoto() {
+    if (!activePhoto) return;
+    const url = URL.createObjectURL(activePhoto);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `crop-leaf-${Date.now()}.jpg`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   const languageToggle = (
     <div className="language-toggle" aria-label={t('Language', 'Language')}>
       {LANGUAGES.map((value) => (
@@ -561,7 +696,46 @@ export default function App() {
   }
 
   let page: ReactNode;
-  if (screen === 'home')
+  if (screen === 'welcome')
+    page = (
+      <main className="app-page welcome-page">
+        <div className="welcome-content">
+          <div className="welcome-icon">
+            <Sprout size={48} />
+          </div>
+          <h1 className="welcome-title">{t('Crop Health', 'ಬೆಳೆ ಆರೋಗ್ಯ')}</h1>
+          <p className="welcome-subtitle">
+            {t(
+              'Care for your crops, wherever you grow.',
+              'ನೀವು ಎಲ್ಲಿದ್ದರೂ ಬೆಳೆಗಳ ಆರೈಕೆ ಮಾಡಿ.',
+            )}
+          </p>
+          <div className="welcome-language">{languageToggle}</div>
+          <button
+            className="primary welcome-button"
+            data-testid="welcome-get-started"
+            onClick={() => {
+              try {
+                globalThis.localStorage?.setItem('crophealth.onboarded', 'true');
+              } catch {
+                /* Ignore local storage errors */
+              }
+              setScreen('home');
+            }}
+          >
+            {t('Get started', 'ಪ್ರಾರಂಭಿಸಿ')}
+            <ArrowRight size={18} />
+          </button>
+        </div>
+        <p className="privacy-note">
+          {t(
+            'Offline-first prototype · All photos and processing stay on this device.',
+            'ಆಫ್‌ಲೈನ್ ಮಾದರಿ · ಎಲ್ಲಾ ಚಿತ್ರಗಳು ಮತ್ತು ಪ್ರಕ್ರಿಯೆಗಳು ಈ ಸಾಧನದಲ್ಲೇ ಇರುತ್ತವೆ.',
+          )}
+        </p>
+      </main>
+    );
+  else if (screen === 'home')
     page = (
       <>
         <main className="app-page">
@@ -854,6 +1028,24 @@ export default function App() {
                   ? t('Saving…', 'ಉಳಿಸಲಾಗುತ್ತಿದೆ…')
                   : t('Save scan', 'ದಾಖಲೆ ಉಳಿಸಿ')}
             </button>
+            <button
+              className="secondary"
+              data-testid="share-observation"
+              onClick={() => void handleShare()}
+            >
+              <Share2 size={17} />
+              {t('Share observation', 'ವೀಕ್ಷಣೆ ಹಂಚಿಕೊಳ್ಳಿ')}
+            </button>
+            {opened && (
+              <button
+                className="secondary"
+                data-testid="delete-opened-scan"
+                onClick={() => setDeleteTarget(opened)}
+              >
+                <Trash2 size={17} />
+                {t('Delete scan', 'ದಾಖಲೆ ಅಳಿಸಿ')}
+              </button>
+            )}
           </div>
           <p className="privacy-note">
             {t(
@@ -1218,6 +1410,23 @@ export default function App() {
               )}
             </p>
           </div>
+          <div className="soft-card">
+            <h3>{t('First-run experience', 'ಮೊದಲ ಭೇಟಿಯ ಅನುಭವ')}</h3>
+            <p>
+              {t(
+                'View the onboarding screen to change your starting language.',
+                'ಆರಂಭಿಕ ಭಾಷೆಯನ್ನು ಬದಲಾಯಿಸಲು ಸ್ವಾಗತ ಪರದೆಯನ್ನು ನೋಡಿ.',
+              )}
+            </p>
+            <button
+              className="text-button"
+              onClick={() => {
+                navigate('welcome');
+              }}
+            >
+              {t('Show welcome screen', 'ಸ್ವಾಗತ ಪರದೆ ನೋಡಿ')} →
+            </button>
+          </div>
         </main>
       </>
     );
@@ -1317,6 +1526,48 @@ export default function App() {
               <button onClick={() => setError('')} aria-label={t('Dismiss error', 'Dismiss error')}>
                 <X size={16} />
               </button>
+            </div>
+          )}
+          {shareModalOpen && (
+            <div className="modal-overlay">
+              <section
+                className="modal"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="share-title"
+              >
+                <h2 id="share-title">{t('Share or export observation', 'ವೀಕ್ಷಣೆ ಹಂಚಿಕೊಳ್ಳಿ ಅಥವಾ ರಫ್ತು ಮಾಡಿ')}</h2>
+                <p>
+                  {t(
+                    'Export your observation summary and photo from this device.',
+                    'ಈ ಸಾಧನದಿಂದ ವೀಕ್ಷಣೆಯ ಸಾರಾಂಶ ಮತ್ತು ಚಿತ್ರವನ್ನು ರಫ್ತು ಮಾಡಿ.',
+                  )}
+                </p>
+                <div className="share-preview-text">
+                  {buildShareSummary()}
+                </div>
+                <div className="share-modal-actions">
+                  <button className="primary" onClick={() => void copyShareText()}>
+                    <Copy size={16} />
+                    {copyFeedback
+                      ? t('Copied to clipboard!', 'ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ಗೆ ನಕಲಿಸಲಾಗಿದೆ!')
+                      : t('Copy summary text', 'ಸಾರಾಂಶ ಪಠ್ಯ ನಕಲಿಸಿ')}
+                  </button>
+                  <button className="secondary" onClick={downloadShareText}>
+                    <Download size={16} />
+                    {t('Download summary (.txt)', 'ಸಾರಾಂಶ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ (.txt)')}
+                  </button>
+                  {activePhoto && (
+                    <button className="secondary" onClick={downloadPhoto}>
+                      <Download size={16} />
+                      {t('Download leaf photo', 'ಎಲೆಯ ಚಿತ್ರ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ')}
+                    </button>
+                  )}
+                  <button className="secondary" onClick={() => setShareModalOpen(false)}>
+                    {t('Close', 'ಮುಚ್ಚಿ')}
+                  </button>
+                </div>
+              </section>
             </div>
           )}
           {expertOpen && (

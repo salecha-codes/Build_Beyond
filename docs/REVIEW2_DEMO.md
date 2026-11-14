@@ -6,14 +6,14 @@ Install the ARM64 APK on a compatible Android phone. Use the 32-bit APK if requi
 
 1. Turn on airplane mode and open Crop Health. Point out the offline badge and English/Kannada/Hindi language choices.
 2. Choose Tomato, Potato, or Maize. Tap **Scan a leaf**, allow camera access, then photograph one clearly lit leaf. The gallery button can import an existing leaf photo.
-3. Tap **Check this leaf**. The app checks the photo and runs the bundled MobileNetV4 locally. Show its actual candidate scores and explicit uncertain result.
+3. Tap **Check this leaf**. The app checks the photo (including leaf detection) and runs the bundled MobileNetV3-Large locally. Show its actual candidate scores, prototype prediction, or explicit uncertain result.
 4. Tap **Observe symptoms (3 questions)**. Answer each question; show the observation summary and general guidance. Explain that concern comes from the farmer’s answers, separate from the model score.
 5. Switch to Kannada or Hindi and play the question/summary/guidance audio. All 90 recordings are bundled in the APK and work without an installed speech language pack. Reopen the app to demonstrate the saved language preference.
 6. Return to the result and tap **Save scan**. Open History and reopen the observation. Saved photos and records remain on this phone unless the user explicitly shares or deletes them.
 
 ## Explain the prototype accurately
 
-“Our native Android prototype runs MobileNetV4 on the phone, keeps the image local, and provides Kannada audio. The current model is trained from scratch and achieved 60.45% accuracy on a bounded source-validation subset. We show its real scores while keeping diagnosis validation off. When the model is uncertain, the app asks for a better photo or expert review rather than giving a pesticide prescription.”
+“Our native Android prototype runs MobileNetV3-Large on the phone, keeps the image local, and provides trilingual Kannada, Hindi and English audio. The current model incorporates ImageNet-pretrained features and a trained 17-class disease head with leaf-guard rejection. We show its real scores while keeping diagnosis validation off. When the model is uncertain or the photo is unclear, the app asks for a better photo or expert review rather than giving a pesticide prescription.”
 
 The app supports 17 label categories for three crops. Its model file is approximately 9.57 MiB. The phone APK is approximately 41 MiB. Report the exact APK size/checksum from the delivery manifest.
 

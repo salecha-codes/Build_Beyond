@@ -32,6 +32,11 @@
   "languagePreference": {
     "storage": "localStorage",
     "key": "crophealth.language",
-    "values": ["en", "kn"]
+    "values": ["en", "kn", "hi"]
+  },
+  "onboardingPreference": {
+    "storage": "localStorage",
+    "key": "crophealth.onboarded",
+    "values": ["true", "false"]
   }
 }

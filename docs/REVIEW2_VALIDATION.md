@@ -1,5 +1,7 @@
 # Review 2 validation evidence
 
+> **Note on Active Model vs. Historical Validation:** This document records the initial Review 2 testing executed against the earlier MobileNetV4 scratch artifact (`d157e7c84013`). The repository has since upgraded the active shared model bundle to **MobileNetV3-Large** (`mnv3-large-leaf-guard-3332b5634fcb`, SHA-256 `3332b5634fcb...`) with leaf-guard rejection and calibrated source acceptance. See [`ml/reports/field_upgrade_v3/`](../ml/reports/field_upgrade_v3/) and [`models/assets/model/MODEL_CARD.md`](../models/assets/model/MODEL_CARD.md) for current model evidence.
+
 ## Final Android execution
 
 The final corrected x86_64 APK and test APK were installed together. AndroidJUnitRunner reported **`OK (10 tests)` in 77.726 seconds**: six native integration methods and four Compose fixture-state smoke methods. Raw output: `/workspace/review2-final-instrumentation.log`; artifact-linked summary: `/workspace/review2-final-test-summary.json`.

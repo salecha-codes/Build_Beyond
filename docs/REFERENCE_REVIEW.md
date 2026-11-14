@@ -14,7 +14,7 @@ The user supplied `Pasted text.txt` as a reference and explicitly requires opera
 
 ## Current user-selected model and actual results
 
-The user subsequently selected **MobileNetV4-Conv-Small**. The active implementation is PyTorch/timm V4 with **17 logits and a measured 960-value pooled embedding**, exported to ONNX and packaged with ONNX Runtime Android. The earlier V3 baseline is historical; it is not the current application model.
+The user subsequently selected **MobileNetV4-Conv-Small** during Review 2 scratch trials. *Update:* In the subsequent field evaluation and upgrade phase, **MobileNetV3-Large** (`mnv3-large-leaf-guard-3332b5634fcb`) was trained with ImageNet pretrained visual features and a calibrated 17-class disease head + leaf-gate output. It achieved 38.75% on the reused 80-photo field benchmark (compared to 22.50% for V4) and was packaged as the canonical active model across Android and Web. The V4 details below document that earlier scratch-training iteration.
 
 All **24,164** selected RGB source files were downloaded, decoded and checked against pinned Git blob IDs. The bounded training experiment used **2,152 training images** and **536 source-validation images**. It ran **15 total scratch epochs** (3 initial + 12 continued), with validation selecting **epoch 14: 60.45% accuracy and macro F1 0.5902**. These are model-selection validation results, not field or independent final-test accuracy.
 
@@ -42,6 +42,6 @@ The **older 3-epoch artifact** separately scored **36.19%** on a **536-image** h
 
 ## Device design rules
 
-MobileNetV4-Conv-Small is the active model, input is **224 × 224 RGB** and batch size is one. The measured model output is **17 logits plus 960 pooled features**; the app reads dimensions from metadata. One shared inference session runs one photo assessment at a time. Downsample large images before processing, reuse/release buffers, and benchmark CPU thread counts. Speech is played from packaged clips; no large speech/LLM model runs alongside diagnosis.
+The canonical active model is **MobileNetV3-Large** (11,965,503 bytes, replacing the 10,032,309-byte V4 scratch candidate). Input is **224 × 224 RGB** and batch size is one. The measured model output is **17 logits, 960 pooled features, and a leaf_logit output**; the app reads dimensions and gate thresholds from metadata. One shared inference session runs one photo assessment at a time. Downsample large images before processing, reuse/release buffers, and benchmark CPU thread counts. Speech is played from packaged clips; no large speech/LLM model runs alongside diagnosis.
 
 The **200 MB PSS**, **10 MB model**, **50 MB per-ABI APK** and **1.5-second warm end-to-end p95** budgets are engineering targets, not achieved device measurements. The current FP32 ONNX file is **10,032,309 bytes** (~9.57 MiB), slightly over a strict 10,000,000-byte target. Real scratch-training and desktop export/runtime checks have executed; no physical 3–4 GB ARM-phone benchmark or field-validation claim follows from them. The reference's tighter accuracy/speed/size estimates remain unverified. Native application/device evidence is recorded separately by QA.
