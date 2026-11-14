@@ -269,6 +269,10 @@ export default function App() {
   const top = assessment?.candidates[0];
   const conditionId = opened?.conditionId || top?.id || null;
   const score = opened?.score ?? top?.score ?? null;
+  const provisionalPrediction = resultType === 'uncertain' && !!conditionId &&
+    (assessment?.sourceEvaluated === true ||
+      (opened?.modelVersion === model?.version && model?.sourceEvaluated === true));
+  const hasPrediction = accepted || provisionalPrediction;
   const promptKey =
     resultType === 'retake'
       ? 'retake'
@@ -278,7 +282,7 @@ export default function App() {
           ? 'model_unavailable'
           : accepted && resultType === 'healthy'
             ? 'healthy'
-            : accepted
+            : hasPrediction
               ? 'model_prototype'
               : 'uncertain';
   const resultPrompt = getPrompt(promptKey, language);
@@ -428,8 +432,10 @@ export default function App() {
   );
   function historyCard(record: ObservationRecord, deletable = false) {
     const acceptedRecord = record.resultType === 'likely' || record.resultType === 'healthy';
+    const predictedRecord = record.resultType === 'uncertain' && !!record.conditionId &&
+      record.modelVersion === model?.version && model?.sourceEvaluated === true;
     const label =
-      acceptedRecord && record.conditionId
+      (acceptedRecord || predictedRecord) && record.conditionId
         ? conditionName(record.conditionId, language)
         : t('Uncertain result', 'ಅನಿಶ್ಚಿತ ಫಲಿತಾಂಶ');
     return (
@@ -443,6 +449,7 @@ export default function App() {
           <span className="history-copy">
             <strong>{label}</strong>
             <small>
+              {predictedRecord && `${t('Low confidence prediction', 'ಕಡಿಮೆ ವಿಶ್ವಾಸದ ಅಂದಾಜು')} · `}
               {cropName(record.cropId, language)} ·{' '}
               {new Date(record.createdAt).toLocaleTimeString(
                 LANGUAGE_LOCALES[language],
@@ -633,7 +640,7 @@ export default function App() {
             <div>
               <small>{cropName(activeCrop, language)}</small>
               <h2>
-                {accepted && conditionId
+                {hasPrediction && conditionId
                   ? conditionName(conditionId, language)
                   : resultType === 'retake'
                     ? t('Try another photo', 'ಮತ್ತೊಂದು ಚಿತ್ರ ಪ್ರಯತ್ನಿಸಿ')
@@ -649,6 +656,8 @@ export default function App() {
               <h2>
                 {accepted
                   ? t('Model match', 'ಮಾದರಿಯ ಹೊಂದಾಣಿಕೆ')
+                  : provisionalPrediction
+                    ? t('Low confidence prediction', 'ಕಡಿಮೆ ವಿಶ್ವಾಸದ ಅಂದಾಜು')
                   : resultType === 'retake'
                     ? t('A clearer photo will help', 'ಸ್ಪಷ್ಟ ಚಿತ್ರ ಸಹಾಯ ಮಾಡುತ್ತದೆ')
                     : resultType === 'model_unavailable'
@@ -663,8 +672,8 @@ export default function App() {
                   'ಡೇಟಾಸೆಟ್‌ನಲ್ಲಿ ಪರೀಕ್ಷಿಸಿದ ಅಂದಾಜು. ಸ್ಥಳೀಯ ಕೃಷಿ ತಜ್ಞರಿಂದ ಸ್ಥಿತಿಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.',
                 )}
               </p>
-            ) : <p>{model?.sourceEvaluated && resultType === 'uncertain'
-              ? t('This photo did not pass the model’s reliability checks. Try a clear close-up of one leaf in daylight, or ask a local agriculture adviser.', 'ಈ ಚಿತ್ರ ಮಾದರಿಯ ವಿಶ್ವಾಸಾರ್ಹತೆ ಪರಿಶೀಲನೆಯನ್ನು ಪೂರೈಸಲಿಲ್ಲ. ಹಗಲು ಬೆಳಕಿನಲ್ಲಿ ಒಂದು ಎಲೆಯ ಸ್ಪಷ್ಟ ಹತ್ತಿರದ ಚಿತ್ರ ತೆಗೆಯಿರಿ ಅಥವಾ ಸ್ಥಳೀಯ ಕೃಷಿ ಸಲಹೆಗಾರರನ್ನು ಸಂಪರ್ಕಿಸಿ.')
+            ) : <p>{provisionalPrediction
+              ? t('This is the model’s top prediction for your leaf. Retake a clearer photo to check the result.', 'ಇದು ನಿಮ್ಮ ಎಲೆಗೆ ಮಾದರಿಯ ಪ್ರಮುಖ ಅಂದಾಜು. ಫಲಿತಾಂಶ ಪರಿಶೀಲಿಸಲು ಇನ್ನಷ್ಟು ಸ್ಪಷ್ಟ ಚಿತ್ರ ತೆಗೆಯಿರಿ.')
               : resultPrompt.message}</p>}
             {!accepted && !validated && !model?.sourceEvaluated && (
               <p>
@@ -678,7 +687,7 @@ export default function App() {
           {score !== null && (
             <div className="soft-card">
               <div className="score-heading">
-                <span>{accepted ? t('Model match score', 'ಮಾದರಿಯ ಹೊಂದಾಣಿಕೆ ಅಂಕ') : t('Top model score', 'ಅತ್ಯಧಿಕ ಮಾದರಿ ಅಂಕ')}</span>
+                <span>{accepted ? t('Model match score', 'ಮಾದರಿಯ ಹೊಂದಾಣಿಕೆ ಅಂಕ') : provisionalPrediction ? t('Prediction score', 'ಅಂದಾಜಿನ ಅಂಕ') : t('Top model score', 'ಅತ್ಯಧಿಕ ಮಾದರಿ ಅಂಕ')}</span>
                 <strong>{Math.round(score * 100)}%</strong>
               </div>
               <div className={`score-track ${validated ? 'validated' : ''}`}>
@@ -696,7 +705,7 @@ export default function App() {
               {opened && conditionId && (
                 <div className="prediction">
                   <strong>{conditionName(conditionId, language)}</strong>
-                  <span>{accepted ? t('Saved model match', 'ಉಳಿಸಿದ ಮಾದರಿಯ ಹೊಂದಾಣಿಕೆ') : t('Stored candidate · not confirmed', 'ಉಳಿಸಿದ ಸಾಧ್ಯತೆ · ಖಚಿತವಲ್ಲ')}</span>
+                  <span>{accepted ? t('Saved model match', 'ಉಳಿಸಿದ ಮಾದರಿಯ ಹೊಂದಾಣಿಕೆ') : provisionalPrediction ? t('Saved prediction · low confidence', 'ಉಳಿಸಿದ ಅಂದಾಜು · ಕಡಿಮೆ ವಿಶ್ವಾಸ') : t('Stored candidate · not confirmed', 'ಉಳಿಸಿದ ಸಾಧ್ಯತೆ · ಖಚಿತವಲ್ಲ')}</span>
                 </div>
               )}
               {assessment?.candidates.slice(0, 2).map((item, index) => (
@@ -704,7 +713,7 @@ export default function App() {
                   <div>
                     <strong>{conditionName(item.id, language)}</strong>
                     <p>
-                      {cropName(item.cropId, language)} · {accepted ? index === 0 ? t('Model match', 'ಮಾದರಿಯ ಹೊಂದಾಣಿಕೆ') : t('Other candidate', 'ಇನ್ನೊಂದು ಸಾಧ್ಯತೆ') : t('not confirmed', 'ಖಚಿತವಲ್ಲ')}
+                      {cropName(item.cropId, language)} · {accepted ? index === 0 ? t('Model match', 'ಮಾದರಿಯ ಹೊಂದಾಣಿಕೆ') : t('Other candidate', 'ಇನ್ನೊಂದು ಸಾಧ್ಯತೆ') : provisionalPrediction ? index === 0 ? t('Top prediction', 'ಪ್ರಮುಖ ಅಂದಾಜು') : t('Alternative prediction', 'ಪರ್ಯಾಯ ಅಂದಾಜು') : t('not confirmed', 'ಖಚಿತವಲ್ಲ')}
                     </p>
                   </div>
                   <span>{(item.score * 100).toFixed(1)}%</span>
@@ -780,7 +789,7 @@ export default function App() {
       </>
     );
   else if (screen === 'guidance') {
-    const generic = getPrompt(accepted ? 'check_expert' : 'uncertain', language);
+    const generic = getPrompt(hasPrediction ? 'check_expert' : 'uncertain', language);
     page = (
       <>
         {topBar('result', languageToggle)}

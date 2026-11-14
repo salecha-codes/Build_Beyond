@@ -351,5 +351,11 @@
   "Source-tested prototype is ready. Field diagnosis is not validated.": "डेटासेट पर परखा गया प्रोटोटाइप तैयार है। खेत में रोग की पुष्टि का परीक्षण अभी बाकी है।",
   "Dataset-tested model · Field confirmation is still needed.": "डेटासेट पर परखा गया मॉडल · खेत में पुष्टि अभी भी ज़रूरी है।",
   "Source test passed · Field diagnosis is not validated.": "डेटासेट परीक्षण सफल · खेत में रोग की पुष्टि का परीक्षण बाकी है।",
-  "This photo did not pass the model’s reliability checks. Try a clear close-up of one leaf in daylight, or ask a local agriculture adviser.": "यह तस्वीर मॉडल की भरोसेमंद परिणाम वाली जाँच में सफल नहीं हुई। दिन की रोशनी में एक पत्ती की साफ़ नज़दीकी तस्वीर लें या स्थानीय कृषि सलाहकार से पूछें।"
+  "This photo did not pass the model’s reliability checks. Try a clear close-up of one leaf in daylight, or ask a local agriculture adviser.": "यह तस्वीर मॉडल की भरोसेमंद परिणाम वाली जाँच में सफल नहीं हुई। दिन की रोशनी में एक पत्ती की साफ़ नज़दीकी तस्वीर लें या स्थानीय कृषि सलाहकार से पूछें।",
+  "Low confidence prediction": "कम भरोसे वाला अनुमान",
+  "This is the model’s top prediction for your leaf. Retake a clearer photo to check the result.": "यह आपकी पत्ती के लिए मॉडल का सबसे प्रमुख अनुमान है। परिणाम जाँचने के लिए अधिक साफ़ तस्वीर लें।",
+  "Prediction score": "अनुमान का अंक",
+  "Saved prediction · low confidence": "सहेजा गया अनुमान · कम भरोसा",
+  "Top prediction": "प्रमुख अनुमान",
+  "Alternative prediction": "दूसरा संभावित अनुमान"
 }

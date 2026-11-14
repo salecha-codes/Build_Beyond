@@ -241,6 +241,9 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
     val fieldValidated=evidence?.calibratedAndValidated ?: stored?.validated ?: false
     val top=evidence?.ranked?.firstOrNull()
     val condition=top?.condition ?: stored?.conditionId?.let(Conditions::byId)
+    val prediction=(result is AssessmentResult.Uncertain && evidence?.sourceEvaluated==true &&
+        UncertaintyReason.MODEL_NOT_VALIDATED !in result.reasons && condition!=null) ||
+        stored?.isPrototypePrediction(s)==true
     val isRetake=result is AssessmentResult.Retake
     val unavailable=result is AssessmentResult.ModelUnavailable
     val cropMismatch=result is AssessmentResult.CropMismatch
@@ -248,11 +251,11 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
         isRetake ->s.tr("Let's take another photo","ಇನ್ನೊಂದು ಫೋಟೋ ತೆಗೆಯೋಣ")
         unavailable ->s.tr("Assessment unavailable","ಪರಿಶೀಲನೆ ಲಭ್ಯವಿಲ್ಲ")
         cropMismatch ->s.tr("Check the selected crop","ಆಯ್ಕೆ ಮಾಡಿದ ಬೆಳೆ ಪರಿಶೀಲಿಸಿ")
-        accepted ->condition?.displayName(s.language) ?: s.tr("Leaf assessment","ಎಲೆಯ ಪರಿಶೀಲನೆ")
+        accepted || prediction ->condition?.displayName(s.language) ?: s.tr("Leaf assessment","ಎಲೆಯ ಪರಿಶೀಲನೆ")
         else ->s.tr("Not sure about this one","ಈ ಫೋಟೋದ ಬಗ್ಗೆ ಖಚಿತವಿಲ್ಲ")
     }
     Page {
-        if(!accepted) Notice(title,when {
+        if(!accepted && !prediction) Notice(title,when {
             isRetake ->s.tr("Try a brighter, sharper close-up of one leaf.","ಒಂದು ಎಲೆಯ ಹೆಚ್ಚು ಬೆಳಕಿನ ಸ್ಪಷ್ಟ ಫೋಟೋ ತೆಗೆಯಿರಿ.")
             unavailable ->s.tr("No diagnosis was produced. Your photo stays on this phone.","ಯಾವುದೇ ರೋಗನಿರ್ಣಯ ಮಾಡಲಾಗಿಲ್ಲ. ಫೋಟೋ ಈ ಫೋನ್‌ನಲ್ಲೇ ಉಳಿಯುತ್ತದೆ.")
             cropMismatch ->s.tr("The model candidate and selected crop differ. Please check and retake.","ಮಾದರಿಯ ಊಹೆ ಮತ್ತು ಆಯ್ಕೆ ಮಾಡಿದ ಬೆಳೆ ಬೇರೆ ಇವೆ. ಪರಿಶೀಲಿಸಿ ಮತ್ತೆ ಫೋಟೋ ತೆಗೆಯಿರಿ.")
@@ -260,28 +263,34 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
         })
         Row(verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(14.dp)) {
             Photo(s.photoPath,Modifier.size(82.dp),256);Column(Modifier.weight(1f)) {
-                Text(s.selectedCrop.displayName(s.language),color=CropColors.Muted,fontSize=12.sp)
-                Text(if(accepted) title else s.tr("Leaf observation","ಎಲೆಯ ವೀಕ್ಷಣೆ"),fontSize=24.sp,fontWeight=FontWeight.Medium)
+                Text((if(prediction) condition?.crop else null)?.displayName(s.language) ?: s.selectedCrop.displayName(s.language),color=CropColors.Muted,fontSize=12.sp)
+                if(prediction) Text(s.predictionText("Predicted condition","ಊಹಿಸಿದ ಸ್ಥಿತಿ","अनुमानित स्थिति"),color=CropColors.Muted,fontSize=12.sp)
+                Text(if(accepted || prediction) title else s.tr("Leaf observation","ಎಲೆಯ ವೀಕ್ಷಣೆ"),fontSize=24.sp,fontWeight=FontWeight.Medium)
             }
         }
+        if(prediction) Notice(s.predictionText("Low confidence","ಕಡಿಮೆ ವಿಶ್ವಾಸ","कम भरोसा"),s.predictionText(
+            "This is the model's top prediction. A clearer photo or expert check is needed before choosing treatment.",
+            "ಇದು ಮಾದರಿಯ ಮೊದಲ ಊಹೆ. ಚಿಕಿತ್ಸೆ ಆಯ್ಕೆ ಮಾಡುವ ಮೊದಲು ಸ್ಪಷ್ಟ ಚಿತ್ರ ಅಥವಾ ತಜ್ಞರ ಪರಿಶೀಲನೆ ಅಗತ್ಯ.",
+            "यह मॉडल का सबसे संभावित अनुमान है। उपचार चुनने से पहले साफ़ तस्वीर या विशेषज्ञ की जाँच ज़रूरी है।"))
         val score=top?.score ?: stored?.score
-        if(score!=null) ScoreCard(s,score,fieldValidated,accepted)
+        if(score!=null) ScoreCard(s,score,fieldValidated,accepted,prediction)
         if(accepted && !fieldValidated) Text(s.tr("Dataset-tested estimate. Confirm the condition with a local crop expert.","ಡೇಟಾಸೆಟ್‌ನಲ್ಲಿ ಪರೀಕ್ಷಿಸಿದ ಅಂದಾಜು. ಸ್ಥಳೀಯ ಕೃಷಿ ತಜ್ಞರಿಂದ ಸ್ಥಿತಿಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ."),fontSize=12.sp,color=CropColors.Muted)
         if(!accepted && (evidence?.ranked?.isNotEmpty()==true || condition!=null)) SoftCard {
-            Text(s.tr("Possible — not confirmed","ಸಾಧ್ಯತೆ — ದೃಢಪಟ್ಟಿಲ್ಲ"),fontSize=15.sp,fontWeight=FontWeight.Medium)
+            Text(if(prediction) s.predictionText("Model predictions","ಮಾದರಿಯ ಊಹೆಗಳು","मॉडल के अनुमान") else s.tr("Possible — not confirmed","ಸಾಧ್ಯತೆ — ದೃಢಪಟ್ಟಿಲ್ಲ"),fontSize=15.sp,fontWeight=FontWeight.Medium)
             val ranked=evidence?.ranked?.take(2)
             if(ranked!=null) ranked.forEach {PredictionRow(it.condition.displayName(s.language),it.score)}
             else condition?.let {Text(it.displayName(s.language),fontSize=16.sp)}
         }
         if(result is AssessmentResult.Retake) SoftCard {Text(s.tr("Photo checks","ಫೋಟೋ ಪರಿಶೀಲನೆ"),fontSize=16.sp);result.quality.issues.forEach {Text("• "+qualityCopy(it,s),fontSize=13.sp,color=CropColors.Muted)}}
-        if(accepted) Row(horizontalArrangement=Arrangement.spacedBy(10.dp)) {
+        if(accepted || prediction) Row(horizontalArrangement=Arrangement.spacedBy(10.dp)) {
             MiniCard(s.tr("Concern check","ಲಕ್ಷಣ ಪರಿಶೀಲನೆ"),s.tr("Based on 3 questions","3 ಪ್ರಶ್ನೆಗಳ ಆಧಾರದಲ್ಲಿ"),Modifier.weight(1f))
             MiniCard(s.tr("Other signs?","ಬೇರೆ ಲಕ್ಷಣಗಳಿವೆಯೇ?"),s.tr("Check with an expert","ತಜ್ಞರನ್ನು ಸಂಪರ್ಕಿಸಿ"),Modifier.weight(1f))
         }
         AudioButton(s.prompt?.audioAsset ?: prompt("uncertain").audioAsset,s.tr("Listen in ${s.language.displayName}","ಕನ್ನಡದಲ್ಲಿ ಕೇಳಿ"),autoPlay=s.autoAudio)
-        if(accepted) {
+        if(accepted || prediction) {
             Primary(s.tr("Check concern (3 questions)","ಲಕ್ಷಣ ಪರಿಶೀಲನೆ (3 ಪ್ರಶ್ನೆಗಳು)"),{a(AppAction.Navigate(Screen.CONCERN))})
             Secondary(s.tr("See guidance","ಮಾರ್ಗದರ್ಶನ ನೋಡಿ"),{a(AppAction.Navigate(Screen.GUIDANCE))})
+            if(prediction) Secondary(s.tr("Retake photo","ಮತ್ತೆ ಫೋಟೋ ತೆಗೆಯಿರಿ"),{a(AppAction.Navigate(Screen.CAPTURE))},Icons.Outlined.CameraAlt)
         } else {
             ExpertCall(s)
             Primary(s.tr("Retake photo","ಮತ್ತೆ ಫೋಟೋ ತೆಗೆಯಿರಿ"),{a(AppAction.Navigate(Screen.CAPTURE))},Icons.Outlined.CameraAlt)
@@ -289,13 +298,13 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
         }
         if(stored==null) Secondary(if(s.savedObservationId==null) s.tr("Save scan","ಪರಿಶೀಲನೆ ಉಳಿಸಿ") else s.tr("Saved on this phone","ಈ ಫೋನ್‌ನಲ್ಲಿ ಉಳಿಸಲಾಗಿದೆ"),{a(AppAction.SaveObservation)},Icons.Outlined.BookmarkBorder,enabled=s.savedObservationId==null && result!=null)
         Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.Center) {TextButton(onClick={a(AppAction.ShareCurrent)}) {Icon(Icons.Outlined.Share,null,Modifier.size(16.dp));Spacer(Modifier.width(6.dp));Text(s.tr("Share observation","ವೀಕ್ಷಣೆ ಹಂಚಿಕೊಳ್ಳಿ"))}}
-        if(!accepted) Text(s.tr("Prototype model: scores are not validated diagnostic probabilities.","ಪ್ರಾಯೋಗಿಕ ಮಾದರಿ: ಅಂಕಗಳು ದೃಢೀಕರಿಸಿದ ರೋಗನಿರ್ಣಯದ ಸಂಭವನೀಯತೆಗಳಲ್ಲ."),fontSize=11.sp,color=CropColors.Muted)
+        if(!accepted && !prediction) Text(s.tr("Prototype model: scores are not validated diagnostic probabilities.","ಪ್ರಾಯೋಗಿಕ ಮಾದರಿ: ಅಂಕಗಳು ದೃಢೀಕರಿಸಿದ ರೋಗನಿರ್ಣಯದ ಸಂಭವನೀಯತೆಗಳಲ್ಲ."),fontSize=11.sp,color=CropColors.Muted)
     }
 }
 
-@Composable private fun ScoreCard(s:AppUiState,score:Float,fieldValidated:Boolean,accepted:Boolean) {
+@Composable private fun ScoreCard(s:AppUiState,score:Float,fieldValidated:Boolean,accepted:Boolean,prediction:Boolean=false) {
     SoftCard {
-        Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween) {Text(when {fieldValidated->s.tr("Model confidence","ಮಾದರಿಯ ವಿಶ್ವಾಸ");accepted->s.tr("Model match score","ಮಾದರಿಯ ಹೊಂದಾಣಿಕೆ ಅಂಕ");else->s.tr("Model score · unvalidated","ಮಾದರಿಯ ಅಂಕ · ದೃಢೀಕರಿಸಿಲ್ಲ")},fontSize=13.sp);Text("${(score.coerceIn(0f,1f)*100).roundToInt()}%",fontSize=17.sp,fontWeight=FontWeight.Medium)}
+        Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween) {Text(when {fieldValidated->s.tr("Model confidence","ಮಾದರಿಯ ವಿಶ್ವಾಸ");accepted->s.tr("Model match score","ಮಾದರಿಯ ಹೊಂದಾಣಿಕೆ ಅಂಕ");prediction->s.predictionText("Prediction score","ಊಹೆಯ ಅಂಕ","अनुमान का अंक");else->s.tr("Model score · unvalidated","ಮಾದರಿಯ ಅಂಕ · ದೃಢೀಕರಿಸಿಲ್ಲ")},fontSize=13.sp);Text("${(score.coerceIn(0f,1f)*100).roundToInt()}%",fontSize=17.sp,fontWeight=FontWeight.Medium)}
         LinearProgressIndicator(progress={score.coerceIn(0f,1f)},modifier=Modifier.fillMaxWidth().height(6.dp).clip(CircleShape),color=if(fieldValidated) CropColors.Green else CropColors.Gold,trackColor=CropColors.Border)
     }
 }
@@ -305,7 +314,8 @@ private fun qualityCopy(issue:QualityIssue,s:AppUiState)=when(issue) {QualityIss
 @Composable private fun GuidanceScreen(s:AppUiState,a:(AppAction)->Unit,prompt:(String)->Prompt) {
     val g=s.guidance
     val accepted=s.assessment is AssessmentResult.LikelyCondition || s.assessment is AssessmentResult.HealthyLooking || s.openedObservation?.isAcceptedModelMatch()==true
-    val genericPrompt=prompt(if(accepted) "check_expert" else "uncertain")
+    val prediction=(s.assessment is AssessmentResult.Uncertain && s.assessment.evidence.sourceEvaluated) || s.openedObservation?.isPrototypePrediction(s)==true
+    val genericPrompt=prompt(if(accepted || prediction) "check_expert" else "uncertain")
     Page {
         Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.End) {LanguageToggle(s,a)}
         Text(g?.name ?: s.tr("Observation guidance","ವೀಕ್ಷಣೆಯ ಮಾರ್ಗದರ್ಶನ"),fontSize=28.sp,fontWeight=FontWeight.Medium)
@@ -399,15 +409,23 @@ private fun dateGroup(time:Long,s:AppUiState):String {
     return when(day) {today->s.tr("Today","ಇಂದು");yesterday->s.tr("Yesterday","ನಿನ್ನೆ");else->s.tr("Earlier","ಹಿಂದಿನ")}
 }
 private fun Observation.isAcceptedModelMatch():Boolean = resultType=="likely_condition" || resultType=="healthy_looking"
+private fun Observation.isPrototypePrediction(s:AppUiState):Boolean = resultType=="uncertain" && conditionId!=null &&
+    (note.startsWith("Prototype prediction:") || (s.model.sourceEvaluated && modelVersion==s.model.version))
+private fun AppUiState.predictionText(en:String,kn:String,hi:String):String = when(language) {
+    AppLanguage.ENGLISH -> en
+    AppLanguage.KANNADA -> kn
+    AppLanguage.HINDI -> hi
+}
 
 @Composable private fun HistoryCard(o:Observation,s:AppUiState,a:(AppAction)->Unit) {
     val accepted=o.isAcceptedModelMatch()
+    val prediction=o.isPrototypePrediction(s)
     Surface(shape=RoundedCornerShape(18.dp),color=CropColors.Lavender,modifier=Modifier.fillMaxWidth().clickable {a(AppAction.OpenObservation(o.id))}) {
         Row(Modifier.padding(12.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)) {
             Photo(o.imagePath,Modifier.size(60.dp),160);Column(Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(4.dp)) {
-                Text(if(accepted) Conditions.byId(o.conditionId.orEmpty())?.displayName(s.language) ?: s.tr("Leaf observation","ಎಲೆಯ ವೀಕ್ಷಣೆ") else s.tr("Needs review","ಪರಿಶೀಲನೆ ಅಗತ್ಯ"),fontSize=15.sp,fontWeight=FontWeight.Medium)
+                Text(if(accepted || prediction) Conditions.byId(o.conditionId.orEmpty())?.displayName(s.language) ?: s.tr("Leaf observation","ಎಲೆಯ ವೀಕ್ಷಣೆ") else s.tr("Needs review","ಪರಿಶೀಲನೆ ಅಗತ್ಯ"),fontSize=15.sp,fontWeight=FontWeight.Medium)
                 Text(o.crop.displayName(s.language)+" · "+SimpleDateFormat("h:mm a",Locale.getDefault()).format(Date(o.createdAt)),fontSize=11.sp,color=CropColors.Muted)
-                Text(when {accepted && o.validated->s.tr("Model assessment","ಮಾದರಿಯ ಪರಿಶೀಲನೆ");accepted->s.tr("Model match","ಮಾದರಿಯ ಹೊಂದಾಣಿಕೆ");else->s.tr("Uncertain observation","ಅನಿಶ್ಚಿತ ವೀಕ್ಷಣೆ")},fontSize=10.sp,color=CropColors.Gold)
+                Text(when {accepted && o.validated->s.tr("Model assessment","ಮಾದರಿಯ ಪರಿಶೀಲನೆ");accepted->s.tr("Model match","ಮಾದರಿಯ ಹೊಂದಾಣಿಕೆ");prediction->s.predictionText("Prediction · Low confidence","ಊಹೆ · ಕಡಿಮೆ ವಿಶ್ವಾಸ","अनुमान · कम भरोसा");else->s.tr("Uncertain observation","ಅನಿಶ್ಚಿತ ವೀಕ್ಷಣೆ")},fontSize=10.sp,color=CropColors.Gold)
             }
             IconButton(onClick={a(AppAction.DeleteObservation(o.id))}) {Icon(Icons.Outlined.DeleteOutline,s.tr("Delete scan","ಪರಿಶೀಲನೆ ಅಳಿಸಿ"),tint=CropColors.Muted,modifier=Modifier.size(19.dp))}
         }

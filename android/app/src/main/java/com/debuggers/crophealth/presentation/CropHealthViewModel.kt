@@ -161,6 +161,8 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
                 "retake" -> "retake"
                 "model_unavailable" -> "model_unavailable"
                 "crop_mismatch" -> "crop_mismatch"
+                "uncertain" -> if (savedRecord.note.startsWith("Prototype prediction:") ||
+                    (current.model.sourceEvaluated && savedRecord.modelVersion == current.model.version)) "model_prototype" else "uncertain"
                 else -> "uncertain"
             }
             val key = when (current.assessment) {
@@ -169,6 +171,7 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
                 is AssessmentResult.CropMismatch -> "crop_mismatch"
                 is AssessmentResult.HealthyLooking -> "healthy"
                 is AssessmentResult.LikelyCondition -> "model_prototype"
+                is AssessmentResult.Uncertain -> if (current.assessment.evidence.sourceEvaluated) "model_prototype" else "uncertain"
                 else -> savedKey
             }
             val adviceAllowed = current.model.validated && current.model.allowConditionSpecificAdvice
@@ -191,7 +194,9 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
         }
         val evidence = result.evidence
         val note = when (result) {
-            is AssessmentResult.Uncertain -> "Uncertain: ${result.reasons.joinToString()}. Model output is not a confirmed diagnosis."
+            is AssessmentResult.Uncertain -> if (result.evidence.sourceEvaluated && UncertaintyReason.MODEL_NOT_VALIDATED !in result.reasons)
+                "Prototype prediction: ${result.evidence.top.condition.id}. Low confidence: ${result.reasons.joinToString()}. Expert confirmation needed."
+                else "Uncertain: ${result.reasons.joinToString()}. Model output is not a confirmed diagnosis."
             is AssessmentResult.Retake -> "Photo needs retaking: ${result.quality.issues.joinToString()}."
             is AssessmentResult.ModelUnavailable -> "Local model unavailable: ${result.reason}. No diagnosis produced."
             is AssessmentResult.CropMismatch -> "Selected crop and model output differ. Retake or check with an expert."
