@@ -1,70 +1,99 @@
-# Repository architecture
+# Repository structure and source of truth
 
-The product has two clients: the native Android application and a browser preview. Both execute the canonical MobileNetV3 leaf-guarded ONNX bundle on the user's device. The browser host serves application files; it does not receive crop photos or run diagnosis.
+AgriScan has a native Android client and a browser client. Both run the same packaged MobileNetV3-Large ONNX model locally. The Node host serves browser files and a health endpoint; it does not receive photos or perform inference.
+
+## Top-level map
 
 ```text
 Build_Beyond/
-├── frontend/                 React + TypeScript browser client
-│   ├── src/components/       Shared UI components and local audio player
-│   ├── src/lib/              Inference, content, concern rules, IndexedDB, offline hook
-│   ├── src/App.tsx           Screen state and user workflows
-│   └── tests/                Real Chromium/ONNX and offline integration checks
-├── backend/                  Node static host and GET /api/health
-├── models/assets/model/      Canonical ONNX, labels, policy, metadata and receipts
-├── database/
-│   ├── android/schema.sql    Actual generated Room schema and identity
-│   └── browser/schema.json   IndexedDB object store and indexes
-├── android/app/              Native Android application
-│   └── src/main/
-│       ├── java/.../ui/      Compose screens and CameraX
-│       ├── java/.../presentation/ ViewModel and screen/action contracts
-│       ├── java/.../inference/ ORT session and bounded photo preprocessing
-│       ├── java/.../data/    Room persistence, photo files and preferences
-│       └── assets/           Shared trilingual catalog and offline audio
-├── ml/                       Acquisition, training, evaluation and ONNX export
-├── content/                  Guidance/audio generator and technical checks
-├── contracts/                Label taxonomy and Python-generated golden tensors
-├── scripts/                  Asset sync and offline web packaging
-└── docs/                     Design, build instructions and executed evidence
+├── android/       Kotlin/Compose app, local storage, and Android tests
+├── frontend/      React/TypeScript app, browser storage, and web tests
+├── backend/       Static preview server and health endpoint
+├── models/        Canonical exported ONNX model and model metadata
+├── content/       Authored model profiles, care protocols, and generators
+├── ml/            Dataset preparation, training, evaluation, and export
+├── contracts/     Stable model labels and preprocessing fixtures
+├── database/      Room schema and IndexedDB documentation
+├── scripts/       Build and offline-web packaging
+├── tools/         Content/model bundle validation and acquisition tools
+├── docs/          Architecture, setup, evaluation, evidence, and reports
+└── presentations/ Current project presentation
 ```
+
+## Where to make changes
+
+| Change | Edit the canonical source |
+|---|---|
+| Disease model, class labels, decision policy, model metadata | `models/assets/model/` |
+| Image model training/evaluation | `ml/crop_ml/` and the corresponding `ml/reports/` receipts |
+| Stable label taxonomy and preprocessing contract | `contracts/` |
+| Authored advisory rules and translations | `content/advisory_model.json`, `content/catalog.source.json`, and related `content/` sources |
+| Detailed treatment/recovery protocols | `content/care_protocols.json` |
+| Android UI and workflow | `android/app/src/main/java/com/debuggers/crophealth/` |
+| Web UI and workflow | `frontend/src/` |
+| Android packaged app content/audio | Built from the shared/generated assets described below; use the bundle builders rather than hand-editing a copy |
+| Persistence contracts | `database/` plus the Android Room/browser storage implementation |
+| Browser/Android build behavior | `scripts/`, root Gradle files, and app build configuration |
+
+### Generated and packaged assets
+
+Several copies are generated so each client can run fully offline. Edit the canonical source, then rebuild the package; do not hand-edit generated copies.
+
+- `models/assets/model/` is the canonical exported ONNX model and metadata. Android reads it through Gradle's shared model asset source set.
+- `content/` contains authored advisory and care sources. `tools/build_advisory_bundle.py` and `tools/build_care_protocols.py` validate/package their corresponding content in `android/app/src/main/assets/content/`.
+- Audio source scripts/manifests and generated recordings live under `content/` and `android/app/src/main/assets/audio/`.
+- `scripts/sync-web-assets.mjs` copies the canonical model plus Android-packaged content/audio into ignored `frontend/public/assets/`. It verifies care bundle hashes and the model checksum.
+- `npm run build` writes ignored `frontend/dist/` and generates its service-worker cache and offline manifest.
+- Android Gradle outputs, including APKs and generated web assets, live under ignored `android/app/build/`.
+- `dist/` at the repository root is local delivery/evaluation output and is ignored by Git.
+
+## Runtime architecture
 
 ```mermaid
 flowchart TD
-    Photo[Farmer selects a crop and takes or imports a photo]
-    Photo --> Native[Android Compose client]
-    Photo --> Web[React browser client]
-    Native --> NPrep[Bounded EXIF-aware decode and Pillow-compatible tensor]
-    Web --> WPrep[Browser decode and Pillow-compatible tensor]
-    Bundle[(Shared MobileNetV3 bundle)] --> ORTA[ONNX Runtime Android]
-    Bundle --> ORTW[ONNX Runtime Web CPU WASM]
-    NPrep --> ORTA
-    WPrep --> ORTW
-    ORTA --> Gate[Real candidate scores and uncertainty policy]
-    ORTW --> Gate
-    Gate --> Guide[User-reported symptom check and local English/Kannada/Hindi guidance]
-    Native --> Room[(Local Room / SQLite)]
-    Web --> IDB[(Local IndexedDB photo Blobs and observations)]
-    Host[Node or static preview host] -->|Application assets only| Web
+    Photo[Camera or gallery photo] --> Android[Android Compose client]
+    Photo --> Browser[React browser client]
+    Android --> PrepA[Bounded image decode and normalization]
+    Browser --> PrepB[Browser image decode and normalization]
+    Model[(Shared ONNX model)] --> ORTA[ONNX Runtime Android]
+    Model --> ORTW[ONNX Runtime Web · WASM]
+    PrepA --> ORTA
+    PrepB --> ORTW
+    ORTA --> Results[Candidate scores and input policy]
+    ORTW --> Results
+    Results --> Questions[Farmer-reported symptom questions]
+    Results --> Advisory[Separate offline advisory rules]
+    Questions --> Advisory
+    Advisory --> Care[Conditional care and recovery guidance]
+    Android --> Room[(Room / SQLite)]
+    Browser --> IDB[(IndexedDB)]
+    StaticHost[Node or static web host] -->|App assets only| Browser
 ```
 
-## Frontend and application logic
+## Client responsibilities
 
-`frontend/src/App.tsx` controls the browser screens. `src/lib/inference.ts` verifies the actual model's SHA-256, labels and shapes, prepares RGB/NCHW tensors and runs one CPU-WASM assessment at a time. `content.ts` reads the packaged trilingual catalog and applies the symptom checklist rules; `storage.ts` commits observations and photo Blobs to IndexedDB. `offline.ts` registers the generated service worker.
+### Browser
 
-The native equivalent lives under `android/app/src/main/java/com/debuggers/crophealth/`: `ui/` for Compose, `presentation/` for the ViewModel, `inference/` for ORT/preprocessing, and `data/` for private files, Room and preferences. Android's Gradle assets source includes `models/assets`, preserving logical `assets/model/...` paths inside the APK.
+`frontend/src/App.tsx` currently owns screen state and connects the browser workflows. Supporting modules divide inference (`lib/inference.ts`), advisory decisions (`lib/advisory.ts`), care-protocol selection (`lib/careProtocols.ts`), translations/assets (`lib/content.ts`), local records (`lib/storage.ts`), and offline cache registration (`lib/offline.ts`). Reusable panels and audio/treatment components are in `frontend/src/components/`.
 
-## Backend and database
+The screen controller is large; extract screen components incrementally with explicit props and browser workflow coverage. Avoid turning one broad refactor into simultaneous changes to navigation, inference, and storage.
 
-`backend/server.mjs` exposes a health endpoint and serves only `frontend/dist`. It refuses uploads and does not connect to a database. The browser can also be hosted as static files without this server. Runtime photo analysis is independent of the health endpoint.
+### Android
 
-Android stores observation metadata in Room/SQLite and photos in its private files directory. The browser stores metadata and photo Blobs together in IndexedDB. Each client has its own local history; there is no account, synchronization server, or shared cloud database.
+The application entry point is `MainActivity.kt`. Under `android/app/src/main/java/com/debuggers/crophealth/`, `ui/` contains Compose screens/theme/camera, `presentation/` contains ViewModel and screen state, `domain/` contains conditions/advisory/care logic, `inference/` contains ONNX runtime and bounded photo preprocessing, `data/` contains Room/photo/preferences storage, and `content/` loads packaged catalogs/protocols.
 
-## Shared assets and offline behavior
+`CropHealthApp.kt` currently contains most Compose screen rendering. Split its screen composables separately from navigation/state changes, preserving the existing domain/UI tests.
 
-`npm run build` copies the canonical model and Android's catalog/audio into generated, ignored `frontend/public/assets`, builds the client, then creates a versioned service-worker cache manifest. No generated `node_modules` or web build output is committed.
+### Data and server
 
-The installed Android app needs no first-run download. The browser requires a successful first visit over HTTPS or localhost, then indicates **Offline ready** after its required files are cached. Browser storage can be cleared by its owner or browser; it is not a cloud backup.
+Android observation metadata is stored in Room/SQLite and photos in app-private storage. The browser stores observation metadata and photo Blobs in IndexedDB. Each client has independent device-local history; there is no account, synchronization server, or cloud database.
 
-## Model boundaries
+`backend/server.mjs` serves `frontend/dist` and `GET /api/health`. The browser can also be hosted as static files. Neither host accepts crop photos or runs diagnosis.
 
-The packaged model is scratch-trained and not validated for field diagnosis. Both clients preserve actual scores and keep the unvalidated-model uncertainty gate. The symptom questionnaire describes user observations and does not estimate disease severity from a photograph. Current source-validation metrics and exact hashes are retained under `ml/reports/` and `models/assets/model/`.
+## Model boundary
+
+The current disease model uses ImageNet-pretrained MobileNetV3-Large visual features and a trained 17-class disease head, with a separate leaf/object check. It has not been validated for field diagnosis. The authored symptom/advisory model is a separate rule/profile system, not a trained severity network. The model card, exact artifacts, metrics, and limitations are in `models/assets/model/`, `ml/reports/`, and the [evaluation documentation](MODEL_RETRAINING_VALIDATION.md).
+
+## Offline behavior
+
+The installed Android app includes required model, content, and audio assets; inference and records do not require network access. The browser needs one successful asset load over HTTPS or localhost before its service worker can provide offline reload. **Offline ready** means required assets are cached, not that model predictions have been field-validated. Browser and Android history can be removed when the user clears the corresponding local app/browser data.
