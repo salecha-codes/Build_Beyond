@@ -3,6 +3,7 @@ package com.debuggers.crophealth.presentation
 import android.net.Uri
 import com.debuggers.crophealth.content.Guidance
 import com.debuggers.crophealth.content.Prompt
+import com.debuggers.crophealth.content.AdvisoryProfile
 import com.debuggers.crophealth.domain.*
 import java.io.File
 
@@ -31,6 +32,7 @@ data class Observation(
     val inferenceMs: Long,
     val note: String,
     val validated: Boolean = false,
+    val reportedSymptoms: ReportedSymptoms? = null,
 )
 
 /** Persisted provenance is explicit; legacy unsupported records must never gain candidate status. */
@@ -58,6 +60,9 @@ data class AppUiState(
     val autoAudio: Boolean = false,
     val symptoms: ReportedSymptoms = ReportedSymptoms(),
     val concern: ConcernResult = ConcernGuidance.summarize(ReportedSymptoms()),
+    val symptomsComplete: Boolean = false,
+    val advisoryProfile: AdvisoryProfile? = null,
+    val advisory: AdvisoryAssessment = AdvisoryDecisionModel.assess(null, null, null),
     val openedObservation: Observation? = null,
 )
 
@@ -69,7 +74,7 @@ sealed interface AppAction {
     data class CameraCaptured(val file: File) : AppAction
     data class OpenObservation(val id: String) : AppAction
     data class DeleteObservation(val id: String) : AppAction
-    data class ReportSymptoms(val symptoms: ReportedSymptoms) : AppAction
+    data class ReportSymptoms(val symptoms: ReportedSymptoms, val completed: Boolean = false) : AppAction
     data class SetAutoAudio(val enabled: Boolean) : AppAction
     data object Analyze : AppAction
     data object DismissError : AppAction

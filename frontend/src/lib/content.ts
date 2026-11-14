@@ -224,11 +224,14 @@ export function summarizeConcern(input: Partial<ReportedSymptoms>): ConcernResul
     wiltingOrDying: input.wiltingOrDying ?? false,
     leafCoverage: input.leafCoverage ?? 'NOT_REPORTED',
     uncertainAnswers: input.uncertainAnswers ?? false,
+    fruitOrStemAffected: input.fruitOrStemAffected ?? false,
+    wetWeather: input.wetWeather ?? false,
   };
   const needsExpert =
     reportedSymptoms.spreadingQuickly ||
     reportedSymptoms.manyPlantsAffected ||
     reportedSymptoms.wiltingOrDying ||
+    reportedSymptoms.fruitOrStemAffected ||
     reportedSymptoms.leafCoverage === 'MANY_SPOTS' ||
     reportedSymptoms.leafCoverage === 'NOT_REPORTED' ||
     reportedSymptoms.uncertainAnswers;

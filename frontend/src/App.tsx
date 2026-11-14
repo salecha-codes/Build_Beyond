@@ -28,12 +28,15 @@ import {
   ZapOff,
 } from 'lucide-react';
 import { AudioPlayer } from './components/AudioPlayer';
+import { AdvisoryPanel } from './components/AdvisoryPanel';
+import { advisoryText, evaluateAdvisory, loadAdvisoryModel } from './lib/advisory';
+import type { AdvisoryModel, AdvisoryTextKey } from './lib/advisory';
 import { analyzeLeaf, getModelStatus } from './lib/inference';
 import type { AssessmentResult, ModelStatus } from './lib/inference';
 import {
   conditionName,
+  assetUrl,
   cropName,
-  getGuidance,
   getPrompt,
   loadCatalog,
   summarizeConcern,
@@ -45,6 +48,7 @@ import {
   HISTORY_CHANGED_EVENT,
   listObservations,
   saveObservation,
+  updateObservationConcern,
   setLanguage as persistLanguage,
 } from './lib/storage';
 import { CONDITIONS, CROPS, LANGUAGES, LANGUAGE_LABELS, LANGUAGE_LOCALES } from './lib/types';
@@ -149,9 +153,12 @@ export default function App() {
   const [saving, setSaving] = useState(false);
   const [savedId, setSavedId] = useState<string | null>(null);
   const [question, setQuestion] = useState(0);
-  const [answers, setAnswers] = useState<(number | null)[]>([null, null, null]);
+  const [answers, setAnswers] = useState<(number | null)[]>(Array(6).fill(null));
+  const [advisoryModel, setAdvisoryModel] = useState<AdvisoryModel | null>(null);
+  const [advisoryFailed, setAdvisoryFailed] = useState(false);
   const [concern, setConcern] = useState<ConcernResult | null>(null);
   const [concernComplete, setConcernComplete] = useState(false);
+  const [careSaved, setCareSaved] = useState(false);
   const [expertOpen, setExpertOpen] = useState(false);
   const [expertNumber, setExpertNumber] = useState('');
   const [deleteTarget, setDeleteTarget] = useState<ObservationRecord | null>(null);
@@ -159,6 +166,7 @@ export default function App() {
   const analysisRequest = useRef(0);
   const offlineReady = useOfflineReady();
   const t = useCallback((en: string, kn: string) => translateUi(en, kn, language), [language]);
+  const a = (key: AdvisoryTextKey) => advisoryText(key, language);
   const refreshHistory = useCallback(async () => {
     try {
       setHistory(await listObservations({ limit: 100 }));
@@ -169,6 +177,7 @@ export default function App() {
     }
   }, []);
   useEffect(() => {
+    void loadAdvisoryModel().then(setAdvisoryModel).catch(() => setAdvisoryFailed(true));
     void loadCatalog()
       .then(() => setCatalogReady(true))
       .catch(() => setCatalogFailed(true));
@@ -227,7 +236,7 @@ export default function App() {
     setSavedId(null);
     setConcern(null);
     setConcernComplete(false);
-    setAnswers([null, null, null]);
+    setAnswers(Array(6).fill(null));
     setScreen('photo');
   }
   function onUpload(event: ChangeEvent<HTMLInputElement>) {
@@ -294,11 +303,8 @@ export default function App() {
               : 'uncertain';
   const resultPrompt = getPrompt(promptKey, language);
   const currentConcern = concern || opened?.concern || null;
-  const conditionSpecificAdviceAllowed =
-    accepted && validated &&
-    (assessment as (AssessmentResult & { allowConditionSpecificAdvice?: boolean }) | null)
-      ?.allowConditionSpecificAdvice === true;
-  const guidance = conditionSpecificAdviceAllowed && conditionId ? getGuidance(conditionId, language) : null;
+  const advisory = advisoryModel ? evaluateAdvisory(advisoryModel, conditionId, currentConcern?.reportedSymptoms, resultType) : null;
+
 
   async function saveScan() {
     if (saving || savedId || opened || !assessment || !photo) return;
@@ -334,39 +340,53 @@ export default function App() {
     setAssessment(null);
     setConcern(record.concern);
     setConcernComplete(false);
-    setAnswers([null, null, null]);
+    setAnswers(Array(6).fill(null));
     setScreen('result');
   }
   function beginConcern() {
+    setCareSaved(false);
     setQuestion(0);
-    setAnswers([null, null, null]);
+    setAnswers(Array(6).fill(null));
     setConcernComplete(false);
     setScreen('concern');
   }
   function nextConcern() {
     if (answers[question] === null) return;
-    if (question < 2) {
+    if (question < 5) {
       setQuestion(question + 1);
       return;
     }
-    const coverage: LeafCoverage =
-      answers[1] === 0
-        ? 'FEW_SPOTS'
-        : answers[1] === 1
-          ? 'SOME_SPOTS'
-          : answers[1] === 2
-            ? 'MANY_SPOTS'
-            : 'NOT_REPORTED';
+    const coverage: LeafCoverage = ['NO_VISIBLE_DAMAGE', 'FEW_SPOTS', 'SOME_SPOTS', 'MANY_SPOTS', 'NOT_REPORTED'][answers[1] ?? 4] as LeafCoverage;
     const reported: ReportedSymptoms = {
       ...EMPTY_SYMPTOMS,
       spreadingQuickly: answers[0] === 0,
       manyPlantsAffected: answers[2] === 0,
+      wiltingOrDying: answers[3] === 0,
+      fruitOrStemAffected: answers[4] === 0,
+      wetWeather: answers[5] === 0,
       leafCoverage: coverage,
-      uncertainAnswers: answers[0] === 2 || answers[1] === 3 || answers[2] === 2,
+      uncertainAnswers: answers.some((answer, index) => answer === null || answer === (index === 1 ? 4 : 2)),
     };
     const summary = summarizeConcern(reported);
+    if (advisoryModel) {
+      const next = evaluateAdvisory(advisoryModel, conditionId, reported, resultType);
+      summary.level = next.urgency === 'MONITOR' ? 'OBSERVE_AND_RECHECK' : 'SEEK_LOCAL_EXPERT';
+    }
     setConcern(summary);
     setConcernComplete(true);
+  }
+
+  async function saveCarePlan() {
+    const id = opened?.id || savedId;
+    if (!id || !concern || saving) return;
+    setSaving(true);
+    try {
+      const record = await updateObservationConcern(id, concern);
+      if (opened) setOpened(record);
+      setCareSaved(true);
+      await refreshHistory();
+    } catch (failure) { setError(failure instanceof Error ? failure.message : String(failure)); }
+    finally { setSaving(false); }
   }
 
   const languageToggle = (
@@ -748,21 +768,8 @@ export default function App() {
             label={t('Listen in English', 'ಕನ್ನಡದಲ್ಲಿ ಕೇಳಿ')}
             compact
           />
-          {currentConcern && (
-            <div className="soft-card" data-testid="concern-summary">
-              <h3>
-                {currentConcern.level === 'SEEK_LOCAL_EXPERT'
-                  ? t('Ask a local expert', 'ಸ್ಥಳೀಯ ತಜ್ಞರನ್ನು ಕೇಳಿ')
-                  : t('Observe and recheck', 'ಗಮನಿಸಿ ಮರುಪರಿಶೀಲಿಸಿ')}
-              </h3>
-              <p>
-                {t(
-                  'Based on your answers about visible symptoms, not an AI severity estimate.',
-                  'ಕಾಣುವ ಲಕ್ಷಣಗಳ ಬಗ್ಗೆ ನಿಮ್ಮ ಉತ್ತರಗಳ ಆಧಾರಿತ. AI ತೀವ್ರತೆ ಅಂದಾಜಲ್ಲ.',
-                )}
-              </p>
-            </div>
-          )}
+          {advisory && advisoryModel && !nonLeaf && <AdvisoryPanel result={advisory} language={language} model={advisoryModel} />}
+          {advisoryFailed && <p className="hint">{a('failure')}</p>}
           <div className="button-stack">
             {cropMismatchPrediction && <button className="secondary" onClick={() => navigate('home')}>
               {t('Change selected crop', 'ಆಯ್ಕೆ ಮಾಡಿದ ಬೆಳೆಯನ್ನು ಬದಲಿಸಿ')}
@@ -770,7 +777,7 @@ export default function App() {
             {!accepted && !nonLeaf && expertButton}
             {!nonLeaf && <>
             <button className="primary" onClick={beginConcern}>
-              {t('Check concern (3 questions)', 'ಲಕ್ಷಣ ಪರಿಶೀಲನೆ (3 ಪ್ರಶ್ನೆಗಳು)')}
+              {a('questions')}
             </button>
             <button className="secondary" onClick={() => navigate('guidance')}>
               {t('See guidance', 'ಸಲಹೆ ನೋಡಿ')}
@@ -809,170 +816,54 @@ export default function App() {
       </>
     );
   else if (screen === 'guidance') {
-    const generic = getPrompt(hasPrediction ? 'check_expert' : 'uncertain', language);
-    page = (
-      <>
-        {topBar('result', languageToggle)}
-        <main className="app-page with-top">
-          <div className="heading-copy">
-            <h1 data-testid="guidance-heading">{t('Care for your crop', 'ನಿಮ್ಮ ಬೆಳೆ ಆರೈಕೆ')}</h1>
-            <p>
-              {cropName(activeCrop, language)} ·{' '}
-              {guidance?.name || t('General observation guidance', 'ಸಾಮಾನ್ಯ ವೀಕ್ಷಣೆಯ ಸಲಹೆ')}
-            </p>
-          </div>
-          <AudioPlayer
-            language={language}
-            src={catalogReady ? guidance?.audioAsset || generic.audioAsset : null}
-            label={t('Listen to guidance', 'ಸಲಹೆ ಕೇಳಿ')}
-          />
-          {guidance ? (
-            <>
-              {[
-                ['Do now', 'ಈಗ ಮಾಡಿ', guidance.actions, ''],
-                ['What to watch', 'ಗಮನಿಸಬೇಕಾದವು', guidance.symptoms, 'gold'],
-                ['Prevention', 'ಮುನ್ನೆಚ್ಚರಿಕೆ', guidance.prevention, 'rose'],
-              ].map(([en, kn, lines, color]) => (
-                <section className={`guidance-card ${color}`} key={String(en)}>
-                  <h3>{t(String(en), String(kn))}</h3>
-                  <ul>
-                    {(lines as string[]).map((line) => (
-                      <li key={line}>{line}</li>
-                    ))}
-                  </ul>
-                </section>
-              ))}
-              <p className="hint">{guidance.caution}</p>
-            </>
-          ) : (
-            <>
-              <section className="guidance-card">
-                <h3>{t('Observe your plants', 'ಗಿಡಗಳನ್ನು ಗಮನಿಸಿ')}</h3>
-                <ul>
-                  <li>
-                    {t(
-                      'Look at more than one plant. Note whether symptoms are spreading.',
-                      'ಒಂದಕ್ಕಿಂತ ಹೆಚ್ಚು ಗಿಡಗಳನ್ನು ನೋಡಿ. ಲಕ್ಷಣಗಳು ಹರಡುತ್ತಿವೆಯೇ ಗಮನಿಸಿ.',
-                    )}
-                  </li>
-                  <li>
-                    {t(
-                      'Keep a dated photo and recheck the same plant.',
-                      'ದಿನಾಂಕದೊಂದಿಗೆ ಚಿತ್ರ ಉಳಿಸಿ. ಅದೇ ಗಿಡವನ್ನು ಮತ್ತೆ ಪರಿಶೀಲಿಸಿ.',
-                    )}
-                  </li>
-                </ul>
-              </section>
-              <section className="guidance-card gold">
-                <h3>{t('Get the cause checked', 'ಕಾರಣ ಪರಿಶೀಲಿಸಿಕೊಳ್ಳಿ')}</h3>
-                <ul>
-                  <li>{getPrompt('check_expert', language).message}</li>
-                </ul>
-              </section>
-              <section className="guidance-card rose">
-                <h3>{t('Take simple precautions', 'ಸರಳ ಮುನ್ನೆಚ್ಚರಿಕೆ ವಹಿಸಿ')}</h3>
-                <ul>
-                  <li>
-                    {t(
-                      'Keep tools clean and avoid moving damaged plant material between fields.',
-                      'ಉಪಕರಣಗಳನ್ನು ಸ್ವಚ್ಛವಾಗಿಡಿ. ಹಾನಿಗೊಂಡ ಗಿಡದ ಭಾಗಗಳನ್ನು ಹೊಲಗಳ ನಡುವೆ ಸಾಗಿಸಬೇಡಿ.',
-                    )}
-                  </li>
-                  <li>
-                    {t(
-                      'Do not choose a pesticide or dosage from this prototype result.',
-                      'ಈ ಮಾದರಿಯ ಫಲಿತಾಂಶದಿಂದ ಕೀಟನಾಶಕ ಅಥವಾ ಪ್ರಮಾಣ ಆಯ್ಕೆ ಮಾಡಬೇಡಿ.',
-                    )}
-                  </li>
-                </ul>
-              </section>
-            </>
-          )}
-          {expertButton}
-          <p className="privacy-note">
-            {t(
-              'Prototype guidance and Kannada translations are pending agronomist and language review.',
-              'ಮಾದರಿ ಸಲಹೆ ಮತ್ತು ಕನ್ನಡ ಅನುವಾದಗಳಿಗೆ ಕೃಷಿ ತಜ್ಞರ ಹಾಗೂ ಭಾಷಾ ಪರಿಶೀಲನೆ ಬಾಕಿಯಿದೆ.',
-            )}
-          </p>
-        </main>
-      </>
-    );
+    page = <>
+      {topBar('result', languageToggle)}
+      <main className="app-page with-top">
+        <div className="heading-copy">
+          <h1 data-testid="guidance-heading">{t('Care for your crop', 'ನಿಮ್ಮ ಬೆಳೆ ಆರೈಕೆ')}</h1>
+          <p>{cropName(activeCrop, language)} · {conditionId && advisory?.profile ? conditionName(conditionId, language) : a('generic')}</p>
+        </div>
+        {advisory && advisoryModel ? <AdvisoryPanel result={advisory} language={language} model={advisoryModel} onQuestions={beginConcern} detailed /> : <p>{advisoryFailed ? a('failure') : t('Loading…', 'ಲೋಡ್ ಆಗುತ್ತಿದೆ…')}</p>}
+        {expertButton}
+      </main>
+    </>;
   } else if (screen === 'concern') {
     const keys = ['concern_spreading', 'concern_coverage', 'concern_plants'];
-    const questions = [
-      t('Are symptoms spreading quickly?', 'ಲಕ್ಷಣಗಳು ವೇಗವಾಗಿ ಹರಡುತ್ತಿವೆಯೇ?'),
-      t('How much of the leaf looks affected?', 'ಎಲೆಯ ಎಷ್ಟು ಭಾಗದಲ್ಲಿ ಲಕ್ಷಣಗಳಿವೆ?'),
-      t('Do several plants have these symptoms?', 'ಹಲವು ಗಿಡಗಳಲ್ಲಿ ಇದೇ ಲಕ್ಷಣಗಳಿವೆಯೇ?'),
-    ];
-    const options =
-      question === 1
-        ? [
-            t('A few small spots', 'ಕೆಲವು ಸಣ್ಣ ಚುಕ್ಕೆಗಳು'),
-            t('Some of the leaf', 'ಎಲೆಯ ಕೆಲವು ಭಾಗ'),
-            t('Most of the leaf', 'ಎಲೆಯ ಹೆಚ್ಚಿನ ಭಾಗ'),
-            t('I’m not sure', 'ನನಗೆ ಖಚಿತವಿಲ್ಲ'),
-          ]
-        : [t('Yes', 'ಹೌದು'), t('No', 'ಇಲ್ಲ'), t('I’m not sure', 'ನನಗೆ ಖಚಿತವಿಲ್ಲ')];
-    const summaryPrompt = getPrompt(
-      currentConcern?.level === 'SEEK_LOCAL_EXPERT' ? 'concern_expert' : 'concern_observe',
-      language,
-    );
+    const questions = Array.from({ length: 6 }, (_, index) => a(`question${index}` as AdvisoryTextKey));
+    const options = question === 1
+      ? [a('none'), a('few'), a('some'), a('many'), a('unsure')]
+      : [a('yes'), a('no'), a('unsure')];
     page = (
       <>
         {topBar(
           'result',
           !concernComplete ? (
             <span className="hint">
-              {t(`Question ${question + 1} of 3`, `ಪ್ರಶ್ನೆ ${question + 1} / 3`)}
+              {language === 'hi' ? `प्रश्न ${question + 1} / 6` : language === 'kn' ? `ಪ್ರಶ್ನೆ ${question + 1} / 6` : `Question ${question + 1} of 6`}
             </span>
           ) : null,
         )}
         <main className="app-page with-top">
           {concernComplete ? (
             <>
-              <div className="heading-copy" data-testid="concern-summary">
-                <h1>
-                  {currentConcern?.level === 'SEEK_LOCAL_EXPERT'
-                    ? t('Get a closer look', 'ಹೆಚ್ಚಿನ ಪರಿಶೀಲನೆ ಪಡೆಯಿರಿ')
-                    : t('Observe and recheck', 'ಗಮನಿಸಿ ಮರುಪರಿಶೀಲಿಸಿ')}
-                </h1>
-                <p>{summaryPrompt.message}</p>
-              </div>
-              <AudioPlayer
-            language={language}
-                src={catalogReady ? summaryPrompt.audioAsset : null}
-                label={t('Listen to next steps', 'ಮುಂದಿನ ಕ್ರಮ ಕೇಳಿ')}
-              />
-              <div className="soft-card">
-                <h3>{t('Your observations matter', 'ನಿಮ್ಮ ಗಮನಿಸುವಿಕೆ ಮುಖ್ಯ')}</h3>
-                <p>
-                  {t(
-                    'This follow-up comes from your answers. It does not measure disease severity from the image.',
-                    'ಇದು ನಿಮ್ಮ ಉತ್ತರಗಳ ಆಧಾರಿತ ಸಲಹೆ. ಚಿತ್ರದಿಂದ ರೋಗದ ತೀವ್ರತೆಯನ್ನು ಅಳೆಯುವುದಿಲ್ಲ.',
-                  )}
-                </p>
-              </div>
-              {currentConcern?.level === 'SEEK_LOCAL_EXPERT' && expertButton}
+              <div className="heading-copy" data-testid="concern-summary"><h1>{a('title')}</h1></div>
+              {advisory && advisoryModel && <AdvisoryPanel result={advisory} language={language} model={advisoryModel} detailed />}
+              {advisoryFailed && <p>{a('failure')}</p>}
+              {advisory?.urgency !== 'MONITOR' && expertButton}
               <button className="primary" onClick={() => navigate('guidance')}>
                 {t('See guidance', 'ಸಲಹೆ ನೋಡಿ')}
               </button>
               <button className="secondary" onClick={() => navigate('result')}>
                 {t('Back to result', 'ಫಲಿತಾಂಶಕ್ಕೆ ಹಿಂತಿರುಗಿ')}
               </button>
-              {(opened || savedId) && (
-                <p className="hint">
-                  {t(
-                    'These new answers are for this visit. The saved observation is unchanged.',
-                    'ಈ ಹೊಸ ಉತ್ತರಗಳು ಈ ಭೇಟಿಗೆ ಮಾತ್ರ. ಉಳಿಸಿದ ದಾಖಲೆ ಬದಲಾಗುವುದಿಲ್ಲ.',
-                  )}
-                </p>
-              )}
+              {(opened || savedId) && <button className="secondary" onClick={saveCarePlan} disabled={saving || careSaved} data-testid="save-care-plan">
+                {careSaved ? (language === 'hi' ? 'देखभाल के उत्तर सहेजे गए' : language === 'kn' ? 'ಆರೈಕೆ ಉತ್ತರ ಉಳಿಸಲಾಗಿದೆ' : 'Care answers saved') : (language === 'hi' ? 'देखभाल के उत्तर सहेजें' : language === 'kn' ? 'ಆರೈಕೆ ಉತ್ತರ ಉಳಿಸಿ' : 'Save care answers')}
+              </button>}
             </>
           ) : (
             <>
               <div className="question-progress">
-                <i style={{ width: `${((question + 1) / 3) * 100}%` }} />
+                <i style={{ width: `${((question + 1) / 6) * 100}%` }} />
               </div>
               <p>
                 {cropName(activeCrop, language)} · {t('Your observations', 'ನಿಮ್ಮ ಗಮನಿಸುವಿಕೆ')}
@@ -981,7 +872,7 @@ export default function App() {
               <AudioPlayer
             language={language}
                 compact
-                src={catalogReady ? getPrompt(keys[question], language).audioAsset : null}
+                src={catalogReady ? question === 1 ? assetUrl(`audio/${language}/advisory_question_coverage.ogg`) : question < 3 ? getPrompt(keys[question], language).audioAsset : assetUrl(`audio/${language}/advisory_question_${['wilting', 'fruit_stem', 'wet_weather'][question - 3]}.ogg`) : null}
                 label={t('Read question aloud', 'ಪ್ರಶ್ನೆ ಕೇಳಿ')}
               />
               <div className="button-stack" role="radiogroup" aria-label={questions[question]}>
@@ -1010,7 +901,7 @@ export default function App() {
                 disabled={answers[question] === null}
                 onClick={nextConcern}
               >
-                {question === 2 ? t('See next steps', 'ಮುಂದಿನ ಕ್ರಮ ನೋಡಿ') : t('Next', 'ಮುಂದೆ')}
+                {question === 5 ? t('See next steps', 'ಮುಂದಿನ ಕ್ರಮ ನೋಡಿ') : t('Next', 'ಮುಂದೆ')}
                 <ArrowRight size={17} />
               </button>
               <p className="small-center">

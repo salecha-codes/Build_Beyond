@@ -223,3 +223,24 @@ export async function closeHistoryDatabase(): Promise<void> {
     opening = null;
   }
 }
+
+/** Explicitly save new advisory answers without altering the original photo or inference. */
+export async function updateObservationConcern(id: string, concern: ObservationRecord['concern']): Promise<ObservationRecord> {
+  const db = await database();
+  try {
+    const tx = db.transaction(STORE, 'readwrite');
+    const finished = complete(tx);
+    const store = tx.objectStore(STORE);
+    let record: ObservationRecord | undefined;
+    const read = store.get(id);
+    read.onsuccess = () => {
+      if (!read.result) { tx.abort(); return; }
+      record = { ...read.result, concern };
+      store.put(record);
+    };
+    await finished;
+    if (!record) throw new LocalStorageError('The saved observation no longer exists.');
+    changed();
+    return record;
+  } catch (error) { throw storageError(error); }
+}

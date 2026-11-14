@@ -14,6 +14,7 @@
     "openai": "PORT=4173 node backend/server.mjs",
     "test:backend": "node --test backend/test/*.test.mjs",
     "test:policy": "node --test frontend/tests/source-acceptance.test.cjs",
+    "test:advisory": "node --test frontend/tests/advisory.test.cjs",
     "test:web": "node frontend/tests/browser-qa.cjs"
   },
   "engines": {

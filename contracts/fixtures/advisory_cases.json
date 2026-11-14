@@ -1,0 +1,334 @@
+{
+  "schema_version": 1,
+  "scope": "hand-authored behavior contract, not clinical validation or training data",
+  "cases": [
+    {
+      "name": "few stable early-blight spots",
+      "conditionId": "tomato_early_blight",
+      "resultType": "likely",
+      "symptoms": {
+        "leafCoverage": "FEW_SPOTS",
+        "spreadingQuickly": false,
+        "manyPlantsAffected": false,
+        "wiltingOrDying": false,
+        "uncertainAnswers": false,
+        "fruitOrStemAffected": false,
+        "wetWeather": false
+      },
+      "expected": {
+        "severity": "MILD",
+        "urgency": "MONITOR"
+      }
+    },
+    {
+      "name": "mild damage but fast-risk suspected late blight",
+      "conditionId": "potato_late_blight",
+      "resultType": "likely",
+      "symptoms": {
+        "leafCoverage": "FEW_SPOTS",
+        "spreadingQuickly": false,
+        "manyPlantsAffected": false,
+        "wiltingOrDying": false,
+        "uncertainAnswers": false,
+        "fruitOrStemAffected": false,
+        "wetWeather": false
+      },
+      "expected": {
+        "severity": "MILD",
+        "urgency": "SAME_DAY"
+      }
+    },
+    {
+      "name": "late blight with extent unknown",
+      "conditionId": "tomato_late_blight",
+      "resultType": "likely",
+      "symptoms": {
+        "leafCoverage": "NOT_REPORTED",
+        "spreadingQuickly": false,
+        "manyPlantsAffected": false,
+        "wiltingOrDying": false,
+        "uncertainAnswers": false,
+        "fruitOrStemAffected": false,
+        "wetWeather": false
+      },
+      "expected": {
+        "severity": "UNKNOWN",
+        "urgency": "SAME_DAY"
+      }
+    },
+    {
+      "name": "large maize leaf damage",
+      "conditionId": "maize_northern_leaf_blight",
+      "resultType": "likely",
+      "symptoms": {
+        "leafCoverage": "MANY_SPOTS",
+        "spreadingQuickly": false,
+        "manyPlantsAffected": false,
+        "wiltingOrDying": false,
+        "uncertainAnswers": false,
+        "fruitOrStemAffected": false,
+        "wetWeather": false
+      },
+      "expected": {
+        "severity": "SEVERE",
+        "urgency": "SAME_DAY"
+      }
+    },
+    {
+      "name": "stable suspected mosaic requires confirmation",
+      "conditionId": "tomato_mosaic_virus",
+      "resultType": "likely",
+      "symptoms": {
+        "leafCoverage": "FEW_SPOTS",
+        "spreadingQuickly": false,
+        "manyPlantsAffected": false,
+        "wiltingOrDying": false,
+        "uncertainAnswers": false,
+        "fruitOrStemAffected": false,
+        "wetWeather": false
+      },
+      "expected": {
+        "severity": "MILD",
+        "urgency": "SOON"
+      }
+    },
+    {
+      "name": "spreading suspected leaf curl",
+      "conditionId": "tomato_yellow_leaf_curl_virus",
+      "resultType": "likely",
+      "symptoms": {
+        "leafCoverage": "FEW_SPOTS",
+        "spreadingQuickly": true,
+        "manyPlantsAffected": false,
+        "wiltingOrDying": false,
+        "uncertainAnswers": false,
+        "fruitOrStemAffected": false,
+        "wetWeather": false
+      },
+      "expected": {
+        "severity": "MILD",
+        "urgency": "SAME_DAY"
+      }
+    },
+    {
+      "name": "wilting overrides healthy-looking result",
+      "conditionId": "tomato_healthy",
+      "resultType": "likely",
+      "symptoms": {
+        "leafCoverage": "NO_VISIBLE_DAMAGE",
+        "spreadingQuickly": false,
+        "manyPlantsAffected": false,
+        "wiltingOrDying": true,
+        "uncertainAnswers": false,
+        "fruitOrStemAffected": false,
+        "wetWeather": false
+      },
+      "expected": {
+        "severity": "SEVERE",
+        "urgency": "URGENT"
+      }
+    },
+    {
+      "name": "healthy no visible signs",
+      "conditionId": "maize_healthy",
+      "resultType": "likely",
+      "symptoms": {
+        "leafCoverage": "NO_VISIBLE_DAMAGE",
+        "spreadingQuickly": false,
+        "manyPlantsAffected": false,
+        "wiltingOrDying": false,
+        "uncertainAnswers": false,
+        "fruitOrStemAffected": false,
+        "wetWeather": false
+      },
+      "expected": {
+        "severity": "NONE",
+        "urgency": "MONITOR"
+      }
+    },
+    {
+      "name": "wet weather alone does not imply severe damage",
+      "conditionId": "tomato_healthy",
+      "resultType": "likely",
+      "symptoms": {
+        "leafCoverage": "NO_VISIBLE_DAMAGE",
+        "spreadingQuickly": false,
+        "manyPlantsAffected": false,
+        "wiltingOrDying": false,
+        "uncertainAnswers": false,
+        "fruitOrStemAffected": false,
+        "wetWeather": true
+      },
+      "expected": {
+        "severity": "NONE",
+        "urgency": "MONITOR"
+      }
+    },
+    {
+      "name": "unknown extent never reassuring",
+      "conditionId": "tomato_spider_mites",
+      "resultType": "likely",
+      "symptoms": {
+        "leafCoverage": "NOT_REPORTED",
+        "spreadingQuickly": false,
+        "manyPlantsAffected": false,
+        "wiltingOrDying": false,
+        "uncertainAnswers": false,
+        "fruitOrStemAffected": false,
+        "wetWeather": false
+      },
+      "expected": {
+        "severity": "UNKNOWN",
+        "urgency": "SOON"
+      }
+    },
+    {
+      "name": "uncertain answer does not become routine monitoring",
+      "conditionId": "maize_common_rust",
+      "resultType": "likely",
+      "symptoms": {
+        "leafCoverage": "FEW_SPOTS",
+        "spreadingQuickly": false,
+        "manyPlantsAffected": false,
+        "wiltingOrDying": false,
+        "uncertainAnswers": true,
+        "fruitOrStemAffected": false,
+        "wetWeather": false
+      },
+      "expected": {
+        "severity": "MILD",
+        "urgency": "SOON"
+      }
+    },
+    {
+      "name": "moderate coverage needs early advice",
+      "conditionId": "tomato_septoria_leaf_spot",
+      "resultType": "likely",
+      "symptoms": {
+        "leafCoverage": "SOME_SPOTS",
+        "spreadingQuickly": false,
+        "manyPlantsAffected": false,
+        "wiltingOrDying": false,
+        "uncertainAnswers": false,
+        "fruitOrStemAffected": false,
+        "wetWeather": false
+      },
+      "expected": {
+        "severity": "MODERATE",
+        "urgency": "SOON"
+      }
+    },
+    {
+      "name": "rapid spread across plants needs urgent advice",
+      "conditionId": "tomato_bacterial_spot",
+      "resultType": "likely",
+      "symptoms": {
+        "leafCoverage": "FEW_SPOTS",
+        "spreadingQuickly": true,
+        "manyPlantsAffected": true,
+        "wiltingOrDying": false,
+        "uncertainAnswers": false,
+        "fruitOrStemAffected": false,
+        "wetWeather": false
+      },
+      "expected": {
+        "severity": "MILD",
+        "urgency": "URGENT"
+      }
+    },
+    {
+      "name": "fruit or stem concern elevates reported severity",
+      "conditionId": "tomato_target_spot",
+      "resultType": "likely",
+      "symptoms": {
+        "leafCoverage": "FEW_SPOTS",
+        "spreadingQuickly": false,
+        "manyPlantsAffected": false,
+        "wiltingOrDying": false,
+        "uncertainAnswers": false,
+        "fruitOrStemAffected": true,
+        "wetWeather": false
+      },
+      "expected": {
+        "severity": "SEVERE",
+        "urgency": "SAME_DAY"
+      }
+    },
+    {
+      "name": "one spreading patch needs early review",
+      "conditionId": "potato_early_blight",
+      "resultType": "likely",
+      "symptoms": {
+        "leafCoverage": "FEW_SPOTS",
+        "spreadingQuickly": true,
+        "manyPlantsAffected": false,
+        "wiltingOrDying": false,
+        "uncertainAnswers": false,
+        "fruitOrStemAffected": false,
+        "wetWeather": false
+      },
+      "expected": {
+        "severity": "MILD",
+        "urgency": "SOON"
+      }
+    },
+    {
+      "name": "unanswered questionnaire",
+      "conditionId": "tomato_early_blight",
+      "resultType": "likely",
+      "symptoms": null,
+      "expected": {
+        "severity": "UNKNOWN",
+        "diseaseCareAllowed": true
+      }
+    },
+    {
+      "name": "nonleaf photo cannot receive disease care",
+      "conditionId": "tomato_early_blight",
+      "resultType": "retake",
+      "symptoms": null,
+      "expected": {
+        "severity": "UNKNOWN",
+        "diseaseCareAllowed": false
+      }
+    },
+    {
+      "name": "wrong crop cannot receive disease care",
+      "conditionId": "maize_common_rust",
+      "resultType": "crop_mismatch",
+      "symptoms": null,
+      "expected": {
+        "severity": "UNKNOWN",
+        "diseaseCareAllowed": false
+      }
+    },
+    {
+      "name": "missing model cannot receive disease care",
+      "conditionId": "potato_late_blight",
+      "resultType": "model_unavailable",
+      "symptoms": null,
+      "expected": {
+        "severity": "UNKNOWN",
+        "diseaseCareAllowed": false
+      }
+    },
+    {
+      "name": "no damage on pictured leaf but other plants spreading needs urgent advice",
+      "conditionId": "tomato_healthy",
+      "resultType": "healthy",
+      "symptoms": {
+        "leafCoverage": "NO_VISIBLE_DAMAGE",
+        "spreadingQuickly": true,
+        "manyPlantsAffected": true,
+        "wiltingOrDying": false,
+        "uncertainAnswers": false,
+        "fruitOrStemAffected": false,
+        "wetWeather": false
+      },
+      "expected": {
+        "severity": "NONE",
+        "urgency": "URGENT"
+      }
+    }
+  ]
+}

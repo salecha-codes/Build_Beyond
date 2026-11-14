@@ -1,6 +1,6 @@
 # Offline observation content and speech
 
-The app packages `assets/content/catalog.json` and **90 neural narration clips**: 30 English, 30 Kannada and 30 Hindi. Playback needs no network, downloaded language pack, API key or runtime speech model. The current recordings replace the former eSpeak voice after user feedback about clarity.
+The app packages its observation catalog and a separate **17-category offline advisory model**. Narration includes the original 90 observation clips plus 75 advisory clips: conditional care summaries, four urgency messages and four revised/new symptom questions in each language. Playback needs no network, downloaded language pack, API key or runtime speech model.
 
 | Language | Build-time voice | Packaged output |
 |---|---|---|
@@ -14,9 +14,24 @@ All generators run locally using publicly downloadable checkpoints. No paid spee
 
 ## Review status
 
-The text is **general observation guidance**, not expert-reviewed treatment. No chemical product, pesticide dose or application interval is supplied. PlantVillage is cited for taxonomy only, not management advice. UC IPM/TNAU retrieval was blocked by the environment proxy; no primary advisory content was read or represented as reviewed. Kannada text and the new neural pronunciation remain pending native-speaker review. Technical audio decoding does not validate translation, pronunciation or agricultural correctness.
+The original catalog is general observation guidance. The new `advisory_model.json` adds disease-specific conditional care, curability, management, prevention and escalation in all three languages. Both remain **drafts requiring agronomist review**. No pesticide dose or application interval is supplied. PlantVillage is cited for taxonomy only, not management advice. Extension/government source retrieval was blocked by the environment proxy; no blocked source is represented as read or verified. Translations and neural pronunciation remain pending native-speaker review. Technical audio decoding does not validate translation, pronunciation or agricultural correctness.
 
 The default model policy is unvalidated. It must not produce confirmed disease/crop assertions based on random or unvalidated output. Keep real model scores visible only as experimental evidence. Concern guidance uses farmer-reported signs, including approximate leaf-spot coverage; it does not measure photo severity.
+
+## Advisory model and new speech
+
+Run `python3 tools/build_advisory_bundle.py` after editing `advisory_model.json`
+or either runtime decision implementation. It checks all 17 stable IDs, crop and
+risk mappings, three-language profiles and honest validation flags, then packages
+the model and a hash receipt. `npm run sync:assets` refuses stale knowledge assets.
+
+`generate_advisory_voice.py` generates the new narration with the same cached,
+pinned speech providers. Its separate `advisory_audio_manifest.json` binds every
+clip to its text, model hash and provider provenance. A care clip speaks a short
+conditional summary, not every bullet on the screen. Urgency and question clips
+are separate; a fixed disease summary never invents a severity measurement.
+Only audio files ship, not the speech-model weights. See the generator's `--help`
+for staging and installation commands.
 
 ## Regenerate
 

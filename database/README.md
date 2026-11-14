@@ -6,18 +6,24 @@ This prototype has **two local implementations**, not a central database service
 |---|---|---|
 | Native Android | Room / SQLite (`crop-observations.db`) and app-private image files | Saved observations and their photo paths |
 | Browser preview | IndexedDB (`debuggers-crop-health`, version 1) | Saved observation metadata and the actual photo `Blob` in one atomic record |
-| Browser preference | `localStorage` key `crophealth.language` | `en` or `kn` interface preference |
+| Browser preference | `localStorage` key `crophealth.language` | `en`, `kn` or `hi` interface preference |
 
 There is no remote observation API, shared cloud database, authentication service, or automatic Android/browser synchronization. The web preview and Android APK keep separate histories. No mock or demonstration rows are inserted. An empty history means no observation has been saved in that installation/origin.
 
 ## Android schema
 
-[`android/schema.sql`](android/schema.sql) is copied from the actual generated Room `CropDatabase_Impl.createAllTables` for database version 1. It includes Room's identity table/hash. The source of truth is:
+[`android/schema.sql`](android/schema.sql) records the actual generated Room schema for database version 2. It includes Room's identity table/hash. The source of truth is:
 
 - `android/app/src/main/java/com/debuggers/crophealth/data/ObservationStore.kt`
 - generated `android/app/build/generated/ksp/debug/kotlin/com/debuggers/crophealth/data/CropDatabase_Impl.kt`
 
 The table stores ID/time/crop, private image path, outcome, condition/model score where available, model version, inference duration, note and validated flag. The image bytes live in app-private storage. Native deletion removes the observation and deletes an owned image only after no remaining observation references it. The schema is documentation of the real local database, not a proposed server schema or a migration to apply to a backend.
+
+Version 2 adds nullable `reportedSymptomsJson`. The non-destructive 1→2 migration
+preserves existing scans. Completed advisory-question answers are saved here;
+old scans retain null/unknown answers. Revising a care questionnaire updates that
+record without replacing its photo or disease-model output. The current advisory
+model recomputes care and urgency from those saved observations.
 
 ## Browser schema
 
@@ -42,6 +48,8 @@ IndexedDB is scoped to the browser origin. Another device/browser, another previ
 The parent asset preparation script copies the **actual** Android content and speech assets to `frontend/public/assets/`. Content helpers resolve paths relative to Vite `BASE_URL`:
 
 - `assets/content/catalog.json` — 17 English/Kannada/Hindi condition records and prompts;
+- `assets/content/advisory_model.json` — the separate trilingual care-and-urgency knowledge model;
+- `assets/content/advisory_receipt.json` and `advisory_audio_manifest.json` — knowledge and new narration provenance;
 - `assets/content/audio_manifest.json` — 90 speech clip hashes/durations;
 - `assets/audio/en/*.ogg`, `assets/audio/kn/*.ogg` — generated local speech.
 

@@ -293,19 +293,20 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
         }
         if(result is AssessmentResult.Retake) SoftCard {Text(s.tr("Photo checks","ಫೋಟೋ ಪರಿಶೀಲನೆ"),fontSize=16.sp);result.quality.issues.forEach {Text("• "+qualityCopy(it,s),fontSize=13.sp,color=CropColors.Muted)}}
         if(accepted || prediction) Row(horizontalArrangement=Arrangement.spacedBy(10.dp)) {
-            MiniCard(s.tr("Concern check","ಲಕ್ಷಣ ಪರಿಶೀಲನೆ"),s.tr("Based on 3 questions","3 ಪ್ರಶ್ನೆಗಳ ಆಧಾರದಲ್ಲಿ"),Modifier.weight(1f))
+            MiniCard(s.tr("Concern check","ಲಕ್ಷಣ ಪರಿಶೀಲನೆ"),s.careText("6 observation questions","6 ವೀಕ್ಷಣೆ ಪ್ರಶ್ನೆಗಳು","लक्षणों के 6 प्रश्न"),Modifier.weight(1f))
             MiniCard(s.tr("Other signs?","ಬೇರೆ ಲಕ್ಷಣಗಳಿವೆಯೇ?"),s.tr("Check with an expert","ತಜ್ಞರನ್ನು ಸಂಪರ್ಕಿಸಿ"),Modifier.weight(1f))
         }
+        if(s.symptomsComplete) AdvisorySummary(s,reasons=false)
         AudioButton(s.prompt?.audioAsset ?: prompt("uncertain").audioAsset,s.tr("Listen in ${s.language.displayName}","ಕನ್ನಡದಲ್ಲಿ ಕೇಳಿ"),autoPlay=s.autoAudio)
         if(accepted || prediction) {
             if(cropMismatch) Secondary(s.predictionText("Change selected crop","ಆಯ್ಕೆ ಮಾಡಿದ ಬೆಳೆ ಬದಲಿಸಿ","चुनी हुई फसल बदलें"),{a(AppAction.Navigate(Screen.HOME))})
-            Primary(s.tr("Check concern (3 questions)","ಲಕ್ಷಣ ಪರಿಶೀಲನೆ (3 ಪ್ರಶ್ನೆಗಳು)"),{a(AppAction.Navigate(Screen.CONCERN))})
-            Secondary(s.tr("See guidance","ಮಾರ್ಗದರ್ಶನ ನೋಡಿ"),{a(AppAction.Navigate(Screen.GUIDANCE))})
+            Primary(s.careText("Assess severity · 6 questions","ತೀವ್ರತೆ ಪರಿಶೀಲಿಸಿ · 6 ಪ್ರಶ್ನೆಗಳು","गंभीरता जाँचें · 6 प्रश्न"),{a(AppAction.Navigate(Screen.CONCERN))})
+            Secondary(s.careText("See care plan","ಆರೈಕೆ ಯೋಜನೆ ನೋಡಿ","देखभाल योजना देखें"),{a(AppAction.Navigate(Screen.GUIDANCE))})
             if(prediction) Secondary(s.tr("Retake photo","ಮತ್ತೆ ಫೋಟೋ ತೆಗೆಯಿರಿ"),{a(AppAction.Navigate(Screen.CAPTURE))},Icons.Outlined.CameraAlt)
         } else {
             ExpertCall(s)
             Primary(s.tr("Retake photo","ಮತ್ತೆ ಫೋಟೋ ತೆಗೆಯಿರಿ"),{a(AppAction.Navigate(Screen.CAPTURE))},Icons.Outlined.CameraAlt)
-            Secondary(s.tr("Observe symptoms (3 questions)","ಲಕ್ಷಣಗಳನ್ನು ಗಮನಿಸಿ (3 ಪ್ರಶ್ನೆಗಳು)"),{a(AppAction.Navigate(Screen.CONCERN))})
+            Secondary(s.careText("Assess symptoms · 6 questions","ಲಕ್ಷಣ ಪರಿಶೀಲಿಸಿ · 6 ಪ್ರಶ್ನೆಗಳು","लक्षण जाँचें · 6 प्रश्न"),{a(AppAction.Navigate(Screen.CONCERN))})
         }
         if(stored==null) Secondary(if(s.savedObservationId==null) s.tr("Save scan","ಪರಿಶೀಲನೆ ಉಳಿಸಿ") else s.tr("Saved on this phone","ಈ ಫೋನ್‌ನಲ್ಲಿ ಉಳಿಸಲಾಗಿದೆ"),{a(AppAction.SaveObservation)},Icons.Outlined.BookmarkBorder,enabled=s.savedObservationId==null && result!=null)
         Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.Center) {TextButton(onClick={a(AppAction.ShareCurrent)}) {Icon(Icons.Outlined.Share,null,Modifier.size(16.dp));Spacer(Modifier.width(6.dp));Text(s.tr("Share observation","ವೀಕ್ಷಣೆ ಹಂಚಿಕೊಳ್ಳಿ"))}}
@@ -322,20 +323,90 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
 @Composable private fun PredictionRow(label:String,score:Float) {Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween) {Text(label,Modifier.weight(1f),fontSize=14.sp);Text("${(score*100).roundToInt()}%",fontSize=13.sp,color=CropColors.Muted)}}
 private fun qualityCopy(issue:QualityIssue,s:AppUiState)=when(issue) {QualityIssue.BLURRY->s.tr("Hold steady and focus on one leaf.","ಸ್ಥಿರವಾಗಿ ಹಿಡಿದು ಒಂದು ಎಲೆಯ ಮೇಲೆ ಕೇಂದ್ರೀಕರಿಸಿ.");QualityIssue.TOO_DARK->s.tr("Move into natural light.","ನೈಸರ್ಗಿಕ ಬೆಳಕಿಗೆ ಸರಿಸಿ.");QualityIssue.TOO_BRIGHT->s.tr("Avoid glare or direct flash.","ಪ್ರಖರ ಬೆಳಕು ಅಥವಾ ನೇರ ಫ್ಲ್ಯಾಶ್ ತಪ್ಪಿಸಿ.");QualityIssue.TOO_SMALL->s.tr("Choose a larger, closer photo.","ದೊಡ್ಡದಾದ ಹತ್ತಿರದ ಫೋಟೋ ಆಯ್ಕೆಮಾಡಿ.");QualityIssue.UNREADABLE->s.tr("This image could not be opened.","ಈ ಚಿತ್ರವನ್ನು ತೆರೆಯಲಾಗಲಿಲ್ಲ.");QualityIssue.NOT_A_LEAF->s.predictionText("No crop leaf detected. Photograph one crop leaf.","ಬೆಳೆ ಎಲೆ ಪತ್ತೆಯಾಗಲಿಲ್ಲ. ಒಂದು ಬೆಳೆ ಎಲೆಯ ಫೋಟೋ ತೆಗೆಯಿರಿ.","फसल की पत्ती नहीं मिली। एक पत्ती की तस्वीर लें।")}
 
+internal fun AppUiState.careText(en: String, kn: String, hi: String): String = when (language) {
+    AppLanguage.ENGLISH -> en; AppLanguage.KANNADA -> kn; AppLanguage.HINDI -> hi
+}
+
+@Composable private fun AdvisorySummary(s:AppUiState, reasons:Boolean=true) {
+    val model=s.advisory
+    val severity=when(model.severity) {
+        ReportedSeverity.NONE ->s.careText("No visible damage reported","ಕಾಣುವ ಹಾನಿ ತಿಳಿಸಿಲ್ಲ","कोई दिखने वाला नुकसान नहीं बताया")
+        ReportedSeverity.MILD ->s.careText("Mild damage","ಕಡಿಮೆ ಹಾನಿ","हल्का नुकसान")
+        ReportedSeverity.MODERATE ->s.careText("Moderate damage","ಮಧ್ಯಮ ಹಾನಿ","मध्यम नुकसान")
+        ReportedSeverity.SEVERE ->s.careText("Severe signs","ತೀವ್ರ ಲಕ್ಷಣಗಳು","गंभीर लक्षण")
+        ReportedSeverity.UNKNOWN ->s.careText("Not enough information","ಮಾಹಿತಿ ಸಾಕಾಗಿಲ್ಲ","जानकारी पर्याप्त नहीं")
+    }
+    val urgency=when(model.urgency) {
+        CareUrgency.URGENT ->s.careText("Urgent · contact an expert now","ತುರ್ತು · ಈಗಲೇ ತಜ್ಞರನ್ನು ಸಂಪರ್ಕಿಸಿ","तुरंत विशेषज्ञ से संपर्क करें")
+        CareUrgency.SAME_DAY ->s.careText("Get advice today · within 24 hours","ಇಂದೇ ಸಲಹೆ ಪಡೆಯಿರಿ · 24 ಗಂಟೆಯೊಳಗೆ","आज सलाह लें · 24 घंटे के भीतर")
+        CareUrgency.SOON ->s.careText("Ask an expert within 48 hours","48 ಗಂಟೆಯೊಳಗೆ ತಜ್ಞರನ್ನು ಕೇಳಿ","48 घंटे में विशेषज्ञ से पूछें")
+        CareUrgency.MONITOR ->s.careText("Monitor · recheck within 48 hours","ಗಮನಿಸಿ · 48 ಗಂಟೆಯೊಳಗೆ ಪರಿಶೀಲಿಸಿ","निगरानी करें · 48 घंटे में दोबारा देखें")
+    }
+    val color=when(model.urgency) {CareUrgency.URGENT->CropColors.Rose;CareUrgency.SAME_DAY,CareUrgency.SOON->CropColors.Gold;else->CropColors.Green}
+    Surface(shape=RoundedCornerShape(20.dp),color=CropColors.Lavender,modifier=Modifier.fillMaxWidth().testTag("advisory_summary")) {
+        Column(Modifier.padding(18.dp),verticalArrangement=Arrangement.spacedBy(10.dp)) {
+            Text(s.careText("Care & urgency","ಆರೈಕೆ ಮತ್ತು ತುರ್ತು ಕ್ರಮ","देखभाल और तात्कालिकता"),fontSize=20.sp,fontWeight=FontWeight.Medium)
+            Text(s.careText("Reported damage","ತಿಳಿಸಿದ ಹಾನಿ","बताया गया नुकसान"),fontSize=12.sp,color=CropColors.Muted)
+            Text(severity,modifier=Modifier.testTag("advisory_severity"),fontSize=19.sp,fontWeight=FontWeight.Medium)
+            HorizontalDivider(color=CropColors.Border)
+            Text(s.careText("When to act","ಯಾವಾಗ ಕ್ರಮ ಕೈಗೊಳ್ಳಬೇಕು","कब कदम उठाएँ"),fontSize=12.sp,color=CropColors.Muted)
+            Text(urgency,modifier=Modifier.testTag("advisory_urgency"),fontSize=17.sp,color=color,fontWeight=FontWeight.Medium)
+            if(reasons) model.reasonCodes.forEach { code -> Text("• "+careReason(code,s),fontSize=13.sp,color=CropColors.Muted) }
+            Text(s.careText("Based on your answers, not a measured percentage or the disease model score.","ನಿಮ್ಮ ಉತ್ತರಗಳ ಆಧಾರಿತ; ಅಳೆಯಲಾದ ಶೇಕಡಾವಾರು ಅಥವಾ ರೋಗ ಮಾದರಿಯ ಅಂಕವಲ್ಲ.","आपके उत्तरों पर आधारित; यह मापा गया प्रतिशत या रोग मॉडल का अंक नहीं है।"),fontSize=11.sp,color=CropColors.Muted)
+        }
+    }
+    AdvisoryAudio(s,"advisory_"+model.urgency.name.lowercase(Locale.ROOT),s.careText("Listen to urgency advice","ತುರ್ತು ಸಲಹೆ ಕೇಳಿ","तात्कालिक सलाह सुनें"))
+}
+
+@Composable private fun AdvisoryAudio(s:AppUiState,name:String,label:String) {
+    val context=LocalContext.current
+    val path="audio/${s.language.id}/$name.ogg"
+    val available=remember(path) {runCatching {context.assets.openFd(path).use { }}.isSuccess}
+    if(available) AudioButton(path,label)
+}
+
+private fun careReason(code:String,s:AppUiState):String=when(code) {
+    "awaiting_answers" ->s.careText("Answer the questions to assess reported damage.","ಹಾನಿ ಪರಿಶೀಲಿಸಲು ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸಿ.","नुकसान का आकलन करने के लिए प्रश्नों के उत्तर दें।")
+    "coverage_unknown" ->s.careText("The affected leaf area is not known.","ಪೀಡಿತ ಎಲೆಯ ಭಾಗ ತಿಳಿದಿಲ್ಲ.","पत्ती का प्रभावित हिस्सा पता नहीं है।")
+    "coverage_none" ->s.careText("No visible leaf damage was reported.","ಕಾಣುವ ಎಲೆ ಹಾನಿ ತಿಳಿಸಿಲ್ಲ.","पत्ती पर दिखने वाला नुकसान नहीं बताया।")
+    "coverage_low" ->s.careText("You reported less than 10% of this leaf affected.","ಈ ಎಲೆಯ 10% ಕ್ಕಿಂತ ಕಡಿಮೆ ಭಾಗ ಪೀಡಿತ ಎಂದಿದ್ದೀರಿ.","आपने इस पत्ते का 10% से कम प्रभावित बताया।")
+    "coverage_moderate" ->s.careText("You reported about 10–30% of this leaf affected.","ಈ ಎಲೆಯ ಸುಮಾರು 10–30% ಭಾಗ ಪೀಡಿತ ಎಂದಿದ್ದೀರಿ.","आपने इस पत्ते का लगभग 10–30% प्रभावित बताया।")
+    "coverage_high" ->s.careText("You reported more than 30% of this leaf affected.","ಈ ಎಲೆಯ 30% ಕ್ಕಿಂತ ಹೆಚ್ಚು ಭಾಗ ಪೀಡಿತ ಎಂದಿದ್ದೀರಿ.","आपने इस पत्ते का 30% से अधिक प्रभावित बताया।")
+    "wilting" ->s.careText("Wilting or dying plants need immediate attention.","ಬಾಡುವ ಅಥವಾ ಸಾಯುವ ಗಿಡಗಳಿಗೆ ತಕ್ಷಣ ಗಮನ ಬೇಕು.","मुरझाते या मरते पौधों को तुरंत ध्यान चाहिए।")
+    "fruit_or_stem" ->s.careText("Fruit, tuber or stem symptoms may threaten the harvest.","ಹಣ್ಣು, ಗೆಡ್ಡೆ ಅಥವಾ ಕಾಂಡದ ಲಕ್ಷಣ ಇಳುವರಿಗೆ ಹಾನಿ ಮಾಡಬಹುದು.","फल, कंद या तने के लक्षण उपज को नुकसान पहुँचा सकते हैं।")
+    "rapid_spread" ->s.careText("Symptoms are spreading quickly.","ಲಕ್ಷಣಗಳು ವೇಗವಾಗಿ ಹರಡುತ್ತಿವೆ.","लक्षण तेजी से फैल रहे हैं।")
+    "multiple_plants" ->s.careText("Many plants are affected.","ಅನೇಕ ಸಸ್ಯಗಳು ಪೀಡಿತವಾಗಿವೆ.","कई पौधे प्रभावित हैं।")
+    "uncertain_answers" ->s.careText("Some answers are uncertain; get the crop checked.","ಕೆಲವು ಉತ್ತರ ಖಚಿತವಿಲ್ಲ; ಬೆಳೆ ಪರಿಶೀಲಿಸಿಕೊಳ್ಳಿ.","कुछ उत्तर अनिश्चित हैं; फसल की जाँच कराएँ।")
+    "wet_weather" ->s.careText("Wet conditions can favor leaf disease; inspect nearby plants.","ತೇವ ಎಲೆ ರೋಗಕ್ಕೆ ಅನುಕೂಲ; ಹತ್ತಿರದ ಗಿಡಗಳನ್ನು ಪರಿಶೀಲಿಸಿ.","नमी पत्ती रोग बढ़ा सकती है; आसपास के पौधे जाँचें।")
+    "rapid_blight" ->s.careText("Suspected late blight can spread rapidly; get advice today.","ಶಂಕಿತ ತಡವಾದ ಅಂಗಮಾರಿ ವೇಗವಾಗಿ ಹರಡಬಹುದು; ಇಂದೇ ಸಲಹೆ ಪಡೆಯಿರಿ.","संभावित पछेती झुलसा तेजी से फैल सकता है; आज ही सलाह लें।")
+    "virus" ->s.careText("Confirm suspected virus symptoms; sprays do not cure a virus.","ಶಂಕಿತ ವೈರಸ್ ಲಕ್ಷಣ ದೃಢಪಡಿಸಿ; ಸಿಂಪಡಣೆ ವೈರಸ್ ಗುಣಪಡಿಸುವುದಿಲ್ಲ.","संभावित विषाणु लक्षणों की पुष्टि कराएँ; छिड़काव विषाणु नहीं मिटाता।")
+    "healthy_conflict" ->s.careText("Your symptoms conflict with the healthy-looking prediction. Confirm the cause.","ನಿಮ್ಮ ಲಕ್ಷಣ ಆರೋಗ್ಯಕರ ಅಂದಾಜಿಗೆ ಹೊಂದುವುದಿಲ್ಲ. ಕಾರಣ ದೃಢಪಡಿಸಿ.","आपके लक्षण स्वस्थ दिखने के अनुमान से मेल नहीं खाते। कारण की पुष्टि कराएँ।")
+    else ->s.careText("Confirm the cause with a local agriculture expert.","ಸ್ಥಳೀಯ ಕೃಷಿ ತಜ್ಞರಿಂದ ಕಾರಣ ದೃಢಪಡಿಸಿ.","स्थानीय कृषि विशेषज्ञ से कारण की पुष्टि कराएँ।")
+}
+
 @Composable private fun GuidanceScreen(s:AppUiState,a:(AppAction)->Unit,prompt:(String)->Prompt) {
-    val g=s.guidance
-    val accepted=s.assessment is AssessmentResult.LikelyCondition || s.assessment is AssessmentResult.HealthyLooking || s.openedObservation?.isAcceptedModelMatch()==true
-    val prediction=((s.assessment is AssessmentResult.Uncertain || s.assessment is AssessmentResult.CropMismatch) && s.assessment?.evidence?.sourceEvaluated==true && s.assessment.rejectsUnsupportedInput().not()) || s.openedObservation?.isPrototypePrediction(s)==true
-    val genericPrompt=prompt(if(accepted || prediction) "check_expert" else "uncertain")
+    val profile=s.advisoryProfile
     Page {
         Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.End) {LanguageToggle(s,a)}
-        Text(g?.name ?: s.tr("Observation guidance","ವೀಕ್ಷಣೆಯ ಮಾರ್ಗದರ್ಶನ"),fontSize=28.sp,fontWeight=FontWeight.Medium)
-        Text(g?.summary ?: genericPrompt.message,fontSize=14.sp,color=CropColors.Muted)
-        AudioButton(g?.audioAsset ?: genericPrompt.audioAsset,s.tr("Listen to guidance","ಮಾರ್ಗದರ್ಶನ ಕೇಳಿ"),autoPlay=s.autoAudio)
-        GuidanceCard(s.tr("What to observe","ಗಮನಿಸಬೇಕಾದುದು"),g?.symptoms ?: listOf(s.tr("Take clear photos of the affected leaf and the whole plant.","ಪೀಡಿತ ಎಲೆ ಮತ್ತು ಇಡೀ ಸಸ್ಯದ ಸ್ಪಷ್ಟ ಫೋಟೋ ತೆಗೆಯಿರಿ.")),CropColors.Green)
-        GuidanceCard(s.tr("What to do now","ಈಗ ಮಾಡಬೇಕಾದುದು"),g?.actions ?: listOf(s.tr("Ask a local agriculture expert before choosing a treatment.","ಚಿಕಿತ್ಸೆ ಆಯ್ಕೆ ಮಾಡುವ ಮೊದಲು ಸ್ಥಳೀಯ ಕೃಷಿ ತಜ್ಞರನ್ನು ಸಂಪರ್ಕಿಸಿ.")),CropColors.Gold)
-        GuidanceCard(s.tr("Prevention & next steps","ತಡೆಗಟ್ಟುವಿಕೆ ಮತ್ತು ಮುಂದಿನ ಕ್ರಮಗಳು"),g?.prevention ?: listOf(s.tr("Observe nearby plants and record changes over time.","ಹತ್ತಿರದ ಸಸ್ಯಗಳನ್ನು ಗಮನಿಸಿ ಕಾಲಕ್ರಮೇಣ ಬದಲಾವಣೆಗಳನ್ನು ದಾಖಲಿಸಿ.")),CropColors.Rose)
-        Text(g?.caution ?: s.tr("This prototype does not provide verified chemical dosage instructions.","ಈ ಪ್ರಾಯೋಗಿಕ ಆವೃತ್ತಿ ದೃಢೀಕರಿಸಿದ ರಾಸಾಯನಿಕ ಪ್ರಮಾಣ ಸೂಚನೆಗಳನ್ನು ನೀಡುವುದಿಲ್ಲ."),fontSize=12.sp,color=CropColors.Muted)
+        Text(s.careText("Crop care plan","ಬೆಳೆ ಆರೈಕೆ ಯೋಜನೆ","फसल देखभाल योजना"),fontSize=28.sp,fontWeight=FontWeight.Medium)
+        AdvisorySummary(s)
+        if(!s.symptomsComplete) Primary(s.careText("Assess severity · 6 questions","ತೀವ್ರತೆ ಪರಿಶೀಲಿಸಿ · 6 ಪ್ರಶ್ನೆಗಳು","गंभीरता जाँचें · 6 प्रश्न"),{a(AppAction.Navigate(Screen.CONCERN))})
+        if(profile!=null) {
+            Notice(s.careText("If this condition is confirmed","ಈ ಸ್ಥಿತಿ ದೃಢಪಟ್ಟರೆ","यदि इस स्थिति की पुष्टि हो"),Conditions.byId(profile.conditionId)?.displayName(s.language).orEmpty())
+            Text(profile.copy.overview,fontSize=14.sp,color=CropColors.Muted)
+            GuidanceCard(s.careText("Can it be cured?","ಇದನ್ನು ಗುಣಪಡಿಸಬಹುದೇ?","क्या यह ठीक हो सकता है?"),listOf(profile.copy.curability),CropColors.Primary)
+            AdvisoryAudio(s,"advisory_"+profile.conditionId,s.careText("Listen to care summary","ಆರೈಕೆ ಸಾರಾಂಶ ಕೇಳಿ","देखभाल का सार सुनें"))
+            GuidanceCard(s.careText("Do now","ಈಗ ಮಾಡಿ","अभी करें"),profile.copy.doNow,CropColors.Green)
+            GuidanceCard(s.careText("Management options","ನಿರ್ವಹಣೆ ಆಯ್ಕೆಗಳು","प्रबंधन के उपाय"),profile.copy.management,CropColors.Gold)
+            GuidanceCard(s.careText("Prevent recurrence","ಮರುಕಳಿಸದಂತೆ ತಡೆಯಿರಿ","दोबारा होने से बचाएँ"),profile.copy.prevention,CropColors.Primary)
+            GuidanceCard(s.careText("When to call an expert","ತಜ್ಞರನ್ನು ಯಾವಾಗ ಕೇಳಬೇಕು","विशेषज्ञ को कब बुलाएँ"),profile.copy.escalation,CropColors.Rose)
+            if(profile.sources.isNotEmpty()) Text(s.careText("Reference topics: ","ಉಲ್ಲೇಖ ವಿಷಯಗಳು: ","संदर्भ विषय: ")+profile.sources.joinToString {it.title},fontSize=11.sp,color=CropColors.Muted)
+        } else {
+            Notice(s.careText("Confirm the cause first","ಮೊದಲು ಕಾರಣ ದೃಢಪಡಿಸಿ","पहले कारण की पुष्टि कराएँ"),s.careText("A disease-specific care plan is unavailable for this result. Record the signs and ask a local agriculture expert.","ಈ ಫಲಿತಾಂಶಕ್ಕೆ ನಿರ್ದಿಷ್ಟ ರೋಗ ಆರೈಕೆ ಯೋಜನೆ ಲಭ್ಯವಿಲ್ಲ. ಲಕ್ಷಣ ದಾಖಲಿಸಿ ಸ್ಥಳೀಯ ಕೃಷಿ ತಜ್ಞರನ್ನು ಕೇಳಿ.","इस परिणाम के लिए रोग विशेष की देखभाल उपलब्ध नहीं है। लक्षण लिखें और स्थानीय कृषि विशेषज्ञ से पूछें।"))
+            GuidanceCard(s.careText("Do now","ಈಗ ಮಾಡಿ","अभी करें"),listOf(s.careText("Take clear photos of the leaf, whole plant and nearby affected plants.","ಎಲೆ, ಇಡೀ ಗಿಡ ಮತ್ತು ಹತ್ತಿರದ ಪೀಡಿತ ಗಿಡಗಳ ಸ್ಪಷ್ಟ ಚಿತ್ರ ತೆಗೆಯಿರಿ.","पत्ती, पूरे पौधे और आसपास के प्रभावित पौधों की साफ तस्वीर लें।"),s.careText("Check soil moisture and avoid unnecessary sprays while the cause is uncertain.","ಮಣ್ಣಿನ ತೇವ ಪರಿಶೀಲಿಸಿ; ಕಾರಣ ಖಚಿತವಿಲ್ಲದಾಗ ಅನಗತ್ಯ ಸಿಂಪಡಣೆ ತಪ್ಪಿಸಿ.","मिट्टी की नमी जाँचें और कारण अनिश्चित होने पर अनावश्यक छिड़काव से बचें।")),CropColors.Green)
+        }
+        Text(s.careText("Draft offline decision guidance; not a trained severity model or an agronomist-reviewed prescription. Damaged tissue does not become healthy again.","ಪ್ರಾಯೋಗಿಕ ಆಫ್‌ಲೈನ್ ನಿರ್ಧಾರ ಸಲಹೆ; ತರಬೇತಿಪಡೆದ ತೀವ್ರತೆ ಮಾದರಿ ಅಥವಾ ಕೃಷಿ ತಜ್ಞರು ಪರಿಶೀಲಿಸಿದ ಔಷಧ ಸೂಚನೆಯಲ್ಲ. ಹಾನಿಯಾದ ಅಂಗಾಂಶ ಮತ್ತೆ ಆರೋಗ್ಯಕರವಾಗುವುದಿಲ್ಲ.","प्रारूप ऑफलाइन निर्णय मार्गदर्शन; यह प्रशिक्षित गंभीरता मॉडल या कृषि विशेषज्ञ द्वारा जाँचा नुस्खा नहीं है। खराब ऊतक फिर स्वस्थ नहीं होता।"),fontSize=11.sp,color=CropColors.Muted)
+        Text(s.advisory.modelVersion,fontSize=11.sp,color=CropColors.Muted)
         ExpertCall(s)
     }
 }
@@ -348,50 +419,55 @@ private fun qualityCopy(issue:QualityIssue,s:AppUiState)=when(issue) {QualityIss
     var question by rememberSaveable {mutableIntStateOf(0)}
     var selected by rememberSaveable {mutableIntStateOf(-1)}
     val questions=listOf(
-        s.tr("Are the symptoms spreading quickly?","ಲಕ್ಷಣಗಳು ಬೇಗ ಹರಡುತ್ತಿವೆಯೇ?"),
-        s.tr("How much of the leaf looks affected?","ಎಲೆಯ ಎಷ್ಟು ಭಾಗ ಪೀಡಿತವಾಗಿ ಕಾಣುತ್ತದೆ?"),
-        s.tr("Are many plants affected?","ಅನೇಕ ಸಸ್ಯಗಳು ಪೀಡಿತವಾಗಿವೆಯೇ?"),
+        s.careText("Are the symptoms spreading quickly?","ಲಕ್ಷಣಗಳು ಬೇಗ ಹರಡುತ್ತಿವೆಯೇ?","क्या लक्षण तेजी से फैल रहे हैं?"),
+        s.careText("How much of this leaf looks affected?","ಈ ಎಲೆಯ ಎಷ್ಟು ಭಾಗ ಪೀಡಿತವಾಗಿದೆ?","इस पत्ते का कितना हिस्सा प्रभावित है?"),
+        s.careText("Are many plants affected?","ಅನೇಕ ಸಸ್ಯಗಳು ಪೀಡಿತವಾಗಿವೆಯೇ?","क्या कई पौधे प्रभावित हैं?"),
+        s.careText("Are plants wilting or dying?","ಗಿಡಗಳು ಬಾಡುತ್ತಿವೆಯೇ ಅಥವಾ ಸಾಯುತ್ತಿವೆಯೇ?","क्या पौधे मुरझा रहे हैं या मर रहे हैं?"),
+        s.careText("Are fruit, tubers or stems affected?","ಹಣ್ಣು, ಗೆಡ್ಡೆ ಅಥವಾ ಕಾಂಡಕ್ಕೆ ಹಾನಿಯಿದೆಯೇ?","क्या फल, कंद या तने प्रभावित हैं?"),
+        s.careText("Has the crop been in wet or humid conditions?","ಬೆಳೆ ತೇವ ಅಥವಾ ಆರ್ದ್ರ ಪರಿಸ್ಥಿತಿಯಲ್ಲಿದೆಯೇ?","क्या फसल के आसपास नमी या आर्द्रता रही है?"),
     )
-    val keys=listOf("concern_spreading","concern_coverage","concern_plants")
-    if(question>=3) Page {
-        Text(s.tr("Your observation summary","ನಿಮ್ಮ ವೀಕ್ಷಣೆಯ ಸಾರಾಂಶ"),fontSize=28.sp,fontWeight=FontWeight.Medium)
-        val expert=s.concern.level==ConcernLevel.SEEK_LOCAL_EXPERT
-        Notice(s.tr("Based on your answers","ನಿಮ್ಮ ಉತ್ತರಗಳ ಆಧಾರದಲ್ಲಿ"),if(expert)
-            s.tr("Ask a local agriculture expert to review these signs.","ಈ ಲಕ್ಷಣಗಳನ್ನು ಪರಿಶೀಲಿಸಲು ಸ್ಥಳೀಯ ಕೃಷಿ ತಜ್ಞರನ್ನು ಸಂಪರ್ಕಿಸಿ.")
-            else s.tr("Keep observing and recheck. Ask an expert if symptoms change or spread.","ಗಮನಿಸುತ್ತಿರಿ ಮತ್ತು ಮರುಪರಿಶೀಲಿಸಿ. ಲಕ್ಷಣಗಳು ಬದಲಾದರೆ ಅಥವಾ ಹರಡಿದರೆ ತಜ್ಞರನ್ನು ಸಂಪರ್ಕಿಸಿ."))
-        Text(s.tr("This is a symptom checklist, not a photo-based severity diagnosis.","ಇದು ಲಕ್ಷಣಗಳ ಪಟ್ಟಿ, ಫೋಟೋ ಆಧಾರಿತ ತೀವ್ರತೆಯ ರೋಗನಿರ್ಣಯವಲ್ಲ."),fontSize=13.sp,color=CropColors.Muted)
-        AudioButton(prompt(if(expert) "concern_expert" else "concern_observe").audioAsset,s.tr("Listen to the summary","ಸಾರಾಂಶ ಕೇಳಿ"))
+    if(question>=6) Page {
+        Text(s.careText("Your care assessment","ನಿಮ್ಮ ಆರೈಕೆ ಪರಿಶೀಲನೆ","आपका देखभाल आकलन"),fontSize=28.sp,fontWeight=FontWeight.Medium)
+        AdvisorySummary(s)
         ExpertCall(s)
-        Primary(s.tr("See observation guidance","ವೀಕ್ಷಣೆಯ ಮಾರ್ಗದರ್ಶನ ನೋಡಿ"),{a(AppAction.Navigate(Screen.GUIDANCE))})
+        Primary(s.careText("See the care plan","ಆರೈಕೆ ಯೋಜನೆ ನೋಡಿ","देखभाल योजना देखें"),{a(AppAction.Navigate(Screen.GUIDANCE))})
+        Secondary(s.careText("Return to result","ಫಲಿತಾಂಶಕ್ಕೆ ಹಿಂತಿರುಗಿ","परिणाम पर लौटें"),{a(AppAction.Navigate(Screen.RESULT))})
     } else Page {
-        Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween) {
-            Text(s.tr("Symptom check","ಲಕ್ಷಣ ಪರಿಶೀಲನೆ"),fontSize=14.sp,color=CropColors.Muted)
-            Text(s.tr("Question ${question+1} of 3","ಪ್ರಶ್ನೆ ${question+1} / 3"),fontSize=12.sp,color=CropColors.Primary)
-        }
-        LinearProgressIndicator(progress={(question+1)/3f},modifier=Modifier.fillMaxWidth(),color=CropColors.Primary,trackColor=CropColors.Lavender)
-        Text(s.selectedCrop.displayName(s.language),fontSize=13.sp,color=CropColors.Muted)
-        Text(questions[question],fontSize=28.sp,fontWeight=FontWeight.Medium)
-        AudioButton(prompt(keys[question]).audioAsset,s.tr("Read question aloud","ಪ್ರಶ್ನೆಯನ್ನು ಕೇಳಿ"))
-        val options=if(question==1) listOf(s.tr("A few spots","ಕೆಲವು ಚುಕ್ಕೆಗಳು"),s.tr("Some of the leaf","ಎಲೆಯ ಸ್ವಲ್ಪ ಭಾಗ"),s.tr("Much of the leaf","ಎಲೆಯ ಹೆಚ್ಚಿನ ಭಾಗ"),s.tr("I'm not sure","ಖಚಿತವಿಲ್ಲ"))
-            else listOf(s.tr("Yes","ಹೌದು"),s.tr("No","ಇಲ್ಲ"),s.tr("I'm not sure","ಖಚಿತವಿಲ್ಲ"))
+        Text(s.careText("Question ${question+1} of 6","ಪ್ರಶ್ನೆ ${question+1} / 6","प्रश्न ${question+1} / 6"),fontSize=12.sp,color=CropColors.Muted)
+        LinearProgressIndicator(progress={(question+1)/6f},modifier=Modifier.fillMaxWidth().height(5.dp).clip(CircleShape),color=CropColors.Primary,trackColor=CropColors.Border)
+        Text(questions[question],fontSize=25.sp,fontWeight=FontWeight.Medium)
+        if(question==1) AdvisoryAudio(s,"advisory_question_coverage",s.careText("Read question aloud","ಪ್ರಶ್ನೆಯನ್ನು ಕೇಳಿ","प्रश्न सुनें"))
+        else if(question<3) AudioButton(prompt(listOf("concern_spreading","concern_coverage","concern_plants")[question]).audioAsset,s.tr("Read question aloud","ಪ್ರಶ್ನೆಯನ್ನು ಕೇಳಿ"))
+        else AdvisoryAudio(s,"advisory_question_"+listOf("wilting","fruit_stem","wet_weather")[question-3],s.careText("Read question aloud","ಪ್ರಶ್ನೆಯನ್ನು ಕೇಳಿ","प्रश्न सुनें"))
+        val options=if(question==1) listOf(
+            s.careText("No visible damage · 0%","ಕಾಣುವ ಹಾನಿ ಇಲ್ಲ · 0%","कोई दिखने वाला नुकसान नहीं · 0%"),
+            s.careText("A few spots · less than 10%","ಕೆಲವು ಚುಕ್ಕೆಗಳು · 10% ಕ್ಕಿಂತ ಕಡಿಮೆ","कुछ धब्बे · 10% से कम"),
+            s.careText("Some damage · about 10–30%","ಸ್ವಲ್ಪ ಹಾನಿ · ಸುಮಾರು 10–30%","कुछ नुकसान · लगभग 10–30%"),
+            s.careText("Many spots · more than 30%","ಹಲವು ಚುಕ್ಕೆಗಳು · 30% ಕ್ಕಿಂತ ಹೆಚ್ಚು","बहुत धब्बे · 30% से अधिक"),
+            s.careText("I'm not sure","ಖಚಿತವಿಲ್ಲ","मुझे पक्का नहीं"))
+        else listOf(s.careText("Yes","ಹೌದು","हाँ"),s.careText("No","ಇಲ್ಲ","नहीं"),s.careText("I'm not sure","ಖಚಿತವಿಲ್ಲ","मुझे पक्का नहीं"))
         options.forEachIndexed {index,label ->
             Surface(onClick={selected=index},shape=RoundedCornerShape(18.dp),color=if(selected==index) CropColors.Lavender else Color.White,
-                border=BorderStroke(if(selected==index) 1.5.dp else 1.dp,if(selected==index) CropColors.Primary else CropColors.Border),modifier=Modifier.fillMaxWidth()) {
+                border=BorderStroke(if(selected==index) 1.5.dp else 1.dp,if(selected==index) CropColors.Primary else CropColors.Border),modifier=Modifier.fillMaxWidth().testTag("care_answer_$index")) {
                 Row(Modifier.padding(horizontal=16.dp,vertical=10.dp),verticalAlignment=Alignment.CenterVertically) {
-                    RadioButton(selected=selected==index,onClick={selected=index});Spacer(Modifier.width(12.dp));Text(label,fontSize=17.sp)
+                    RadioButton(selected=selected==index,onClick={selected=index});Spacer(Modifier.width(12.dp));Text(label,fontSize=16.sp)
                 }
             }
         }
-        Primary(s.tr(if(question==2) "See summary" else "Next",if(question==2) "ಸಾರಾಂಶ ನೋಡಿ" else "ಮುಂದೆ"),{
+        Primary(s.careText(if(question==5) "See assessment" else "Next",if(question==5) "ಪರಿಶೀಲನೆ ನೋಡಿ" else "ಮುಂದೆ",if(question==5) "आकलन देखें" else "आगे"),{
             val uncertain=selected==options.lastIndex
+            val answered=s.symptoms.copy(uncertainAnswers=s.symptoms.uncertainAnswers || uncertain)
             val next=when(question) {
-                0 ->s.symptoms.copy(spreadingQuickly=selected==0,uncertainAnswers=s.symptoms.uncertainAnswers || uncertain)
-                1 ->s.symptoms.copy(leafCoverage=when(selected) {0->LeafCoverage.FEW_SPOTS;1->LeafCoverage.SOME_SPOTS;2->LeafCoverage.MANY_SPOTS;else->LeafCoverage.NOT_REPORTED},uncertainAnswers=s.symptoms.uncertainAnswers || uncertain)
-                else ->s.symptoms.copy(manyPlantsAffected=selected==0,uncertainAnswers=s.symptoms.uncertainAnswers || uncertain)
+                0 ->answered.copy(spreadingQuickly=selected==0)
+                1 ->answered.copy(leafCoverage=when(selected) {0->LeafCoverage.NO_VISIBLE_DAMAGE;1->LeafCoverage.FEW_SPOTS;2->LeafCoverage.SOME_SPOTS;3->LeafCoverage.MANY_SPOTS;else->LeafCoverage.NOT_REPORTED})
+                2 ->answered.copy(manyPlantsAffected=selected==0)
+                3 ->answered.copy(wiltingOrDying=selected==0)
+                4 ->answered.copy(fruitOrStemAffected=selected==0)
+                else ->answered.copy(wetWeather=selected==0)
             }
-            a(AppAction.ReportSymptoms(next));question++;selected=-1
+            a(AppAction.ReportSymptoms(next,completed=question==5));question++;selected=-1
         },Icons.Outlined.ArrowForward,enabled=selected>=0)
-        Text(s.tr("Your answers describe what you see; they do not confirm a disease.","ನಿಮ್ಮ ಉತ್ತರಗಳು ನೀವು ಗಮನಿಸಿದುದನ್ನು ವಿವರಿಸುತ್ತವೆ; ರೋಗವನ್ನು ದೃಢಪಡಿಸುವುದಿಲ್ಲ."),fontSize=12.sp,color=CropColors.Muted)
+        Text(s.careText("Report what you see. These answers do not confirm a disease.","ನೀವು ಗಮನಿಸಿದುದನ್ನು ತಿಳಿಸಿ. ಈ ಉತ್ತರ ರೋಗ ದೃಢಪಡಿಸುವುದಿಲ್ಲ.","जो दिख रहा है वह बताएँ। ये उत्तर किसी रोग की पुष्टि नहीं करते।"),fontSize=12.sp,color=CropColors.Muted)
     }
 }
 
@@ -481,17 +557,29 @@ private fun AppUiState.predictionText(en:String,kn:String,hi:String):String = wh
     if(show) AlertDialog(onDismissRequest={show=false},title={Text(s.tr("Choose your expert contact","ನಿಮ್ಮ ತಜ್ಞರ ಸಂಪರ್ಕ ಆಯ್ಕೆಮಾಡಿ"))},text={Column(verticalArrangement=Arrangement.spacedBy(10.dp)) {Text(s.tr("Enter a number you trust. This app does not verify hotline availability. Calling needs phone service.","ನೀವು ನಂಬುವ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ. ಕರೆ ಮಾಡಲು ದೂರವಾಣಿ ಸೇವೆ ಬೇಕು."),fontSize=13.sp);OutlinedTextField(value=number,onValueChange={number=it.filter {c->c.isDigit() || c=='+'}},label={Text(s.tr("Phone number","ದೂರವಾಣಿ ಸಂಖ್ಯೆ"))},singleLine=true)}},confirmButton={TextButton(enabled=number.length>=5,onClick={runCatching {context.startActivity(Intent(Intent.ACTION_DIAL,Uri.parse("tel:$number")))};show=false}) {Text(s.tr("Open dialer","ಡಯಲರ್ ತೆರೆಯಿರಿ"))}},dismissButton={TextButton(onClick={show=false}) {Text(s.tr("Cancel","ರದ್ದುಮಾಡಿ"))}})
 }
 
+/** Only one bundled narration may play, including multiple care cards on a page. */
+private object NarrationPlayback {
+    private var owner: Any? = null
+    private var stopCurrent: (() -> Unit)? = null
+    fun claim(next: Any, stop: () -> Unit) {
+        if(owner !== next) stopCurrent?.invoke()
+        owner=next;stopCurrent=stop
+    }
+    fun release(current: Any) {if(owner===current) {owner=null;stopCurrent=null}}
+}
+
 @Composable fun AudioButton(asset:String?,label:String,autoPlay:Boolean=false) {
     val context=LocalContext.current;var player by remember {mutableStateOf<MediaPlayer?>(null)};var playing by remember {mutableStateOf(false)};var failed by remember {mutableStateOf(false)}
+    val narrationOwner=remember {Any()}
     val unavailable=when(LocalAppLanguage.current) {AppLanguage.ENGLISH -> "Audio unavailable";AppLanguage.KANNADA -> "ಧ್ವನಿ ಲಭ್ಯವಿಲ್ಲ";AppLanguage.HINDI -> HindiUi.translate("Audio unavailable")}
-    fun stop() { player?.let { current -> runCatching { current.stop() }; current.release() }; player=null;playing=false }
+    fun stop() { player?.let { current -> runCatching { current.stop() }; current.release() }; player=null;playing=false;NarrationPlayback.release(narrationOwner) }
     fun play() {
         if(asset==null) return
-        stop();failed=false
+        stop();failed=false;NarrationPlayback.claim(narrationOwner) {stop()}
         runCatching {
             val afd=context.assets.openFd(asset);val next=MediaPlayer();next.setDataSource(afd.fileDescriptor,afd.startOffset,afd.length);afd.close();player=next
-            next.setOnCompletionListener {playing=false;it.release();if(player===it) player=null}
-            next.setOnErrorListener {p,_,_->playing=false;failed=true;p.release();if(player===p) player=null;true}
+            next.setOnCompletionListener {stop()}
+            next.setOnErrorListener {_,_,_->failed=true;stop();true}
             next.prepare();next.start();playing=true
         }.onFailure {failed=true;stop()}
     }

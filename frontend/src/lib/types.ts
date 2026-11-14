@@ -59,13 +59,15 @@ export interface ModelStatus {
   message: string;
 }
 
-export type LeafCoverage = 'NOT_REPORTED' | 'FEW_SPOTS' | 'SOME_SPOTS' | 'MANY_SPOTS';
+export type LeafCoverage = 'NO_VISIBLE_DAMAGE' | 'NOT_REPORTED' | 'FEW_SPOTS' | 'SOME_SPOTS' | 'MANY_SPOTS';
 export interface ReportedSymptoms {
   spreadingQuickly: boolean;
   manyPlantsAffected: boolean;
   wiltingOrDying: boolean;
   leafCoverage: LeafCoverage;
   uncertainAnswers: boolean;
+  fruitOrStemAffected?: boolean;
+  wetWeather?: boolean;
 }
 export interface ConcernResult {
   level: 'OBSERVE_AND_RECHECK' | 'SEEK_LOCAL_EXPERT';

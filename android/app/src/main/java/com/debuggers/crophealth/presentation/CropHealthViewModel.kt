@@ -8,6 +8,7 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.debuggers.crophealth.content.ContentCatalog
+import com.debuggers.crophealth.content.AdvisoryCatalog
 import com.debuggers.crophealth.content.Prompt
 import com.debuggers.crophealth.data.*
 import com.debuggers.crophealth.domain.*
@@ -19,6 +20,7 @@ import java.util.UUID
 
 class CropHealthViewModel(application: Application) : AndroidViewModel(application) {
     private val catalog = runCatching { ContentCatalog(application) }.getOrNull()
+    private val advisoryCatalog = runCatching { AdvisoryCatalog(application) }.getOrNull()
     private val preferences = UserPreferences(application)
     private val history = ObservationStore(application)
     private val photos = PhotoStore(application)
@@ -38,6 +40,7 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
         viewModelScope.launch {
             val status = withContext(Dispatchers.IO) { engine.load() }
             mutableState.update { it.copy(model = status) }
+            refreshCopy()
         }
     }
 
@@ -60,12 +63,15 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
                     if (action.screen == Screen.CONCERN && it.screen != Screen.CONCERN) {
                         val symptoms = ReportedSymptoms()
                         it.copy(screen = action.screen, error = null, symptoms = symptoms,
-                            concern = ConcernGuidance.summarize(symptoms))
+                            concern = ConcernGuidance.summarize(symptoms), symptomsComplete = false)
                     } else it.copy(screen = action.screen, error = null)
                 }
+                refreshCopy()
             }
             is AppAction.SelectCrop -> if (!state.value.processing) mutableState.update {
-                it.copy(selectedCrop = action.crop, assessment = null, guidance = null, savedObservationId = null, openedObservation = null)
+                it.copy(selectedCrop = action.crop, assessment = null, guidance = null, savedObservationId = null, openedObservation = null,
+                    symptoms = ReportedSymptoms(), symptomsComplete = false, advisoryProfile = null,
+                    advisory = AdvisoryDecisionModel.assess(null, null, null))
             }
             is AppAction.SetLanguage -> viewModelScope.launch { preferences.language(action.language) }
             is AppAction.SetAutoAudio -> viewModelScope.launch { preferences.audio(action.enabled) }
@@ -85,8 +91,14 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
                 history.clear()
                 mutableState.update { it.copy(openedObservation = null, savedObservationId = null, photoPath = null, assessment = null, guidance = null) }
             }
-            is AppAction.ReportSymptoms -> mutableState.update {
-                it.copy(symptoms = action.symptoms, concern = ConcernGuidance.summarize(action.symptoms))
+            is AppAction.ReportSymptoms -> {
+                mutableState.update { it.copy(symptoms = action.symptoms, concern = ConcernGuidance.summarize(action.symptoms),
+                    symptomsComplete = action.completed) }
+                if (action.completed) state.value.savedObservationId?.let { id -> viewModelScope.launch(Dispatchers.IO) {
+                    history.updateSymptoms(id, action.symptoms)
+                    mutableState.update { current -> current.copy(openedObservation = current.openedObservation?.copy(reportedSymptoms = action.symptoms)) }
+                } }
+                refreshCopy()
             }
             AppAction.CompleteWelcome -> viewModelScope.launch {
                 preferences.welcomed(); mutableState.update { it.copy(screen = Screen.HOME) }
@@ -109,7 +121,7 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
         mutableState.update { it.copy(screen = Screen.PHOTO_REVIEW, photoPath = file.absolutePath,
             assessment = null, guidance = null, prompt = null, error = null, processing = false,
             inferenceMs = 0, savedObservationId = null, openedObservation = null,
-            symptoms = ReportedSymptoms(), concern = ConcernGuidance.summarize(ReportedSymptoms())) }
+            symptoms = ReportedSymptoms(), symptomsComplete = false, concern = ConcernGuidance.summarize(ReportedSymptoms())) }
     }
 
     private fun analyze() {
@@ -175,7 +187,25 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
                 else -> savedKey
             }
             val adviceAllowed = current.model.validated && current.model.allowConditionSpecificAdvice
+            val liveId = when (val result = current.assessment) {
+                is AssessmentResult.LikelyCondition -> result.condition.id
+                is AssessmentResult.HealthyLooking -> result.condition.id
+                is AssessmentResult.Uncertain -> result.evidence.top.condition.id.takeIf {
+                    result.evidence.sourceEvaluated && !result.rejectsUnsupportedInput() && UncertaintyReason.MODEL_NOT_VALIDATED !in result.reasons
+                }
+                else -> null
+            }
+            val storedEligible = savedRecord != null && savedRecord.resultType in setOf("likely_condition", "healthy_looking", "uncertain") &&
+                !savedRecord.hidesUnsupportedCandidate() && (savedRecord.validated || savedRecord.isLeafCheckedCandidate() ||
+                (current.model.sourceEvaluated && savedRecord.modelVersion == current.model.version))
+            val advisoryId = if (current.assessment != null) liveId else savedRecord?.conditionId?.takeIf { storedEligible }
+            val profile = advisoryId?.let { advisoryCatalog?.profile(it, current.language) }
+            val rawAdvisory = AdvisoryDecisionModel.assess(profile?.risk, profile?.kind, current.symptoms.takeIf { current.symptomsComplete })
+            val blocked = current.assessment is AssessmentResult.Retake || current.assessment is AssessmentResult.ModelUnavailable ||
+                current.assessment is AssessmentResult.CropMismatch || savedRecord?.resultType in setOf("retake", "model_unavailable", "crop_mismatch")
+            val advisory = if (blocked) rawAdvisory.copy(reasonCodes = rawAdvisory.reasonCodes.map { if (it == "confirm_cause") "blocked_prediction" else it }) else rawAdvisory
             current.copy(guidance = if (adviceAllowed) (condition?.id ?: saved)?.let { catalog?.guidance(it, current.language) } else null,
+                advisoryProfile = profile.takeUnless { advisory.healthyConflict }, advisory = advisory,
                 prompt = catalog?.prompt(key, current.language))
         }
     }
@@ -212,7 +242,8 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
         val record = Observation(UUID.randomUUID().toString(), System.currentTimeMillis(), snapshot.selectedCrop,
             snapshot.photoPath, type, if(retainCandidate) evidence?.top?.condition?.id else null, if(retainCandidate) evidence?.top?.score else null,
             evidence?.modelVersion ?: snapshot.model.version, snapshot.inferenceMs,
-            "$note Self-reported concern: ${snapshot.concern.level} (not a photo severity score).", evidence?.calibratedAndValidated ?: false)
+            "$note Self-reported concern: ${snapshot.concern.level} (not a photo severity score).", evidence?.calibratedAndValidated ?: false,
+            snapshot.symptoms.takeIf { snapshot.symptomsComplete })
         // Mark before the write to make rapid repeated taps idempotent.
         mutableState.update { it.copy(savedObservationId = record.id) }
         viewModelScope.launch(Dispatchers.IO) {
@@ -225,7 +256,8 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
         val record = withContext(Dispatchers.IO) { history.find(id) } ?: return@launch
         mutableState.update { it.copy(screen = Screen.RESULT, openedObservation = record, selectedCrop = record.crop,
             photoPath = record.imagePath, assessment = null, guidance = null, savedObservationId = record.id,
-            inferenceMs = record.inferenceMs, error = null) }
+            inferenceMs = record.inferenceMs, error = null, symptoms = record.reportedSymptoms ?: ReportedSymptoms(),
+            symptomsComplete = record.reportedSymptoms != null, concern = ConcernGuidance.summarize(record.reportedSymptoms ?: ReportedSymptoms())) }
         refreshCopy()
     }
 

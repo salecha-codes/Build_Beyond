@@ -4,6 +4,12 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
+// Keep authored knowledge changes from silently shipping an older care bundle.
+const advisorySource = await readFile(path.join(root, 'content/advisory_model.json'));
+const advisoryPackaged = await readFile(path.join(root, 'android/app/src/main/assets/content/advisory_model.json'));
+const advisoryReceipt = JSON.parse(await readFile(path.join(root, 'android/app/src/main/assets/content/advisory_receipt.json'), 'utf8'));
+if (!advisorySource.equals(advisoryPackaged) || createHash('sha256').update(advisorySource).digest('hex') !== advisoryReceipt.profile_sha256)
+  throw new Error('Care model assets are stale. Run python3 tools/build_advisory_bundle.py.');
 const destination = path.join(root, 'frontend/public/assets');
 await mkdir(destination, { recursive: true });
 for (const [source, name] of [

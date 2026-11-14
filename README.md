@@ -6,7 +6,7 @@ Android application and interactive browser preview for **PS 4.1**, built for Te
 
 **Team Debuggers · Team 8 · Problem Statement 4.1**
 
-Current prototype: **v0.4.3**, with an offline MobileNetV3-Large disease model and a leaf/object check. It supports tomato, potato and maize, English/Kannada/Hindi audio, symptom questions, general precautions and local history.
+Current prototype: **v0.5.0**, with an offline MobileNetV3-Large disease model, a leaf/object check and a separate offline care-and-urgency decision model. It supports tomato, potato and maize, English/Kannada/Hindi audio, six observation questions, condition-specific care plans and local history.
 
 [Open the browser demo](https://salecha-codes.github.io/Build_Beyond/) · [Review 2 implementation and checks](docs/REVIEW2_SUBMISSION.md)
 
@@ -16,8 +16,11 @@ flowchart LR
     B -->|Leaf| C[On-device disease prediction]
     B -->|Object or unclear photo| D[Retake photo]
     C --> E[Condition and model score]
-    E --> F[Symptom questions and general guidance]
-    F --> G[Regional audio and local history]
+    E --> F[Six farmer observation questions]
+    F --> H[Second model: reported damage and urgency]
+    E --> H
+    H --> I[Conditional care plan for the suspected condition]
+    I --> G[Regional audio and local history]
 ```
 
 ## Repository structure
@@ -56,12 +59,21 @@ The first browser visit downloads the model, WASM runtime, content and audio. Wa
 - Camera capture and gallery import with bounded decoding and EXIF orientation.
 - Local **MobileNetV3-Large** inference through ONNX Runtime, with 17 tomato, potato, and maize condition labels.
 - Photo-quality checks, real ranked scores, and explicit uncertain results.
-- Three questions about observed symptoms, producing a user-reported concern level.
-- English, Kannada and Hindi interface and general precautions, with **90 bundled neural-voice audio clips**: AI4Bharat Indic-TTS for Kannada and Piper for English/Hindi. Playback requires no speech API, installed language pack or phone TTS model. The selected language is remembered locally.
+- Six questions about visible damage, spread, affected plants, wilting, fruit/stem symptoms and wet weather. The separate advisory model produces reported damage and action urgency, including unknown, mild, moderate, severe, routine monitoring, advice within 48 hours, same-day advice and urgent help.
+- A conditional care profile for every dataset category: what to do now, management, prevention, escalation and whether a cure is possible. Viral profiles explain the lack of a curative treatment; spider mites are treated as pests rather than fungal disease.
+- English, Kannada and Hindi interface and care, with 165 bundled neural narration clips: AI4Bharat Indic-TTS for Kannada and Piper for English/Hindi. Playback requires no speech API, installed language pack or phone TTS model. The selected language is remembered locally.
 - Room-backed Android history and IndexedDB-backed browser history, with crop filters and targeted deletion.
 - Offline help and model status. The installed Android app requests camera permission and has **no Internet permission**; the browser downloads assets on its first visit.
 
 The target is Android 7.0+ on 3–4 GB RAM phones. Actual ARM-phone memory, latency, camera behavior, and Kannada pronunciation still require a physical-device check.
+
+## Second model: care, severity and urgency
+
+The [offline advisory model](models/advisory/README.md) is a transparent expert decision system with **17 profiles in three languages**. It is a separate model from image recognition and does not require another large neural network or cloud API. It combines the suspected condition with farmer observations. The result includes reported damage, when to act, the reasons for that priority and a conditional care plan. Saved answers can be reopened with the observation.
+
+Damage and urgency are different: a few spots on suspected potato late blight can warrant same-day advice; a healthy-looking photo accompanied by reported wilting prompts urgent help rather than reassurance. Disease-model confidence never becomes a severity measurement. Unanswered questions remain unknown, and a mouse/object photo cannot receive a disease-specific care plan.
+
+This model is **authored, not trained on PlantVillage severity labels**: those labels are absent from our dataset. Its rules, care text, translations and urgency intervals are prototypes requiring agronomist and language review. Source-reference access limitations are recorded honestly. It does not improve the image classifier's field accuracy, guarantee cures or generate pesticide doses. See the [advisory model card](docs/ADVISORY_MODEL_CARD.md) and [research notes](docs/ADVISORY_RESEARCH.md).
 
 ## Dataset used — 17 categories
 
@@ -115,7 +127,7 @@ The following table measures the disease classifier before the separate leaf che
 
 Field recognition improves by 16.25 percentage points (18 → 31 correct out of 80). **Field accuracy is still limited.** This 80-photo set was already used for V4; it is a reused comparison benchmark, not newly blind independent data. Source accuracy must not be presented as field accuracy. External labels are mostly unreviewed.
 
-Classifier-only accepted precision on source images is 96.72% at 85.44% coverage. Field accepted precision is 52.63% at 47.50% coverage. Field validation and condition-specific advice remain false. Both apps show the actual predicted condition, with low-confidence or crop-mismatch labels when applicable; numeric gates and global 17-class score semantics remain intact.
+Classifier-only accepted precision on source images is 96.72% at 85.44% coverage. Field accepted precision is 52.63% at 47.50% coverage. The classifier's field validation and authorization for confirmed treatment advice remain false. The separate advisory model can display conditional care without asserting a confirmed disease. Both apps show the actual predicted condition, with low-confidence or crop-mismatch labels when applicable; numeric gates and global 17-class score semantics remain intact.
 
 SHA-256: `31b29158cc1fc1c07bdf3acc07cb6bb6da39eccb1050ffe6ed1d499811179fba`.
 

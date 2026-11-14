@@ -46,7 +46,13 @@ export function AudioPlayer({
           ref={audio}
           src={src}
           preload="metadata"
-          onPlay={() => setPlaying(true)}
+          onPlay={() => {
+            // A care plan has separate urgency and summary narrations.
+            for (const other of document.querySelectorAll('audio')) {
+              if (other !== audio.current) other.pause();
+            }
+            setPlaying(true);
+          }}
           onPause={() => setPlaying(false)}
           onEnded={() => setPlaying(false)}
           onError={() => setFailed(true)}

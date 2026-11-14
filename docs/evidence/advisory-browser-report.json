@@ -1,0 +1,371 @@
+{
+  "startedAt": "2026-11-14T15:47:24.170Z",
+  "baseURL": "http://127.0.0.1:3000/",
+  "checks": [
+    {
+      "name": "shared hand-authored advisory behavior scenarios",
+      "status": "passed",
+      "cases": [
+        {
+          "name": "few stable early-blight spots",
+          "severity": "MILD",
+          "urgency": "MONITOR",
+          "conditionCare": true
+        },
+        {
+          "name": "mild damage but fast-risk suspected late blight",
+          "severity": "MILD",
+          "urgency": "SAME_DAY",
+          "conditionCare": true
+        },
+        {
+          "name": "late blight with extent unknown",
+          "severity": "UNKNOWN",
+          "urgency": "SAME_DAY",
+          "conditionCare": true
+        },
+        {
+          "name": "large maize leaf damage",
+          "severity": "SEVERE",
+          "urgency": "SAME_DAY",
+          "conditionCare": true
+        },
+        {
+          "name": "stable suspected mosaic requires confirmation",
+          "severity": "MILD",
+          "urgency": "SOON",
+          "conditionCare": true
+        },
+        {
+          "name": "spreading suspected leaf curl",
+          "severity": "MILD",
+          "urgency": "SAME_DAY",
+          "conditionCare": true
+        },
+        {
+          "name": "wilting overrides healthy-looking result",
+          "severity": "SEVERE",
+          "urgency": "URGENT",
+          "conditionCare": false
+        },
+        {
+          "name": "healthy no visible signs",
+          "severity": "NONE",
+          "urgency": "MONITOR",
+          "conditionCare": true
+        },
+        {
+          "name": "wet weather alone does not imply severe damage",
+          "severity": "NONE",
+          "urgency": "MONITOR",
+          "conditionCare": true
+        },
+        {
+          "name": "unknown extent never reassuring",
+          "severity": "UNKNOWN",
+          "urgency": "SOON",
+          "conditionCare": true
+        },
+        {
+          "name": "uncertain answer does not become routine monitoring",
+          "severity": "MILD",
+          "urgency": "SOON",
+          "conditionCare": true
+        },
+        {
+          "name": "moderate coverage needs early advice",
+          "severity": "MODERATE",
+          "urgency": "SOON",
+          "conditionCare": true
+        },
+        {
+          "name": "rapid spread across plants needs urgent advice",
+          "severity": "MILD",
+          "urgency": "URGENT",
+          "conditionCare": true
+        },
+        {
+          "name": "fruit or stem concern elevates reported severity",
+          "severity": "SEVERE",
+          "urgency": "SAME_DAY",
+          "conditionCare": true
+        },
+        {
+          "name": "one spreading patch needs early review",
+          "severity": "MILD",
+          "urgency": "SOON",
+          "conditionCare": true
+        },
+        {
+          "name": "unanswered questionnaire",
+          "severity": "UNKNOWN",
+          "urgency": "SOON",
+          "conditionCare": true
+        },
+        {
+          "name": "nonleaf photo cannot receive disease care",
+          "severity": "UNKNOWN",
+          "urgency": "SOON",
+          "conditionCare": false
+        },
+        {
+          "name": "wrong crop cannot receive disease care",
+          "severity": "UNKNOWN",
+          "urgency": "SOON",
+          "conditionCare": false
+        },
+        {
+          "name": "missing model cannot receive disease care",
+          "severity": "UNKNOWN",
+          "urgency": "SOON",
+          "conditionCare": false
+        },
+        {
+          "name": "no damage on pictured leaf but other plants spreading needs urgent advice",
+          "severity": "NONE",
+          "urgency": "URGENT",
+          "conditionCare": false
+        }
+      ],
+      "modelVersion": "offline-advisory-v1"
+    },
+    {
+      "name": "real leaf inference reaches unknown advisory until explicit answers",
+      "status": "passed",
+      "photo": "/workspace/crop-data/plantdoc-5467f601/raw/train/Corn rust leaf/corn-rust-4.jpg",
+      "crop": "maize",
+      "type": "uncertain",
+      "conditionHeading": "Common rust"
+    },
+    {
+      "name": "six explicit observations produce severe reported damage and urgent action",
+      "status": "passed"
+    },
+    {
+      "name": "real saved photo and all advisory answers survive reload/history reopen",
+      "status": "passed",
+      "saved": {
+        "id": "6a6e5043-0e5f-4087-b824-fe27c7754a07",
+        "createdAt": 1794671247256,
+        "cropId": "maize",
+        "resultType": "uncertain",
+        "conditionId": "maize_common_rust",
+        "score": 0.8662563616875486,
+        "modelVersion": "mnv3-large-healthy-transfer-31b29158cc1f",
+        "inferenceMs": 43.79999999701977,
+        "note": "LEAF_CHECKED_UNCERTAIN",
+        "validated": false,
+        "concern": {
+          "level": "SEEK_LOCAL_EXPERT",
+          "reportedSymptoms": {
+            "spreadingQuickly": false,
+            "manyPlantsAffected": false,
+            "wiltingOrDying": true,
+            "leafCoverage": "MANY_SPOTS",
+            "uncertainAnswers": false,
+            "fruitOrStemAffected": false,
+            "wetWeather": false
+          },
+          "ruleVersion": "prototype-observation-v1",
+          "agronomistReviewed": false
+        },
+        "photoBytes": 35550
+      }
+    },
+    {
+      "name": "mild reassessment updates the existing saved care answers without duplicate records or photo loss",
+      "status": "passed"
+    },
+    {
+      "name": "starting care narration pauses urgency narration so voices cannot overlap",
+      "status": "passed"
+    },
+    {
+      "name": "trilingual conditional care and new urgency/care audio decode and play",
+      "status": "passed",
+      "audio": [
+        {
+          "language": "en",
+          "urgency": {
+            "url": "http://127.0.0.1:3000/assets/audio/en/advisory_monitor.ogg",
+            "duration": 16.3845,
+            "currentTime": 0.058863,
+            "paused": false
+          },
+          "care": {
+            "url": "http://127.0.0.1:3000/assets/audio/en/advisory_maize_common_rust.ogg",
+            "duration": 27.7145,
+            "currentTime": 0.064,
+            "paused": false
+          }
+        },
+        {
+          "language": "kn",
+          "urgency": {
+            "url": "http://127.0.0.1:3000/assets/audio/kn/advisory_monitor.ogg",
+            "duration": 23.21125,
+            "currentTime": 0.069589,
+            "paused": false
+          },
+          "care": {
+            "url": "http://127.0.0.1:3000/assets/audio/kn/advisory_maize_common_rust.ogg",
+            "duration": 39.699375,
+            "currentTime": 0.055606,
+            "paused": false
+          }
+        },
+        {
+          "language": "hi",
+          "urgency": {
+            "url": "http://127.0.0.1:3000/assets/audio/hi/advisory_monitor.ogg",
+            "duration": 16.96125,
+            "currentTime": 0.067039,
+            "paused": false
+          },
+          "care": {
+            "url": "http://127.0.0.1:3000/assets/audio/hi/advisory_maize_common_rust.ogg",
+            "duration": 27.997875,
+            "currentTime": 0.05416,
+            "paused": false
+          }
+        }
+      ],
+      "nativePronunciationValidated": false
+    },
+    {
+      "name": "offline reload restores advisory answers, conditional care and new audio",
+      "status": "passed",
+      "offlineAudio": {
+        "url": "http://127.0.0.1:3000/assets/audio/hi/advisory_maize_common_rust.ogg",
+        "duration": 27.997875,
+        "currentTime": 0.060203,
+        "paused": false
+      }
+    },
+    {
+      "name": "real mouse photo is rejected with no disease prediction or condition care",
+      "status": "passed",
+      "mouse": "/workspace/crop-data/nonleaf/source/n03793489_mouse.JPEG"
+    }
+  ],
+  "pageErrors": [],
+  "scope": "software behavior, not agricultural validation",
+  "artifacts": {
+    "classifier": {
+      "schema_version": 1,
+      "model_version": "mnv3-large-healthy-transfer-31b29158cc1f",
+      "architecture": "MobileNetV3-Large",
+      "model_file": "crop_model.onnx",
+      "model_sha256": "31b29158cc1fc1c07bdf3acc07cb6bb6da39eccb1050ffe6ed1d499811179fba",
+      "model_size_bytes": 11965503,
+      "class_count": 17,
+      "embedding_dimension": 960,
+      "input": {
+        "name": "image",
+        "dtype": "float32",
+        "shape": [
+          1,
+          3,
+          224,
+          224
+        ],
+        "layout": "NCHW",
+        "color_order": "RGB",
+        "width": 224,
+        "height": 224,
+        "resize": "letterbox",
+        "resize_rounding": "half_up",
+        "interpolation": "bilinear",
+        "padding_rgb": [
+          124,
+          116,
+          104
+        ],
+        "pixel_scale": 255,
+        "mean": [
+          0.485,
+          0.456,
+          0.406
+        ],
+        "std": [
+          0.229,
+          0.224,
+          0.225
+        ],
+        "exif_orientation": true
+      },
+      "outputs": {
+        "logits": {
+          "name": "logits",
+          "shape": [
+            1,
+            17
+          ]
+        },
+        "embeddings": {
+          "name": "embeddings",
+          "shape": [
+            1,
+            960
+          ]
+        },
+        "leaf_logit": {
+          "name": "leaf_logit",
+          "shape": [
+            1,
+            1
+          ]
+        }
+      },
+      "labels_file": "labels.json",
+      "policy_file": "decision_policy.json",
+      "precision": "fp32",
+      "onnx_opset": 17,
+      "onnx_ir_version": 8,
+      "runtime_tested": "onnxruntime-python-1.23.2-cpu",
+      "training_status": "trained_prototype",
+      "diagnosis_validated": false,
+      "test_scope": "Full original source-domain test with frozen CAL gates; no field diagnosis or phone-performance validation.",
+      "torchvision_model": "mobilenet_v3_large",
+      "pretrained_weights": "IMAGENET1K_V2",
+      "pretrained_weights_sha256": "5c1a416349c4cf298f2a6a5e2600ed0ee55e604713578f5e74e6bc8bcaef7997",
+      "leaf_gate": {
+        "enabled": true,
+        "output_name": "leaf_logit",
+        "minimum_leaf_probability": 0.4514392108851361,
+        "receipt_file": "leaf_validation.json",
+        "receipt_sha256": "659dfd9cd8299f0568fa7bb5a223a5b4e5c8a11cc95dbf2ba967c7abccfa9fa4"
+      },
+      "source_evaluated": true,
+      "source_thresholds_calibrated": true,
+      "source_acceptance_qualified": true,
+      "source_acceptance_enabled": true,
+      "source_evaluation_file": "source_evaluation.json",
+      "source_evaluation_sha256": "406047f01d8826684160bc8dcab35e4f2cefb9261eef937155669bf4b8f8b4a3",
+      "pipeline_version": "0.4.3-diagnosis-flow-fix"
+    },
+    "advisory": {
+      "schema_version": 1,
+      "model_version": "offline-advisory-v1",
+      "model_type": "expert_decision_model",
+      "profile_sha256": "efc2270f58827db3ae611861919857956210d649aa6c28ce0e8a88cec2e8d290",
+      "profile_count": 17,
+      "languages": [
+        "en",
+        "kn",
+        "hi"
+      ],
+      "trained": false,
+      "field_validated": false,
+      "agronomist_reviewed": false,
+      "implementation_sha256": {
+        "frontend/src/lib/advisory.ts": "ce768eb70287daf4821389783e8cca328690d97004562d746fad2c3076b78e25",
+        "android/app/src/main/java/com/debuggers/crophealth/domain/AdvisoryDecisionModel.kt": "2efb78314ffb99f813373f2573f1afd402463d334aad8d02be043992a89535fd"
+      },
+      "behavior_cases_sha256": "b9a9728bc46046638f511c557107c1d01784e74ffbb74d33c4aea1dfdd594bd5",
+      "scope": "Disease-specific draft knowledge plus deterministic farmer-reported triage. Behavior tests do not establish agricultural correctness or treatment efficacy."
+    }
+  },
+  "status": "passed",
+  "finishedAt": "2026-11-14T15:47:31.962Z"
+}
