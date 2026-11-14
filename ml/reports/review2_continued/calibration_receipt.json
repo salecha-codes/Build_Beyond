@@ -1,0 +1,14 @@
+{
+  "scope": "Source-validation fit on a subset also used for model selection, not independent test or field calibration",
+  "samples": 536,
+  "actual_model_sha256": "d157e7c8401319a700039de467caba6728b7bdbf35b4cdae1818757cf0ba7e3c",
+  "subset_manifest_sha256": "83249366e47a09f84815e3453dc7f9bf07181adc23e4cc627db8ea0267835f19",
+  "temperature": 0.8857924395488052,
+  "nll_before": 1.1451541166639705,
+  "nll_after": 1.1378339698126594,
+  "thresholds_calibrated": false,
+  "diagnosis_validated": false,
+  "training_mode": "supervised_from_scratch",
+  "all_reference_logits_parity_checked": true,
+  "reference_logits_max_abs_error": 3.1948089599609375e-05
+}

@@ -1,0 +1,24 @@
+{
+  "name": "offline-crop-health",
+  "version": "0.2.0",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "sync:assets": "node scripts/sync-web-assets.mjs",
+    "dev": "npm run sync:assets && npm run dev --workspace frontend -- --host 0.0.0.0",
+    "build": "npm run sync:assets && npm run build --workspace frontend && node scripts/build-offline.mjs",
+    "start": "node backend/server.mjs",
+    "openai": "PORT=4173 node backend/server.mjs",
+    "test:backend": "node --test backend/test/*.test.mjs",
+    "test:web": "node frontend/tests/browser-qa.cjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.1"
+  }
+}

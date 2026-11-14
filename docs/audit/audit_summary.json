@@ -1,0 +1,119 @@
+{
+  "plantvillage_commit": "7f7ecc7e1eaca78107e3affe7cb5abd9427e139a",
+  "plantdoc_commit": "5467f6012d78d1c446145d5f582da6096f852ae8",
+  "selected_images": 24164,
+  "classes": [
+    {
+      "label": "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot",
+      "images": 513,
+      "mapped_images": 0,
+      "known_leaf_groups": 0
+    },
+    {
+      "label": "Corn_(maize)___Common_rust_",
+      "images": 1192,
+      "mapped_images": 0,
+      "known_leaf_groups": 0
+    },
+    {
+      "label": "Corn_(maize)___Northern_Leaf_Blight",
+      "images": 985,
+      "mapped_images": 0,
+      "known_leaf_groups": 0
+    },
+    {
+      "label": "Corn_(maize)___healthy",
+      "images": 1162,
+      "mapped_images": 0,
+      "known_leaf_groups": 0
+    },
+    {
+      "label": "Potato___Early_blight",
+      "images": 1000,
+      "mapped_images": 1000,
+      "known_leaf_groups": 250
+    },
+    {
+      "label": "Potato___Late_blight",
+      "images": 1000,
+      "mapped_images": 1000,
+      "known_leaf_groups": 250
+    },
+    {
+      "label": "Potato___healthy",
+      "images": 152,
+      "mapped_images": 152,
+      "known_leaf_groups": 38
+    },
+    {
+      "label": "Tomato___Bacterial_spot",
+      "images": 2127,
+      "mapped_images": 2127,
+      "known_leaf_groups": 532
+    },
+    {
+      "label": "Tomato___Early_blight",
+      "images": 1000,
+      "mapped_images": 999,
+      "known_leaf_groups": 250
+    },
+    {
+      "label": "Tomato___Late_blight",
+      "images": 1909,
+      "mapped_images": 920,
+      "known_leaf_groups": 230
+    },
+    {
+      "label": "Tomato___Leaf_Mold",
+      "images": 952,
+      "mapped_images": 952,
+      "known_leaf_groups": 238
+    },
+    {
+      "label": "Tomato___Septoria_leaf_spot",
+      "images": 1771,
+      "mapped_images": 1000,
+      "known_leaf_groups": 250
+    },
+    {
+      "label": "Tomato___Spider_mites Two-spotted_spider_mite",
+      "images": 1676,
+      "mapped_images": 1676,
+      "known_leaf_groups": 419
+    },
+    {
+      "label": "Tomato___Target_Spot",
+      "images": 1404,
+      "mapped_images": 0,
+      "known_leaf_groups": 0
+    },
+    {
+      "label": "Tomato___Tomato_Yellow_Leaf_Curl_Virus",
+      "images": 5357,
+      "mapped_images": 2738,
+      "known_leaf_groups": 685
+    },
+    {
+      "label": "Tomato___Tomato_mosaic_virus",
+      "images": 373,
+      "mapped_images": 0,
+      "known_leaf_groups": 0
+    },
+    {
+      "label": "Tomato___healthy",
+      "images": 1591,
+      "mapped_images": 999,
+      "known_leaf_groups": 250
+    }
+  ],
+  "exact_duplicate_groups": 14,
+  "extra_exact_duplicate_files": 14,
+  "cross_label_exact_duplicates": 0,
+  "sample_downloads": 79,
+  "sample_passed": 79,
+  "sample_failed": [],
+  "plantdoc_image_files": 2578,
+  "mapping_method": "class-qualified exact or punctuation-insensitive unambiguous filename match to source leaf map",
+  "mapped_images": 13563,
+  "known_leaf_groups": 3392
+}

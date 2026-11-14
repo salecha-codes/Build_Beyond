@@ -1,0 +1,37 @@
+{
+  "runtime": "IndexedDB",
+  "database": "debuggers-crop-health",
+  "version": 1,
+  "stores": {
+    "observations": {
+      "keyPath": "id",
+      "autoIncrement": false,
+      "indexes": {
+        "createdAt": { "keyPath": "createdAt", "unique": false },
+        "cropId": { "keyPath": "cropId", "unique": false },
+        "resultType": { "keyPath": "resultType", "unique": false }
+      },
+      "record": {
+        "id": "string",
+        "createdAt": "epoch milliseconds",
+        "cropId": "tomato | potato | maize",
+        "photoBlob": "Blob | null",
+        "resultType": "uncertain | retake | crop_mismatch | model_unavailable | likely | healthy",
+        "conditionId": "string | null",
+        "score": "number in [0,1] | null",
+        "modelVersion": "string",
+        "inferenceMs": "nonnegative number",
+        "note": "string",
+        "validated": "boolean",
+        "concern": "user-reported ConcernResult | null"
+      }
+    }
+  },
+  "seedData": false,
+  "remoteSync": false,
+  "languagePreference": {
+    "storage": "localStorage",
+    "key": "crophealth.language",
+    "values": ["en", "kn"]
+  }
+}

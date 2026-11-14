@@ -1,0 +1,9 @@
+# Install CPU Torch/Torchvision from the official CPU index first (README).
+timm==1.0.22
+onnx==1.18.0
+onnxruntime==1.23.2
+scikit-learn==1.7.2
+safetensors>=0.5,<1
+Pillow>=11,<14
+numpy>=2,<3
+pytest>=8,<10

@@ -1,0 +1,170 @@
+{
+  "architecture": "MobileNetV4-Conv-Small",
+  "checkpoint": "/workspace/crop-artifacts/scratch_continued/best.pt",
+  "initialized_model_only": false,
+  "selected_training_epoch": 14,
+  "training_receipt": {
+    "model_name": "mobilenetv4_conv_small.e2400_r224_in1k",
+    "training_mode": "supervised_from_scratch",
+    "pretrained_checkpoint_sha256": null,
+    "resume_checkpoint_sha256": "b8f380fecc2e2c5ba377061dde3aea193efc8314c8e6d7e4db971974a30e8230",
+    "resumed_from_epoch": 3,
+    "optimizer_restarted": true,
+    "parent_training_receipt": {
+      "model_name": "mobilenetv4_conv_small.e2400_r224_in1k",
+      "training_mode": "supervised_from_scratch",
+      "pretrained_checkpoint_sha256": null,
+      "training_files": 2152,
+      "validation_files": 536,
+      "train_validation_only": true,
+      "held_out_test_executed": false,
+      "limited_subset": true,
+      "epochs": 3,
+      "seed": 26,
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 3.8944166495454358,
+          "validation_accuracy": 0.27798507462686567,
+          "validation_macro_f1": 0.2479610639651859,
+          "elapsed_seconds": 28
+        },
+        {
+          "epoch": 2,
+          "train_loss": 2.7778768096271502,
+          "validation_accuracy": 0.332089552238806,
+          "validation_macro_f1": 0.2961949344696295,
+          "elapsed_seconds": 62
+        },
+        {
+          "epoch": 3,
+          "train_loss": 2.384268817405275,
+          "validation_accuracy": 0.3824626865671642,
+          "validation_macro_f1": 0.37681049544912615,
+          "elapsed_seconds": 90
+        }
+      ],
+      "elapsed_seconds": 90,
+      "application_diagnosis_validated": false,
+      "limitations": "Validation is used during model selection. It is not a held-out test or field trial. The app must remain Uncertain until its declared release criteria are evaluated."
+    },
+    "training_files": 2152,
+    "validation_files": 536,
+    "train_validation_only": true,
+    "held_out_test_executed": false,
+    "limited_subset": true,
+    "epochs": 12,
+    "total_epochs_in_lineage": 15,
+    "seed": 26,
+    "history": [
+      {
+        "epoch": 4,
+        "train_loss": 2.2195150825613936,
+        "validation_accuracy": 0.39552238805970147,
+        "validation_macro_f1": 0.34986036074599536,
+        "elapsed_seconds": 31
+      },
+      {
+        "epoch": 5,
+        "train_loss": 2.0419784203781073,
+        "validation_accuracy": 0.4216417910447761,
+        "validation_macro_f1": 0.40394325860528596,
+        "elapsed_seconds": 68
+      },
+      {
+        "epoch": 6,
+        "train_loss": 1.9401170037492943,
+        "validation_accuracy": 0.44776119402985076,
+        "validation_macro_f1": 0.4391706465714075,
+        "elapsed_seconds": 99
+      },
+      {
+        "epoch": 7,
+        "train_loss": 1.7726981294199438,
+        "validation_accuracy": 0.4533582089552239,
+        "validation_macro_f1": 0.436461064153018,
+        "elapsed_seconds": 127
+      },
+      {
+        "epoch": 8,
+        "train_loss": 1.749707331001537,
+        "validation_accuracy": 0.4925373134328358,
+        "validation_macro_f1": 0.46083387093612993,
+        "elapsed_seconds": 179
+      },
+      {
+        "epoch": 9,
+        "train_loss": 1.6841260979166703,
+        "validation_accuracy": 0.5074626865671642,
+        "validation_macro_f1": 0.48210063537956976,
+        "elapsed_seconds": 209
+      },
+      {
+        "epoch": 10,
+        "train_loss": 1.5991740528092508,
+        "validation_accuracy": 0.5597014925373134,
+        "validation_macro_f1": 0.5358105212143686,
+        "elapsed_seconds": 239
+      },
+      {
+        "epoch": 11,
+        "train_loss": 1.5704393528651128,
+        "validation_accuracy": 0.5708955223880597,
+        "validation_macro_f1": 0.5598034577927394,
+        "elapsed_seconds": 269
+      },
+      {
+        "epoch": 12,
+        "train_loss": 1.5350697563483369,
+        "validation_accuracy": 0.5746268656716418,
+        "validation_macro_f1": 0.5610042993633921,
+        "elapsed_seconds": 300
+      },
+      {
+        "epoch": 13,
+        "train_loss": 1.502285700748401,
+        "validation_accuracy": 0.5652985074626866,
+        "validation_macro_f1": 0.5482878801457138,
+        "elapsed_seconds": 329
+      },
+      {
+        "epoch": 14,
+        "train_loss": 1.4557635855054323,
+        "validation_accuracy": 0.6044776119402985,
+        "validation_macro_f1": 0.5901515753510295,
+        "elapsed_seconds": 358
+      },
+      {
+        "epoch": 15,
+        "train_loss": 1.4218002783764694,
+        "validation_accuracy": 0.6082089552238806,
+        "validation_macro_f1": 0.5896740128113508,
+        "elapsed_seconds": 387
+      }
+    ],
+    "elapsed_seconds": 387,
+    "application_diagnosis_validated": false,
+    "limitations": "Validation is used during model selection. It is not a held-out test or field trial. The app must remain Uncertain until its declared release criteria are evaluated."
+  },
+  "onnx_checker_passed": true,
+  "zero_input_max_abs_error": 9.745359420776367e-06,
+  "nonzero_input_max_abs_error": 6.103515625e-05,
+  "output_shapes": [
+    [
+      1,
+      17
+    ],
+    [
+      1,
+      960
+    ]
+  ],
+  "desktop_cpu_latency_ms": {
+    "iterations": 10,
+    "p50": 1.1033590008082683,
+    "p95": 1.7460633994232915
+  },
+  "phone_benchmark_executed": false,
+  "diagnosis_validated": false,
+  "model_sha256": "d157e7c8401319a700039de467caba6728b7bdbf35b4cdae1818757cf0ba7e3c"
+}

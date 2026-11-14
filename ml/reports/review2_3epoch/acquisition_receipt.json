@@ -1,0 +1,27 @@
+{
+  "source_commit": "7f7ecc7e1eaca78107e3affe7cb5abd9427e139a",
+  "requested": 24164,
+  "verified": 24164,
+  "failed": 0,
+  "complete_selected_corpus": true,
+  "elapsed_seconds": 383,
+  "class_counts": {
+    "maize_gray_leaf_spot": 513,
+    "maize_common_rust": 1192,
+    "maize_northern_leaf_blight": 985,
+    "maize_healthy": 1162,
+    "potato_early_blight": 1000,
+    "potato_late_blight": 1000,
+    "potato_healthy": 152,
+    "tomato_bacterial_spot": 2127,
+    "tomato_early_blight": 1000,
+    "tomato_late_blight": 1909,
+    "tomato_leaf_mold": 952,
+    "tomato_septoria_leaf_spot": 1771,
+    "tomato_spider_mites": 1676,
+    "tomato_target_spot": 1404,
+    "tomato_yellow_leaf_curl_virus": 5357,
+    "tomato_mosaic_virus": 373,
+    "tomato_healthy": 1591
+  }
+}

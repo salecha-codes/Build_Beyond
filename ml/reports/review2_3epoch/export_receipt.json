@@ -1,0 +1,64 @@
+{
+  "architecture": "MobileNetV4-Conv-Small",
+  "checkpoint": "/workspace/crop-artifacts/scratch_training/best.pt",
+  "initialized_model_only": false,
+  "training_receipt": {
+    "model_name": "mobilenetv4_conv_small.e2400_r224_in1k",
+    "training_mode": "supervised_from_scratch",
+    "pretrained_checkpoint_sha256": null,
+    "training_files": 2152,
+    "validation_files": 536,
+    "train_validation_only": true,
+    "held_out_test_executed": false,
+    "limited_subset": true,
+    "epochs": 3,
+    "seed": 26,
+    "history": [
+      {
+        "epoch": 1,
+        "train_loss": 3.8944166495454358,
+        "validation_accuracy": 0.27798507462686567,
+        "validation_macro_f1": 0.2479610639651859,
+        "elapsed_seconds": 28
+      },
+      {
+        "epoch": 2,
+        "train_loss": 2.7778768096271502,
+        "validation_accuracy": 0.332089552238806,
+        "validation_macro_f1": 0.2961949344696295,
+        "elapsed_seconds": 62
+      },
+      {
+        "epoch": 3,
+        "train_loss": 2.384268817405275,
+        "validation_accuracy": 0.3824626865671642,
+        "validation_macro_f1": 0.37681049544912615,
+        "elapsed_seconds": 90
+      }
+    ],
+    "elapsed_seconds": 90,
+    "application_diagnosis_validated": false,
+    "limitations": "Validation is used during model selection. It is not a held-out test or field trial. The app must remain Uncertain until its declared release criteria are evaluated."
+  },
+  "onnx_checker_passed": true,
+  "zero_input_max_abs_error": 1.7642974853515625e-05,
+  "nonzero_input_max_abs_error": 7.414817810058594e-05,
+  "output_shapes": [
+    [
+      1,
+      17
+    ],
+    [
+      1,
+      960
+    ]
+  ],
+  "desktop_cpu_latency_ms": {
+    "iterations": 10,
+    "p50": 1.1730419992090901,
+    "p95": 2.9366565499913095
+  },
+  "phone_benchmark_executed": false,
+  "diagnosis_validated": false,
+  "model_sha256": "1771d69fd1e795b97d920cdcce0ebce2643ef233044e45a08a74362e40452724"
+}

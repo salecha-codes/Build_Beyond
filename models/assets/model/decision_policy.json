@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "model_version": "mnv4-conv-small-supervised_from_scratch-d157e7c84013",
+  "validated": false,
+  "validation_status": "not_validated_for_diagnosis",
+  "temperature": 0.8857924395488052,
+  "min_confidence": 0.75,
+  "min_margin": 0.15,
+  "thresholds_calibrated": false,
+  "reason": "MODEL_NOT_VALIDATED",
+  "allow_condition_specific_advice": false,
+  "note": "Temperature fitted to actual exported-model source-validation logits. Acceptance thresholds remain provisional; diagnosis remains unvalidated.",
+  "calibration_receipt": "calibration_receipt.json"
+}

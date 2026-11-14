@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "source_leaf_sha256": "eb5f9c10404aabeab5d2205a06689c4f0c966b1c7dbca20bb96c8927ccd1dae8",
+  "source_note": "Derived non-square crop from a PlantVillage tomato healthy sample, not a model outcome.",
+  "fixtures": [
+    {
+      "name": "solid_letterbox",
+      "image_file": "solid_letterbox.png",
+      "input_size": [
+        448,
+        224
+      ],
+      "image_sha256": "83bfa601381247df31e6c925bae271dc73bda980a34d408217a96d7386d613b6",
+      "tensor_file": "solid_letterbox.f32",
+      "tensor_dtype": "little_endian_float32",
+      "tensor_shape": [
+        1,
+        3,
+        224,
+        224
+      ],
+      "tensor_sha256": "5abb62183cb0e3fd210482c7cc4f2a422f0c6e3dbdec917335ab7ce116d25c94",
+      "probes": [
+        {
+          "y": 0,
+          "x": 0,
+          "rgb_normalized": [
+            0.005565485917031765,
+            -0.004901949781924486,
+            0.008191797882318497
+          ]
+        },
+        {
+          "y": 27,
+          "x": 0,
+          "rgb_normalized": [
+            0.005565485917031765,
+            -0.004901949781924486,
+            0.008191797882318497
+          ]
+        },
+        {
+          "y": 28,
+          "x": 0,
+          "rgb_normalized": [
+            0.005565485917031765,
+            -0.004901949781924486,
+            0.008191797882318497
+          ]
+        },
+        {
+          "y": 56,
+          "x": 112,
+          "rgb_normalized": [
+            2.248908281326294,
+            -2.0357141494750977,
+            -1.804444432258606
+          ]
+        },
+        {
+          "y": 112,
+          "x": 112,
+          "rgb_normalized": [
+            2.248908281326294,
+            -2.0357141494750977,
+            -1.804444432258606
+          ]
+        },
+        {
+          "y": 195,
+          "x": 223,
+          "rgb_normalized": [
+            0.005565485917031765,
+            -0.004901949781924486,
+            0.008191797882318497
+          ]
+        },
+        {
+          "y": 223,
+          "x": 223,
+          "rgb_normalized": [
+            0.005565485917031765,
+            -0.004901949781924486,
+            0.008191797882318497
+          ]
+        }
+      ],
+      "parity_requirement": "For solid-color fixture all values should agree within absolute 1e-5. Textured leaf is diagnostic: Pillow bilinear downsampling uses filtering which may differ from Skia; measure max/mean/p99 error before declaring an acceptance tolerance."
+    },
+    {
+      "name": "leaf_letterbox",
+      "image_file": "leaf_letterbox.png",
+      "input_size": [
+        256,
+        192
+      ],
+      "image_sha256": "c8159c583d8fe651e41655276545c4feb4d99eda316dbc4ab2a2f4330d56187f",
+      "tensor_file": "leaf_letterbox.f32",
+      "tensor_dtype": "little_endian_float32",
+      "tensor_shape": [
+        1,
+        3,
+        224,
+        224
+      ],
+      "tensor_sha256": "1892c6814d8a26e0aeaac4da3b5439aa67b5321207ab75f327faf5ed10a7242c",
+      "probes": [
+        {
+          "y": 0,
+          "x": 0,
+          "rgb_normalized": [
+            0.005565485917031765,
+            -0.004901949781924486,
+            0.008191797882318497
+          ]
+        },
+        {
+          "y": 27,
+          "x": 0,
+          "rgb_normalized": [
+            0.005565485917031765,
+            -0.004901949781924486,
+            0.008191797882318497
+          ]
+        },
+        {
+          "y": 28,
+          "x": 0,
+          "rgb_normalized": [
+            0.9645517468452454,
+            1.0455182790756226,
+            1.507102608680725
+          ]
+        },
+        {
+          "y": 56,
+          "x": 112,
+          "rgb_normalized": [
+            -0.3026800751686096,
+            0.0476190522313118,
+            -0.026666589081287384
+          ]
+        },
+        {
+          "y": 112,
+          "x": 112,
+          "rgb_normalized": [
+            0.21106265485286713,
+            0.6078432202339172,
+            0.4264925718307495
+          ]
+        },
+        {
+          "y": 195,
+          "x": 223,
+          "rgb_normalized": [
+            -0.11430778354406357,
+            -0.17997196316719055,
+            0.1999129205942154
+          ]
+        },
+        {
+          "y": 223,
+          "x": 223,
+          "rgb_normalized": [
+            0.005565485917031765,
+            -0.004901949781924486,
+            0.008191797882318497
+          ]
+        }
+      ],
+      "parity_requirement": "For solid-color fixture all values should agree within absolute 1e-5. Textured leaf is diagnostic: Pillow bilinear downsampling uses filtering which may differ from Skia; measure max/mean/p99 error before declaring an acceptance tolerance."
+    }
+  ]
+}

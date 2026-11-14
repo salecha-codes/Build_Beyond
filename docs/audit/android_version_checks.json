@@ -1,0 +1,44 @@
+[
+  {
+    "name": "agp",
+    "url": "https://dl.google.com/dl/android/maven2/com/android/tools/build/gradle/8.9.2/gradle-8.9.2.pom",
+    "status": 200,
+    "bytes": 12001
+  },
+  {
+    "name": "compose_bom",
+    "url": "https://dl.google.com/dl/android/maven2/androidx/compose/compose-bom/2025.04.01/compose-bom-2025.04.01.pom",
+    "status": 200,
+    "bytes": 24148
+  },
+  {
+    "name": "camera",
+    "url": "https://dl.google.com/dl/android/maven2/androidx/camera/camera-core/1.4.2/camera-core-1.4.2.pom",
+    "status": 200,
+    "bytes": 5768
+  },
+  {
+    "name": "room",
+    "url": "https://dl.google.com/dl/android/maven2/androidx/room/room-runtime/2.7.1/room-runtime-2.7.1.pom",
+    "status": 200,
+    "bytes": 6126
+  },
+  {
+    "name": "kotlin",
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin/2.1.20/kotlin-gradle-plugin-2.1.20.pom",
+    "status": 200,
+    "bytes": 11963
+  },
+  {
+    "name": "ksp",
+    "url": "https://repo.maven.apache.org/maven2/com/google/devtools/ksp/symbol-processing-gradle-plugin/2.1.20-1.0.32/symbol-processing-gradle-plugin-2.1.20-1.0.32.pom",
+    "status": 200,
+    "bytes": 1884
+  },
+  {
+    "name": "gradle_checksum",
+    "url": "https://services.gradle.org/distributions/gradle-8.11.1-bin.zip.sha256",
+    "status": 200,
+    "bytes": 64
+  }
+]

@@ -1,0 +1,168 @@
+{
+  "seed": 26,
+  "verified_files": 24164,
+  "unique_files": 24150,
+  "exact_duplicates_excluded": 14,
+  "known_leaf_group_files": 13563,
+  "grouping_limitations": "Source leaf metadata is incomplete; exact deduplication does not establish independence of unmatched physical leaves. No full perceptual/manual review is claimed.",
+  "class_counts": {
+    "maize_gray_leaf_spot": {
+      "files": 513,
+      "groups": 513,
+      "partitions": {
+        "validation": 77,
+        "test": 77,
+        "train": 359
+      }
+    },
+    "maize_common_rust": {
+      "files": 1192,
+      "groups": 1192,
+      "partitions": {
+        "validation": 179,
+        "test": 179,
+        "train": 834
+      }
+    },
+    "maize_northern_leaf_blight": {
+      "files": 985,
+      "groups": 985,
+      "partitions": {
+        "validation": 148,
+        "test": 148,
+        "train": 689
+      }
+    },
+    "maize_healthy": {
+      "files": 1162,
+      "groups": 1162,
+      "partitions": {
+        "validation": 174,
+        "test": 174,
+        "train": 814
+      }
+    },
+    "potato_early_blight": {
+      "files": 1000,
+      "groups": 250,
+      "partitions": {
+        "validation": 152,
+        "test": 152,
+        "train": 696
+      }
+    },
+    "potato_late_blight": {
+      "files": 1000,
+      "groups": 250,
+      "partitions": {
+        "validation": 152,
+        "test": 152,
+        "train": 696
+      }
+    },
+    "potato_healthy": {
+      "files": 152,
+      "groups": 38,
+      "partitions": {
+        "validation": 24,
+        "test": 24,
+        "train": 104
+      }
+    },
+    "tomato_bacterial_spot": {
+      "files": 2127,
+      "groups": 532,
+      "partitions": {
+        "validation": 319,
+        "test": 320,
+        "train": 1488
+      }
+    },
+    "tomato_early_blight": {
+      "files": 1000,
+      "groups": 251,
+      "partitions": {
+        "validation": 152,
+        "test": 149,
+        "train": 699
+      }
+    },
+    "tomato_late_blight": {
+      "files": 1909,
+      "groups": 1211,
+      "partitions": {
+        "validation": 275,
+        "test": 305,
+        "train": 1329
+      }
+    },
+    "tomato_leaf_mold": {
+      "files": 952,
+      "groups": 238,
+      "partitions": {
+        "validation": 144,
+        "test": 144,
+        "train": 664
+      }
+    },
+    "tomato_septoria_leaf_spot": {
+      "files": 1771,
+      "groups": 1021,
+      "partitions": {
+        "validation": 240,
+        "test": 285,
+        "train": 1246
+      }
+    },
+    "tomato_spider_mites": {
+      "files": 1676,
+      "groups": 419,
+      "partitions": {
+        "validation": 252,
+        "test": 252,
+        "train": 1172
+      }
+    },
+    "tomato_target_spot": {
+      "files": 1404,
+      "groups": 1404,
+      "partitions": {
+        "validation": 211,
+        "test": 211,
+        "train": 982
+      }
+    },
+    "tomato_yellow_leaf_curl_virus": {
+      "files": 5357,
+      "groups": 3304,
+      "partitions": {
+        "validation": 820,
+        "test": 816,
+        "train": 3721
+      }
+    },
+    "tomato_mosaic_virus": {
+      "files": 373,
+      "groups": 373,
+      "partitions": {
+        "validation": 56,
+        "test": 56,
+        "train": 261
+      }
+    },
+    "tomato_healthy": {
+      "files": 1591,
+      "groups": 836,
+      "partitions": {
+        "validation": 249,
+        "test": 233,
+        "train": 1109
+      }
+    }
+  },
+  "split_counts": {
+    "train": 16856,
+    "test": 3674,
+    "validation": 3620
+  }
+}

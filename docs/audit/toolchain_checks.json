@@ -1,0 +1,73 @@
+[
+  {
+    "name": "ort_android_aar",
+    "url": "https://repo.maven.apache.org/maven2/com/microsoft/onnxruntime/onnxruntime-android/1.23.2/onnxruntime-android-1.23.2.aar",
+    "bytes": 30241654,
+    "manifest": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    package=\"ai.onnxruntime\" >\n\n    <uses-sdk android:minSdkVersion=\"24\" />\n\n</manifest>",
+    "native_libraries": [
+      "jni/arm64-v8a/libonnxruntime.so",
+      "jni/arm64-v8a/libonnxruntime4j_jni.so",
+      "jni/armeabi-v7a/libonnxruntime.so",
+      "jni/armeabi-v7a/libonnxruntime4j_jni.so",
+      "jni/x86/libonnxruntime.so",
+      "jni/x86/libonnxruntime4j_jni.so",
+      "jni/x86_64/libonnxruntime.so",
+      "jni/x86_64/libonnxruntime4j_jni.so"
+    ]
+  },
+  {
+    "name": "espeak_kannada",
+    "url": "https://raw.githubusercontent.com/espeak-ng/espeak-ng/master/espeak-ng-data/lang/dra/kn",
+    "text": "name Kannada\nlanguage kn\n\nintonation 2\n//consonants 80\n"
+  },
+  {
+    "name": "ort_sample_build",
+    "url": "https://raw.githubusercontent.com/microsoft/onnxruntime-inference-examples/main/mobile/examples/image_classification/android/app/build.gradle",
+    "text": "plugins {\n    id 'com.android.application'\n    id 'kotlin-android'\n}\n\nandroid {\n    compileSdkVersion 33\n\n    defaultConfig {\n        applicationId \"ai.onnxruntime.example.imageclassifier\"\n        minSdkVersion 24\n        targetSdkVersion 31\n        versionCode 1\n        versionName \"1.0\"\n\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\n    }\n\n    buildTypes {\n        release {\n            minifyEnabled false\n            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'\n        }\n    }\n\n    compileOptions {\n        sourceCompatibility JavaVersion.VERSION_1_8\n        targetCompatibility JavaVersion.VERSION_1_8\n    }\n\n    kotlinOptions {\n        jvmTarget = '1.8'\n    }\n\n    buildFeatures {\n        viewBinding true\n    }\n}\n\ndependencies {\n    // CameraX core library using the camera2 implementation\n    def camerax_version = \"1.2.1\"\n    // The following line is optional, as the core library is included indirectly by camera-camera2\n    implementation \"androidx.camera:camera-camera2:${camerax_version}\"\n    // If you want to additionally use the CameraX Lifecycle library\n    implementation \"androidx.camera:camera-lifecycle:${camerax_version}\"\n    // If you want to additionally use the CameraX View class\n    implementation \"androidx.camera:camera-view:1.3.0-alpha04\"\n\n    implementation \"org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version\"\n    implementation \"org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1\"\n    implementation 'androidx.core:core-ktx:1.9.0'\n    implementation 'androidx.appcompat:appcompat:1.6.1'\n    implementation 'com.google.android.material:material:1.8.0'\n    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'\n    testImplementation 'junit:junit:4.13.2'\n    androidTestImplementation 'androidx.test.ext:junit:1.1.5'\n    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'\n\n    implementation 'com.microsoft.onnxruntime:onnxruntime-android:latest.release'\n}"
+  },
+  {
+    "name": "pytorch_metadata",
+    "url": "https://pypi.org/pypi/torch/2.9.1/json",
+    "python": ">=3.10",
+    "requires_dist": [
+      "filelock",
+      "typing-extensions>=4.10.0",
+      "setuptools; python_version >= \"3.12\"",
+      "sympy>=1.13.3",
+      "networkx>=2.5.1",
+      "jinja2",
+      "fsspec>=0.8.5",
+      "nvidia-cuda-nvrtc-cu12==12.8.93; platform_system == \"Linux\" and platform_machine == \"x86_64\"",
+      "nvidia-cuda-runtime-cu12==12.8.90; platform_system == \"Linux\" and platform_machine == \"x86_64\"",
+      "nvidia-cuda-cupti-cu12==12.8.90; platform_system == \"Linux\" and platform_machine == \"x86_64\"",
+      "nvidia-cudnn-cu12==9.10.2.21; platform_system == \"Linux\" and platform_machine == \"x86_64\"",
+      "nvidia-cublas-cu12==12.8.4.1; platform_system == \"Linux\" and platform_machine == \"x86_64\"",
+      "nvidia-cufft-cu12==11.3.3.83; platform_system == \"Linux\" and platform_machine == \"x86_64\"",
+      "nvidia-curand-cu12==10.3.9.90; platform_system == \"Linux\" and platform_machine == \"x86_64\"",
+      "nvidia-cusolver-cu12==11.7.3.90; platform_system == \"Linux\" and platform_machine == \"x86_64\"",
+      "nvidia-cusparse-cu12==12.5.8.93; platform_system == \"Linux\" and platform_machine == \"x86_64\"",
+      "nvidia-cusparselt-cu12==0.7.1; platform_system == \"Linux\" and platform_machine == \"x86_64\"",
+      "nvidia-nccl-cu12==2.27.5; platform_system == \"Linux\" and platform_machine == \"x86_64\"",
+      "nvidia-nvshmem-cu12==3.3.20; platform_system == \"Linux\" and platform_machine == \"x86_64\"",
+      "nvidia-nvtx-cu12==12.8.90; platform_system == \"Linux\" and platform_machine == \"x86_64\"",
+      "nvidia-nvjitlink-cu12==12.8.93; platform_system == \"Linux\" and platform_machine == \"x86_64\"",
+      "nvidia-cufile-cu12==1.13.1.3; platform_system == \"Linux\" and platform_machine == \"x86_64\"",
+      "triton==3.5.1; platform_system == \"Linux\" and platform_machine == \"x86_64\"",
+      "optree>=0.13.0; extra == \"optree\"",
+      "opt-einsum>=3.3; extra == \"opt-einsum\"",
+      "pyyaml; extra == \"pyyaml\""
+    ]
+  },
+  {
+    "name": "vision_metadata",
+    "url": "https://pypi.org/pypi/torchvision/0.24.1/json",
+    "python": ">=3.10",
+    "requires_dist": [
+      "numpy",
+      "torch==2.9.1",
+      "pillow!=8.3.*,>=5.3.0",
+      "gdown>=4.7.3; extra == \"gdown\"",
+      "scipy; extra == \"scipy\""
+    ]
+  }
+]

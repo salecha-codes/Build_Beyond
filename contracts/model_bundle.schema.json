@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Offline Crop Health model metadata",
+  "type": "object",
+  "required": ["schema_version", "model_version", "architecture", "model_file", "model_sha256", "class_count", "embedding_dimension", "input", "outputs", "diagnosis_validated"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "architecture": {"const": "MobileNetV4-Conv-Small"},
+    "model_version": {"type": "string", "minLength": 1},
+    "model_file": {"const": "crop_model.onnx"},
+    "model_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "class_count": {"const": 17},
+    "embedding_dimension": {"type": "integer", "minimum": 1},
+    "diagnosis_validated": {"type": "boolean"},
+    "input": {"type": "object", "required": ["name", "shape", "layout", "resize", "padding_rgb", "mean", "std"], "properties": {"name": {"const": "image"}, "shape": {"const": [1, 3, 224, 224]}, "layout": {"const": "NCHW"}, "resize": {"const": "letterbox"}}},
+    "outputs": {"type": "object", "required": ["logits", "embeddings"]}
+  }
+}

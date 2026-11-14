@@ -1,0 +1,68 @@
+[
+  {
+    "name": "ort_mobile",
+    "url": "https://raw.githubusercontent.com/microsoft/onnxruntime/main/docs/Mobile.md",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "name": "ort_android_pom",
+    "url": "https://repo.maven.apache.org/maven2/com/microsoft/onnxruntime/onnxruntime-android/1.23.2/onnxruntime-android-1.23.2.pom",
+    "status": 200,
+    "content_length": "1520",
+    "chars": 1520,
+    "excerpt": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project xsi:schemaLocation=\"http://maven.apache.org/POM/4.0."
+  },
+  {
+    "name": "ort_android_build",
+    "url": "https://raw.githubusercontent.com/microsoft/onnxruntime/main/java/build-android.gradle",
+    "status": 200,
+    "content_length": "8893",
+    "chars": 8893,
+    "excerpt": "apply plugin: 'com.android.library'\napply plugin: 'maven-publish'\n\ndef jniLibsDir = System.propertie"
+  },
+  {
+    "name": "ort_android_example",
+    "url": "https://raw.githubusercontent.com/microsoft/onnxruntime-inference-examples/main/mobile/examples/image_classification/android/README.md",
+    "status": 200,
+    "content_length": "2706",
+    "chars": 2706,
+    "excerpt": "# ONNX Runtime Mobile image classification Android sample application\n\n## Overview\nThis is an exampl"
+  },
+  {
+    "name": "ort_quantization",
+    "url": "https://raw.githubusercontent.com/microsoft/onnxruntime/main/onnxruntime/python/tools/quantization/quantize.py",
+    "status": 200,
+    "content_length": "60301",
+    "chars": 60301,
+    "excerpt": "# -------------------------------------------------------------------------\n# Copyright (c) Microsof"
+  },
+  {
+    "name": "keras_weights",
+    "url": "https://storage.googleapis.com/tensorflow/keras-applications/mobilenet_v3/weights_mobilenet_v3_small_224_1.0_float_no_top_v2.h5",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+  },
+  {
+    "name": "pytorch_weights",
+    "url": "https://download.pytorch.org/models/mobilenet_v3_small-047dcff4.pth",
+    "status": 200,
+    "content_length": "10306551",
+    "chars": 0,
+    "excerpt": ""
+  },
+  {
+    "name": "plantvillage_hf_readme",
+    "url": "https://raw.githubusercontent.com/spMohanty/PlantVillage-Dataset/7f7ecc7e1eaca78107e3affe7cb5abd9427e139a/README_HF.md",
+    "status": 200,
+    "content_length": "6471",
+    "chars": 6468,
+    "excerpt": "---\nlanguage:\n- en\nlicense: cc-by-sa-3.0\ntask_categories:\n- image-classification\ntags:\n- agriculture"
+  },
+  {
+    "name": "ort_python_metadata",
+    "url": "https://pypi.org/pypi/onnxruntime/1.23.2/json",
+    "status": 200,
+    "content_length": "24900",
+    "chars": 24900,
+    "excerpt": "{\"info\":{\"author\":\"Microsoft Corporation\",\"author_email\":\"onnxruntime@microsoft.com\",\"bugtrack_url\":"
+  }
+]

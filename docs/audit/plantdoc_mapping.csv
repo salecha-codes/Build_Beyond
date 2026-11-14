@@ -1,0 +1,18 @@
+plantvillage_label,plantvillage_files,plantdoc_label,plantdoc_train_files,plantdoc_test_files,mapping_status
+Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot,513,Corn Gray leaf spot,64,4,candidate_match
+Corn_(maize)___Common_rust_,1192,Corn rust leaf,106,10,candidate_match
+Corn_(maize)___Northern_Leaf_Blight,985,Corn leaf blight,180,12,ambiguous_do_not_merge
+Corn_(maize)___healthy,1162,,0,0,not_present
+Potato___Early_blight,1000,Potato leaf early blight,109,8,candidate_match
+Potato___Late_blight,1000,Potato leaf late blight,97,8,candidate_match
+Potato___healthy,152,,0,0,not_present
+Tomato___Bacterial_spot,2127,Tomato leaf bacterial spot,101,9,candidate_match
+Tomato___Early_blight,1000,Tomato Early blight leaf,79,9,candidate_match
+Tomato___Late_blight,1909,Tomato leaf late blight,101,10,candidate_match
+Tomato___Leaf_Mold,952,Tomato mold leaf,85,6,candidate_match
+Tomato___Septoria_leaf_spot,1771,Tomato Septoria leaf spot,140,11,candidate_match
+Tomato___Spider_mites Two-spotted_spider_mite,1676,Tomato two spotted spider mites leaf,2,0,quarantine_sampled_collages
+Tomato___Target_Spot,1404,,0,0,not_present
+Tomato___Tomato_Yellow_Leaf_Curl_Virus,5357,Tomato leaf yellow virus,70,6,ambiguous_do_not_merge
+Tomato___Tomato_mosaic_virus,373,Tomato leaf mosaic virus,44,10,candidate_match
+Tomato___healthy,1591,Tomato leaf,55,8,verify_healthy_label_convention
