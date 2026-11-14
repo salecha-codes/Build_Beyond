@@ -28,6 +28,7 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
     private var analysisJob: Job? = null
 
     init {
+        HindiUi.load(application)
         viewModelScope.launch {
             preferences.state.collect { preference -> mutableState.update {
                 it.copy(language = preference.language, autoAudio = preference.autoAudio)
@@ -42,9 +43,10 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
 
     fun text(key: String): String = catalog?.text(key, state.value.language) ?: key
     fun prompt(key: String): Prompt = catalog?.prompt(key, state.value.language) ?: Prompt(key,
-        if (state.value.language == AppLanguage.KANNADA) "ಮತ್ತೊಮ್ಮೆ ಪರಿಶೀಲಿಸಿ" else "Please check again",
-        if (state.value.language == AppLanguage.KANNADA) "ಸ್ಪಷ್ಟವಾದ ಎಲೆಯ ಫೋಟೋ ತೆಗೆದುಕೊಳ್ಳಿ. ಅಗತ್ಯವಿದ್ದರೆ ಕೃಷಿ ತಜ್ಞರನ್ನು ಸಂಪರ್ಕಿಸಿ."
-        else "Take a clear photo of one leaf. Ask a local crop expert when needed.", null)
+        localized("Please check again", "ಮತ್ತೊಮ್ಮೆ ಪರಿಶೀಲಿಸಿ", "कृपया फिर से जाँचें"),
+        localized("Take a clear photo of one leaf. Ask a local crop expert when needed.",
+            "ಸ್ಪಷ್ಟವಾದ ಎಲೆಯ ಫೋಟೋ ತೆಗೆದುಕೊಳ್ಳಿ. ಅಗತ್ಯವಿದ್ದರೆ ಕೃಷಿ ತಜ್ಞರನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+            "एक पत्ती की साफ़ तस्वीर लें। ज़रूरत होने पर स्थानीय कृषि विशेषज्ञ से सलाह लें।"), null)
     fun newCameraFile(): File = photos.newCameraFile()
 
     fun onAction(action: AppAction) {
@@ -98,7 +100,7 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
         try {
             val file = withContext(Dispatchers.IO) { photos.importPhoto(uri) }
             acceptPhoto(file)
-        } catch (failure: Exception) { showError(failure.message ?: "The photo could not be opened.") }
+        } catch (failure: Exception) { showError("The photo could not be opened.") }
     }
 
     private fun acceptPhoto(file: File) {
@@ -139,7 +141,7 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
             } catch (cancelled: CancellationException) { throw cancelled }
             catch (failure: Exception) {
                 mutableState.update { it.copy(screen = Screen.PHOTO_REVIEW, processing = false,
-                    error = failure.message ?: "This photo could not be assessed. Please try again.") }
+                    error = "This photo could not be assessed. Please try again.") }
             }
         }
     }
@@ -208,15 +210,21 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
         val value = state.value
         val stored = value.openedObservation
         val condition = stored?.conditionId?.let(Conditions::byId) ?: value.assessment?.evidence?.top?.condition
-        val name = condition?.displayName(value.language) ?: "Uncertain observation"
+        val name = condition?.displayName(value.language) ?: localized("Uncertain observation", "ಅನಿಶ್ಚಿತ ವೀಕ್ಷಣೆ", "अनिश्चित अवलोकन")
         val validated = stored?.validated ?: value.assessment?.evidence?.calibratedAndValidated ?: false
         val shareText = buildString {
-            appendLine("Crop Health — observation")
-            appendLine("Crop: ${value.selectedCrop.nameEn}")
-            appendLine("Model candidate: $name")
-            appendLine(if (validated) "Model assessment; expert confirmation may be needed." else "Prototype / uncertain output. This is not a confirmed diagnosis or treatment recommendation.")
-            appendLine("Model: ${stored?.modelVersion ?: value.model.version}")
-            appendLine(stored?.note ?: "Please review the original leaf photo and observed symptoms.")
+            appendLine(localized("Crop Health — observation", "ಬೆಳೆ ಆರೋಗ್ಯ — ವೀಕ್ಷಣೆ", "फसल स्वास्थ्य — अवलोकन"))
+            appendLine("${localized("Crop", "ಬೆಳೆ", "फसल")}: ${value.selectedCrop.displayName(value.language)}")
+            appendLine("${localized("Model candidate", "ಮಾದರಿಯ ಸಾಧ್ಯತೆ", "मॉडल का संभावित परिणाम")}: $name")
+            appendLine(if (validated) localized("Model assessment; expert confirmation may be needed.",
+                "ಮಾದರಿಯ ಪರಿಶೀಲನೆ; ತಜ್ಞರ ದೃಢೀಕರಣ ಬೇಕಾಗಬಹುದು.", "मॉडल का आकलन; विशेषज्ञ की पुष्टि आवश्यक हो सकती है।")
+                else localized("Prototype / uncertain output. This is not a confirmed diagnosis or treatment recommendation.",
+                    "ಪ್ರಾಯೋಗಿಕ / ಅನಿಶ್ಚಿತ ಫಲಿತಾಂಶ. ಇದು ದೃಢಪಟ್ಟ ರೋಗನಿರ್ಣಯ ಅಥವಾ ಚಿಕಿತ್ಸೆಯ ಸಲಹೆಯಲ್ಲ.",
+                    "प्रोटोटाइप / अनिश्चित परिणाम। यह पुष्टि किया गया निदान या उपचार की सलाह नहीं है।"))
+            appendLine("${localized("Model", "ಮಾದರಿ", "मॉडल")}: ${stored?.modelVersion ?: value.model.version}")
+            appendLine(if (value.language == AppLanguage.ENGLISH && stored != null) stored.note else localized(
+                "Please review the original leaf photo and observed symptoms.",
+                "ಮೂಲ ಎಲೆಯ ಫೋಟೋ ಮತ್ತು ಗಮನಿಸಿದ ಲಕ್ಷಣಗಳನ್ನು ಪರಿಶೀಲಿಸಿ.", "कृपया पत्ती की मूल तस्वीर और देखे गए लक्षणों की जाँच करें।"))
         }
         try {
             val intent = Intent(Intent.ACTION_SEND).apply {
@@ -225,14 +233,19 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
                 if (photo != null) {
                     val uri = FileProvider.getUriForFile(getApplication<Application>(), "${getApplication<Application>().packageName}.files", photo)
                     type = "image/*"; putExtra(Intent.EXTRA_STREAM, uri)
-                    clipData = ClipData.newUri(getApplication<Application>().contentResolver, "Leaf observation", uri)
+                    clipData = ClipData.newUri(getApplication<Application>().contentResolver, localized("Leaf observation", "ಎಲೆಯ ವೀಕ್ಷಣೆ", "पत्ती का अवलोकन"), uri)
                     addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 }
             }
-            getApplication<Application>().startActivity(Intent.createChooser(intent, "Share observation").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            getApplication<Application>().startActivity(Intent.createChooser(intent, localized("Share observation", "ವೀಕ್ಷಣೆ ಹಂಚಿಕೊಳ್ಳಿ", "अवलोकन साझा करें")).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         } catch (failure: Exception) { showError("This observation could not be shared.") }
     }
 
     private fun showError(message: String) { mutableState.update { it.copy(error = message) } }
+    private fun localized(en: String, kn: String, hi: String): String = when (state.value.language) {
+        AppLanguage.ENGLISH -> en
+        AppLanguage.KANNADA -> kn
+        AppLanguage.HINDI -> hi
+    }
     override fun onCleared() { analysisJob?.cancel(); engine.close(); history.close(); super.onCleared() }
 }

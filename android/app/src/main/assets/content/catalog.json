@@ -50,6 +50,24 @@
           "caution": "ಇದು ಮಾದರಿ ವೀಕ್ಷಣೆಯ ಮಾರ್ಗದರ್ಶನ. ಚಿಕಿತ್ಸೆ ಆಯ್ಕೆ ಮಾಡುವ ಮೊದಲು ಸ್ಥಳೀಯ ಕೃಷಿ ಸಲಹೆಗಾರರಿಂದ ಸಮಸ್ಯೆಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.",
           "audio_asset": "audio/kn/maize_gray_leaf_spot.ogg",
           "translation_status": "draft_not_native_reviewed"
+        },
+        "hi": {
+          "name": "धूसर पत्ती धब्बा",
+          "summary": "धूसर पत्ती धब्बा के लिए देखने योग्य संकेत। केवल तस्वीर से समस्या की पुष्टि नहीं होती।",
+          "symptoms": [
+            "पत्ती की नसों के बीच लंबे धूसर या भूरे निशान देखें।"
+          ],
+          "actions": [
+            "दिन की रोशनी में एक पत्ती के ऊपर और नीचे की साफ तस्वीर लें।",
+            "निशान कब शुरू हुए और पास के पौधों में भी बदलाव हैं या नहीं, यह लिखें।",
+            "इस जानकारी और तस्वीर को स्थानीय कृषि सलाहकार को दिखाने के लिए रखें।"
+          ],
+          "prevention": [
+            "अगला कदम चुनने से पहले पौधे को देखते रहें और बदलाव लिखें।"
+          ],
+          "caution": "यह शुरुआती नमूने का सामान्य मार्गदर्शन है। उपचार चुनने से पहले स्थानीय कृषि सलाहकार से पुष्टि कराएँ।",
+          "audio_asset": "audio/hi/maize_gray_leaf_spot.ogg",
+          "translation_status": "draft_not_native_reviewed"
         }
       }
     },
@@ -99,6 +117,24 @@
           ],
           "caution": "ಇದು ಮಾದರಿ ವೀಕ್ಷಣೆಯ ಮಾರ್ಗದರ್ಶನ. ಚಿಕಿತ್ಸೆ ಆಯ್ಕೆ ಮಾಡುವ ಮೊದಲು ಸ್ಥಳೀಯ ಕೃಷಿ ಸಲಹೆಗಾರರಿಂದ ಸಮಸ್ಯೆಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.",
           "audio_asset": "audio/kn/maize_common_rust.ogg",
+          "translation_status": "draft_not_native_reviewed"
+        },
+        "hi": {
+          "name": "सामान्य रतुआ",
+          "summary": "सामान्य रतुआ के लिए देखने योग्य संकेत। केवल तस्वीर से समस्या की पुष्टि नहीं होती।",
+          "symptoms": [
+            "पत्ती की दोनों सतहों पर जंग के रंग के छोटे उभरे धब्बे देखें।"
+          ],
+          "actions": [
+            "दिन की रोशनी में एक पत्ती के ऊपर और नीचे की साफ तस्वीर लें।",
+            "निशान कब शुरू हुए और पास के पौधों में भी बदलाव हैं या नहीं, यह लिखें।",
+            "इस जानकारी और तस्वीर को स्थानीय कृषि सलाहकार को दिखाने के लिए रखें।"
+          ],
+          "prevention": [
+            "अगला कदम चुनने से पहले पौधे को देखते रहें और बदलाव लिखें।"
+          ],
+          "caution": "यह शुरुआती नमूने का सामान्य मार्गदर्शन है। उपचार चुनने से पहले स्थानीय कृषि सलाहकार से पुष्टि कराएँ।",
+          "audio_asset": "audio/hi/maize_common_rust.ogg",
           "translation_status": "draft_not_native_reviewed"
         }
       }
@@ -150,6 +186,24 @@
           "caution": "ಇದು ಮಾದರಿ ವೀಕ್ಷಣೆಯ ಮಾರ್ಗದರ್ಶನ. ಚಿಕಿತ್ಸೆ ಆಯ್ಕೆ ಮಾಡುವ ಮೊದಲು ಸ್ಥಳೀಯ ಕೃಷಿ ಸಲಹೆಗಾರರಿಂದ ಸಮಸ್ಯೆಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.",
           "audio_asset": "audio/kn/maize_northern_leaf_blight.ogg",
           "translation_status": "draft_not_native_reviewed"
+        },
+        "hi": {
+          "name": "उत्तरी पत्ती झुलसा",
+          "summary": "उत्तरी पत्ती झुलसा के लिए देखने योग्य संकेत। केवल तस्वीर से समस्या की पुष्टि नहीं होती।",
+          "symptoms": [
+            "लंबे धूसर या भूरे क्षतिग्रस्त हिस्से देखें। ऐसे निशानों के दूसरे कारण भी हो सकते हैं।"
+          ],
+          "actions": [
+            "दिन की रोशनी में एक पत्ती के ऊपर और नीचे की साफ तस्वीर लें।",
+            "निशान कब शुरू हुए और पास के पौधों में भी बदलाव हैं या नहीं, यह लिखें।",
+            "इस जानकारी और तस्वीर को स्थानीय कृषि सलाहकार को दिखाने के लिए रखें।"
+          ],
+          "prevention": [
+            "अगला कदम चुनने से पहले पौधे को देखते रहें और बदलाव लिखें।"
+          ],
+          "caution": "यह शुरुआती नमूने का सामान्य मार्गदर्शन है। उपचार चुनने से पहले स्थानीय कृषि सलाहकार से पुष्टि कराएँ।",
+          "audio_asset": "audio/hi/maize_northern_leaf_blight.ogg",
+          "translation_status": "draft_not_native_reviewed"
         }
       }
     },
@@ -199,6 +253,24 @@
           ],
           "caution": "ಇದು ಮಾದರಿ ವೀಕ್ಷಣೆಯ ಮಾರ್ಗದರ್ಶನ. ಚಿಕಿತ್ಸೆ ಆಯ್ಕೆ ಮಾಡುವ ಮೊದಲು ಸ್ಥಳೀಯ ಕೃಷಿ ಸಲಹೆಗಾರರಿಂದ ಸಮಸ್ಯೆಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.",
           "audio_asset": "audio/kn/maize_healthy.ogg",
+          "translation_status": "draft_not_native_reviewed"
+        },
+        "hi": {
+          "name": "स्वस्थ दिखती पत्ती",
+          "summary": "स्वस्थ दिखने वाली पत्ती पूरे पौधे के स्वस्थ होने की गारंटी नहीं है।",
+          "symptoms": [
+            "स्वस्थ दिखने वाली तस्वीर से छिपी या दूसरी समस्याएँ खारिज नहीं होतीं।"
+          ],
+          "actions": [
+            "दिन की रोशनी में एक पत्ती के ऊपर और नीचे की साफ तस्वीर लें।",
+            "निशान कब शुरू हुए और पास के पौधों में भी बदलाव हैं या नहीं, यह लिखें।",
+            "इस जानकारी और तस्वीर को स्थानीय कृषि सलाहकार को दिखाने के लिए रखें।"
+          ],
+          "prevention": [
+            "अगला कदम चुनने से पहले पौधे को देखते रहें और बदलाव लिखें।"
+          ],
+          "caution": "यह शुरुआती नमूने का सामान्य मार्गदर्शन है। उपचार चुनने से पहले स्थानीय कृषि सलाहकार से पुष्टि कराएँ।",
+          "audio_asset": "audio/hi/maize_healthy.ogg",
           "translation_status": "draft_not_native_reviewed"
         }
       }
@@ -250,6 +322,24 @@
           "caution": "ಇದು ಮಾದರಿ ವೀಕ್ಷಣೆಯ ಮಾರ್ಗದರ್ಶನ. ಚಿಕಿತ್ಸೆ ಆಯ್ಕೆ ಮಾಡುವ ಮೊದಲು ಸ್ಥಳೀಯ ಕೃಷಿ ಸಲಹೆಗಾರರಿಂದ ಸಮಸ್ಯೆಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.",
           "audio_asset": "audio/kn/potato_early_blight.ogg",
           "translation_status": "draft_not_native_reviewed"
+        },
+        "hi": {
+          "name": "अगेती झुलसा",
+          "summary": "अगेती झुलसा के लिए देखने योग्य संकेत। केवल तस्वीर से समस्या की पुष्टि नहीं होती।",
+          "symptoms": [
+            "पुरानी पत्तियों पर छल्लों जैसे भूरे धब्बे देखें।"
+          ],
+          "actions": [
+            "दिन की रोशनी में एक पत्ती के ऊपर और नीचे की साफ तस्वीर लें।",
+            "निशान कब शुरू हुए और पास के पौधों में भी बदलाव हैं या नहीं, यह लिखें।",
+            "इस जानकारी और तस्वीर को स्थानीय कृषि सलाहकार को दिखाने के लिए रखें।"
+          ],
+          "prevention": [
+            "अगला कदम चुनने से पहले पौधे को देखते रहें और बदलाव लिखें।"
+          ],
+          "caution": "यह शुरुआती नमूने का सामान्य मार्गदर्शन है। उपचार चुनने से पहले स्थानीय कृषि सलाहकार से पुष्टि कराएँ।",
+          "audio_asset": "audio/hi/potato_early_blight.ogg",
+          "translation_status": "draft_not_native_reviewed"
         }
       }
     },
@@ -299,6 +389,24 @@
           ],
           "caution": "ಇದು ಮಾದರಿ ವೀಕ್ಷಣೆಯ ಮಾರ್ಗದರ್ಶನ. ಚಿಕಿತ್ಸೆ ಆಯ್ಕೆ ಮಾಡುವ ಮೊದಲು ಸ್ಥಳೀಯ ಕೃಷಿ ಸಲಹೆಗಾರರಿಂದ ಸಮಸ್ಯೆಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.",
           "audio_asset": "audio/kn/potato_late_blight.ogg",
+          "translation_status": "draft_not_native_reviewed"
+        },
+        "hi": {
+          "name": "पछेती झुलसा",
+          "summary": "पछेती झुलसा के लिए देखने योग्य संकेत। केवल तस्वीर से समस्या की पुष्टि नहीं होती।",
+          "symptoms": [
+            "फैलते हुए गहरे धब्बे देखें। बदलाव कितनी जल्दी हो रहे हैं, यह लिखें।"
+          ],
+          "actions": [
+            "दिन की रोशनी में एक पत्ती के ऊपर और नीचे की साफ तस्वीर लें।",
+            "निशान कब शुरू हुए और पास के पौधों में भी बदलाव हैं या नहीं, यह लिखें।",
+            "इस जानकारी और तस्वीर को स्थानीय कृषि सलाहकार को दिखाने के लिए रखें।"
+          ],
+          "prevention": [
+            "अगला कदम चुनने से पहले पौधे को देखते रहें और बदलाव लिखें।"
+          ],
+          "caution": "यह शुरुआती नमूने का सामान्य मार्गदर्शन है। उपचार चुनने से पहले स्थानीय कृषि सलाहकार से पुष्टि कराएँ।",
+          "audio_asset": "audio/hi/potato_late_blight.ogg",
           "translation_status": "draft_not_native_reviewed"
         }
       }
@@ -350,6 +458,24 @@
           "caution": "ಇದು ಮಾದರಿ ವೀಕ್ಷಣೆಯ ಮಾರ್ಗದರ್ಶನ. ಚಿಕಿತ್ಸೆ ಆಯ್ಕೆ ಮಾಡುವ ಮೊದಲು ಸ್ಥಳೀಯ ಕೃಷಿ ಸಲಹೆಗಾರರಿಂದ ಸಮಸ್ಯೆಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.",
           "audio_asset": "audio/kn/potato_healthy.ogg",
           "translation_status": "draft_not_native_reviewed"
+        },
+        "hi": {
+          "name": "स्वस्थ दिखती पत्ती",
+          "summary": "स्वस्थ दिखने वाली पत्ती पूरे पौधे के स्वस्थ होने की गारंटी नहीं है।",
+          "symptoms": [
+            "स्वस्थ दिखने वाली तस्वीर से छिपी या दूसरी समस्याएँ खारिज नहीं होतीं।"
+          ],
+          "actions": [
+            "दिन की रोशनी में एक पत्ती के ऊपर और नीचे की साफ तस्वीर लें।",
+            "निशान कब शुरू हुए और पास के पौधों में भी बदलाव हैं या नहीं, यह लिखें।",
+            "इस जानकारी और तस्वीर को स्थानीय कृषि सलाहकार को दिखाने के लिए रखें।"
+          ],
+          "prevention": [
+            "अगला कदम चुनने से पहले पौधे को देखते रहें और बदलाव लिखें।"
+          ],
+          "caution": "यह शुरुआती नमूने का सामान्य मार्गदर्शन है। उपचार चुनने से पहले स्थानीय कृषि सलाहकार से पुष्टि कराएँ।",
+          "audio_asset": "audio/hi/potato_healthy.ogg",
+          "translation_status": "draft_not_native_reviewed"
         }
       }
     },
@@ -399,6 +525,24 @@
           ],
           "caution": "ಇದು ಮಾದರಿ ವೀಕ್ಷಣೆಯ ಮಾರ್ಗದರ್ಶನ. ಚಿಕಿತ್ಸೆ ಆಯ್ಕೆ ಮಾಡುವ ಮೊದಲು ಸ್ಥಳೀಯ ಕೃಷಿ ಸಲಹೆಗಾರರಿಂದ ಸಮಸ್ಯೆಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.",
           "audio_asset": "audio/kn/tomato_bacterial_spot.ogg",
+          "translation_status": "draft_not_native_reviewed"
+        },
+        "hi": {
+          "name": "जीवाणु पत्ती धब्बा",
+          "summary": "जीवाणु पत्ती धब्बा के लिए देखने योग्य संकेत। केवल तस्वीर से समस्या की पुष्टि नहीं होती।",
+          "symptoms": [
+            "छोटे गहरे धब्बे देखें। कुछ धब्बों के किनारे पीले हो सकते हैं।"
+          ],
+          "actions": [
+            "दिन की रोशनी में एक पत्ती के ऊपर और नीचे की साफ तस्वीर लें।",
+            "निशान कब शुरू हुए और पास के पौधों में भी बदलाव हैं या नहीं, यह लिखें।",
+            "इस जानकारी और तस्वीर को स्थानीय कृषि सलाहकार को दिखाने के लिए रखें।"
+          ],
+          "prevention": [
+            "अगला कदम चुनने से पहले पौधे को देखते रहें और बदलाव लिखें।"
+          ],
+          "caution": "यह शुरुआती नमूने का सामान्य मार्गदर्शन है। उपचार चुनने से पहले स्थानीय कृषि सलाहकार से पुष्टि कराएँ।",
+          "audio_asset": "audio/hi/tomato_bacterial_spot.ogg",
           "translation_status": "draft_not_native_reviewed"
         }
       }
@@ -450,6 +594,24 @@
           "caution": "ಇದು ಮಾದರಿ ವೀಕ್ಷಣೆಯ ಮಾರ್ಗದರ್ಶನ. ಚಿಕಿತ್ಸೆ ಆಯ್ಕೆ ಮಾಡುವ ಮೊದಲು ಸ್ಥಳೀಯ ಕೃಷಿ ಸಲಹೆಗಾರರಿಂದ ಸಮಸ್ಯೆಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.",
           "audio_asset": "audio/kn/tomato_early_blight.ogg",
           "translation_status": "draft_not_native_reviewed"
+        },
+        "hi": {
+          "name": "अगेती झुलसा",
+          "summary": "अगेती झुलसा के लिए देखने योग्य संकेत। केवल तस्वीर से समस्या की पुष्टि नहीं होती।",
+          "symptoms": [
+            "पुरानी पत्तियों पर छल्लों जैसे भूरे धब्बे देखें।"
+          ],
+          "actions": [
+            "दिन की रोशनी में एक पत्ती के ऊपर और नीचे की साफ तस्वीर लें।",
+            "निशान कब शुरू हुए और पास के पौधों में भी बदलाव हैं या नहीं, यह लिखें।",
+            "इस जानकारी और तस्वीर को स्थानीय कृषि सलाहकार को दिखाने के लिए रखें।"
+          ],
+          "prevention": [
+            "अगला कदम चुनने से पहले पौधे को देखते रहें और बदलाव लिखें।"
+          ],
+          "caution": "यह शुरुआती नमूने का सामान्य मार्गदर्शन है। उपचार चुनने से पहले स्थानीय कृषि सलाहकार से पुष्टि कराएँ।",
+          "audio_asset": "audio/hi/tomato_early_blight.ogg",
+          "translation_status": "draft_not_native_reviewed"
         }
       }
     },
@@ -499,6 +661,24 @@
           ],
           "caution": "ಇದು ಮಾದರಿ ವೀಕ್ಷಣೆಯ ಮಾರ್ಗದರ್ಶನ. ಚಿಕಿತ್ಸೆ ಆಯ್ಕೆ ಮಾಡುವ ಮೊದಲು ಸ್ಥಳೀಯ ಕೃಷಿ ಸಲಹೆಗಾರರಿಂದ ಸಮಸ್ಯೆಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.",
           "audio_asset": "audio/kn/tomato_late_blight.ogg",
+          "translation_status": "draft_not_native_reviewed"
+        },
+        "hi": {
+          "name": "पछेती झुलसा",
+          "summary": "पछेती झुलसा के लिए देखने योग्य संकेत। केवल तस्वीर से समस्या की पुष्टि नहीं होती।",
+          "symptoms": [
+            "फैलते हुए गहरे धब्बे देखें। बदलाव कितनी जल्दी हो रहे हैं, यह लिखें।"
+          ],
+          "actions": [
+            "दिन की रोशनी में एक पत्ती के ऊपर और नीचे की साफ तस्वीर लें।",
+            "निशान कब शुरू हुए और पास के पौधों में भी बदलाव हैं या नहीं, यह लिखें।",
+            "इस जानकारी और तस्वीर को स्थानीय कृषि सलाहकार को दिखाने के लिए रखें।"
+          ],
+          "prevention": [
+            "अगला कदम चुनने से पहले पौधे को देखते रहें और बदलाव लिखें।"
+          ],
+          "caution": "यह शुरुआती नमूने का सामान्य मार्गदर्शन है। उपचार चुनने से पहले स्थानीय कृषि सलाहकार से पुष्टि कराएँ।",
+          "audio_asset": "audio/hi/tomato_late_blight.ogg",
           "translation_status": "draft_not_native_reviewed"
         }
       }
@@ -550,6 +730,24 @@
           "caution": "ಇದು ಮಾದರಿ ವೀಕ್ಷಣೆಯ ಮಾರ್ಗದರ್ಶನ. ಚಿಕಿತ್ಸೆ ಆಯ್ಕೆ ಮಾಡುವ ಮೊದಲು ಸ್ಥಳೀಯ ಕೃಷಿ ಸಲಹೆಗಾರರಿಂದ ಸಮಸ್ಯೆಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.",
           "audio_asset": "audio/kn/tomato_leaf_mold.ogg",
           "translation_status": "draft_not_native_reviewed"
+        },
+        "hi": {
+          "name": "पत्ती की फफूंद",
+          "summary": "पत्ती की फफूंद के लिए देखने योग्य संकेत। केवल तस्वीर से समस्या की पुष्टि नहीं होती।",
+          "symptoms": [
+            "पत्ती के दोनों ओर तस्वीर लें। पीले निशान और नीचे की ओर असामान्य बढ़त देखें।"
+          ],
+          "actions": [
+            "दिन की रोशनी में एक पत्ती के ऊपर और नीचे की साफ तस्वीर लें।",
+            "निशान कब शुरू हुए और पास के पौधों में भी बदलाव हैं या नहीं, यह लिखें।",
+            "इस जानकारी और तस्वीर को स्थानीय कृषि सलाहकार को दिखाने के लिए रखें।"
+          ],
+          "prevention": [
+            "अगला कदम चुनने से पहले पौधे को देखते रहें और बदलाव लिखें।"
+          ],
+          "caution": "यह शुरुआती नमूने का सामान्य मार्गदर्शन है। उपचार चुनने से पहले स्थानीय कृषि सलाहकार से पुष्टि कराएँ।",
+          "audio_asset": "audio/hi/tomato_leaf_mold.ogg",
+          "translation_status": "draft_not_native_reviewed"
         }
       }
     },
@@ -599,6 +797,24 @@
           ],
           "caution": "ಇದು ಮಾದರಿ ವೀಕ್ಷಣೆಯ ಮಾರ್ಗದರ್ಶನ. ಚಿಕಿತ್ಸೆ ಆಯ್ಕೆ ಮಾಡುವ ಮೊದಲು ಸ್ಥಳೀಯ ಕೃಷಿ ಸಲಹೆಗಾರರಿಂದ ಸಮಸ್ಯೆಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.",
           "audio_asset": "audio/kn/tomato_septoria_leaf_spot.ogg",
+          "translation_status": "draft_not_native_reviewed"
+        },
+        "hi": {
+          "name": "सेप्टोरिया पत्ती धब्बा",
+          "summary": "सेप्टोरिया पत्ती धब्बा के लिए देखने योग्य संकेत। केवल तस्वीर से समस्या की पुष्टि नहीं होती।",
+          "symptoms": [
+            "गहरे किनारे और हल्के बीच वाले छोटे गोल धब्बे देखें।"
+          ],
+          "actions": [
+            "दिन की रोशनी में एक पत्ती के ऊपर और नीचे की साफ तस्वीर लें।",
+            "निशान कब शुरू हुए और पास के पौधों में भी बदलाव हैं या नहीं, यह लिखें।",
+            "इस जानकारी और तस्वीर को स्थानीय कृषि सलाहकार को दिखाने के लिए रखें।"
+          ],
+          "prevention": [
+            "अगला कदम चुनने से पहले पौधे को देखते रहें और बदलाव लिखें।"
+          ],
+          "caution": "यह शुरुआती नमूने का सामान्य मार्गदर्शन है। उपचार चुनने से पहले स्थानीय कृषि सलाहकार से पुष्टि कराएँ।",
+          "audio_asset": "audio/hi/tomato_septoria_leaf_spot.ogg",
           "translation_status": "draft_not_native_reviewed"
         }
       }
@@ -650,6 +866,24 @@
           "caution": "ಇದು ಮಾದರಿ ವೀಕ್ಷಣೆಯ ಮಾರ್ಗದರ್ಶನ. ಚಿಕಿತ್ಸೆ ಆಯ್ಕೆ ಮಾಡುವ ಮೊದಲು ಸ್ಥಳೀಯ ಕೃಷಿ ಸಲಹೆಗಾರರಿಂದ ಸಮಸ್ಯೆಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.",
           "audio_asset": "audio/kn/tomato_spider_mites.ogg",
           "translation_status": "draft_not_native_reviewed"
+        },
+        "hi": {
+          "name": "दो धब्बों वाला मकड़ी घुन",
+          "summary": "दो धब्बों वाला मकड़ी घुन के लिए देखने योग्य संकेत। केवल तस्वीर से समस्या की पुष्टि नहीं होती।",
+          "symptoms": [
+            "पत्ती के नीचे बारीक जाला, छोटे कीट या बहुत से हल्के बिंदु देखें।"
+          ],
+          "actions": [
+            "दिन की रोशनी में एक पत्ती के ऊपर और नीचे की साफ तस्वीर लें।",
+            "निशान कब शुरू हुए और पास के पौधों में भी बदलाव हैं या नहीं, यह लिखें।",
+            "इस जानकारी और तस्वीर को स्थानीय कृषि सलाहकार को दिखाने के लिए रखें।"
+          ],
+          "prevention": [
+            "अगला कदम चुनने से पहले पौधे को देखते रहें और बदलाव लिखें।"
+          ],
+          "caution": "यह शुरुआती नमूने का सामान्य मार्गदर्शन है। उपचार चुनने से पहले स्थानीय कृषि सलाहकार से पुष्टि कराएँ।",
+          "audio_asset": "audio/hi/tomato_spider_mites.ogg",
+          "translation_status": "draft_not_native_reviewed"
         }
       }
     },
@@ -699,6 +933,24 @@
           ],
           "caution": "ಇದು ಮಾದರಿ ವೀಕ್ಷಣೆಯ ಮಾರ್ಗದರ್ಶನ. ಚಿಕಿತ್ಸೆ ಆಯ್ಕೆ ಮಾಡುವ ಮೊದಲು ಸ್ಥಳೀಯ ಕೃಷಿ ಸಲಹೆಗಾರರಿಂದ ಸಮಸ್ಯೆಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.",
           "audio_asset": "audio/kn/tomato_target_spot.ogg",
+          "translation_status": "draft_not_native_reviewed"
+        },
+        "hi": {
+          "name": "लक्ष्याकार धब्बा",
+          "summary": "लक्ष्याकार धब्बा के लिए देखने योग्य संकेत। केवल तस्वीर से समस्या की पुष्टि नहीं होती।",
+          "symptoms": [
+            "भूरे गोल निशान देखें। दूसरी समस्याओं में भी ऐसे छल्ले दिख सकते हैं।"
+          ],
+          "actions": [
+            "दिन की रोशनी में एक पत्ती के ऊपर और नीचे की साफ तस्वीर लें।",
+            "निशान कब शुरू हुए और पास के पौधों में भी बदलाव हैं या नहीं, यह लिखें।",
+            "इस जानकारी और तस्वीर को स्थानीय कृषि सलाहकार को दिखाने के लिए रखें।"
+          ],
+          "prevention": [
+            "अगला कदम चुनने से पहले पौधे को देखते रहें और बदलाव लिखें।"
+          ],
+          "caution": "यह शुरुआती नमूने का सामान्य मार्गदर्शन है। उपचार चुनने से पहले स्थानीय कृषि सलाहकार से पुष्टि कराएँ।",
+          "audio_asset": "audio/hi/tomato_target_spot.ogg",
           "translation_status": "draft_not_native_reviewed"
         }
       }
@@ -750,6 +1002,24 @@
           "caution": "ಇದು ಮಾದರಿ ವೀಕ್ಷಣೆಯ ಮಾರ್ಗದರ್ಶನ. ಚಿಕಿತ್ಸೆ ಆಯ್ಕೆ ಮಾಡುವ ಮೊದಲು ಸ್ಥಳೀಯ ಕೃಷಿ ಸಲಹೆಗಾರರಿಂದ ಸಮಸ್ಯೆಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.",
           "audio_asset": "audio/kn/tomato_yellow_leaf_curl_virus.ogg",
           "translation_status": "draft_not_native_reviewed"
+        },
+        "hi": {
+          "name": "पीली पत्ती मुड़ने का वायरस",
+          "summary": "पीली पत्ती मुड़ने का वायरस के लिए देखने योग्य संकेत। केवल तस्वीर से समस्या की पुष्टि नहीं होती।",
+          "symptoms": [
+            "पीलापन, मुड़ी पत्तियाँ और नई बढ़त में बदलाव देखें। ये संकेत केवल एक रोग के नहीं हैं।"
+          ],
+          "actions": [
+            "दिन की रोशनी में एक पत्ती के ऊपर और नीचे की साफ तस्वीर लें।",
+            "निशान कब शुरू हुए और पास के पौधों में भी बदलाव हैं या नहीं, यह लिखें।",
+            "इस जानकारी और तस्वीर को स्थानीय कृषि सलाहकार को दिखाने के लिए रखें।"
+          ],
+          "prevention": [
+            "अगला कदम चुनने से पहले पौधे को देखते रहें और बदलाव लिखें।"
+          ],
+          "caution": "यह शुरुआती नमूने का सामान्य मार्गदर्शन है। उपचार चुनने से पहले स्थानीय कृषि सलाहकार से पुष्टि कराएँ।",
+          "audio_asset": "audio/hi/tomato_yellow_leaf_curl_virus.ogg",
+          "translation_status": "draft_not_native_reviewed"
         }
       }
     },
@@ -799,6 +1069,24 @@
           ],
           "caution": "ಇದು ಮಾದರಿ ವೀಕ್ಷಣೆಯ ಮಾರ್ಗದರ್ಶನ. ಚಿಕಿತ್ಸೆ ಆಯ್ಕೆ ಮಾಡುವ ಮೊದಲು ಸ್ಥಳೀಯ ಕೃಷಿ ಸಲಹೆಗಾರರಿಂದ ಸಮಸ್ಯೆಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.",
           "audio_asset": "audio/kn/tomato_mosaic_virus.ogg",
+          "translation_status": "draft_not_native_reviewed"
+        },
+        "hi": {
+          "name": "मोज़ेक वायरस",
+          "summary": "मोज़ेक वायरस के लिए देखने योग्य संकेत। केवल तस्वीर से समस्या की पुष्टि नहीं होती।",
+          "symptoms": [
+            "हल्के और गहरे हरे रंग के असमान निशान और बदली हुई पत्तियाँ देखें।"
+          ],
+          "actions": [
+            "दिन की रोशनी में एक पत्ती के ऊपर और नीचे की साफ तस्वीर लें।",
+            "निशान कब शुरू हुए और पास के पौधों में भी बदलाव हैं या नहीं, यह लिखें।",
+            "इस जानकारी और तस्वीर को स्थानीय कृषि सलाहकार को दिखाने के लिए रखें।"
+          ],
+          "prevention": [
+            "अगला कदम चुनने से पहले पौधे को देखते रहें और बदलाव लिखें।"
+          ],
+          "caution": "यह शुरुआती नमूने का सामान्य मार्गदर्शन है। उपचार चुनने से पहले स्थानीय कृषि सलाहकार से पुष्टि कराएँ।",
+          "audio_asset": "audio/hi/tomato_mosaic_virus.ogg",
           "translation_status": "draft_not_native_reviewed"
         }
       }
@@ -850,6 +1138,24 @@
           "caution": "ಇದು ಮಾದರಿ ವೀಕ್ಷಣೆಯ ಮಾರ್ಗದರ್ಶನ. ಚಿಕಿತ್ಸೆ ಆಯ್ಕೆ ಮಾಡುವ ಮೊದಲು ಸ್ಥಳೀಯ ಕೃಷಿ ಸಲಹೆಗಾರರಿಂದ ಸಮಸ್ಯೆಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.",
           "audio_asset": "audio/kn/tomato_healthy.ogg",
           "translation_status": "draft_not_native_reviewed"
+        },
+        "hi": {
+          "name": "स्वस्थ दिखती पत्ती",
+          "summary": "स्वस्थ दिखने वाली पत्ती पूरे पौधे के स्वस्थ होने की गारंटी नहीं है।",
+          "symptoms": [
+            "स्वस्थ दिखने वाली तस्वीर से छिपी या दूसरी समस्याएँ खारिज नहीं होतीं।"
+          ],
+          "actions": [
+            "दिन की रोशनी में एक पत्ती के ऊपर और नीचे की साफ तस्वीर लें।",
+            "निशान कब शुरू हुए और पास के पौधों में भी बदलाव हैं या नहीं, यह लिखें।",
+            "इस जानकारी और तस्वीर को स्थानीय कृषि सलाहकार को दिखाने के लिए रखें।"
+          ],
+          "prevention": [
+            "अगला कदम चुनने से पहले पौधे को देखते रहें और बदलाव लिखें।"
+          ],
+          "caution": "यह शुरुआती नमूने का सामान्य मार्गदर्शन है। उपचार चुनने से पहले स्थानीय कृषि सलाहकार से पुष्टि कराएँ।",
+          "audio_asset": "audio/hi/tomato_healthy.ogg",
+          "translation_status": "draft_not_native_reviewed"
         }
       }
     }
@@ -865,6 +1171,11 @@
         "title": "ಮತ್ತೊಮ್ಮೆ ಪರಿಶೀಲಿಸೋಣ",
         "message": "ಈ ಮಾದರಿಯನ್ನು ರೋಗ ನಿರ್ಣಯಕ್ಕಾಗಿ ಇನ್ನೂ ಪರಿಶೀಲಿಸಲಾಗಿಲ್ಲ. ಹಗಲಿನ ಬೆಳಕಿನಲ್ಲಿ ಒಂದು ಎಲೆಯ ಸ್ಪಷ್ಟ ಚಿತ್ರ ತೆಗೆದುಕೊಳ್ಳಿ. ಲಕ್ಷಣಗಳು ಹರಡಿದರೆ ಸ್ಥಳೀಯ ಕೃಷಿ ಸಲಹೆಗಾರರನ್ನು ಸಂಪರ್ಕಿಸಿ.",
         "audio_asset": "audio/kn/prompt_uncertain.ogg"
+      },
+      "hi": {
+        "title": "एक बार फिर देखें",
+        "message": "इस तस्वीर से समस्या को भरोसे के साथ पहचानना संभव नहीं है। दिन की रोशनी में एक पत्ती की साफ नज़दीकी तस्वीर लेकर फिर कोशिश करें।",
+        "audio_asset": "audio/hi/prompt_uncertain.ogg"
       }
     },
     "retake": {
@@ -877,6 +1188,11 @@
         "title": "ಸ್ಪಷ್ಟವಾದ ಚಿತ್ರ ತೆಗೆದುಕೊಳ್ಳಿ",
         "message": "ಫೋನನ್ನು ಸ್ಥಿರವಾಗಿ ಹಿಡಿಯಿರಿ. ಒಂದು ಎಲೆಯನ್ನು ಚೌಕಟ್ಟಿನಲ್ಲಿ ಇರಿಸಿ. ಸಹಜ ಬೆಳಕನ್ನು ಬಳಸಿ ನೆರಳನ್ನು ತಪ್ಪಿಸಿ.",
         "audio_asset": "audio/kn/prompt_retake.ogg"
+      },
+      "hi": {
+        "title": "और साफ तस्वीर लें",
+        "message": "फोन स्थिर रखें। फ्रेम में केवल एक पत्ती रखें। दिन की रोशनी में, छाया से बचते हुए फिर तस्वीर लें।",
+        "audio_asset": "audio/hi/prompt_retake.ogg"
       }
     },
     "offline": {
@@ -889,6 +1205,11 @@
         "title": "ಇಂಟರ್ನೆಟ್ ಇಲ್ಲದೆ ಕೆಲಸ ಮಾಡುತ್ತದೆ",
         "message": "ಪರಿಶೀಲನೆ, ಮಾರ್ಗದರ್ಶನ ಮತ್ತು ಧ್ವನಿ ಈ ಫೋನಿನಲ್ಲಿ ಇಂಟರ್ನೆಟ್ ಇಲ್ಲದೆ ಕೆಲಸ ಮಾಡುತ್ತವೆ. ಹಂಚಿಕೊಳ್ಳಲು ಅಥವಾ ಕರೆ ಮಾಡಲು ಸಂಪರ್ಕ ಬೇಕಾಗಬಹುದು.",
         "audio_asset": "audio/kn/prompt_offline.ogg"
+      },
+      "hi": {
+        "title": "बिना इंटरनेट काम करता है",
+        "message": "इस फोन पर तस्वीर की जाँच और बोली गई सलाह के लिए इंटरनेट नहीं चाहिए। तस्वीर साझा करने या कॉल करने के लिए कनेक्शन लग सकता है।",
+        "audio_asset": "audio/hi/prompt_offline.ogg"
       }
     },
     "crop_mismatch": {
@@ -901,6 +1222,11 @@
         "title": "ಆಯ್ಕೆ ಮಾಡಿದ ಬೆಳೆ ಪರಿಶೀಲಿಸಿ",
         "message": "ನೀವು ಆಯ್ಕೆ ಮಾಡಿದ ಬೆಳೆಯನ್ನು ಪರಿಶೀಲಿಸಿ ಮತ್ತೊಂದು ಸ್ಪಷ್ಟ ಚಿತ್ರ ತೆಗೆದುಕೊಳ್ಳಿ. ಈ ಮಾದರಿಯ ಬೆಳೆ ಊಹೆ ಖಚಿತ ಗುರುತಿಸುವಿಕೆ ಅಲ್ಲ.",
         "audio_asset": "audio/kn/prompt_crop_mismatch.ogg"
+      },
+      "hi": {
+        "title": "चुनी हुई फसल देखें",
+        "message": "चुनी हुई फसल एक बार जाँचें। सही फसल चुनकर एक पत्ती की साफ तस्वीर लें।",
+        "audio_asset": "audio/hi/prompt_crop_mismatch.ogg"
       }
     },
     "model_unavailable": {
@@ -913,6 +1239,11 @@
         "title": "ಮಾದರಿ ಲಭ್ಯವಿಲ್ಲ",
         "message": "ಫೋನಿನ ಮಾದರಿ ಸಿದ್ಧವಾಗಿಲ್ಲ. ಆದ್ದರಿಂದ ಈ ಚಿತ್ರವನ್ನು ಪರಿಶೀಲಿಸಲಾಗುವುದಿಲ್ಲ. ಚಿತ್ರ ತೆಗೆಯುವ ಸಲಹೆಗಳನ್ನು ಓದಿ ವೀಕ್ಷಣೆಯನ್ನು ಉಳಿಸಬಹುದು.",
         "audio_asset": "audio/kn/prompt_model_unavailable.ogg"
+      },
+      "hi": {
+        "title": "अभी जाँच उपलब्ध नहीं है",
+        "message": "अभी तस्वीर की जाँच नहीं हो पा रही है। तस्वीर लेने के सुझाव देखें। समस्या बनी रहे तो ऐप बंद करके फिर कोशिश करें।",
+        "audio_asset": "audio/hi/prompt_model_unavailable.ogg"
       }
     },
     "model_prototype": {
@@ -925,6 +1256,11 @@
         "title": "ಮಾದರಿ ಪರಿಶೀಲನೆ",
         "message": "ಅಂಕಗಳು ಪ್ರಾಯೋಗಿಕ ಮಾದರಿಯ ಫಲಿತಾಂಶಗಳು. ಅವು ಖಚಿತ ರೋಗ ನಿರ್ಣಯವಲ್ಲ.",
         "audio_asset": "audio/kn/prompt_model_prototype.ogg"
+      },
+      "hi": {
+        "title": "शुरुआती परीक्षण का परिणाम",
+        "message": "यह ऐप अभी परीक्षण के चरण में है। परिणाम को केवल सुझाव मानें। उपचार से पहले स्थानीय कृषि सलाहकार से पूछें।",
+        "audio_asset": "audio/hi/prompt_model_prototype.ogg"
       }
     },
     "healthy": {
@@ -937,6 +1273,11 @@
         "title": "ಆರೋಗ್ಯಕರವಾಗಿ ಕಾಣುವ ಚಿತ್ರ",
         "message": "ಈ ಚಿತ್ರದಲ್ಲಿ ಬೆಂಬಲಿತ ಲಕ್ಷಣಗಳು ಗುರುತಿಸಲ್ಪಟ್ಟಿಲ್ಲ. ಗಮನಿಸುವುದನ್ನು ಮುಂದುವರಿಸಿ. ಒಂದು ಚಿತ್ರದಿಂದ ಎಲ್ಲಾ ಸಮಸ್ಯೆಗಳನ್ನೂ ತಳ್ಳಿಹಾಕಲಾಗುವುದಿಲ್ಲ.",
         "audio_asset": "audio/kn/prompt_healthy.ogg"
+      },
+      "hi": {
+        "title": "स्वस्थ दिखती तस्वीर",
+        "message": "इस तस्वीर में पत्ती स्वस्थ दिखती है। फिर भी नए धब्बों, पीलेपन या मुरझाने पर ध्यान देते रहें।",
+        "audio_asset": "audio/hi/prompt_healthy.ogg"
       }
     },
     "concern_spreading": {
@@ -949,6 +1290,11 @@
         "title": "ಲಕ್ಷಣಗಳು ಹರಡುತ್ತಿವೆಯೇ?",
         "message": "ಹಿಂದಿನ ವೀಕ್ಷಣೆಯಿಂದ ಈ ಗುರುತುಗಳು ಬೇಗ ಹರಡಿವೆಯೇ?",
         "audio_asset": "audio/kn/prompt_concern_spreading.ogg"
+      },
+      "hi": {
+        "title": "क्या धब्बे फैल रहे हैं?",
+        "message": "क्या धब्बे जल्दी फैल रहे हैं? पिछली बार की जानकारी से पत्ती की तुलना करके उत्तर चुनें।",
+        "audio_asset": "audio/hi/prompt_concern_spreading.ogg"
       }
     },
     "concern_coverage": {
@@ -961,6 +1307,11 @@
         "title": "ಎಲೆಯ ಎಷ್ಟು ಭಾಗದಲ್ಲಿ ಚುಕ್ಕೆಗಳಿವೆ?",
         "message": "ನಿಮಗೆ ಕಾಣುವ ಭಾಗವನ್ನು ಆಯ್ಕೆ ಮಾಡಿ. ಕಡಿಮೆ ಚುಕ್ಕೆಗಳು, ಕೆಲವು ಚುಕ್ಕೆಗಳು ಅಥವಾ ಹೆಚ್ಚು ಚುಕ್ಕೆಗಳು. ಇದು ನಿಮ್ಮ ವೀಕ್ಷಣೆ. ಕೃತಕ ಬುದ್ಧಿಮತ್ತೆಯ ಅಳತೆಯಲ್ಲ.",
         "audio_asset": "audio/kn/prompt_concern_coverage.ogg"
+      },
+      "hi": {
+        "title": "पत्ती पर कितने धब्बे हैं?",
+        "message": "पत्ती पर कितने धब्बे हैं? बहुत कम, कुछ, या बहुत सारे धब्बे। पत्ती देखकर सही विकल्प चुनें।",
+        "audio_asset": "audio/hi/prompt_concern_coverage.ogg"
       }
     },
     "concern_plants": {
@@ -973,6 +1324,11 @@
         "title": "ಹತ್ತಿರದ ಸಸ್ಯಗಳಿಗೂ ಸಮಸ್ಯೆಯಿದೆಯೇ?",
         "message": "ಹತ್ತಿರದ ಹಲವು ಸಸ್ಯಗಳಲ್ಲಿ ಇದೇ ರೀತಿಯ ಲಕ್ಷಣಗಳಿವೆಯೇ ಎಂದು ಪರಿಶೀಲಿಸಿ.",
         "audio_asset": "audio/kn/prompt_concern_plants.ogg"
+      },
+      "hi": {
+        "title": "क्या पास के पौधे भी प्रभावित हैं?",
+        "message": "क्या पास के पौधों में भी ऐसे लक्षण हैं? उत्तर चुनने से पहले आस-पास के कुछ पौधे जाँचें।",
+        "audio_asset": "audio/hi/prompt_concern_plants.ogg"
       }
     },
     "concern_expert": {
@@ -985,6 +1341,11 @@
         "title": "ಸ್ಥಳೀಯ ತಜ್ಞರನ್ನು ಸಂಪರ್ಕಿಸಿ",
         "message": "ಹರಡುವ ಲಕ್ಷಣಗಳು, ಹೆಚ್ಚು ಚುಕ್ಕೆಗಳು, ಬಾಧಿತ ಸಸ್ಯಗಳು ಅಥವಾ ಬಾಡುವಿಕೆ ಇದೆ ಎಂದು ನೀವು ತಿಳಿಸಿದ್ದೀರಿ. ಚಿತ್ರಗಳನ್ನು ಉಳಿಸಿ ಸ್ಥಳೀಯ ಕೃಷಿ ಸಲಹೆಗಾರರಿಂದ ಪರಿಶೀಲಿಸಿಕೊಳ್ಳಿ. ಇದು ಖಚಿತ ತೀವ್ರತೆಯ ಅಂಕವಲ್ಲ.",
         "audio_asset": "audio/kn/prompt_concern_expert.ogg"
+      },
+      "hi": {
+        "title": "स्थानीय विशेषज्ञ से पूछें",
+        "message": "आपने जो लक्षण बताए हैं, उन्हें विशेषज्ञ को दिखाना उपयोगी हो सकता है। पत्ती की तस्वीरें रखें और स्थानीय कृषि सलाहकार से संपर्क करें।",
+        "audio_asset": "audio/hi/prompt_concern_expert.ogg"
       }
     },
     "concern_observe": {
@@ -997,6 +1358,11 @@
         "title": "ದಾಖಲಿಸಿ ಮತ್ತೆ ಗಮನಿಸಿ",
         "message": "ಲಕ್ಷಣಗಳನ್ನು ದಾಖಲಿಸಿ ಬದಲಾವಣೆಗಳನ್ನು ಗಮನಿಸಿ. ಅವು ಹೆಚ್ಚಾದರೆ ಸ್ಥಳೀಯ ಕೃಷಿ ಸಲಹೆಗಾರರನ್ನು ಸಂಪರ್ಕಿಸಿ. ಈ ಪ್ರಶ್ನಾವಳಿ ರೋಗ ನಿರ್ಣಯ ಅಥವಾ ತೀವ್ರತೆಯ ಅಳತೆ ಮಾಡುವುದಿಲ್ಲ.",
         "audio_asset": "audio/kn/prompt_concern_observe.ogg"
+      },
+      "hi": {
+        "title": "लिखें और दोबारा देखें",
+        "message": "तस्वीर रखें और बदलाव देखते रहें। धब्बे फैलें, पौधा मुरझाए या पास के पौधे प्रभावित हों तो कृषि सलाहकार से संपर्क करें।",
+        "audio_asset": "audio/hi/prompt_concern_observe.ogg"
       }
     },
     "check_expert": {
@@ -1009,6 +1375,11 @@
         "title": "ಚಿಕಿತ್ಸೆಗೆ ಮೊದಲು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ",
         "message": "ಈ ಮಾದರಿಯ ಫಲಿತಾಂಶದಿಂದ ಕೀಟನಾಶಕ ಅಥವಾ ಪ್ರಮಾಣವನ್ನು ಆಯ್ಕೆ ಮಾಡಬೇಡಿ. ಸ್ಥಳೀಯ ಕೃಷಿ ಸಲಹೆಗಾರರಿಂದ ಸಮಸ್ಯೆ ಮತ್ತು ಸರಿಯಾದ ಕ್ರಮವನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.",
         "audio_asset": "audio/kn/prompt_check_expert.ogg"
+      },
+      "hi": {
+        "title": "उपचार से पहले पुष्टि कराएँ",
+        "message": "केवल इस तस्वीर को देखकर कीटनाशक या उसकी मात्रा न चुनें। पहले स्थानीय कृषि सलाहकार से समस्या और सही अगले कदम की पुष्टि कराएँ।",
+        "audio_asset": "audio/hi/prompt_check_expert.ogg"
       }
     }
   },
@@ -1070,6 +1441,35 @@
       "many_spots": "ಹೆಚ್ಚು ಚುಕ್ಕೆಗಳು (30% ಕ್ಕಿಂತ ಹೆಚ್ಚು)",
       "not_reported": "ಖಚಿತವಿಲ್ಲ",
       "review_pending": "ಸಾಮಾನ್ಯ ವೀಕ್ಷಣೆಯ ಮಾರ್ಗದರ್ಶನ. ತಜ್ಞರ ಪರಿಶೀಲನೆ ಬಾಕಿಯಿದೆ."
+    },
+    "hi": {
+      "home": "होम",
+      "help": "सहायता",
+      "scan_leaf": "पत्ती की जाँच करें",
+      "select_crop": "अपनी फसल चुनें",
+      "take_photo": "तस्वीर लें",
+      "choose_photo": "तस्वीर चुनें",
+      "listen": "सुनें",
+      "pause": "रोकें",
+      "replay": "फिर सुनें",
+      "retake": "फिर तस्वीर लें",
+      "save": "जानकारी सहेजें",
+      "delete": "हटाएँ",
+      "history": "हाल की जाँच",
+      "do_now": "अभी क्या करें",
+      "expert_check": "विशेषज्ञ से पूछें",
+      "precaution": "सावधानी",
+      "prototype": "परीक्षण संस्करण",
+      "offline": "बिना इंटरनेट",
+      "concern_check": "लक्षणों की जाँच",
+      "next": "आगे",
+      "yes": "हाँ",
+      "no": "नहीं",
+      "few_spots": "बहुत कम धब्बे (10% से कम)",
+      "some_spots": "कुछ धब्बे (10–30%)",
+      "many_spots": "बहुत सारे धब्बे (30% से अधिक)",
+      "not_reported": "पक्का नहीं",
+      "review_pending": "सामान्य जानकारी का मार्गदर्शन। विशेषज्ञ समीक्षा अभी बाकी है।"
     }
   },
   "primary_advisory_access": [
@@ -1081,5 +1481,357 @@
       "url": "https://agritech.tnau.ac.in/",
       "status": "blocked_by_environment_proxy_not_read"
     }
-  ]
+  ],
+  "language_reviews": {
+    "hi": {
+      "agronomy": "not_expert_reviewed;general_observation_only",
+      "translation": "draft_not_native_reviewed",
+      "pronunciation": "pending_synthesis_and_listening_review"
+    }
+  },
+  "ui_english": {
+    "hi": {
+      "17 image classes · Tomato, Potato and Maize": "17 चित्र श्रेणियाँ · टमाटर, आलू और मक्का",
+      "A better photo makes a better starting point.": "साफ तस्वीर से जाँच की बेहतर शुरुआत होती है।",
+      "A clearer photo helps": "साफ तस्वीर मदद करती है",
+      "A clearer photo will help": "और साफ तस्वीर मदद करेगी",
+      "A few small spots": "बहुत कम छोटे धब्बे",
+      "A few spots": "बहुत कम धब्बे",
+      "A high score does not prove that the diagnosis is correct.": "बड़ा अंक सही पहचान की पुष्टि नहीं करता।",
+      "A little clarity for your crop": "अपनी फसल को थोड़ा बेहतर समझें",
+      "A little help": "थोड़ी सहायता",
+      "A model score describes a candidate match. It is not a guarantee or a treatment instruction. Unvalidated scores need expert review.": "मॉडल का अंक केवल संभावित मिलान बताता है। यह गारंटी या उपचार का निर्देश नहीं है। अपुष्ट अंकों की विशेषज्ञ समीक्षा ज़रूरी है।",
+      "A model score describes how the image compares with training labels. It is not proof of a disease, a field accuracy measurement or permission to spray.": "मॉडल का अंक बताता है कि तस्वीर प्रशिक्षण की श्रेणियों से कितनी मिलती है। यह रोग का प्रमाण, खेत में मापी गई सटीकता या छिड़काव की अनुमति नहीं है।",
+      "A quick photo check": "तस्वीर की एक छोटी जाँच",
+      "About this prototype": "इस परीक्षण संस्करण के बारे में",
+      "All": "सभी",
+      "Analyse leaf": "पत्ती की जाँच करें",
+      "Analysed offline": "बिना इंटरनेट जाँच हुई",
+      "Analysed on device": "इसी उपकरण पर जाँच हुई",
+      "Analysis runs on your device. Your photo is never uploaded.": "जाँच आपके उपकरण पर होती है। तस्वीर अपलोड नहीं की जाती।",
+      "App, model and content are available offline in this browser.": "इस ब्राउज़र में ऐप, मॉडल और सामग्री बिना इंटरनेट उपलब्ध हैं।",
+      "Are many plants affected?": "क्या कई पौधे प्रभावित हैं?",
+      "Are symptoms spreading quickly?": "क्या लक्षण जल्दी फैल रहे हैं?",
+      "Are the symptoms spreading quickly?": "क्या लक्षण जल्दी फैल रहे हैं?",
+      "Ask a local agriculture expert before choosing a treatment.": "उपचार चुनने से पहले स्थानीय कृषि विशेषज्ञ से पूछें।",
+      "Ask a local agriculture expert to review these signs.": "इन लक्षणों की जाँच स्थानीय कृषि विशेषज्ञ से कराएँ।",
+      "Ask a local expert": "स्थानीय विशेषज्ञ से पूछें",
+      "Assessment runs locally. Photos leave the app only when you choose to share an observation.": "जाँच इसी उपकरण पर होती है। तस्वीर केवल तब ऐप से बाहर जाती है जब आप जानकारी साझा करना चुनते हैं।",
+      "Assessment unavailable": "जाँच उपलब्ध नहीं है",
+      "Avoid deep shadows and bright glare.": "गहरी छाया और तेज़ चमक से बचें।",
+      "Avoid glare or direct flash.": "चमक या सीधे फ्लैश से बचें।",
+      "Avoid harsh shadows, glare and very dark photos.": "तेज़ छाया, चमक और बहुत अँधेरी तस्वीर से बचें।",
+      "Avoid selecting a treatment from a model score. Confirm the cause with a qualified local expert.": "मॉडल के अंक देखकर उपचार न चुनें। योग्य स्थानीय विशेषज्ञ से कारण की पुष्टि कराएँ।",
+      "Avoid several leaves overlapping.": "कई पत्तियाँ एक-दूसरे पर न आने दें।",
+      "Back to result": "परिणाम पर वापस जाएँ",
+      "Based on 3 questions": "तीन सवालों पर आधारित",
+      "Based on your answers": "आपके उत्तरों के आधार पर",
+      "Based on your answers about visible symptoms, not an AI severity estimate.": "यह दिख रहे लक्षणों पर आपके उत्तरों से बना है, चित्र से निकली रोग की गंभीरता नहीं है।",
+      "Better photos. Clearer next steps.": "बेहतर तस्वीरें। स्पष्ट अगले कदम।",
+      "Bundled English and Kannada audio": "अंग्रेज़ी और कन्नड़ की आवाज़ साथ में उपलब्ध",
+      "Call": "कॉल करें",
+      "Call a local crop expert": "स्थानीय फसल विशेषज्ञ को कॉल करें",
+      "Call a local expert": "स्थानीय विशेषज्ञ को कॉल करें",
+      "Cancel": "रद्द करें",
+      "Care for your crop": "अपनी फसल की देखभाल करें",
+      "Care for your crops, wherever you grow.": "आप जहाँ भी उगाएँ, अपनी फसल का ध्यान रखें।",
+      "Check concern (3 questions)": "लक्षण जाँचें (तीन सवाल)",
+      "Check the selected crop": "चुनी हुई फसल जाँचें",
+      "Check this leaf": "इस पत्ती की जाँच करें",
+      "Check with an expert": "विशेषज्ञ से पूछें",
+      "Check your crop": "अपनी फसल जाँचें",
+      "Checking your leaf": "आपकी पत्ती की जाँच हो रही है",
+      "Choose a larger, closer photo.": "और बड़ी, नज़दीक से ली गई तस्वीर चुनें।",
+      "Choose a leaf photo to continue": "आगे बढ़ने के लिए पत्ती की तस्वीर चुनें",
+      "Choose an image file (JPG, PNG or WebP).": "JPG, PNG या WebP तस्वीर चुनें।",
+      "Choose another photo": "दूसरी तस्वीर चुनें",
+      "Choose your crop": "अपनी फसल चुनें",
+      "Choose your expert contact": "अपने विशेषज्ञ का संपर्क चुनें",
+      "Clear saved history": "सहेजी गई जानकारी हटाएँ",
+      "Close up": "नज़दीक से",
+      "Concern check": "लक्षणों की जाँच",
+      "Contact a local expert": "स्थानीय विशेषज्ञ से संपर्क करें",
+      "Content catalogue loaded": "मार्गदर्शन सामग्री तैयार है",
+      "Content unavailable — reload while online": "सामग्री उपलब्ध नहीं है। इंटरनेट चालू होने पर फिर खोलें।",
+      "Could not analyse this photo. Please try another.": "इस तस्वीर की जाँच नहीं हो सकी। दूसरी तस्वीर आज़माएँ।",
+      "Could not delete the scan.": "जाँच की जानकारी नहीं हट सकी।",
+      "Could not save. Browser storage may be full or disabled.": "सहेजा नहीं जा सका। ब्राउज़र का संग्रह भरा या बंद हो सकता है।",
+      "Delete": "हटाएँ",
+      "Delete saved observations?": "सहेजी गई जानकारी हटाएँ?",
+      "Delete scan": "सहेजी जाँच हटाएँ",
+      "Delete this scan?": "यह जाँच हटाएँ?",
+      "Do not choose a pesticide or dosage from this prototype result.": "इस परीक्षण परिणाम से कीटनाशक या उसकी मात्रा न चुनें।",
+      "Do several plants have these symptoms?": "क्या कई पौधों में ये लक्षण हैं?",
+      "Earlier": "पहले की जानकारी",
+      "English and Kannada guidance with bundled speech. Text, translations and general observation rules need agronomist and native-language review before field use.": "आवाज़ के साथ अंग्रेज़ी और कन्नड़ में मार्गदर्शन। खेत में उपयोग से पहले सामग्री, अनुवाद और सामान्य नियमों की कृषि विशेषज्ञ तथा भाषा-जानकार से समीक्षा चाहिए।",
+      "Enter a number you trust. This app does not verify hotline availability. Calling needs phone service.": "विश्वसनीय नंबर दर्ज करें। यह ऐप हेल्पलाइन की उपलब्धता नहीं जाँचता। कॉल करने के लिए फोन सेवा चाहिए।",
+      "Enter the verified number of your local agriculture officer or crop specialist. Calling needs phone service.": "अपने स्थानीय कृषि अधिकारी या फसल विशेषज्ञ का सत्यापित नंबर दर्ज करें। कॉल के लिए फोन सेवा चाहिए।",
+      "Expert follow-up": "विशेषज्ञ से आगे की सलाह",
+      "Fill the frame with one leaf, including the affected area.": "प्रभावित भाग सहित एक पत्ती को फ्रेम में भरें।",
+      "Find natural light": "प्राकृतिक रोशनी में जाएँ",
+      "Find soft daylight": "हल्की दिन की रोशनी चुनें",
+      "Fit one leaf inside the frame": "फ्रेम में एक पत्ती रखें",
+      "Flash off": "फ्लैश बंद",
+      "Flash on": "फ्लैश चालू",
+      "For advice, contact a qualified local agriculture professional. Keep their verified number handy.": "सलाह के लिए योग्य स्थानीय कृषि विशेषज्ञ से संपर्क करें। उनका सत्यापित नंबर अपने पास रखें।",
+      "General observation guidance": "सामान्य जानकारी का मार्गदर्शन",
+      "Get a closer look": "थोड़ा नज़दीक से देखें",
+      "Get close, keep it simple": "पास से लें, तस्वीर सरल रखें",
+      "Get started": "शुरू करें",
+      "Get the cause checked": "कारण की जाँच कराएँ",
+      "Good light": "अच्छी रोशनी",
+      "Guidance & language": "मार्गदर्शन और भाषा",
+      "Help": "सहायता",
+      "Here to help": "हम मदद के लिए हैं",
+      "History": "पुरानी जाँच",
+      "Hold one leaf steady": "एक पत्ती को स्थिर रखें",
+      "Hold steady": "स्थिर रखें",
+      "Hold steady and focus on one leaf.": "फोन स्थिर रखें और एक पत्ती पर ध्यान दें।",
+      "Hold still and make sure the leaf is in focus.": "स्थिर रहें और पत्ती साफ दिखाई दे, यह जाँचें।",
+      "Home": "होम",
+      "How much of the leaf looks affected?": "पत्ती का कितना हिस्सा प्रभावित दिखता है?",
+      "I'm not sure": "मुझे पक्का नहीं है",
+      "Images are processed locally with ONNX Runtime Web. Saved scans use IndexedDB on this device. There is no remote diagnosis or photo upload.": "तस्वीरों की जाँच इसी उपकरण पर ONNX Runtime Web से होती है। सहेजी जाँच इसी उपकरण के IndexedDB में रहती है। दूरस्थ पहचान या तस्वीर अपलोड नहीं होती।",
+      "Is the leaf clear, well lit and filling most of the photo? Avoid hands, several leaves and very dark images.": "क्या पत्ती साफ, अच्छी रोशनी में और तस्वीर के अधिकतर भाग में है? हाथ, कई पत्तियाँ और बहुत अँधेरी तस्वीर से बचें।",
+      "I’m not sure": "मुझे पक्का नहीं है",
+      "Keep a dated photo and recheck the same plant.": "तारीख के साथ तस्वीर रखें और उसी पौधे को फिर देखें।",
+      "Keep it steady": "स्थिर रखें",
+      "Keep observing and recheck. Ask an expert if symptoms change or spread.": "देखते रहें और फिर जाँचें। लक्षण बदलें या फैलें तो विशेषज्ञ से पूछें।",
+      "Keep the leaf sharp and inside the frame.": "पत्ती साफ और फ्रेम के अंदर रखें।",
+      "Keep this page open with internet until offline preparation finishes. Storage can be cleared by the browser.": "ऑफलाइन तैयारी पूरी होने तक इस पेज को इंटरनेट के साथ खुला रखें। ब्राउज़र संग्रह मिटा सकता है।",
+      "Keep tools clean and avoid moving damaged plant material between fields.": "औज़ार साफ रखें और क्षतिग्रस्त पौधों की सामग्री एक खेत से दूसरे में न ले जाएँ।",
+      "Language & voice": "भाषा और आवाज़",
+      "Leaf assessment": "पत्ती की जाँच",
+      "Leaf observation": "पत्ती की जानकारी",
+      "Let's take another photo": "एक और तस्वीर लें",
+      "Let’s take a closer look": "थोड़ा नज़दीक से देखें",
+      "Likely condition": "संभावित समस्या",
+      "Listen in ${s.language.displayName}": "हिन्दी में सुनें",
+      "Listen in English": "हिन्दी में सुनें",
+      "Listen to guidance": "मार्गदर्शन सुनें",
+      "Listen to next steps": "अगले कदम सुनें",
+      "Listen to the summary": "सारांश सुनें",
+      "Loading content…": "सामग्री खुल रही है…",
+      "Local model installed": "स्थानीय मॉडल उपलब्ध है",
+      "Local model is loading or unavailable": "स्थानीय मॉडल खुल रहा है या उपलब्ध नहीं है",
+      "Local model unavailable": "स्थानीय मॉडल उपलब्ध नहीं है",
+      "Look at more than one plant. Note whether symptoms are spreading.": "एक से अधिक पौधे देखें। लक्षण फैल रहे हैं या नहीं, यह लिखें।",
+      "Looking at your leaf": "आपकी पत्ती देख रहे हैं",
+      "Make sure one leaf is clear and fills the photo.": "एक पत्ती साफ दिखे और तस्वीर में पूरी आए, यह सुनिश्चित करें।",
+      "MobileNetV4 installed": "MobileNetV4 उपलब्ध है",
+      "Model & content details": "मॉडल और सामग्री का विवरण",
+      "Model assessment": "मॉडल की जाँच",
+      "Model confidence": "मॉडल का भरोसा अंक",
+      "Model score · unvalidated": "मॉडल का अंक · अपुष्ट",
+      "Model unavailable": "मॉडल उपलब्ध नहीं है",
+      "Model validation, agricultural review and Kannada translation review are still pending. Guidance is for observation, not a chemical prescription.": "रोग की पहचान का परीक्षण, कृषि विशेषज्ञ की समीक्षा और कन्नड़ अनुवाद की समीक्षा अभी बाकी है। यह देखने-समझने की जानकारी है, रसायन का नुस्खा नहीं।",
+      "Model, privacy & settings": "मॉडल, गोपनीयता और सेटिंग",
+      "Most of the leaf": "पत्ती का अधिकतर हिस्सा",
+      "Move into natural light.": "प्राकृतिक रोशनी में जाएँ।",
+      "Much of the leaf": "पत्ती का बड़ा हिस्सा",
+      "Needs review": "समीक्षा ज़रूरी है",
+      "Next": "आगे",
+      "No": "नहीं",
+      "No diagnosis was produced. Your photo stays on this phone.": "रोग का कोई पक्का परिणाम नहीं दिया गया। तस्वीर इसी फोन पर है।",
+      "No flash": "फ्लैश नहीं",
+      "No saved scans yet": "अभी कोई जाँच सहेजी नहीं गई",
+      "No scans here yet": "यहाँ अभी कोई जाँच नहीं है",
+      "Not confirmed": "पुष्टि नहीं हुई",
+      "Not sure about this one": "इस तस्वीर से पक्का नहीं है",
+      "OK": "ठीक है",
+      "Observation guidance": "देखने-समझने का मार्गदर्शन",
+      "Observe & recheck": "देखें और फिर जाँचें",
+      "Observe and recheck": "देखें और फिर जाँचें",
+      "Observe nearby plants and record changes over time.": "पास के पौधे देखें और समय के साथ बदलाव लिखें।",
+      "Observe symptoms (3 questions)": "लक्षण देखें (तीन सवाल)",
+      "Observe your plants": "अपने पौधों को देखें",
+      "Offline assets": "ऑफलाइन सामग्री",
+      "Offline ready": "बिना इंटरनेट उपयोग के लिए तैयार",
+      "On this phone": "इसी फोन पर",
+      "On your phone. In your language.": "आपके फोन पर। आपकी भाषा में।",
+      "One clear leaf is best": "एक साफ पत्ती की तस्वीर बेहतर है",
+      "One leaf at a time": "एक बार में एक पत्ती",
+      "Open dialer": "फोन डायलर खोलें",
+      "Opening saved scans…": "सहेजी गई जाँच खुल रही है…",
+      "Opening your camera…": "कैमरा खुल रहा है…",
+      "Opening your scans…": "आपकी जाँच खुल रही है…",
+      "Or choose an existing leaf photo from your gallery": "या गैलरी से पत्ती की तस्वीर चुनें",
+      "Other signs?": "दूसरे संकेत?",
+      "Phone number": "फोन नंबर",
+      "Photo check: ": "तस्वीर की जाँच: ",
+      "Photo checks": "तस्वीर की जाँच",
+      "Photo stays here": "तस्वीर यहीं रहती है",
+      "Photos and results live in this browser on this device. Clearing site data removes them.": "तस्वीरें और परिणाम इसी उपकरण के ब्राउज़र में रहते हैं। साइट का डेटा मिटाने पर ये भी हट जाते हैं।",
+      "Play guidance automatically": "मार्गदर्शन अपने-आप चलाएँ",
+      "Please try again": "फिर कोशिश करें",
+      "Possible — not confirmed": "संभावना है, पुष्टि नहीं",
+      "Preparing model": "मॉडल तैयार हो रहा है",
+      "Preparing offline": "ऑफलाइन तैयारी हो रही है",
+      "Preparing the local model…": "स्थानीय मॉडल तैयार हो रहा है…",
+      "Prevention & next steps": "सावधानी और अगले कदम",
+      "Private by design": "निजता का ध्यान रखकर बनाया गया",
+      "Prototype content": "परीक्षण संस्करण की सामग्री",
+      "Prototype guidance and Kannada translations are pending agronomist and language review.": "परीक्षण मार्गदर्शन और कन्नड़ अनुवाद की कृषि तथा भाषा विशेषज्ञ से समीक्षा बाकी है।",
+      "Prototype model · Disease diagnosis is not validated.": "परीक्षण मॉडल · रोग की पहचान की पुष्टि नहीं हुई है।",
+      "Prototype model: scores are not validated diagnostic probabilities.": "परीक्षण मॉडल: अंक भरोसेमंद रोग-पहचान की संभावनाएँ साबित नहीं हुए हैं।",
+      "Question ${question+1} of 3": "तीन में से सवाल ${question+1}",
+      "Read question aloud": "सवाल सुनें",
+      "Ready to check?": "जाँच के लिए तैयार हैं?",
+      "Recent scans": "हाल की जाँच",
+      "Retake photo": "फिर तस्वीर लें",
+      "Retry model": "मॉडल फिर चलाएँ",
+      "Review 2 prototype · Model results are not a confirmed diagnosis.": "दूसरी समीक्षा का परीक्षण संस्करण · मॉडल का परिणाम रोग की पुष्टि नहीं है।",
+      "Running MobileNetV4 on this device. The first check may take a little longer.": "MobileNetV4 इसी उपकरण पर चल रहा है। पहली जाँच में थोड़ा अधिक समय लग सकता है।",
+      "Save a scan after checking a leaf. It will appear here with your photo and notes.": "पत्ती जाँचने के बाद जानकारी सहेजें। वह तस्वीर और नोट के साथ यहाँ दिखेगी।",
+      "Save an observation after checking a leaf.": "पत्ती जाँचने के बाद जानकारी सहेजें।",
+      "Save scan": "जाँच सहेजें",
+      "Saved leaf observations will appear here, only on this phone.": "सहेजी गई पत्तियों की जानकारी केवल इसी फोन पर यहाँ दिखेगी।",
+      "Saved on this device": "इसी उपकरण पर सहेजा गया",
+      "Saved on this phone": "इसी फोन पर सहेजा गया",
+      "Saved on this phone. Available offline.": "इसी फोन पर सहेजा गया। बिना इंटरनेट उपलब्ध है।",
+      "Saving…": "सहेजा जा रहा है…",
+      "Scan a leaf": "पत्ती की जाँच करें",
+      "Scan a leaf and save your observation. Your photos stay on this device.": "पत्ती जाँचकर जानकारी सहेजें। तस्वीरें इसी उपकरण पर रहती हैं।",
+      "Scan your first leaf": "अपनी पहली पत्ती जाँचें",
+      "See guidance": "मार्गदर्शन देखें",
+      "See next steps": "अगले कदम देखें",
+      "See observation guidance": "देखने-समझने का मार्गदर्शन देखें",
+      "Share observation": "जानकारी साझा करें",
+      "Some of the leaf": "पत्ती का कुछ हिस्सा",
+      "Stored candidate · not confirmed": "सहेजी संभावना · पुष्टि नहीं हुई",
+      "Symptom check": "लक्षणों की जाँच",
+      "Take a good leaf photo": "पत्ती की अच्छी तस्वीर लें",
+      "Take a photo of one leaf. No internet needed after setup.": "एक पत्ती की तस्वीर लें। तैयारी के बाद इंटरनेट नहीं चाहिए।",
+      "Take a photo of one leaf. No internet needed.": "एक पत्ती की तस्वीर लें। इंटरनेट नहीं चाहिए।",
+      "Take clear photos of the affected leaf and the whole plant.": "प्रभावित पत्ती और पूरे पौधे की साफ तस्वीरें लें।",
+      "Take simple precautions": "साधारण सावधानी बरतें",
+      "The assessment stays on this phone.": "जाँच इसी फोन पर होती है।",
+      "The model candidate and selected crop differ. Please check and retake.": "मॉडल की संभावना और चुनी फसल अलग हैं। फसल जाँचकर फिर तस्वीर लें।",
+      "The saved photo and result will be removed from this device.": "सहेजी तस्वीर और परिणाम इस उपकरण से हट जाएँगे।",
+      "Their saved images will also be removed from this app.": "उनकी सहेजी तस्वीरें भी इस ऐप से हट जाएँगी।",
+      "These are possible matches, not a confirmed diagnosis. Ask a local crop expert when needed.": "ये संभावित मिलान हैं, रोग की पुष्टि नहीं। ज़रूरत पर स्थानीय फसल विशेषज्ञ से पूछें।",
+      "These new answers are for this visit. The saved observation is unchanged.": "ये नए उत्तर केवल इस बार के हैं। सहेजी गई जानकारी नहीं बदली है।",
+      "This follow-up comes from your answers. It does not measure disease severity from the image.": "यह आगे की सलाह आपके उत्तरों से बनी है। यह तस्वीर से रोग की गंभीरता नहीं मापती।",
+      "This image could not be opened.": "यह तस्वीर नहीं खुल सकी।",
+      "This is a symptom checklist, not a photo-based severity diagnosis.": "यह लक्षणों की प्रश्नावली है, तस्वीर से रोग की गंभीरता की पहचान नहीं।",
+      "This photo is too large. Choose a photo smaller than 32 MB.": "यह तस्वीर बहुत बड़ी है। 32 MB से छोटी तस्वीर चुनें।",
+      "This prototype does not provide verified chemical dosage instructions.": "यह परीक्षण संस्करण सत्यापित रसायन मात्रा के निर्देश नहीं देता।",
+      "This prototype model has not been validated for disease diagnosis. Scores below are model outputs, not diagnostic confidence.": "इस परीक्षण मॉडल की रोग पहचान के लिए पुष्टि नहीं हुई है। नीचे दिए अंक मॉडल के परिणाम हैं, रोग की पुष्टि का भरोसा नहीं।",
+      "Today": "आज",
+      "Top model score": "मॉडल का सबसे बड़ा अंक",
+      "Try a brighter, sharper close-up of one leaf.": "अच्छी रोशनी में एक पत्ती की साफ नज़दीकी तस्वीर लें।",
+      "Try another photo": "दूसरी तस्वीर आज़माएँ",
+      "Try offline voice": "ऑफलाइन आवाज़ आज़माएँ",
+      "Unable to run the model": "मॉडल नहीं चल सका",
+      "Uncertain observation": "जानकारी स्पष्ट नहीं है",
+      "Uncertain result": "परिणाम स्पष्ट नहीं है",
+      "Use natural light. Hold steady. Avoid several overlapping leaves.": "प्राकृतिक रोशनी में फोन स्थिर रखें। कई पत्तियाँ एक-दूसरे पर न आने दें।",
+      "Uses bundled audio, no internet.": "साथ दी गई आवाज़ चलती है, इंटरनेट नहीं चाहिए।",
+      "Validation: not validated for disease diagnosis": "पुष्टि: रोग की पहचान के लिए पुष्टि नहीं हुई",
+      "View all": "सभी देखें",
+      "What does a score mean?": "अंक का क्या अर्थ है?",
+      "What does the score mean?": "इस अंक का क्या अर्थ है?",
+      "What to do now": "अभी क्या करें",
+      "What to observe": "क्या देखें",
+      "Yes": "हाँ",
+      "Yesterday": "कल",
+      "Your answers describe what you see; they do not confirm a disease.": "आपके उत्तर बताते हैं कि आप क्या देखते हैं। वे रोग की पुष्टि नहीं करते।",
+      "Your answers help decide when to ask an expert.": "आपके उत्तर तय करने में मदद करते हैं कि विशेषज्ञ से कब पूछें।",
+      "Your first leaf starts here": "आपकी पहली पत्ती यहीं से शुरू होती है",
+      "Your first scan starts here": "आपकी पहली जाँच यहीं से शुरू होती है",
+      "Your observation summary": "आपकी बताई जानकारी का सारांश",
+      "Your observations": "आपकी जानकारी",
+      "Your observations matter": "आपकी जानकारी अहम है",
+      "Your photos stay here": "तस्वीरें यहीं रहती हैं",
+      "bundled locally": "इसी उपकरण में उपलब्ध",
+      "model score": "मॉडल का अंक",
+      "not confirmed": "पुष्टि नहीं हुई",
+      "Bundled English, Kannada and Hindi audio": "अंग्रेज़ी, कन्नड़ और हिन्दी की आवाज़ साथ में उपलब्ध",
+      "English, Kannada and Hindi guidance with bundled speech. Text, translations and general observation rules need agronomist and native-language review before field use.": "आवाज़ के साथ अंग्रेज़ी, कन्नड़ और हिन्दी में मार्गदर्शन। खेत में उपयोग से पहले सामग्री, अनुवाद और सामान्य नियमों की कृषि तथा भाषा विशेषज्ञ से समीक्षा चाहिए।",
+      "English + ಕನ್ನಡ + हिन्दी, with voice": "अंग्रेज़ी, कन्नड़ और हिन्दी में आवाज़ के साथ",
+      "Back": "वापस",
+      "Language": "भाषा",
+      "Crop": "फसल",
+      "Settings": "सेटिंग",
+      "Choose leaf photo": "पत्ती की तस्वीर चुनें",
+      "Play": "चलाएँ",
+      "Pause": "रोकें",
+      "Audio unavailable": "आवाज़ उपलब्ध नहीं है",
+      "Bundled offline audio": "साथ दी गई ऑफलाइन आवाज़",
+      "Close camera": "कैमरा बंद करें",
+      "Allow camera": "कैमरे की अनुमति दें",
+      "Allow camera access to photograph a leaf, or choose one from your gallery.": "पत्ती की तस्वीर लेने के लिए कैमरे की अनुमति दें, या गैलरी से तस्वीर चुनें।",
+      "Camera unavailable. You can choose a photo from your gallery.": "कैमरा उपलब्ध नहीं है। गैलरी से तस्वीर चुन सकते हैं।",
+      "Photo could not be captured. Please try again.": "तस्वीर नहीं ली जा सकी। फिर कोशिश करें।",
+      "Camera permission was denied. Allow it in browser settings or choose a photo.": "कैमरे की अनुमति नहीं मिली। ब्राउज़र की सेटिंग में अनुमति दें, या तस्वीर चुनें।",
+      "Choose photo": "तस्वीर चुनें",
+      "Take photo": "तस्वीर लें",
+      "English": "अंग्रेज़ी",
+      "Kannada": "कन्नड़",
+      "Hindi": "हिन्दी",
+      "Tomato": "टमाटर",
+      "Potato": "आलू",
+      "Maize": "मक्का",
+      "Listen in Hindi": "हिन्दी में सुनें",
+      "Listen in Kannada": "हिन्दी में सुनें",
+      "Listen in हिन्दी": "हिन्दी में सुनें",
+      "Saved scans could not be opened. Browser storage may be unavailable.": "सहेजी गई जाँच नहीं खुल सकी। ब्राउज़र का संग्रह उपलब्ध नहीं हो सकता है।",
+      "Model could not be loaded.": "मॉडल नहीं खुल सका।",
+      "Preparing offline assets": "ऑफलाइन सामग्री तैयार हो रही है",
+      "Question 1 of 3": "तीन में से सवाल 1",
+      "Question 1": "सवाल 1",
+      "Question 2 of 3": "तीन में से सवाल 2",
+      "Question 2": "सवाल 2",
+      "Question 3 of 3": "तीन में से सवाल 3",
+      "Question 3": "सवाल 3",
+      "Model validation, agricultural review and Kannada and Hindi translation review are still pending. Guidance is for observation, not a chemical prescription.": "मॉडल का परीक्षण, कृषि समीक्षा और कन्नड़ तथा हिन्दी अनुवाद की समीक्षा अभी बाकी है। यह देखने-समझने का मार्गदर्शन है, रसायन का नुस्खा नहीं।",
+      "TOO SMALL": "तस्वीर बहुत छोटी है",
+      "TOO DARK": "बहुत अँधेरा है",
+      "TOO BRIGHT": "बहुत तेज़ चमक है",
+      "BLURRY": "तस्वीर धुँधली है",
+      "UNREADABLE": "तस्वीर नहीं पढ़ी जा सकी",
+      "Local scratch-trained prototype is ready. Disease diagnosis is not validated.": "इसी काम के लिए शुरू से सिखाया गया परीक्षण मॉडल तैयार है। रोग की पहचान की पुष्टि नहीं हुई है।",
+      "Local model is ready.": "स्थानीय मॉडल तैयार है।",
+      "A little clarity.": "थोड़ी स्पष्टता।",
+      "Browser preview": "ब्राउज़र में देखें",
+      "Built for offline use": "बिना इंटरनेट उपयोग के लिए बनाया गया",
+      "Bundled speech, available without a cloud service.": "आवाज़ ऐप के साथ है। किसी ऑनलाइन सेवा की ज़रूरत नहीं।",
+      "Change language": "भाषा बदलें",
+      "Choose photo from gallery": "गैलरी से तस्वीर चुनें",
+      "Crop Health": "फसल स्वास्थ्य",
+      "Crop health guidance that stays with the farmer. Try the working browser prototype, with the same local model and content as our Android app.": "फसल का मार्गदर्शन जो किसान के साथ रहे। हमारे Android ऐप वाले स्थानीय मॉडल और सामग्री के साथ यह काम करता ब्राउज़र संस्करण आज़माएँ।",
+      "Dismiss error": "संदेश बंद करें",
+      "For every leaf.": "हर पत्ती के लिए।",
+      "MB model": "MB का मॉडल",
+      "Main navigation": "मुख्य नेविगेशन",
+      "Prepare once, then check leaves without a connection.": "एक बार तैयारी करें, फिर बिना इंटरनेट पत्तियाँ जाँचें।",
+      "Real MobileNetV4 inference. No photo upload.": "वास्तविक MobileNetV4 से जाँच। तस्वीर अपलोड नहीं होती।",
+      "Selected crop leaf": "चुनी हुई फसल की पत्ती",
+      "Take leaf photo": "पत्ती की तस्वीर लें",
+      "This is a working web app. The native Android APK uses CameraX and the same model bundle. This research prototype always marks unvalidated predictions as uncertain; model scores are not a diagnosis.": "यह काम करने वाला वेब ऐप है। Android ऐप CameraX और इसी मॉडल का उपयोग करता है। इस परीक्षण संस्करण में अपुष्ट अनुमान हमेशा अनिश्चित दिखते हैं। मॉडल के अंक रोग की पुष्टि नहीं हैं।",
+      "Version loading": "संस्करण खुल रहा है",
+      "Version: ${s.model.version}": "संस्करण: ${s.model.version}",
+      "Version: ": "संस्करण: ",
+      "Version": "संस्करण",
+      "Your photo stays on your device": "तस्वीर आपके उपकरण पर ही रहती है",
+      "The photo could not be opened.": "तस्वीर नहीं खुल सकी।",
+      "The photo was not saved. Please try again.": "तस्वीर सहेजी नहीं जा सकी। फिर कोशिश करें।",
+      "Take or select a leaf photo first.": "पहले पत्ती की तस्वीर लें या चुनें।",
+      "This photo could not be assessed. Please try again.": "इस तस्वीर की जाँच नहीं हो सकी। फिर कोशिश करें।",
+      "The observation could not be saved.": "जानकारी सहेजी नहीं जा सकी।",
+      "This observation could not be shared.": "यह जानकारी साझा नहीं की जा सकी।",
+      "Checking local model…": "स्थानीय मॉडल जाँचा जा रहा है…",
+      "Prototype model — not validated for diagnosis": "परीक्षण मॉडल — रोग की पहचान के लिए पुष्टि नहीं हुई है",
+      "Integration model only — not trained for diagnosis": "यह केवल जोड़ने की जाँच का मॉडल है। रोग पहचानने के लिए सिखाया नहीं गया है।",
+      "Do now": "अभी क्या करें",
+      "What to watch": "किन बातों पर ध्यान दें",
+      "Prevention": "बचाव",
+      "Language changed for this visit; browser preferences could not be saved.": "इस बार भाषा बदल दी गई है, लेकिन ब्राउज़र में पसंद सहेजी नहीं जा सकी।",
+      "Camera requires HTTPS and a supported browser. Choose a photo instead.": "कैमरे के लिए सुरक्षित HTTPS लिंक और समर्थित ब्राउज़र चाहिए। इसके बजाय तस्वीर चुनें।",
+      "Tap the preview to start your camera.": "कैमरा शुरू करने के लिए तस्वीर वाले हिस्से पर टैप करें।",
+      "Camera is unavailable. You can still choose a leaf photo.": "कैमरा उपलब्ध नहीं है। पत्ती की तस्वीर चुन सकते हैं।",
+      "Could not capture this photo. Please try again.": "यह तस्वीर नहीं ली जा सकी। फिर कोशिश करें।",
+      "Flash is unavailable on this camera.": "इस कैमरे में फ्लैश उपलब्ध नहीं है।"
+    }
+  }
 }

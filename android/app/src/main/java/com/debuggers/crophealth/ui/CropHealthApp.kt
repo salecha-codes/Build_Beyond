@@ -50,7 +50,12 @@ import java.util.Date
 import java.util.Locale
 import kotlin.math.roundToInt
 
-private fun AppUiState.tr(en: String, kn: String) = if(language==AppLanguage.KANNADA) kn else en
+internal fun AppUiState.tr(en: String, kn: String) = when(language) {
+    AppLanguage.ENGLISH -> en
+    AppLanguage.KANNADA -> kn
+    AppLanguage.HINDI -> HindiUi.translate(en)
+}
+private val LocalAppLanguage = staticCompositionLocalOf { AppLanguage.ENGLISH }
 
 @Composable
 fun CropHealthApp(viewModel: CropHealthViewModel) {
@@ -61,6 +66,9 @@ fun CropHealthApp(viewModel: CropHealthViewModel) {
 @Composable
 fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)->String,
                      prompt:(String)->Prompt,newCameraFile:()->File) {
+    val context=LocalContext.current
+    remember(context) { HindiUi.load(context) }
+    CompositionLocalProvider(LocalAppLanguage provides state.language) {
     CropTheme {
         val activity=LocalContext.current as? Activity
         SideEffect {
@@ -98,14 +106,15 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
         }
         state.error?.let { message ->
             AlertDialog(onDismissRequest={onAction(AppAction.DismissError)},
-                title={Text(state.tr("Please try again","ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ"))},text={Text(message)},
+                title={Text(state.tr("Please try again","ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ"))},text={Text(state.tr(message,message))},
                 confirmButton={TextButton(onClick={onAction(AppAction.DismissError)}) {Text(state.tr("OK","ಸರಿ"))}})
         }
+    }
     }
 }
 
 @Composable private fun Header(s:AppUiState,a:(AppAction)->Unit) {
-    TopAppBar(title={},navigationIcon={IconButton(onClick={a(AppAction.Navigate(when(s.screen) { Screen.GUIDANCE,Screen.CONCERN -> Screen.RESULT; Screen.SETTINGS -> Screen.HELP; Screen.RESULT -> if(s.openedObservation!=null) Screen.HISTORY else Screen.HOME; else -> Screen.HOME }))}) {Icon(Icons.Outlined.ArrowBack,"Back")}},
+    TopAppBar(title={},navigationIcon={IconButton(onClick={a(AppAction.Navigate(when(s.screen) { Screen.GUIDANCE,Screen.CONCERN -> Screen.RESULT; Screen.SETTINGS -> Screen.HELP; Screen.RESULT -> if(s.openedObservation!=null) Screen.HISTORY else Screen.HOME; else -> Screen.HOME }))}) {Icon(Icons.Outlined.ArrowBack,s.tr("Back","ಹಿಂದೆ"))}},
         actions={OfflineBadge(if(s.assessment?.evidence!=null || s.openedObservation!=null) s.tr("Analysed offline","ಆಫ್‌ಲೈನ್ ಪರಿಶೀಲನೆ") else s.tr("On this phone","ಈ ಫೋನ್‌ನಲ್ಲಿ"));Spacer(Modifier.width(20.dp))},
         colors=TopAppBarDefaults.topAppBarColors(containerColor=Color.White))
 }
@@ -137,10 +146,10 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
     Row(Modifier.clip(RoundedCornerShape(20.dp)).background(CropColors.Lavender).padding(3.dp)) {
         AppLanguage.entries.forEach { lang ->
             val selected=s.language==lang
-            Text(if(lang==AppLanguage.ENGLISH) "English" else "ಕನ್ನಡ",fontSize=11.sp,
+            Text(lang.displayName,fontSize=11.sp,textAlign=TextAlign.Center,
                 color=if(selected) CropColors.Ink else CropColors.Muted,
                 modifier=Modifier.testTag("language_${lang.id}").clip(RoundedCornerShape(16.dp)).background(if(selected) Color.White else Color.Transparent)
-                    .clickable {a(AppAction.SetLanguage(lang))}.padding(horizontal=10.dp,vertical=6.dp))
+                    .clickable {a(AppAction.SetLanguage(lang))}.widthIn(min=48.dp).padding(horizontal=8.dp,vertical=8.dp))
         }
     }
 }
@@ -152,7 +161,7 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
 @Composable private fun Welcome(s:AppUiState,a:(AppAction)->Unit) {
     Column(Modifier.fillMaxSize().padding(28.dp),verticalArrangement=Arrangement.Center,horizontalAlignment=Alignment.CenterHorizontally) {
         Box(Modifier.size(100.dp).background(CropColors.Lavender,CircleShape),contentAlignment=Alignment.Center) {Icon(Icons.Outlined.Grass,null,tint=CropColors.Primary,modifier=Modifier.size(54.dp))}
-        Spacer(Modifier.height(28.dp));Text("Crop Health",fontSize=32.sp,fontWeight=FontWeight.Medium)
+        Spacer(Modifier.height(28.dp));Text(s.tr("Crop Health","ಬೆಳೆ ಆರೋಗ್ಯ"),fontSize=32.sp,fontWeight=FontWeight.Medium)
         Spacer(Modifier.height(12.dp));Text(s.tr("Care for your crops, wherever you grow.","ನೀವು ಎಲ್ಲಿದ್ದರೂ ಬೆಳೆಗಳ ಆರೈಕೆ ಮಾಡಿ."),textAlign=TextAlign.Center,color=CropColors.Muted)
         Spacer(Modifier.height(26.dp));LanguageToggle(s,a);Spacer(Modifier.height(36.dp))
         Primary(s.tr("Get started","ಪ್ರಾರಂಭಿಸಿ"),{a(AppAction.CompleteWelcome)},Icons.Outlined.ArrowForward)
@@ -185,14 +194,14 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
         if(s.observations.isEmpty()) {
             SoftCard {Icon(Icons.Outlined.History,null,tint=CropColors.Primary);Text(s.tr("Your first scan starts here","ನಿಮ್ಮ ಮೊದಲ ಪರಿಶೀಲನೆ ಇಲ್ಲಿಂದ ಪ್ರಾರಂಭವಾಗುತ್ತದೆ"),fontSize=16.sp);Text(s.tr("Saved leaf observations will appear here, only on this phone.","ಉಳಿಸಿದ ಎಲೆ ಪರಿಶೀಲನೆಗಳು ಈ ಫೋನ್‌ನಲ್ಲಿ ಮಾತ್ರ ಕಾಣಿಸುತ್ತವೆ."),fontSize=12.sp,color=CropColors.Muted)}
         } else s.observations.take(3).forEach {HistoryCard(it,s,a)}
-        if(!s.model.ready) Notice(s.tr("Local model is loading or unavailable","ಸ್ಥಳೀಯ ಮಾದರಿ ಲೋಡ್ ಆಗುತ್ತಿದೆ ಅಥವಾ ಲಭ್ಯವಿಲ್ಲ"),s.model.message)
+        if(!s.model.ready) Notice(s.tr("Local model is loading or unavailable","ಸ್ಥಳೀಯ ಮಾದರಿ ಲೋಡ್ ಆಗುತ್ತಿದೆ ಅಥವಾ ಲಭ್ಯವಿಲ್ಲ"),s.tr(s.model.message,s.model.message))
     }
 }
 
 @Composable private fun CropChips(s:AppUiState,a:(AppAction)->Unit,all:Boolean=false,selected:Crop?=s.selectedCrop,onSelect:((Crop?)->Unit)?=null) {
     Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(8.dp)) {
         if(all) CropChip(s.tr("All","ಎಲ್ಲಾ"),selected==null,null) {onSelect?.invoke(null)}
-        Crop.entries.forEach {crop ->CropChip(if(s.language==AppLanguage.KANNADA) crop.nameKn else crop.nameEn,selected==crop,crop) {if(onSelect!=null) onSelect(crop) else a(AppAction.SelectCrop(crop))}}
+        Crop.entries.forEach {crop ->CropChip(crop.displayName(s.language),selected==crop,crop) {if(onSelect!=null) onSelect(crop) else a(AppAction.SelectCrop(crop))}}
     }
 }
 @Composable private fun RowScope.CropChip(label:String,selected:Boolean,crop:Crop?,click:()->Unit) {
@@ -248,7 +257,7 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
         })
         Row(verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(14.dp)) {
             Photo(s.photoPath,Modifier.size(82.dp),256);Column(Modifier.weight(1f)) {
-                Text(if(s.language==AppLanguage.KANNADA) s.selectedCrop.nameKn else s.selectedCrop.nameEn,color=CropColors.Muted,fontSize=12.sp)
+                Text(s.selectedCrop.displayName(s.language),color=CropColors.Muted,fontSize=12.sp)
                 Text(if(certain) title else s.tr("Leaf observation","ಎಲೆಯ ವೀಕ್ಷಣೆ"),fontSize=24.sp,fontWeight=FontWeight.Medium)
             }
         }
@@ -333,7 +342,7 @@ private fun qualityCopy(issue:QualityIssue,s:AppUiState)=when(issue) {QualityIss
             Text(s.tr("Question ${question+1} of 3","ಪ್ರಶ್ನೆ ${question+1} / 3"),fontSize=12.sp,color=CropColors.Primary)
         }
         LinearProgressIndicator(progress={(question+1)/3f},modifier=Modifier.fillMaxWidth(),color=CropColors.Primary,trackColor=CropColors.Lavender)
-        Text(if(s.language==AppLanguage.KANNADA) s.selectedCrop.nameKn else s.selectedCrop.nameEn,fontSize=13.sp,color=CropColors.Muted)
+        Text(s.selectedCrop.displayName(s.language),fontSize=13.sp,color=CropColors.Muted)
         Text(questions[question],fontSize=28.sp,fontWeight=FontWeight.Medium)
         AudioButton(prompt(keys[question]).audioAsset,s.tr("Read question aloud","ಪ್ರಶ್ನೆಯನ್ನು ಕೇಳಿ"))
         val options=if(question==1) listOf(s.tr("A few spots","ಕೆಲವು ಚುಕ್ಕೆಗಳು"),s.tr("Some of the leaf","ಎಲೆಯ ಸ್ವಲ್ಪ ಭಾಗ"),s.tr("Much of the leaf","ಎಲೆಯ ಹೆಚ್ಚಿನ ಭಾಗ"),s.tr("I'm not sure","ಖಚಿತವಿಲ್ಲ"))
@@ -388,7 +397,7 @@ private fun dateGroup(time:Long,s:AppUiState):String {
         Row(Modifier.padding(12.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)) {
             Photo(o.imagePath,Modifier.size(60.dp),160);Column(Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(4.dp)) {
                 Text(if(o.validated) Conditions.byId(o.conditionId.orEmpty())?.displayName(s.language) ?: s.tr("Leaf observation","ಎಲೆಯ ವೀಕ್ಷಣೆ") else s.tr("Needs review","ಪರಿಶೀಲನೆ ಅಗತ್ಯ"),fontSize=15.sp,fontWeight=FontWeight.Medium)
-                Text((if(s.language==AppLanguage.KANNADA) o.crop.nameKn else o.crop.nameEn)+" · "+SimpleDateFormat("h:mm a",Locale.getDefault()).format(Date(o.createdAt)),fontSize=11.sp,color=CropColors.Muted)
+                Text(o.crop.displayName(s.language)+" · "+SimpleDateFormat("h:mm a",Locale.getDefault()).format(Date(o.createdAt)),fontSize=11.sp,color=CropColors.Muted)
                 Text(if(o.validated) s.tr("Model assessment","ಮಾದರಿಯ ಪರಿಶೀಲನೆ") else s.tr("Uncertain observation","ಅನಿಶ್ಚಿತ ವೀಕ್ಷಣೆ"),fontSize=10.sp,color=CropColors.Gold)
             }
             IconButton(onClick={a(AppAction.DeleteObservation(o.id))}) {Icon(Icons.Outlined.DeleteOutline,s.tr("Delete scan","ಪರಿಶೀಲನೆ ಅಳಿಸಿ"),tint=CropColors.Muted,modifier=Modifier.size(19.dp))}
@@ -404,9 +413,9 @@ private fun dateGroup(time:Long,s:AppUiState):String {
             SoftCard {Row(horizontalArrangement=Arrangement.spacedBy(12.dp)) {Box(Modifier.size(28.dp).background(CropColors.Primary,CircleShape),contentAlignment=Alignment.Center) {Text("${i+1}",color=Color.White,fontSize=12.sp)};Column {Text(title,fontSize=16.sp);Spacer(Modifier.height(5.dp));Text(body,fontSize=12.sp,color=CropColors.Muted)}}}
         }
         SoftCard {Text(s.tr("What does the score mean?","ಅಂಕದ ಅರ್ಥವೇನು?"),fontSize=16.sp);Text(s.tr("A model score describes a candidate match. It is not a guarantee or a treatment instruction. Unvalidated scores need expert review.","ಮಾದರಿಯ ಅಂಕ ಒಂದು ಸಾಧ್ಯತೆಯ ಹೊಂದಾಣಿಕೆಯನ್ನು ಸೂಚಿಸುತ್ತದೆ. ಇದು ಖಾತರಿ ಅಥವಾ ಚಿಕಿತ್ಸೆಯ ಸೂಚನೆಯಲ್ಲ. ದೃಢೀಕರಿಸದ ಅಂಕಗಳಿಗೆ ತಜ್ಞರ ಪರಿಶೀಲನೆ ಅಗತ್ಯ."),fontSize=13.sp,color=CropColors.Muted)}
-        Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween,verticalAlignment=Alignment.CenterVertically) {Text(s.tr("Language & voice","ಭಾಷೆ ಮತ್ತು ಧ್ವನಿ"),fontSize=16.sp);LanguageToggle(s,a)}
+        Column(verticalArrangement=Arrangement.spacedBy(10.dp)) {Text(s.tr("Language & voice","ಭಾಷೆ ಮತ್ತು ಧ್ವನಿ"),fontSize=16.sp);LanguageToggle(s,a)}
         AudioButton(prompt("uncertain").audioAsset,s.tr("Try offline voice","ಆಫ್‌ಲೈನ್ ಧ್ವನಿ ಕೇಳಿ"))
-        SoftCard {Row(verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(8.dp)) {Icon(if(s.model.ready) Icons.Outlined.CheckCircle else Icons.Outlined.Info,null,tint=if(s.model.ready) CropColors.Green else CropColors.Gold);Text(if(s.model.ready) s.tr("Local model installed","ಸ್ಥಳೀಯ ಮಾದರಿ ಸ್ಥಾಪಿಸಲಾಗಿದೆ") else s.tr("Local model unavailable","ಸ್ಥಳೀಯ ಮಾದರಿ ಲಭ್ಯವಿಲ್ಲ"),fontSize=15.sp)};Text(s.model.message,fontSize=12.sp,color=CropColors.Muted);Text(s.model.name+" · "+s.model.version,fontSize=10.sp,color=CropColors.Muted)}
+        SoftCard {Row(verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(8.dp)) {Icon(if(s.model.ready) Icons.Outlined.CheckCircle else Icons.Outlined.Info,null,tint=if(s.model.ready) CropColors.Green else CropColors.Gold);Text(if(s.model.ready) s.tr("Local model installed","ಸ್ಥಳೀಯ ಮಾದರಿ ಸ್ಥಾಪಿಸಲಾಗಿದೆ") else s.tr("Local model unavailable","ಸ್ಥಳೀಯ ಮಾದರಿ ಲಭ್ಯವಿಲ್ಲ"),fontSize=15.sp)};Text(s.tr(s.model.message,s.model.message),fontSize=12.sp,color=CropColors.Muted);Text(s.model.name+" · "+s.model.version,fontSize=10.sp,color=CropColors.Muted)}
         Secondary(s.tr("Model, privacy & settings","ಮಾದರಿ, ಗೌಪ್ಯತೆ ಮತ್ತು ಸೆಟ್ಟಿಂಗ್‌ಗಳು"),{a(AppAction.Navigate(Screen.SETTINGS))},Icons.Outlined.Settings)
         ExpertCall(s)
     }
@@ -418,9 +427,9 @@ private fun dateGroup(time:Long,s:AppUiState):String {
         Text(s.tr("On this phone","ಈ ಫೋನ್‌ನಲ್ಲಿ"),fontSize=28.sp,fontWeight=FontWeight.Medium)
         LanguageToggle(s,a)
         Row(Modifier.fillMaxWidth(),verticalAlignment=Alignment.CenterVertically) {Column(Modifier.weight(1f)) {Text(s.tr("Play guidance automatically","ಮಾರ್ಗದರ್ಶನ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಕೇಳಿ"),fontSize=15.sp);Text(s.tr("Uses bundled audio, no internet.","ಸಂಗ್ರಹಿತ ಧ್ವನಿ ಬಳಸುತ್ತದೆ, ಇಂಟರ್ನೆಟ್ ಬೇಡ."),fontSize=11.sp,color=CropColors.Muted)};Switch(checked=s.autoAudio,onCheckedChange={a(AppAction.SetAutoAudio(it))})}
-        SoftCard {Text(s.model.name,fontSize=17.sp);Text(s.model.message,fontSize=13.sp,color=CropColors.Muted);Text("Version: ${s.model.version}",fontSize=11.sp,color=CropColors.Muted);if(s.model.bytes>0) Text("${"%.1f".format(s.model.bytes/1048576.0)} MB · "+s.tr("bundled locally","ಸ್ಥಳೀಯವಾಗಿ ಸಂಗ್ರಹಿಸಲಾಗಿದೆ"),fontSize=11.sp,color=CropColors.Muted)}
+        SoftCard {Text(s.model.name,fontSize=17.sp);Text(s.tr(s.model.message,s.model.message),fontSize=13.sp,color=CropColors.Muted);Text(s.tr("Version: ${s.model.version}","ಆವೃತ್ತಿ: ${s.model.version}"),fontSize=11.sp,color=CropColors.Muted);if(s.model.bytes>0) Text("${"%.1f".format(s.model.bytes/1048576.0)} MB · "+s.tr("bundled locally","ಸ್ಥಳೀಯವಾಗಿ ಸಂಗ್ರಹಿಸಲಾಗಿದೆ"),fontSize=11.sp,color=CropColors.Muted)}
         SoftCard {Text(s.tr("Your photos stay here","ನಿಮ್ಮ ಫೋಟೋಗಳು ಇಲ್ಲಿಯೇ ಉಳಿಯುತ್ತವೆ"),fontSize=17.sp);Text(s.tr("Assessment runs locally. Photos leave the app only when you choose to share an observation.","ಪರಿಶೀಲನೆ ಸ್ಥಳೀಯವಾಗಿ ನಡೆಯುತ್ತದೆ. ನೀವು ಹಂಚಿಕೊಳ್ಳಲು ಆಯ್ಕೆ ಮಾಡಿದಾಗ ಮಾತ್ರ ಫೋಟೋ ಹೊರಗೆ ಹೋಗುತ್ತದೆ."),fontSize=13.sp,color=CropColors.Muted)}
-        SoftCard {Text(s.tr("Prototype content","ಪ್ರಾಯೋಗಿಕ ವಿಷಯ"),fontSize=16.sp);Text(s.tr("Model validation, agricultural review and Kannada translation review are still pending. Guidance is for observation, not a chemical prescription.","ಮಾದರಿಯ ದೃಢೀಕರಣ, ಕೃಷಿ ಪರಿಶೀಲನೆ ಮತ್ತು ಕನ್ನಡ ಅನುವಾದ ಪರಿಶೀಲನೆ ಬಾಕಿಯಿವೆ. ಮಾರ್ಗದರ್ಶನ ವೀಕ್ಷಣೆಗಾಗಿ, ರಾಸಾಯನಿಕ ಚಿಕಿತ್ಸೆಯ ಸೂಚನೆಯಲ್ಲ."),fontSize=12.sp,color=CropColors.Muted)}
+        SoftCard {Text(s.tr("Prototype content","ಪ್ರಾಯೋಗಿಕ ವಿಷಯ"),fontSize=16.sp);Text(s.tr("Model validation, agricultural review and Kannada and Hindi translation review are still pending. Guidance is for observation, not a chemical prescription.","ಮಾದರಿಯ ದೃಢೀಕರಣ, ಕೃಷಿ ಪರಿಶೀಲನೆ ಹಾಗೂ ಕನ್ನಡ ಮತ್ತು ಹಿಂದಿ ಅನುವಾದ ಪರಿಶೀಲನೆ ಬಾಕಿಯಿವೆ. ಮಾರ್ಗದರ್ಶನ ವೀಕ್ಷಣೆಗಾಗಿ, ರಾಸಾಯನಿಕ ಚಿಕಿತ್ಸೆಯ ಸೂಚನೆಯಲ್ಲ."),fontSize=12.sp,color=CropColors.Muted)}
         TextButton(onClick={clear=true}) {Icon(Icons.Outlined.DeleteOutline,null);Spacer(Modifier.width(8.dp));Text(s.tr("Clear saved history","ಉಳಿಸಿದ ಇತಿಹಾಸ ಅಳಿಸಿ"))}
         Text("Debuggers · Build Beyond ’26",fontSize=11.sp,color=CropColors.Muted)
     }
@@ -435,6 +444,7 @@ private fun dateGroup(time:Long,s:AppUiState):String {
 
 @Composable fun AudioButton(asset:String?,label:String,autoPlay:Boolean=false) {
     val context=LocalContext.current;var player by remember {mutableStateOf<MediaPlayer?>(null)};var playing by remember {mutableStateOf(false)};var failed by remember {mutableStateOf(false)}
+    val unavailable=when(LocalAppLanguage.current) {AppLanguage.ENGLISH -> "Audio unavailable";AppLanguage.KANNADA -> "ಧ್ವನಿ ಲಭ್ಯವಿಲ್ಲ";AppLanguage.HINDI -> HindiUi.translate("Audio unavailable")}
     fun stop() { player?.let { current -> runCatching { current.stop() }; current.release() }; player=null;playing=false }
     fun play() {
         if(asset==null) return
@@ -448,10 +458,11 @@ private fun dateGroup(time:Long,s:AppUiState):String {
     }
     DisposableEffect(asset) {onDispose {stop()}}
     LaunchedEffect(asset,autoPlay) {if(autoPlay && asset!=null) play()}
-    OutlinedButton(onClick={if(playing) stop() else play()},enabled=asset!=null,shape=RoundedCornerShape(15.dp),border=BorderStroke(1.dp,CropColors.Border),modifier=Modifier.fillMaxWidth().heightIn(min=47.dp)) {Icon(if(playing) Icons.Outlined.StopCircle else Icons.Outlined.VolumeUp,null,Modifier.size(19.dp));Spacer(Modifier.width(9.dp));Text(if(failed) "Audio unavailable" else label,fontSize=14.sp)}
+    OutlinedButton(onClick={if(playing) stop() else play()},enabled=asset!=null,shape=RoundedCornerShape(15.dp),border=BorderStroke(1.dp,CropColors.Border),modifier=Modifier.fillMaxWidth().heightIn(min=47.dp)) {Icon(if(playing) Icons.Outlined.StopCircle else Icons.Outlined.VolumeUp,null,Modifier.size(19.dp));Spacer(Modifier.width(9.dp));Text(if(failed) unavailable else label,fontSize=14.sp)}
 }
 
 @Composable private fun Photo(path:String?,modifier:Modifier,maxSide:Int=900) {
+    val description=when(LocalAppLanguage.current) {AppLanguage.ENGLISH -> "Leaf photo";AppLanguage.KANNADA -> "ಎಲೆಯ ಫೋಟೋ";AppLanguage.HINDI -> HindiUi.translate("Leaf photo")}
     val decodeLimit=maxSide.coerceIn(32,1024)
     // The producer is cancelled when its file/bounds change or this image leaves composition.
     // Bitmap ownership stays with Compose/GC: never recycle an image it may still draw.
@@ -466,8 +477,8 @@ private fun dateGroup(time:Long,s:AppUiState):String {
         value=decoded
     }
     Box(modifier.clip(RoundedCornerShape(16.dp)).background(CropColors.Lavender),contentAlignment=Alignment.Center) {
-        if(image!=null) Image(image!!,"Leaf photo",Modifier.fillMaxSize(),contentScale=ContentScale.Crop)
-        else Icon(Icons.Outlined.Grass,"Leaf photo",tint=CropColors.Primary,modifier=Modifier.size(32.dp))
+        if(image!=null) Image(image!!,description,Modifier.fillMaxSize(),contentScale=ContentScale.Crop)
+        else Icon(Icons.Outlined.Grass,description,tint=CropColors.Primary,modifier=Modifier.size(32.dp))
     }
 }
 @Composable private fun Section(title:String) {Text(title,fontSize=18.sp,fontWeight=FontWeight.Medium)}

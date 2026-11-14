@@ -1,5 +1,8 @@
 /** Shared local-prototype contracts. No remote database or seeded history. */
-export type Language = 'en' | 'kn';
+export type Language = 'en' | 'kn' | 'hi';
+export const LANGUAGES: readonly Language[] = ['en', 'kn', 'hi'];
+export const LANGUAGE_LABELS: Record<Language, string> = { en: 'English', kn: 'ಕನ್ನಡ', hi: 'हिन्दी' };
+export const LANGUAGE_LOCALES: Record<Language, string> = { en: 'en-IN', kn: 'kn-IN', hi: 'hi-IN' };
 export type CropId = 'tomato' | 'potato' | 'maize';
 export type AssessmentType =
   | 'uncertain'
@@ -16,6 +19,7 @@ export interface ConditionLabel {
   source_label: string;
   name_en: string;
   name_kn: string;
+  name_hi?: string;
 }
 
 export interface SourceReference {
@@ -109,10 +113,10 @@ export interface ObservationFilters {
   limit?: number;
 }
 
-export const CROPS: readonly { id: CropId; nameEn: string; nameKn: string }[] = [
-  { id: 'tomato', nameEn: 'Tomato', nameKn: 'ಟೊಮ್ಯಾಟೊ' },
-  { id: 'potato', nameEn: 'Potato', nameKn: 'ಆಲೂಗಡ್ಡೆ' },
-  { id: 'maize', nameEn: 'Maize', nameKn: 'ಮೆಕ್ಕೆಜೋಳ' },
+export const CROPS: readonly { id: CropId; nameEn: string; nameKn: string; nameHi: string }[] = [
+  { id: 'tomato', nameEn: 'Tomato', nameKn: 'ಟೊಮ್ಯಾಟೊ', nameHi: 'टमाटर' },
+  { id: 'potato', nameEn: 'Potato', nameKn: 'ಆಲೂಗಡ್ಡೆ', nameHi: 'आलू' },
+  { id: 'maize', nameEn: 'Maize', nameKn: 'ಮೆಕ್ಕೆಜೋಳ', nameHi: 'मक्का' },
 ];
 
 /** Copied from contracts/labels.json and the actual packaged Kannada content. */

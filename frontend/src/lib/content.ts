@@ -1,4 +1,4 @@
-import { CONDITIONS, CROPS } from './types';
+import { CONDITIONS, CROPS, LANGUAGES } from './types';
 import type {
   ConditionLabel,
   ConcernResult,
@@ -40,6 +40,7 @@ export interface ContentCatalog {
   >;
   prompts: Record<string, Record<Language, RawPrompt>>;
   ui_strings: Record<Language, Record<string, string>>;
+  ui_english?: Partial<Record<Language, Record<string, string>>>;
 }
 
 const env = (import.meta as ImportMeta & { env?: { BASE_URL?: string } }).env;
@@ -79,10 +80,11 @@ function validateCatalog(value: unknown): ContentCatalog {
       !isRecord(item) ||
       !isRecord(item.translations) ||
       !isRecord(item.translations.en) ||
-      !isRecord(item.translations.kn)
+      !isRecord(item.translations.kn) ||
+      !isRecord(item.translations.hi)
     )
-      throw new Error(`Missing bilingual guidance: ${label.id}`);
-    for (const lang of ['en', 'kn']) {
+      throw new Error(`Missing three-language guidance: ${label.id}`);
+    for (const lang of LANGUAGES) {
       const copy = item.translations[lang];
       if (
         !isRecord(copy) ||
@@ -131,11 +133,14 @@ export function getConditionLabel(id: string): ConditionLabel | undefined {
 }
 export function conditionName(id: string, language: Language): string {
   const label = getConditionLabel(id);
+  if (language === 'hi') {
+    return catalog?.conditions[id]?.translations.hi?.name ?? label?.name_hi ?? label?.name_en ?? id.replaceAll('_', ' ');
+  }
   return label ? (language === 'kn' ? label.name_kn : label.name_en) : id.replaceAll('_', ' ');
 }
 export function cropName(id: CropId, language: Language): string {
   const crop = CROPS.find((item) => item.id === id)!;
-  return language === 'kn' ? crop.nameKn : crop.nameEn;
+  return language === 'hi' ? crop.nameHi : language === 'kn' ? crop.nameKn : crop.nameEn;
 }
 
 export function getGuidance(conditionId: string, language: Language): Guidance | null {
@@ -168,6 +173,10 @@ export function getGuidance(conditionId: string, language: Language): Guidance |
 }
 
 const fallback: Record<Language, RawPrompt> = {
+  hi: {
+    title: 'मार्गदर्शन अभी तैयार नहीं है',
+    message: 'दिन के उजाले में एक पत्ते की साफ तस्वीर लें। यह प्रोटोटाइप किसी रोग की पुष्टि नहीं कर सकता। उपचार चुनने से पहले स्थानीय कृषि सलाहकार से पूछें।',
+  },
   en: {
     title: 'Guidance is not ready',
     message:
@@ -195,6 +204,17 @@ export function text(key: string, language: Language): string {
   return catalog?.ui_strings[language]?.[key] ?? catalog?.ui_strings.en[key] ?? key;
 }
 export const t = text;
+
+/** English keys keep the existing EN/KN copy stable while Hindi comes from the local catalogue. */
+export function translateUi(en: string, kn: string, language: Language): string {
+  if (language === 'kn') return kn;
+  if (language !== 'hi') return en;
+  const translated = catalog?.ui_english?.hi?.[en] ?? catalog?.ui_strings.hi?.[en];
+  if (translated) return translated;
+  const question = /^Question (\d+) of (\d+)$/.exec(en);
+  if (question) return `प्रश्न ${question[1]} / ${question[2]}`;
+  return en;
+}
 
 /** Same observation-based rule as Android. It is not an image-derived severity grade. */
 export function summarizeConcern(input: Partial<ReportedSymptoms>): ConcernResult {

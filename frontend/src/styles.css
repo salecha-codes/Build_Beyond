@@ -1112,3 +1112,9 @@ p {
     height: 66px;
   }
 }
+
+/* Three local languages fit narrow phone headers without shrinking their touch targets. */
+.home-top,.settings-row{flex-wrap:wrap}
+.language-toggle{flex-shrink:0;max-width:100%}
+.language-toggle button{white-space:nowrap;min-height:32px}
+html[lang="hi"] .heading-copy h1,html[lang="hi"] .question-title{letter-spacing:0;line-height:1.4}

@@ -4,11 +4,11 @@ Install the ARM64 APK on a compatible Android phone. Use the 32-bit APK if requi
 
 ## Two-minute flow
 
-1. Turn on airplane mode and open Crop Health. Point out the offline badge and English/Kannada toggle.
+1. Turn on airplane mode and open Crop Health. Point out the offline badge and English/Kannada/Hindi language choices.
 2. Choose Tomato, Potato, or Maize. Tap **Scan a leaf**, allow camera access, then photograph one clearly lit leaf. The gallery button can import an existing leaf photo.
 3. Tap **Check this leaf**. The app checks the photo and runs the bundled MobileNetV4 locally. Show its actual candidate scores and explicit uncertain result.
 4. Tap **Observe symptoms (3 questions)**. Answer each question; show the observation summary and general guidance. Explain that concern comes from the farmer’s answers, separate from the model score.
-5. Switch to Kannada and play the question/summary/guidance audio. These recordings are bundled in the APK and work without an installed speech language pack.
+5. Switch to Kannada or Hindi and play the question/summary/guidance audio. All 90 recordings are bundled in the APK and work without an installed speech language pack. Reopen the app to demonstrate the saved language preference.
 6. Return to the result and tap **Save scan**. Open History and reopen the observation. Saved photos and records remain on this phone unless the user explicitly shares or deletes them.
 
 ## Explain the prototype accurately

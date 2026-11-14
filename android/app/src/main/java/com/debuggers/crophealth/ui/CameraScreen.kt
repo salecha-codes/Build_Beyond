@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.debuggers.crophealth.domain.AppLanguage
 import com.debuggers.crophealth.presentation.*
 import java.io.File
 
@@ -73,27 +72,28 @@ fun CameraScreen(state:AppUiState,onAction:(AppAction)->Unit,newCameraFile:()->F
         val columnModifier=if(needsScroll) Modifier.fillMaxSize().verticalScroll(rememberScrollState()) else Modifier.fillMaxSize()
         Column(columnModifier,verticalArrangement=Arrangement.spacedBy(gap)) {
             Row(Modifier.fillMaxWidth(),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.SpaceBetween) {
-                IconButton(onClick={onAction(AppAction.Navigate(Screen.HOME))}) {Icon(Icons.Outlined.Close,"Close camera",tint=Color.White)}
-                Surface(shape=RoundedCornerShape(20.dp),color=CropColors.Tomato) {Text(if(state.language==AppLanguage.KANNADA) state.selectedCrop.nameKn else state.selectedCrop.nameEn,color=Color.White,fontSize=12.sp,modifier=Modifier.padding(horizontal=18.dp,vertical=8.dp))}
-                TextButton(onClick={flash=!flash}) {Text(if(flash) "Flash on" else "Flash off",fontSize=11.sp,color=Color.White)}
+                IconButton(onClick={onAction(AppAction.Navigate(Screen.HOME))}) {Icon(Icons.Outlined.Close,state.tr("Close camera","ಕ್ಯಾಮೆರಾ ಮುಚ್ಚಿ"),tint=Color.White)}
+                Surface(shape=RoundedCornerShape(20.dp),color=CropColors.Tomato) {Text(state.selectedCrop.displayName(state.language),color=Color.White,fontSize=12.sp,modifier=Modifier.padding(horizontal=18.dp,vertical=8.dp))}
+                TextButton(onClick={flash=!flash}) {Text(if(flash) state.tr("Flash on","ಫ್ಲ್ಯಾಶ್ ಆನ್") else state.tr("Flash off","ಫ್ಲ್ಯಾಶ್ ಆಫ್"),fontSize=11.sp,color=Color.White)}
             }
             Box(Modifier.fillMaxWidth().height(frameHeight).clip(RoundedCornerShape(24.dp)).background(Color(0xFF2E3B31)).border(1.dp,Color.White.copy(alpha=.5f),RoundedCornerShape(24.dp)),contentAlignment=Alignment.Center) {
                 if(permitted) AndroidView(factory={preview},modifier=Modifier.fillMaxSize())
                 else Column(Modifier.padding(24.dp),horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.spacedBy(16.dp)) {
                     Icon(Icons.Outlined.CameraAlt,null,tint=Color.White,modifier=Modifier.size(50.dp))
-                    Text("Allow camera access to photograph a leaf, or choose one from your gallery.",color=Color.White,textAlign=androidx.compose.ui.text.style.TextAlign.Center,fontSize=14.sp)
-                    Button(onClick={permission.launch(Manifest.permission.CAMERA)}) {Text("Allow camera")}
+                    Text(state.tr("Allow camera access to photograph a leaf, or choose one from your gallery.","ಎಲೆಯ ಫೋಟೋ ತೆಗೆಯಲು ಕ್ಯಾಮೆರಾ ಅನುಮತಿ ನೀಡಿ ಅಥವಾ ಗ್ಯಾಲರಿಯಿಂದ ಫೋಟೋ ಆಯ್ಕೆಮಾಡಿ."),color=Color.White,textAlign=androidx.compose.ui.text.style.TextAlign.Center,fontSize=14.sp)
+                    Button(onClick={permission.launch(Manifest.permission.CAMERA)}) {Text(state.tr("Allow camera","ಕ್ಯಾಮೆರಾ ಅನುಮತಿ ನೀಡಿ"))}
                 }
                 Box(Modifier.fillMaxSize().padding(16.dp).border(1.dp,Color.White.copy(alpha=.65f),RoundedCornerShape(17.dp)))
             }
-            Text(if(state.language==AppLanguage.KANNADA) "ಒಂದು ಎಲೆ ಚೌಕಟ್ಟಿನೊಳಗೆ ಇರಲಿ" else "Fit one leaf inside the frame",color=Color.White,fontSize=15.sp,modifier=Modifier.align(Alignment.CenterHorizontally))
-            Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.Center) {listOf("Good light","Hold steady","Close up").forEach {Text(it,color=Color(0xFFD5CBDF),fontSize=10.sp,modifier=Modifier.padding(horizontal=6.dp).clip(RoundedCornerShape(20.dp)).background(Color.White.copy(alpha=.08f)).padding(horizontal=10.dp,vertical=7.dp))}}
-            error?.let {Text(it,color=Color(0xFFFFCE9A),fontSize=12.sp)}
+            Text(state.tr("Fit one leaf inside the frame","ಒಂದು ಎಲೆ ಚೌಕಟ್ಟಿನೊಳಗೆ ಇರಲಿ"),color=Color.White,fontSize=15.sp,modifier=Modifier.align(Alignment.CenterHorizontally))
+            Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(5.dp)) {listOf(state.tr("Good light","ಉತ್ತಮ ಬೆಳಕು"),state.tr("Hold steady","ಸ್ಥಿರವಾಗಿ ಹಿಡಿಯಿರಿ"),state.tr("Close up","ಹತ್ತಿರದಿಂದ")).forEach {Text(it,color=Color(0xFFD5CBDF),fontSize=10.sp,textAlign=androidx.compose.ui.text.style.TextAlign.Center,modifier=Modifier.weight(1f).clip(RoundedCornerShape(20.dp)).background(Color.White.copy(alpha=.08f)).padding(horizontal=4.dp,vertical=7.dp))}}
+            error?.let {Text(state.tr(it,it),color=Color(0xFFFFCE9A),fontSize=12.sp)}
             Spacer(if(needsScroll) Modifier.height(8.dp) else Modifier.weight(1f))
             Row(Modifier.fillMaxWidth().padding(vertical=10.dp),horizontalArrangement=Arrangement.SpaceAround,verticalAlignment=Alignment.CenterVertically) {
-                IconButton(onClick={gallery.launch("image/*")},modifier=Modifier.size(48.dp).clip(RoundedCornerShape(13.dp)).background(Color.White.copy(alpha=.1f))) {Icon(Icons.Outlined.PhotoLibrary,"Choose photo",tint=Color.White)}
+                IconButton(onClick={gallery.launch("image/*")},modifier=Modifier.size(48.dp).clip(RoundedCornerShape(13.dp)).background(Color.White.copy(alpha=.1f))) {Icon(Icons.Outlined.PhotoLibrary,state.tr("Choose photo","ಫೋಟೋ ಆಯ್ಕೆಮಾಡಿ"),tint=Color.White)}
                 Box(Modifier.size(78.dp).clip(CircleShape).border(5.dp,Color(0xFFD7C8ED),CircleShape).padding(9.dp).clip(CircleShape).background(Color.White).clickable(enabled=permitted && imageCapture!=null && !capturing) {capture()},contentAlignment=Alignment.Center) {if(capturing) CircularProgressIndicator(Modifier.size(25.dp),strokeWidth=2.dp)}
-                IconButton(onClick={onAction(AppAction.SetLanguage(if(state.language==AppLanguage.ENGLISH) AppLanguage.KANNADA else AppLanguage.ENGLISH))},modifier=Modifier.size(48.dp).background(Color.White.copy(alpha=.1f),CircleShape)) {Text(if(state.language==AppLanguage.ENGLISH) "ಕ" else "EN",color=Color.White,fontSize=16.sp)}
+                val nextLanguage=state.language.next()
+                TextButton(onClick={onAction(AppAction.SetLanguage(nextLanguage))},modifier=Modifier.widthIn(min=64.dp).heightIn(min=48.dp).background(Color.White.copy(alpha=.1f),RoundedCornerShape(20.dp))) {Text(nextLanguage.displayName,color=Color.White,fontSize=12.sp)}
             }
         }
         }

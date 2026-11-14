@@ -37,6 +37,7 @@ import {
   getPrompt,
   loadCatalog,
   summarizeConcern,
+  translateUi,
 } from './lib/content';
 import {
   deleteObservation,
@@ -46,7 +47,7 @@ import {
   saveObservation,
   setLanguage as persistLanguage,
 } from './lib/storage';
-import { CROPS } from './lib/types';
+import { CROPS, LANGUAGES, LANGUAGE_LABELS, LANGUAGE_LOCALES } from './lib/types';
 import type {
   ConcernResult,
   CropId,
@@ -157,7 +158,7 @@ export default function App() {
   const upload = useRef<HTMLInputElement>(null);
   const analysisRequest = useRef(0);
   const offlineReady = useOfflineReady();
-  const t = useCallback((en: string, kn: string) => (language === 'kn' ? kn : en), [language]);
+  const t = useCallback((en: string, kn: string) => translateUi(en, kn, language), [language]);
   const refreshHistory = useCallback(async () => {
     try {
       setHistory(await listObservations({ limit: 100 }));
@@ -188,7 +189,7 @@ export default function App() {
     return () => window.removeEventListener(HISTORY_CHANGED_EVENT, refreshHistory);
   }, [refreshHistory]);
   useEffect(() => {
-    document.documentElement.lang = language === 'kn' ? 'kn' : 'en';
+    document.documentElement.lang = language;
   }, [language]);
 
   function changeLanguage(value: Language) {
@@ -351,16 +352,17 @@ export default function App() {
   }
 
   const languageToggle = (
-    <div className="language-toggle" aria-label="Language">
-      {(['en', 'kn'] as Language[]).map((value) => (
+    <div className="language-toggle" aria-label={t('Language', 'Language')}>
+      {LANGUAGES.map((value) => (
         <button
           key={value}
           data-testid={`language-${value}`}
+          lang={value}
           className={language === value ? 'active' : ''}
           aria-pressed={language === value}
           onClick={() => changeLanguage(value)}
         >
-          {value === 'en' ? 'English' : 'ಕನ್ನಡ'}
+          {LANGUAGE_LABELS[value]}
         </button>
       ))}
     </div>
@@ -375,7 +377,7 @@ export default function App() {
   function topBar(back: Screen, right?: ReactNode) {
     return (
       <div className="top-bar">
-        <button className="icon-button" aria-label="Back" onClick={() => navigate(back)}>
+        <button className="icon-button" aria-label={t('Back', 'Back')} onClick={() => navigate(back)}>
           <ArrowLeft size={22} />
         </button>
         {right}
@@ -388,7 +390,7 @@ export default function App() {
     includeAll = false,
   ) {
     return (
-      <div className="crop-list" aria-label="Crop">
+      <div className="crop-list" aria-label={t('Crop', 'Crop')}>
         {includeAll && (
           <button
             className={`crop-chip ${value === 'all' ? 'active' : ''}`}
@@ -405,7 +407,7 @@ export default function App() {
             aria-pressed={value === item.id}
             onClick={() => select(item.id)}
           >
-            {language === 'kn' ? item.nameKn : item.nameEn}
+            {cropName(item.id, language)}
           </button>
         ))}
       </div>
@@ -429,13 +431,13 @@ export default function App() {
           onClick={() => openScan(record)}
           aria-label={`${cropName(record.cropId, language)} ${label}`}
         >
-          <Photo blob={record.photoBlob} />
+          <Photo alt={t('Selected crop leaf', 'Selected crop leaf')} blob={record.photoBlob} />
           <span className="history-copy">
             <strong>{label}</strong>
             <small>
               {cropName(record.cropId, language)} ·{' '}
               {new Date(record.createdAt).toLocaleTimeString(
-                language === 'kn' ? 'kn-IN' : 'en-IN',
+                LANGUAGE_LOCALES[language],
                 { hour: 'numeric', minute: '2-digit' },
               )}
               {record.score !== null
@@ -542,7 +544,7 @@ export default function App() {
         onBack={() => navigate('home')}
         onGallery={() => upload.current?.click()}
         onPhoto={selectPhoto}
-        onLanguage={() => changeLanguage(language === 'en' ? 'kn' : 'en')}
+        onLanguage={() => changeLanguage(LANGUAGES[(LANGUAGES.indexOf(language) + 1) % LANGUAGES.length])}
       />
     );
   else if (screen === 'photo')
@@ -556,7 +558,7 @@ export default function App() {
               {cropName(crop, language)} · {t('One clear leaf is best', 'ಒಂದು ಸ್ಪಷ್ಟ ಎಲೆ ಉತ್ತಮ')}
             </p>
           </div>
-          <Photo blob={photo} className="photo-review" />
+          <Photo alt={t('Selected crop leaf', 'Selected crop leaf')} blob={photo} className="photo-review" />
           <div className="soft-card">
             <h3>{t('A quick photo check', 'ಚಿತ್ರವನ್ನು ಪರಿಶೀಲಿಸಿ')}</h3>
             <p>
@@ -617,7 +619,7 @@ export default function App() {
         )}
         <main className="app-page with-top">
           <div className="result-heading">
-            <Photo blob={activePhoto} />
+            <Photo alt={t('Selected crop leaf', 'Selected crop leaf')} blob={activePhoto} />
             <div>
               <small>{cropName(activeCrop, language)}</small>
               <h2>
@@ -678,7 +680,7 @@ export default function App() {
               {assessment?.candidates.slice(0, 2).map((item) => (
                 <div className="prediction" key={item.id}>
                   <div>
-                    <strong>{language === 'kn' ? item.nameKn : item.nameEn}</strong>
+                    <strong>{conditionName(item.id, language)}</strong>
                     <p>
                       {cropName(item.cropId, language)} · {t('not confirmed', 'ಖಚಿತವಲ್ಲ')}
                     </p>
@@ -691,10 +693,11 @@ export default function App() {
           {assessment?.qualityIssues && assessment.qualityIssues.length > 0 && (
             <p className="hint">
               {t('Photo check: ', 'ಚಿತ್ರ ಪರಿಶೀಲನೆ: ')}
-              {assessment.qualityIssues.join(', ').replaceAll('_', ' ')}
+              {assessment.qualityIssues.map(issue => t(issue.replaceAll('_', ' '), issue.replaceAll('_', ' '))).join(', ')}
             </p>
           )}
           <AudioPlayer
+            language={language}
             src={catalogReady ? resultPrompt.audioAsset : null}
             label={t('Listen in English', 'ಕನ್ನಡದಲ್ಲಿ ಕೇಳಿ')}
             compact
@@ -768,6 +771,7 @@ export default function App() {
             </p>
           </div>
           <AudioPlayer
+            language={language}
             src={catalogReady ? guidance?.audioAsset || generic.audioAsset : null}
             label={t('Listen to guidance', 'ಸಲಹೆ ಕೇಳಿ')}
           />
@@ -885,6 +889,7 @@ export default function App() {
                 <p>{summaryPrompt.message}</p>
               </div>
               <AudioPlayer
+            language={language}
                 src={catalogReady ? summaryPrompt.audioAsset : null}
                 label={t('Listen to next steps', 'ಮುಂದಿನ ಕ್ರಮ ಕೇಳಿ')}
               />
@@ -923,6 +928,7 @@ export default function App() {
               </p>
               <h1 className="question-title">{questions[question]}</h1>
               <AudioPlayer
+            language={language}
                 compact
                 src={catalogReady ? getPrompt(keys[question], language).audioAsset : null}
                 label={t('Read question aloud', 'ಪ್ರಶ್ನೆ ಕೇಳಿ')}
@@ -996,7 +1002,7 @@ export default function App() {
                     ? t('Today', 'ಇಂದು')
                     : dateKey === yesterday.toDateString()
                       ? t('Yesterday', 'ನಿನ್ನೆ')
-                      : date.toLocaleDateString(language === 'kn' ? 'kn-IN' : 'en-IN', {
+                      : date.toLocaleDateString(LANGUAGE_LOCALES[language], {
                           day: 'numeric',
                           month: 'short',
                         });
@@ -1043,7 +1049,7 @@ export default function App() {
           </div>
           <button
             className="icon-button"
-            aria-label="Settings"
+            aria-label={t('Settings', 'Settings')}
             onClick={() => navigate('settings')}
           >
             <Settings size={20} />
@@ -1093,7 +1099,7 @@ export default function App() {
         <div className="settings-row">
           <div>
             <h3>{t('Language & voice', 'ಭಾಷೆ ಮತ್ತು ಧ್ವನಿ')}</h3>
-            <p>{t('Bundled English and Kannada audio', 'ಇಂಗ್ಲಿಷ್ ಮತ್ತು ಕನ್ನಡ ಧ್ವನಿ')}</p>
+            <p>{t('Bundled English, Kannada and Hindi audio', 'ಇಂಗ್ಲಿಷ್, ಕನ್ನಡ ಮತ್ತು ಹಿಂದಿ ಧ್ವನಿ')}</p>
           </div>
           {languageToggle}
         </div>
@@ -1136,11 +1142,11 @@ export default function App() {
           <div className="soft-card">
             <h3>MobileNetV4</h3>
             <p>
-              {model?.message || t('Preparing the local model…', 'ಸ್ಥಳೀಯ ಮಾದರಿ ಸಿದ್ಧವಾಗುತ್ತಿದೆ…')}
+              {model?.message ? t(model.message, model.message) : t('Preparing the local model…', 'ಸ್ಥಳೀಯ ಮಾದರಿ ಸಿದ್ಧವಾಗುತ್ತಿದೆ…')}
             </p>
             <p className="model-details">
-              {model?.version || 'Version loading'}
-              {model?.bytes ? ` · ${(model.bytes / 1024 / 1024).toFixed(1)} MB model` : ''}
+              {model?.version || t('Version loading', 'Version loading')}
+              {model?.bytes ? ` · ${(model.bytes / 1024 / 1024).toFixed(1)} ${t('MB model', 'MB model')}` : ''}
               <br />
               {t(
                 '17 image classes · Tomato, Potato and Maize',
@@ -1186,8 +1192,8 @@ export default function App() {
             <h3>{t('Guidance & language', 'ಸಲಹೆ ಮತ್ತು ಭಾಷೆ')}</h3>
             <p>
               {t(
-                'English and Kannada guidance with bundled speech. Text, translations and general observation rules need agronomist and native-language review before field use.',
-                'ಇಂಗ್ಲಿಷ್ ಮತ್ತು ಕನ್ನಡ ಸಲಹೆ, ಧ್ವನಿಯೊಂದಿಗೆ. ಹೊಲದಲ್ಲಿ ಬಳಸುವ ಮೊದಲು ಕೃಷಿ ತಜ್ಞರ ಮತ್ತು ಭಾಷಾ ಪರಿಶೀಲನೆ ಅಗತ್ಯ.',
+                'English, Kannada and Hindi guidance with bundled speech. Text, translations and general observation rules need agronomist and native-language review before field use.',
+                'ಇಂಗ್ಲಿಷ್, ಕನ್ನಡ ಮತ್ತು ಹಿಂದಿ ಸಲಹೆ, ಧ್ವನಿಯೊಂದಿಗೆ. ಹೊಲದಲ್ಲಿ ಬಳಸುವ ಮೊದಲು ಕೃಷಿ ತಜ್ಞರ ಮತ್ತು ಭಾಷಾ ಪರಿಶೀಲನೆ ಅಗತ್ಯ.',
               )}
             </p>
           </div>
@@ -1216,13 +1222,12 @@ export default function App() {
         </div>
         <div className="preview-kicker">BUILD BEYOND ’26 / REVIEW 2</div>
         <h1>
-          A little clarity.
+          {t('A little clarity.', 'A little clarity.')}
           <br />
-          For every leaf.
+          {t('For every leaf.', 'For every leaf.')}
         </h1>
         <p>
-          Crop health guidance that stays with the farmer. Try the working browser prototype, with
-          the same local model and content as our Android app.
+          {t('Crop health guidance that stays with the farmer. Try the working browser prototype, with the same local model and content as our Android app.', 'Crop health guidance that stays with the farmer. Try the working browser prototype, with the same local model and content as our Android app.')}
         </p>
         <div className="preview-points">
           <div className="preview-point">
@@ -1230,8 +1235,8 @@ export default function App() {
               <WifiOff size={20} />
             </span>
             <div>
-              <strong>Built for offline use</strong>
-              <p>Prepare once, then check leaves without a connection.</p>
+              <strong>{t('Built for offline use', 'Built for offline use')}</strong>
+              <p>{t('Prepare once, then check leaves without a connection.', 'Prepare once, then check leaves without a connection.')}</p>
             </div>
           </div>
           <div className="preview-point">
@@ -1239,8 +1244,8 @@ export default function App() {
               <ShieldCheck size={20} />
             </span>
             <div>
-              <strong>Your photo stays on your device</strong>
-              <p>Real MobileNetV4 inference. No photo upload.</p>
+              <strong>{t('Your photo stays on your device', 'Your photo stays on your device')}</strong>
+              <p>{t('Real MobileNetV4 inference. No photo upload.', 'Real MobileNetV4 inference. No photo upload.')}</p>
             </div>
           </div>
           <div className="preview-point">
@@ -1248,15 +1253,13 @@ export default function App() {
               <Volume2 size={20} />
             </span>
             <div>
-              <strong>English + ಕನ್ನಡ, with voice</strong>
-              <p>Bundled speech, available without a cloud service.</p>
+              <strong>{t('English + ಕನ್ನಡ + हिन्दी, with voice', 'English + ಕನ್ನಡ + हिन्दी, with voice')}</strong>
+              <p>{t('Bundled speech, available without a cloud service.', 'Bundled speech, available without a cloud service.')}</p>
             </div>
           </div>
         </div>
         <div className="preview-notice">
-          <strong>Browser preview</strong> · This is a working web app. The native Android APK uses
-          CameraX and the same model bundle. This research prototype always marks unvalidated
-          predictions as uncertain; model scores are not a diagnosis.
+          <strong>{t('Browser preview', 'Browser preview')}</strong> · {t('This is a working web app. The native Android APK uses CameraX and the same model bundle. This research prototype always marks unvalidated predictions as uncertain; model scores are not a diagnosis.', 'This is a working web app. The native Android APK uses CameraX and the same model bundle. This research prototype always marks unvalidated predictions as uncertain; model scores are not a diagnosis.')}
         </div>
       </aside>
       <div className="device-frame">
@@ -1267,12 +1270,12 @@ export default function App() {
             type="file"
             accept="image/*"
             data-testid="upload-input"
-            aria-label="Choose leaf photo"
+            aria-label={t('Choose leaf photo', 'Choose leaf photo')}
             onChange={onUpload}
           />
           {page}
           {primaryTab && (
-            <nav className="bottom-nav" aria-label="Main navigation">
+            <nav className="bottom-nav" aria-label={t('Main navigation', 'Main navigation')}>
               {(
                 [
                   { id: 'home', icon: Home, en: 'Home', kn: 'ಮುಖಪುಟ' },
@@ -1298,8 +1301,8 @@ export default function App() {
           {error && (
             <div className="error-toast" role="alert">
               <AlertCircle size={17} />
-              <span style={{ flex: 1 }}>{error}</span>
-              <button onClick={() => setError('')} aria-label="Dismiss error">
+              <span style={{ flex: 1 }}>{t(error, error)}</span>
+              <button onClick={() => setError('')} aria-label={t('Dismiss error', 'Dismiss error')}>
                 <X size={16} />
               </button>
             </div>
@@ -1420,7 +1423,7 @@ function CameraCapture({
   const [cameraError, setCameraError] = useState('');
   const [torchSupported, setTorchSupported] = useState(false);
   const [torch, setTorch] = useState(false);
-  const t = (en: string, kn: string) => (language === 'kn' ? kn : en);
+  const t = (en: string, kn: string) => translateUi(en, kn, language);
   useEffect(() => {
     let cancelled = false;
     if (!navigator.mediaDevices?.getUserMedia) {
@@ -1497,14 +1500,14 @@ function CameraCapture({
   return (
     <section className="camera-page">
       <div className="camera-top">
-        <button className="icon-button" onClick={onBack} aria-label="Back">
+        <button className="icon-button" onClick={onBack} aria-label={t('Back', 'Back')}>
           <X size={22} />
         </button>
         <span className="crop-label">{cropName(crop, language)}</span>
         <button
           onClick={() => void toggleTorch()}
           disabled={!torchSupported}
-          aria-label={torch ? 'Flash on' : 'Flash off'}
+          aria-label={torch ? t('Flash on', 'ಫ್ಲ್ಯಾಶ್ ಆನ್') : t('Flash off', 'ಫ್ಲ್ಯಾಶ್ ಆಫ್')}
           style={{ display: 'flex', gap: 5, alignItems: 'center' }}
         >
           {torch ? <Zap size={15} /> : <ZapOff size={15} />}
@@ -1545,13 +1548,13 @@ function CameraCapture({
       </div>
       {cameraError && (
         <p className="capture-error" role="status">
-          {cameraError}
+          {t(cameraError, cameraError)}
         </p>
       )}
       <div className="camera-controls">
         <button
           className="camera-gallery"
-          aria-label="Choose photo from gallery"
+          aria-label={t('Choose photo from gallery', 'Choose photo from gallery')}
           onClick={onGallery}
         >
           <ImagePlus size={23} />
@@ -1560,12 +1563,12 @@ function CameraCapture({
           className="shutter"
           disabled={!ready}
           onClick={() => void capture()}
-          aria-label="Take leaf photo"
+          aria-label={t('Take leaf photo', 'Take leaf photo')}
         >
           <i />
         </button>
-        <button className="camera-language" onClick={onLanguage} aria-label="Change language">
-          {language === 'en' ? 'ಕ' : 'En'}
+        <button className="camera-language" onClick={onLanguage} aria-label={t('Change language', 'Change language')}>
+          {language === 'en' ? 'ಕ' : language === 'kn' ? 'हिं' : 'En'}
         </button>
       </div>
       <p style={{ color: '#aba1b7', fontSize: 10, textAlign: 'center' }}>

@@ -1,12 +1,13 @@
 {
   "schema_version": 1,
-  "script_version": "review2-clear-speech-1",
+  "script_version": "review2-clear-speech-2-hi",
   "source_catalog_version": "review2-observation-1",
   "purpose": "Short spoken guidance for fixed existing asset keys. User-visible catalog text is unchanged.",
   "review_status": {
     "agronomy": "not_expert_reviewed;general_observation_only",
     "kannada_translation": "draft_not_native_reviewed",
-    "pronunciation": "pending_synthesis_and_listening_review"
+    "pronunciation": "pending_synthesis_and_listening_review",
+    "hindi_translation": "draft_not_native_reviewed"
   },
   "writing_rules": [
     "Short sentences and natural punctuation.",
@@ -75,6 +76,37 @@
     "audio/en/prompt_concern_observe.ogg": "Save the photo and watch for changes. If spots spread, the plant wilts or nearby plants are affected, contact an agriculture adviser.",
     "audio/kn/prompt_concern_observe.ogg": "ಚಿತ್ರವನ್ನು ಉಳಿಸಿ ಸಸ್ಯವನ್ನು ಗಮನಿಸುತ್ತಿರಿ. ಚುಕ್ಕೆಗಳು ಹೆಚ್ಚಾದರೆ, ಸಸ್ಯ ಬಾಡಿದರೆ ಅಥವಾ ಪಕ್ಕದ ಸಸ್ಯಗಳಿಗೂ ಹರಡಿದರೆ ಕೃಷಿ ಸಲಹೆಗಾರರನ್ನು ಸಂಪರ್ಕಿಸಿ.",
     "audio/en/prompt_check_expert.ogg": "Do not choose a pesticide or dose from this photo alone. Ask a local agriculture adviser to confirm the problem and the next step.",
-    "audio/kn/prompt_check_expert.ogg": "ಚಿತ್ರವನ್ನು ಮಾತ್ರ ನೋಡಿ ಕೀಟನಾಶಕ ಸಿಂಪಡಿಸಬೇಡಿ. ಮೊದಲು ಸ್ಥಳೀಯ ಕೃಷಿ ಸಲಹೆಗಾರರಿಂದ ಸಮಸ್ಯೆ ಮತ್ತು ಸರಿಯಾದ ಕ್ರಮವನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ."
-  }
+    "audio/kn/prompt_check_expert.ogg": "ಚಿತ್ರವನ್ನು ಮಾತ್ರ ನೋಡಿ ಕೀಟನಾಶಕ ಸಿಂಪಡಿಸಬೇಡಿ. ಮೊದಲು ಸ್ಥಳೀಯ ಕೃಷಿ ಸಲಹೆಗಾರರಿಂದ ಸಮಸ್ಯೆ ಮತ್ತು ಸರಿಯಾದ ಕ್ರಮವನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.",
+    "audio/hi/maize_gray_leaf_spot.ogg": "मक्के में धूसर पत्ती धब्बा हो सकता है। नसों के बीच भूरे या धूसर निशान देखें। निशान फैल रहे हों तो स्थानीय कृषि सलाहकार से जाँच कराएँ।",
+    "audio/hi/maize_common_rust.ogg": "मक्के में रतुआ हो सकता है। पत्ती के दोनों ओर जंग के रंग के छोटे उभरे धब्बे देखें। समस्या बढ़े तो कृषि सलाहकार से संपर्क करें।",
+    "audio/hi/maize_northern_leaf_blight.ogg": "मक्के में उत्तरी पत्ती झुलसा हो सकता है। लंबे भूरे या धूसर निशान देखें। नए बदलावों की तस्वीर लेकर कृषि सलाहकार को दिखाएँ।",
+    "audio/hi/maize_healthy.ogg": "तस्वीर में मक्के की पत्ती स्वस्थ दिखती है। नए धब्बे, पीलापन या मुरझाना दिखे तो ध्यान दें। एक तस्वीर हर समस्या को खारिज नहीं करती।",
+    "audio/hi/potato_early_blight.ogg": "आलू में अगेती झुलसा हो सकता है। पुरानी पत्तियों पर छल्लों जैसे भूरे धब्बे देखें। छिड़काव से पहले कृषि सलाहकार से समस्या की पुष्टि कराएँ।",
+    "audio/hi/potato_late_blight.ogg": "आलू में पछेती झुलसा हो सकता है। जल्दी फैलते गहरे धब्बों पर ध्यान दें। पत्ती की साफ तस्वीरें रखकर स्थानीय कृषि सलाहकार को दिखाएँ।",
+    "audio/hi/potato_healthy.ogg": "तस्वीर में आलू की पत्ती स्वस्थ दिखती है। नए धब्बे, पीलापन या मुरझाना दिखे तो ध्यान दें। एक तस्वीर हर समस्या को खारिज नहीं करती।",
+    "audio/hi/tomato_bacterial_spot.ogg": "टमाटर में जीवाणु पत्ती धब्बा हो सकता है। छोटे काले धब्बे और पीले किनारे देखें। पत्ती के दोनों ओर की तस्वीर लेकर कृषि सलाहकार को दिखाएँ।",
+    "audio/hi/tomato_early_blight.ogg": "टमाटर में अगेती झुलसा हो सकता है। पुरानी पत्तियों पर छल्लों जैसे भूरे धब्बे देखें। छिड़काव से पहले कृषि सलाहकार से समस्या की पुष्टि कराएँ।",
+    "audio/hi/tomato_late_blight.ogg": "टमाटर में पछेती झुलसा हो सकता है। जल्दी फैलते गहरे धब्बों पर ध्यान दें। पत्ती की साफ तस्वीरें रखकर स्थानीय कृषि सलाहकार को दिखाएँ।",
+    "audio/hi/tomato_leaf_mold.ogg": "टमाटर की पत्ती में फफूंद हो सकती है। पीले निशान और पत्ती के नीचे असामान्य बढ़त देखें। साफ तस्वीर कृषि सलाहकार को दिखाएँ।",
+    "audio/hi/tomato_septoria_leaf_spot.ogg": "टमाटर में सेप्टोरिया पत्ती धब्बा हो सकता है। गहरे किनारे और हल्के बीच वाले छोटे गोल धब्बे देखें। कृषि सलाहकार से पुष्टि कराएँ।",
+    "audio/hi/tomato_spider_mites.ogg": "टमाटर में मकड़ी घुन का प्रकोप हो सकता है। पत्ती के नीचे बारीक जाला या छोटे जीव देखें। साफ नज़दीकी तस्वीर कृषि सलाहकार को दिखाएँ।",
+    "audio/hi/tomato_target_spot.ogg": "टमाटर में लक्ष्याकार धब्बा हो सकता है। भूरे गोल निशान देखें। दूसरी समस्याएँ भी ऐसी दिख सकती हैं। उपचार चुनने से पहले कृषि सलाहकार से पूछें।",
+    "audio/hi/tomato_yellow_leaf_curl_virus.ogg": "टमाटर में पीली पत्ती मुड़ने की समस्या हो सकती है। पीलापन, मुड़ी पत्तियाँ और नई बढ़त पर ध्यान दें। तस्वीरें स्थानीय कृषि सलाहकार को दिखाएँ।",
+    "audio/hi/tomato_mosaic_virus.ogg": "टमाटर में मोज़ेक वायरस हो सकता है। हल्के और गहरे हरे निशान या बदली पत्तियाँ देखें। तस्वीरें दिखाकर कृषि सलाहकार से पुष्टि कराएँ।",
+    "audio/hi/tomato_healthy.ogg": "तस्वीर में टमाटर की पत्ती स्वस्थ दिखती है। नए धब्बे, पीलापन या मुरझाना दिखे तो ध्यान दें। एक तस्वीर हर समस्या को खारिज नहीं करती।",
+    "audio/hi/prompt_uncertain.ogg": "इस तस्वीर से समस्या को भरोसे के साथ पहचानना संभव नहीं है। दिन की रोशनी में एक पत्ती की साफ नज़दीकी तस्वीर लेकर फिर कोशिश करें।",
+    "audio/hi/prompt_retake.ogg": "फोन स्थिर रखें। फ्रेम में केवल एक पत्ती रखें। दिन की रोशनी में, छाया से बचते हुए फिर तस्वीर लें।",
+    "audio/hi/prompt_offline.ogg": "इस फोन पर तस्वीर की जाँच और बोली गई सलाह के लिए इंटरनेट नहीं चाहिए। तस्वीर साझा करने या कॉल करने के लिए कनेक्शन लग सकता है।",
+    "audio/hi/prompt_crop_mismatch.ogg": "चुनी हुई फसल एक बार जाँचें। सही फसल चुनकर एक पत्ती की साफ तस्वीर लें।",
+    "audio/hi/prompt_model_unavailable.ogg": "अभी तस्वीर की जाँच नहीं हो पा रही है। तस्वीर लेने के सुझाव देखें। समस्या बनी रहे तो ऐप बंद करके फिर कोशिश करें।",
+    "audio/hi/prompt_model_prototype.ogg": "यह ऐप अभी परीक्षण के चरण में है। परिणाम को केवल सुझाव मानें। उपचार से पहले स्थानीय कृषि सलाहकार से पूछें।",
+    "audio/hi/prompt_healthy.ogg": "इस तस्वीर में पत्ती स्वस्थ दिखती है। फिर भी नए धब्बों, पीलेपन या मुरझाने पर ध्यान देते रहें।",
+    "audio/hi/prompt_concern_spreading.ogg": "क्या धब्बे जल्दी फैल रहे हैं? पिछली बार की जानकारी से पत्ती की तुलना करके उत्तर चुनें।",
+    "audio/hi/prompt_concern_coverage.ogg": "पत्ती पर कितने धब्बे हैं? बहुत कम, कुछ, या बहुत सारे धब्बे। पत्ती देखकर सही विकल्प चुनें।",
+    "audio/hi/prompt_concern_plants.ogg": "क्या पास के पौधों में भी ऐसे लक्षण हैं? उत्तर चुनने से पहले आस-पास के कुछ पौधे जाँचें।",
+    "audio/hi/prompt_concern_expert.ogg": "आपने जो लक्षण बताए हैं, उन्हें विशेषज्ञ को दिखाना उपयोगी हो सकता है। पत्ती की तस्वीरें रखें और स्थानीय कृषि सलाहकार से संपर्क करें।",
+    "audio/hi/prompt_concern_observe.ogg": "तस्वीर रखें और बदलाव देखते रहें। धब्बे फैलें, पौधा मुरझाए या पास के पौधे प्रभावित हों तो कृषि सलाहकार से संपर्क करें।",
+    "audio/hi/prompt_check_expert.ogg": "केवल इस तस्वीर को देखकर कीटनाशक या उसकी मात्रा न चुनें। पहले स्थानीय कृषि सलाहकार से समस्या और सही अगले कदम की पुष्टि कराएँ।"
+  },
+  "voice_version": "review2-clear-speech-2-hi"
 }

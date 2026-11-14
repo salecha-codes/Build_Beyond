@@ -165,7 +165,7 @@ export async function listObservations(
       const label = CONDITIONS.find((item) => item.id === row.conditionId);
       const crop = CROPS.find((item) => item.id === row.cropId);
       const searchable =
-        `${row.cropId} ${crop?.nameEn ?? ''} ${crop?.nameKn ?? ''} ${row.conditionId ?? ''} ${label?.name_en ?? ''} ${label?.name_kn ?? ''} ${row.resultType} ${row.note}`
+        `${row.cropId} ${crop?.nameEn ?? ''} ${crop?.nameKn ?? ''} ${crop?.nameHi ?? ''} ${row.conditionId ?? ''} ${label?.name_en ?? ''} ${label?.name_kn ?? ''} ${row.resultType} ${row.note}`
           .replaceAll('_', ' ')
           .toLocaleLowerCase();
       return (
@@ -201,13 +201,14 @@ export async function clearObservations(): Promise<void> {
 }
 export function getLanguage(): Language {
   try {
-    return globalThis.localStorage?.getItem(LANGUAGE_KEY) === 'kn' ? 'kn' : 'en';
+    const language = globalThis.localStorage?.getItem(LANGUAGE_KEY);
+    return language === 'kn' || language === 'hi' ? language : 'en';
   } catch {
     return 'en';
   }
 }
 export function setLanguage(language: Language): void {
-  if (language !== 'en' && language !== 'kn')
+  if (language !== 'en' && language !== 'kn' && language !== 'hi')
     throw new LocalStorageError('Unsupported interface language.');
   try {
     globalThis.localStorage.setItem(LANGUAGE_KEY, language);

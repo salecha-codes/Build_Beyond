@@ -41,8 +41,8 @@ IndexedDB is scoped to the browser origin. Another device/browser, another previ
 
 The parent asset preparation script copies the **actual** Android content and speech assets to `frontend/public/assets/`. Content helpers resolve paths relative to Vite `BASE_URL`:
 
-- `assets/content/catalog.json` — 17 English/Kannada condition records and prompts;
-- `assets/content/audio_manifest.json` — 60 speech clip hashes/durations;
+- `assets/content/catalog.json` — 17 English/Kannada/Hindi condition records and prompts;
+- `assets/content/audio_manifest.json` — 90 speech clip hashes/durations;
 - `assets/audio/en/*.ogg`, `assets/audio/kn/*.ogg` — generated local speech.
 
 These are versioned read-only files, not mutable database records or a live advisory service. Content remains general observation guidance; expert review and Kannada pronunciation review are pending. The model's validation status must accompany saved results. A score from an unvalidated model is not a confirmed diagnosis.

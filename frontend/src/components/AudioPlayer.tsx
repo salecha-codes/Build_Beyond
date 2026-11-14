@@ -1,15 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
 import { Pause, Play, Volume2 } from 'lucide-react';
+import { translateUi } from '../lib/content';
+import type { Language } from '../lib/types';
 
 export function AudioPlayer({
   src,
   label,
   compact = false,
+  language = 'en',
 }: {
   src?: string | null;
   label: string;
   compact?: boolean;
+  language?: Language;
 }) {
+  const t = (en: string) => translateUi(en, en, language);
   const audio = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -54,7 +59,7 @@ export function AudioPlayer({
         className="audio-play"
         onClick={toggle}
         disabled={!src || failed}
-        aria-label={`${playing ? 'Pause' : 'Play'} ${label}`}
+        aria-label={`${playing ? t('Pause') : t('Play')} ${label}`}
       >
         {playing ? (
           <Pause size={19} />
@@ -65,7 +70,7 @@ export function AudioPlayer({
         )}
       </button>
       <div className="audio-copy">
-        <strong>{failed ? 'Audio unavailable' : label}</strong>
+        <strong>{failed ? t('Audio unavailable') : label}</strong>
         {!compact && (
           <>
             <div className="waveform" aria-hidden="true">
@@ -88,7 +93,7 @@ export function AudioPlayer({
                     .padStart(2, '0')} / ${Math.floor(duration / 60)}:${Math.floor(duration % 60)
                     .toString()
                     .padStart(2, '0')}`
-                : 'Bundled offline audio'}
+                : t('Bundled offline audio')}
             </span>
           </>
         )}

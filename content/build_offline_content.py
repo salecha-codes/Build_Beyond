@@ -72,6 +72,23 @@ def build_catalog():
         for lang,title,message in [('en',te,me),('kn',tk,mk)]:
             audio=f'audio/{lang}/prompt_{key}.ogg';prompts[key][lang]={'title':title,'message':message,'audio_asset':audio};speech.append((lang,audio,message))
     result={'schema_version':1,'content_version':VERSION,'review_notice':'Prototype observation guidance, not expert-reviewed treatment. Kannada translation and pronunciation review remain pending.','conditions':conditions,'prompts':prompts,'ui_strings':{'en':UI_EN,'kn':UI_KN},'primary_advisory_access':[{'url':'https://ipm.ucanr.edu/agriculture/','status':'blocked_by_environment_proxy_not_read'},{'url':'https://agritech.tnau.ac.in/','status':'blocked_by_environment_proxy_not_read'}]}
+    # Additive language source: keep the existing English/Kannada records unchanged.
+    hindi_path=ROOT/'content/hindi.source.json'
+    if hindi_path.exists():
+        hindi=json.loads(hindi_path.read_text())
+        if set(hindi['conditions']) != set(conditions) or set(hindi['prompts']) != set(prompts):
+            raise ValueError('Hindi guidance/prompt keys must match the existing catalog exactly')
+        for cid,copy in hindi['conditions'].items():result['conditions'][cid]['translations']['hi']=copy
+        for key,copy in hindi['prompts'].items():result['prompts'][key]['hi']=copy
+        result['ui_strings']['hi']=hindi['ui_strings']
+        result['language_reviews']={'hi':hindi['review_status']}
+        for asset,text in hindi['spoken_scripts'].items():speech.append(('hi',asset,text))
+        hindi_ui_path=ROOT/'content/hindi_ui.json'
+        if hindi_ui_path.exists():
+            hindi_ui=json.loads(hindi_ui_path.read_text())
+            result['ui_english']={'hi':hindi_ui}
+            ui_target=ASSETS/'content/hindi_ui.json';ui_target.parent.mkdir(parents=True,exist_ok=True)
+            ui_target.write_text(json.dumps(hindi_ui,ensure_ascii=False,indent=2)+'\n')
     target=ASSETS/'content/catalog.json';target.parent.mkdir(parents=True,exist_ok=True);target.write_text(json.dumps(result,ensure_ascii=False,indent=2))
     (ROOT/'content/catalog.source.json').write_text(json.dumps(result,ensure_ascii=False,indent=2))
     return result,speech

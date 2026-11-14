@@ -20,7 +20,7 @@ Build_Beyond/
 │       ├── java/.../presentation/ ViewModel and screen/action contracts
 │       ├── java/.../inference/ ORT session and bounded photo preprocessing
 │       ├── java/.../data/    Room persistence, photo files and preferences
-│       └── assets/           Shared bilingual catalog and offline audio
+│       └── assets/           Shared trilingual catalog and offline audio
 ├── ml/                       Acquisition, training, evaluation and ONNX export
 ├── content/                  Guidance/audio generator and technical checks
 ├── contracts/                Label taxonomy and Python-generated golden tensors
@@ -41,7 +41,7 @@ flowchart TD
     WPrep --> ORTW
     ORTA --> Gate[Real candidate scores and uncertainty policy]
     ORTW --> Gate
-    Gate --> Guide[User-reported symptom check and local English/Kannada guidance]
+    Gate --> Guide[User-reported symptom check and local English/Kannada/Hindi guidance]
     Native --> Room[(Local Room / SQLite)]
     Web --> IDB[(Local IndexedDB photo Blobs and observations)]
     Host[Node or static preview host] -->|Application assets only| Web
@@ -49,7 +49,7 @@ flowchart TD
 
 ## Frontend and application logic
 
-`frontend/src/App.tsx` controls the browser screens. `src/lib/inference.ts` verifies the actual model's SHA-256, labels and shapes, prepares RGB/NCHW tensors and runs one CPU-WASM assessment at a time. `content.ts` reads the packaged bilingual catalog and applies the symptom checklist rules; `storage.ts` commits observations and photo Blobs to IndexedDB. `offline.ts` registers the generated service worker.
+`frontend/src/App.tsx` controls the browser screens. `src/lib/inference.ts` verifies the actual model's SHA-256, labels and shapes, prepares RGB/NCHW tensors and runs one CPU-WASM assessment at a time. `content.ts` reads the packaged trilingual catalog and applies the symptom checklist rules; `storage.ts` commits observations and photo Blobs to IndexedDB. `offline.ts` registers the generated service worker.
 
 The native equivalent lives under `android/app/src/main/java/com/debuggers/crophealth/`: `ui/` for Compose, `presentation/` for the ViewModel, `inference/` for ORT/preprocessing, and `data/` for private files, Room and preferences. Android's Gradle assets source includes `models/assets`, preserving logical `assets/model/...` paths inside the APK.
 

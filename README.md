@@ -39,7 +39,7 @@ The first browser visit downloads the model, WASM runtime, content and audio. Wa
 - Local **MobileNetV4-Conv-Small** inference through ONNX Runtime, with 17 tomato, potato, and maize condition labels.
 - Photo-quality checks, real ranked scores, and explicit uncertain results.
 - Three questions about observed symptoms, producing a user-reported concern level.
-- English/Kannada interface and general precautions, with **60 bundled neural-voice audio clips**: AI4Bharat Indic-TTS for Kannada and Piper for English. Playback requires no speech API, installed language pack or phone TTS model.
+- English, Kannada and Hindi interface and general precautions, with **90 bundled neural-voice audio clips**: AI4Bharat Indic-TTS for Kannada and Piper for English/Hindi. Playback requires no speech API, installed language pack or phone TTS model. The selected language is remembered locally.
 - Room-backed Android history and IndexedDB-backed browser history, with crop filters and targeted deletion.
 - Offline help and model status. The installed Android app requests camera permission and has **no Internet permission**; the browser downloads assets on its first visit.
 
@@ -67,7 +67,7 @@ See [Android build instructions](docs/BUILD_ANDROID.md). On this prepared cloud 
 
 Phone outputs are in `android/app/build/outputs/apk/debug/`: use `app-arm64-v8a-debug.apk` for most current Android phones, or `app-armeabi-v7a-debug.apk` for a 32-bit device. `app-universal-debug.apk` contains all supported ABIs. These are debug-signed prototype builds.
 
-For a demonstration, enable airplane mode, open the app, choose the crop, scan or import a clear leaf photo, and run the assessment. Review its actual model scores and uncertain wording. Complete the symptom questions, play English/Kannada audio, save the observation, and reopen it from History. The production app starts with empty history.
+For a demonstration, enable airplane mode, open the app, choose the crop, scan or import a clear leaf photo, and run the assessment. Review its actual model scores and uncertain wording. Complete the symptom questions, play English/Kannada/Hindi audio, save the observation, and reopen it from History. The production app starts with empty history.
 
 ## Validation and project references
 

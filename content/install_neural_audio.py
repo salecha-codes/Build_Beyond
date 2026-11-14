@@ -39,16 +39,24 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--english-root", type=pathlib.Path, required=True)
     parser.add_argument("--kannada-root", type=pathlib.Path, required=True)
+    parser.add_argument("--hindi-root", type=pathlib.Path)
     parser.add_argument("--scripts", type=pathlib.Path, default=ROOT / "content/spoken_scripts.json")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
     scripts = json.loads(args.scripts.read_text())
     catalog = json.loads((ASSETS / "content/catalog.json").read_text())
-    old_manifest = json.loads((ASSETS / "content/audio_manifest.json").read_text())
-    expected = {clip["path"] for clip in old_manifest["clips"]}
-    if len(expected) != 60 or set(scripts["scripts"]) != expected:
-        raise ValueError("Spoken scripts must cover exactly the existing 60 asset paths.")
+    expected = {copy["audio_asset"] for item in catalog["conditions"].values()
+                for copy in item["translations"].values() if copy.get("audio_asset")}
+    expected.update(copy["audio_asset"] for item in catalog["prompts"].values()
+                    for copy in item.values() if copy.get("audio_asset"))
+    if set(scripts["scripts"]) != expected:
+        raise ValueError("Spoken scripts must cover exactly the audio paths referenced by the catalog.")
     roots = {"en": args.english_root.resolve(), "kn": args.kannada_root.resolve()}
+    if args.hindi_root:
+        roots["hi"] = args.hindi_root.resolve()
+    languages = {pathlib.PurePosixPath(asset).parts[1] for asset in expected}
+    if languages != set(roots):
+        raise ValueError(f"Provide staging roots for all catalog languages: {sorted(languages)}")
     provenance = {language: json.loads((folder / "provenance.json").read_text()) for language, folder in roots.items()}
     clips = []
     sources = {}
@@ -65,9 +73,16 @@ def main() -> None:
         engine = provenance[language].get("engine") or provenance[language].get("model")
         if not isinstance(engine, str) or not engine:
             raise ValueError(f"Missing voice engine provenance: {language}")
+        original = next((clip for clip in provenance[language].get("clips", []) if clip.get("path") == asset), None)
+        text_hash = hashlib.sha256(text.encode()).hexdigest()
+        audio_hash = hashlib.sha256(data).hexdigest()
+        if not original or original.get("sha256") != audio_hash:
+            raise ValueError(f"Staged clip disagrees with its generation receipt: {asset}")
+        if (original.get("source_text_sha256") or original.get("text_sha256")) != text_hash:
+            raise ValueError(f"Spoken script changed; regenerate this clip before installation: {asset}")
         clips.append({"path": asset, "language": language, **details, "bytes": len(data),
-                      "sha256": hashlib.sha256(data).hexdigest(),
-                      "source_text_sha256": hashlib.sha256(text.encode()).hexdigest(),
+                      "sha256": audio_hash,
+                      "source_text_sha256": text_hash,
                       "engine": engine, "review": "technical_decode_checked;native_pronunciation_review_pending"})
         sources[asset] = source
     manifest = {"schema_version": 1, "content_version": catalog["content_version"],
