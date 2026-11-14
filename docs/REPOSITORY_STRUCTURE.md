@@ -1,6 +1,6 @@
 # Repository architecture
 
-The product has two clients: the native Android application and a browser preview. Both execute the canonical MobileNetV4 ONNX bundle on the user's device. The browser host serves application files; it does not receive crop photos or run diagnosis.
+The product has two clients: the native Android application and a browser preview. Both execute the canonical MobileNetV3 leaf-guarded ONNX bundle on the user's device. The browser host serves application files; it does not receive crop photos or run diagnosis.
 
 ```text
 Build_Beyond/
@@ -35,7 +35,7 @@ flowchart TD
     Photo --> Web[React browser client]
     Native --> NPrep[Bounded EXIF-aware decode and Pillow-compatible tensor]
     Web --> WPrep[Browser decode and Pillow-compatible tensor]
-    Bundle[(Shared MobileNetV4 bundle)] --> ORTA[ONNX Runtime Android]
+    Bundle[(Shared MobileNetV3 bundle)] --> ORTA[ONNX Runtime Android]
     Bundle --> ORTW[ONNX Runtime Web CPU WASM]
     NPrep --> ORTA
     WPrep --> ORTW

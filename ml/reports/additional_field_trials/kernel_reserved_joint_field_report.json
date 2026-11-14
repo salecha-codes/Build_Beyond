@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "model_sha256": "d9e8a3e7ab259f505adf3aa096f0d5d9600419fb58c119dba773be7abfa4fea2",
+  "source_evaluation_sha256": "622a36f00dcbe32cfa5eada89b2a60e8e848bf642fd9d0ab6fc10602f199d132",
+  "leaf_validation_sha256": "27fb33391909422a61c829ba2a45af3c79671e61bcb29b33e2eed12935e3ef73",
+  "benchmark_manifest_sha256": "28f0987dc20c1fdb5b6a0f680fac2e4403347d25ac7cd68d24b7e0a29bc5106d",
+  "samples": 80,
+  "leaf_threshold": 0.7736096007959162,
+  "leaf_retained": 76,
+  "leaf_retention": 0.95,
+  "raw_classification_correct": 30,
+  "raw_classification_accuracy": 0.375,
+  "classifier_correct_and_leaf_pass": 29,
+  "classifier_correct_and_leaf_pass_rate": 0.3625,
+  "score_gate_pass": 28,
+  "after_leaf_score_correct_crop": {
+    "delivered_condition_results": 25,
+    "correct": 13,
+    "incorrect": 12,
+    "precision": 0.52,
+    "precision_wilson95": [
+      0.3349851695035678,
+      0.6996871404588704
+    ],
+    "coverage": 0.3125
+  },
+  "leaf_pass_crop_mismatch_abstentions": 2,
+  "field_diagnosis_validated": false,
+  "note": "Same reused 80-photo PlantDoc benchmark previously inspected for V4/V3 candidates. Selection uses known correct crop as a best-case user input. This is a retrospective comparison, not an independent field trial or a guarantee for farmer photos. Quality/blur/brightness checks are outside this graph-level measurement."
+}

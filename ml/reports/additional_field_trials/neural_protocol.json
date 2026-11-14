@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "method": "frozen_V3_features_frozen_linear_plus_residual_MLP",
+  "seed": 2611,
+  "configs": [
+    {
+      "hidden": 128,
+      "dropout": 0.4,
+      "decay": 0.02,
+      "field_weight": 1.0,
+      "lr": 0.002
+    },
+    {
+      "hidden": 256,
+      "dropout": 0.5,
+      "decay": 0.02,
+      "field_weight": 1.0,
+      "lr": 0.001
+    },
+    {
+      "hidden": 128,
+      "dropout": 0.3,
+      "decay": 0.01,
+      "field_weight": 2.0,
+      "lr": 0.001
+    }
+  ],
+  "steps": [
+    75,
+    150,
+    300
+  ],
+  "source_accuracy_floor": 0.9,
+  "source_macro_f1_floor": 0.9,
+  "field_accuracy_floor": 0.5472,
+  "field_supported_macro_f1_floor": 0.55393,
+  "train_manifest_sha256": "9e486c7ef623ef2b871d9723ac51a208c9fe92eec3445c9467d0b939c3d2ece0",
+  "source_tune_manifest_sha256": "d218c4bf8e40dbac946dcc019cb319373c11e49ae4c12630277b3ca7fa07254c",
+  "field_tune_manifest_sha256": "646816bb4cf9a1da313bf758711bb19727eb0fef6de6542ca6b01ba3366fce56",
+  "base_head_sha256": "e2d134092557153de057968804d16ea406429c9263a85119aaa7ab33c9e5ee6a",
+  "train_features_sha256": "713dfa555f60319cdb71f6b62e37fdf7f3c8cea707cdc49965691f0120b9fef9",
+  "calibration_or_test_used": false,
+  "leaf_head_or_backbone_changed": false,
+  "selection_order": [
+    "field_macro_f1",
+    "field_accuracy",
+    "source_macro_f1"
+  ]
+}

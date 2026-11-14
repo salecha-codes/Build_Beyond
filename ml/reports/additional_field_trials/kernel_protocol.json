@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "model": "frozenV3_RBF_SVC17",
+  "grid": {
+    "C": [
+      1.0,
+      10.0
+    ],
+    "gamma": [
+      0.0005,
+      0.002,
+      0.01
+    ]
+  },
+  "sample_weight_source": 1.0,
+  "sample_weight_field": 10.0,
+  "source_floor_accuracy": 0.9,
+  "source_floor_f1": 0.9,
+  "field_min_accuracy": 0.5472,
+  "field_min_supported_f1": 0.55393,
+  "selection": [
+    "field_supported_f1",
+    "field_accuracy",
+    "source_f1"
+  ],
+  "manifests": {
+    "train": "9e486c7ef623ef2b871d9723ac51a208c9fe92eec3445c9467d0b939c3d2ece0",
+    "source": "d218c4bf8e40dbac946dcc019cb319373c11e49ae4c12630277b3ca7fa07254c",
+    "field": "646816bb4cf9a1da313bf758711bb19727eb0fef6de6542ca6b01ba3366fce56"
+  },
+  "train_features_sha256": "713dfa555f60319cdb71f6b62e37fdf7f3c8cea707cdc49965691f0120b9fef9",
+  "calibration_or_test_used": false,
+  "threads": 1,
+  "configs": [
+    {
+      "C": 100.0,
+      "gamma": 0.0005
+    },
+    {
+      "C": 10.0,
+      "gamma": 0.0001
+    },
+    {
+      "C": 10.0,
+      "gamma": 0.0002
+    }
+  ],
+  "prediction_method": "argmax_continuous_ovr_scores"
+}

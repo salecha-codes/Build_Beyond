@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "method": "shared_frozen_early_original_frozen_leaf_tail_cloned_trainable_disease_last3",
+  "seed": 2612,
+  "epochs": 3,
+  "steps_per_epoch": 150,
+  "batch_source": 16,
+  "batch_field": 16,
+  "disease_tail_learning_rate": 3e-05,
+  "head_learning_rate": 0.0001,
+  "batchnorm_running_stats": "frozen",
+  "source_accuracy_floor": 0.9,
+  "source_macro_f1_floor": 0.9,
+  "field_accuracy_floor": 0.5472,
+  "field_macro_f1_floor": 0.55393,
+  "weights_sha256": "5c1a416349c4cf298f2a6a5e2600ed0ee55e604713578f5e74e6bc8bcaef7997",
+  "base_head_sha256": "e2d134092557153de057968804d16ea406429c9263a85119aaa7ab33c9e5ee6a",
+  "leaf_head_sha256": "e6101b13682242c24af901f69822f3f93f2336b466d75da77a163c374616d7a6",
+  "manifest_sha256": {
+    "train": "9e486c7ef623ef2b871d9723ac51a208c9fe92eec3445c9467d0b939c3d2ece0",
+    "source": "d218c4bf8e40dbac946dcc019cb319373c11e49ae4c12630277b3ca7fa07254c",
+    "field": "646816bb4cf9a1da313bf758711bb19727eb0fef6de6542ca6b01ba3366fce56"
+  },
+  "calibration_or_test_used": false,
+  "leaf_path_trainable": false
+}

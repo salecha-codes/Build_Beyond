@@ -1,11 +1,11 @@
 # Crop model training and evaluation
 
-Current release: pretrained MobileNetV3-Large with a trained17-class head; field comparison22.5%→38.75%. See [executed V3 receipts](reports/field_upgrade_v3/) and the shared model card. `crop_ml.v3_comparator` trains/selects on TRAIN/TUNE only; `crop_ml.export_v3_candidate` embeds the exact frozen backbone/head/standardization in ONNX. Their `--help` lists reproducible commands and paths. Calibration/finalization uses the same two-phase `crop_ml.qualify` pipeline below.
+Current release: pretrained MobileNetV3-Large with a trained 17-class head; field comparison 22.5% → 38.75%. See [executed V3 receipts](reports/field_upgrade_v3/) and the shared model card. `crop_ml.v3_comparator` trains/selects on TRAIN/TUNE only; `crop_ml.export_v3_candidate` embeds the exact frozen backbone/head/standardization in ONNX. Their `--help` lists reproducible commands and paths. Calibration/finalization uses the same two-phase `crop_ml.qualify` pipeline below.
 
 ## Historical V4 pipeline
 
 
-The Android model is **MobileNetV4-Conv-Small**, with 17 stable condition IDs from `contracts/labels.json`. Its measured pooled feature dimension is **960**, not the earlier V3-specific 576.
+The earlier V4 prototype used **MobileNetV4-Conv-Small**, with 17 stable condition IDs from `contracts/labels.json`. Both current V3-Large and historical V4-Conv-Small expose 960 pooled features; the earlier V3-Small 576-feature assumption does not apply.
 
 ## Setup
 

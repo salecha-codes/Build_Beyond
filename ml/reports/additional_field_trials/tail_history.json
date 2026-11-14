@@ -1,0 +1,48 @@
+{
+  "history": [
+    {
+      "epoch": 1,
+      "source": {
+        "accuracy": 0.9304308797127468,
+        "macro_f1": 0.9251430613297766
+      },
+      "field": {
+        "accuracy": 0.5144927536231884,
+        "macro_f1": 0.5181346144286765
+      },
+      "eligible": false,
+      "loss": 0.03177252514132609,
+      "elapsed_seconds": 11.115113858999393
+    },
+    {
+      "epoch": 2,
+      "source": {
+        "accuracy": 0.933572710951526,
+        "macro_f1": 0.9272437216815765
+      },
+      "field": {
+        "accuracy": 0.5072463768115942,
+        "macro_f1": 0.5152053164227077
+      },
+      "eligible": false,
+      "loss": 0.036525250095097966,
+      "elapsed_seconds": 21.885411682997074
+    },
+    {
+      "epoch": 3,
+      "source": {
+        "accuracy": 0.9322262118491921,
+        "macro_f1": 0.9282795823337889
+      },
+      "field": {
+        "accuracy": 0.4855072463768116,
+        "macro_f1": 0.5062839738234475
+      },
+      "eligible": false,
+      "loss": 0.02567941946676001,
+      "elapsed_seconds": 32.20792478200019
+    }
+  ],
+  "best_key": null,
+  "leaf_path_tensors_identical": true
+}

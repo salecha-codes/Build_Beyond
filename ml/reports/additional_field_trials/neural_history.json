@@ -1,0 +1,131 @@
+{
+  "history": [
+    {
+      "config": 0,
+      "step": 75,
+      "source": {
+        "accuracy": 0.9416517055655296,
+        "macro_f1": 0.9353978920375146
+      },
+      "field": {
+        "accuracy": 0.5,
+        "macro_f1": 0.5096292124198949
+      },
+      "eligible": false,
+      "elapsed_seconds": 3.0943543129978934
+    },
+    {
+      "config": 0,
+      "step": 150,
+      "source": {
+        "accuracy": 0.9434470377019749,
+        "macro_f1": 0.9372539622444533
+      },
+      "field": {
+        "accuracy": 0.4855072463768116,
+        "macro_f1": 0.496815913566491
+      },
+      "eligible": false,
+      "elapsed_seconds": 5.81853366499854
+    },
+    {
+      "config": 0,
+      "step": 300,
+      "source": {
+        "accuracy": 0.9443447037701975,
+        "macro_f1": 0.9401275470819789
+      },
+      "field": {
+        "accuracy": 0.4855072463768116,
+        "macro_f1": 0.49470937970151185
+      },
+      "eligible": false,
+      "elapsed_seconds": 11.243562655999995
+    },
+    {
+      "config": 1,
+      "step": 75,
+      "source": {
+        "accuracy": 0.9403052064631957,
+        "macro_f1": 0.9371921393259094
+      },
+      "field": {
+        "accuracy": 0.5144927536231884,
+        "macro_f1": 0.5254934217399865
+      },
+      "eligible": false,
+      "elapsed_seconds": 16.161599697999918
+    },
+    {
+      "config": 1,
+      "step": 150,
+      "source": {
+        "accuracy": 0.9425493716337523,
+        "macro_f1": 0.9397027326597288
+      },
+      "field": {
+        "accuracy": 0.5,
+        "macro_f1": 0.5121392897165934
+      },
+      "eligible": false,
+      "elapsed_seconds": 20.74412685900097
+    },
+    {
+      "config": 1,
+      "step": 300,
+      "source": {
+        "accuracy": 0.9443447037701975,
+        "macro_f1": 0.941572134379287
+      },
+      "field": {
+        "accuracy": 0.4855072463768116,
+        "macro_f1": 0.5008557897114627
+      },
+      "eligible": false,
+      "elapsed_seconds": 29.73066100199867
+    },
+    {
+      "config": 2,
+      "step": 75,
+      "source": {
+        "accuracy": 0.9353680430879713,
+        "macro_f1": 0.9292034262876987
+      },
+      "field": {
+        "accuracy": 0.5072463768115942,
+        "macro_f1": 0.5160338443285395
+      },
+      "eligible": false,
+      "elapsed_seconds": 32.08104264600115
+    },
+    {
+      "config": 2,
+      "step": 150,
+      "source": {
+        "accuracy": 0.9425493716337523,
+        "macro_f1": 0.9389516923706088
+      },
+      "field": {
+        "accuracy": 0.5,
+        "macro_f1": 0.5082175252153689
+      },
+      "eligible": false,
+      "elapsed_seconds": 34.29688281199924
+    },
+    {
+      "config": 2,
+      "step": 300,
+      "source": {
+        "accuracy": 0.9421005385996409,
+        "macro_f1": 0.9367662024288965
+      },
+      "field": {
+        "accuracy": 0.5072463768115942,
+        "macro_f1": 0.5199324987157057
+      },
+      "eligible": false,
+      "elapsed_seconds": 38.97143006500119
+    }
+  ],
+  "best_key": null
+}
