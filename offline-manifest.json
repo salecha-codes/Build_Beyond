@@ -1,5 +1,5 @@
 {
-  "version": "4353c1b5450934fb",
+  "version": "ff0ef4aa17818eca",
   "files": [
     "app-logo.png",
     "assets/audio/en/advisory_maize_common_rust.ogg",
@@ -239,8 +239,8 @@
     "assets/content/catalog.json",
     "assets/content/hindi_ui.json",
     "assets/content/treatment_audio_manifest.json",
-    "assets/index-1YK4jj8b.js",
-    "assets/index-qCt3D4Jc.css",
+    "assets/index-B2XSkLrd.css",
+    "assets/index-Ca3z318N.js",
     "assets/model/MODEL_CARD.md",
     "assets/model/crop_model.onnx",
     "assets/model/decision_policy.json",
