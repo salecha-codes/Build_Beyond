@@ -16,8 +16,9 @@ export function registerOfflineSupport(): Promise<void> {
     });
     const registration = await navigator.serviceWorker.register(
       `${import.meta.env.BASE_URL}sw.js`,
-      { scope: import.meta.env.BASE_URL },
+      { scope: import.meta.env.BASE_URL, updateViaCache: 'none' },
     );
+    void registration.update().catch(() => undefined);
     const active = await navigator.serviceWorker.ready;
     (active.active || registration.active)?.postMessage({ type: 'CROP_OFFLINE_STATUS' });
   })().catch((error) => {

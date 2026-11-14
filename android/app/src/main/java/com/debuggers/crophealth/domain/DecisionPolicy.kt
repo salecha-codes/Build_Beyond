@@ -70,7 +70,9 @@ object DecisionPolicy {
         val ranked = output.labelIds.indices.map { i ->
             RankedPrediction(Conditions.byId(output.labelIds[i])!!, (exps[i] / sum).toFloat())
         }.sortedByDescending { it.score }
-        val evidence = PredictionEvidence(ranked, output.modelVersion, policy.validated, output.embeddingDistance, policy.sourceEvaluated)
+        val evidence = PredictionEvidence(ranked, output.modelVersion, policy.validated, output.embeddingDistance, policy.sourceEvaluated,
+            leafGatePassed = policy.minimumLeafProbability != null && output.leafProbability != null &&
+                output.leafProbability >= policy.minimumLeafProbability)
         // Unvalidated plumbing/model output must never assert that the farmer chose a wrong crop.
         if (!policy.validated && !policy.sourceEvaluated) {
             return AssessmentResult.Uncertain(setOf(UncertaintyReason.MODEL_NOT_VALIDATED), evidence)

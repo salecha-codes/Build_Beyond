@@ -154,14 +154,14 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
                 else -> null
             }
             val savedRecord = current.openedObservation
-            val saved = savedRecord?.takeIf { it.validated }?.conditionId
+            val saved = savedRecord?.takeIf { it.validated && it.resultType in setOf("likely_condition", "healthy_looking") }?.conditionId
             val savedKey = when (savedRecord?.resultType) {
                 "likely_condition" -> "model_prototype"
                 "healthy_looking" -> "healthy"
                 "retake" -> "retake"
                 "model_unavailable" -> "model_unavailable"
                 "crop_mismatch" -> "crop_mismatch"
-                "uncertain" -> if ("UNFAMILIAR_IMAGE" in savedRecord.note || "CONDITION_DISABLED" in savedRecord.note) "retake" else if (savedRecord.note.startsWith("Prototype prediction:") ||
+                "uncertain" -> if (savedRecord.hidesUnsupportedCandidate()) "uncertain" else if (savedRecord.isLeafCheckedCandidate()) "uncertain" else if (savedRecord.note.startsWith("Prototype prediction:") ||
                     (current.model.sourceEvaluated && savedRecord.modelVersion == current.model.version)) "model_prototype" else "uncertain"
                 else -> "uncertain"
             }
@@ -171,7 +171,7 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
                 is AssessmentResult.CropMismatch -> "crop_mismatch"
                 is AssessmentResult.HealthyLooking -> "healthy"
                 is AssessmentResult.LikelyCondition -> "model_prototype"
-                is AssessmentResult.Uncertain -> if (current.assessment.rejectsUnsupportedInput()) "retake" else if (current.assessment.evidence.sourceEvaluated) "model_prototype" else "uncertain"
+                is AssessmentResult.Uncertain -> if (current.assessment.rejectsUnsupportedInput() || current.assessment.hasLeafCheckedCandidate()) "uncertain" else if (current.assessment.evidence.sourceEvaluated) "model_prototype" else "uncertain"
                 else -> savedKey
             }
             val adviceAllowed = current.model.validated && current.model.allowConditionSpecificAdvice
@@ -195,7 +195,9 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
         val evidence = result.evidence
         val retainCandidate = !result.rejectsUnsupportedInput()
         val note = when (result) {
-            is AssessmentResult.Uncertain -> if (retainCandidate && result.evidence.sourceEvaluated && UncertaintyReason.MODEL_NOT_VALIDATED !in result.reasons)
+            is AssessmentResult.Uncertain -> if (result.hasLeafCheckedCandidate())
+                "$LEAF_CHECKED_CANDIDATE_NOTE ${result.evidence.top.condition.id}. Low confidence: ${result.reasons.joinToString()}. Expert confirmation needed."
+                else if (retainCandidate && result.evidence.sourceEvaluated && UncertaintyReason.MODEL_NOT_VALIDATED !in result.reasons)
                 "Prototype prediction: ${result.evidence.top.condition.id}. Low confidence: ${result.reasons.joinToString()}. Expert confirmation needed."
                 else "Uncertain: ${result.reasons.joinToString()}. Model output is not a confirmed diagnosis."
             is AssessmentResult.Retake -> "Photo needs retaking: ${result.quality.issues.joinToString()}."
@@ -231,7 +233,7 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
         val value = state.value
         val stored = value.openedObservation
         val unsupported = value.assessment?.rejectsUnsupportedInput()==true ||
-            stored?.note?.let { "UNFAMILIAR_IMAGE" in it || "CONDITION_DISABLED" in it }==true
+            stored?.hidesUnsupportedCandidate()==true
         val condition = if(unsupported) null else stored?.conditionId?.let(Conditions::byId) ?: value.assessment?.evidence?.top?.condition
         val name = condition?.displayName(value.language) ?: localized("Uncertain observation", "ಅನಿಶ್ಚಿತ ವೀಕ್ಷಣೆ", "अनिश्चित अवलोकन")
         val validated = stored?.validated ?: value.assessment?.evidence?.calibratedAndValidated ?: false

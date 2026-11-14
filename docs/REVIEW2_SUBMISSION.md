@@ -34,8 +34,8 @@ Android: JDK 17 and Android SDK 35; configure the SDK path, then `./gradlew :app
 ## Executed verification
 
 - Python ML unit tests: 25 passed.
-- Web policy/leaf-gate fixtures: 31 passed; fixture outputs are explicitly synthetic and are not accuracy evidence.
-- Android domain/leaf-gate unit tests: 32 passed.
+- Web policy/leaf-gate fixtures: 33 passed; fixture outputs are explicitly synthetic and are not accuracy evidence.
+- Android domain/leaf-gate unit tests: 42 passed.
 - Actual native mouse/leaf integration: 2 passed; actual ONNX output and gate behavior verified.
 - Actual browser mouse/laptop rejection and healthy/field-leaf inference passed with no page errors.
 - Android debug/test APK builds and TypeScript/Vite production build passed.
@@ -45,3 +45,7 @@ Physical ARM-phone RAM/latency and native-speaker language review remain pending
 ## Healthy field-data revision
 
 The current head additionally trains on 448 Kandahar Healthy maize photos. The disease benchmark stays 31/80. On new Healthy TEST14, one correct provisional prediction is visible versus zero previously; neither model has strict accepted Healthy results. See ml/reports/healthy_field_update and ml/KANDAHAR_DATA.md. This small gain does not validate field-health diagnosis.
+
+## Version0.4.3 workflow repair
+
+Corrected leaf-threshold search on TUNE; retained137/138field leaves versus132, while104/104tuning objects remainrejected. Reused objectTEST125/125stillrejected. Leaf-checked unfamiliar disease outputs nowdisplayexplicituncertaincandidates ratherthanbeingmislabelednoleaf. Clear128pxphotos mayrun;224px+recommended. Classifierweights andclassificationaccuracy areunchanged; somefield diseasesremainmisclassified, includinghigh-scoreerrors. No confirmedfielddiagnosisclaim follows.

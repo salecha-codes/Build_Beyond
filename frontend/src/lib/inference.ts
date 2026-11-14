@@ -43,6 +43,7 @@ export interface AssessmentResult {
   allowConditionSpecificAdvice?: boolean;
   embeddingDistance?: number;
   leafProbability?: number;
+  leafCheckPassed?: boolean;
 }
 export interface PreprocessSpec {
   width: number;
@@ -345,7 +346,7 @@ export function photoQualityIssues(rgb: Uint8Array, width: number, height: numbe
   const mean = total / luma.length;
   const variance = count ? Math.max(0, squared / count - (sum / count) ** 2) : 0;
   const issues: string[] = [];
-  if (width < 224 || height < 224) issues.push('TOO_SMALL');
+  if (width < 128 || height < 128) issues.push('TOO_SMALL');
   if (mean < 20) issues.push('TOO_DARK');
   if (mean > 240) issues.push('TOO_BRIGHT');
   if (variance < 25) issues.push('BLURRY');
@@ -748,6 +749,7 @@ async function analyzeOnce(file: File, cropId: CropId): Promise<AssessmentResult
       preprocessingMs,
       outputShapes: [Array.from(logits.dims), Array.from(embeddings.dims)],
       leafProbability,
+      leafCheckPassed: metadata.leaf_gate?.enabled === true && leafProbability !== undefined,
     };
     // Source-qualified prototype acceptance is distinct from field validation.
     // Old or failed-qualification bundles remain ready but explicitly uncertain.

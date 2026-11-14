@@ -95,6 +95,40 @@ def rates(source,field,negative,threshold):
             'nonleaf_rejection':part(negative,False)}
 
 
+def select_threshold(source, field, negative, field_floor=.95, source_floor=.98):
+    """Search TUNE score intervals, preserving recall floors and tie-breaks.
+
+    With acceptance ``p >= threshold``, decisions are constant on (low, high].
+    Use an interior midpoint so floating-point roundoff at a sample score cannot
+    change the intended decisions. No TEST or calibration data belongs here.
+    """
+    source, field, negative = [np.asarray(v, dtype=np.float64).reshape(-1)
+                               for v in (source, field, negative)]
+    if any(not len(v) or not np.isfinite(v).all() or ((v < 0) | (v > 1)).any()
+           for v in (source, field, negative)):
+        raise ValueError('Expected nonempty finite TUNE probabilities in [0, 1]')
+    edges = np.unique(np.r_[0., source, field, negative, 1.])
+    zero_report = rates(source, field, negative, 0.)
+    best = ((zero_report['nonleaf_rejection']['correct'],
+             zero_report['field_leaf_recall']['correct'],
+             zero_report['source_leaf_recall']['correct']),
+            0., zero_report, {'lower_inclusive': 0., 'upper_inclusive': 0.,
+                              'representative': 'endpoint'})
+    for low, high in zip(edges[:-1], edges[1:]):
+        threshold = float(low + (high - low) / 2)
+        report = rates(source, field, negative, threshold)
+        if (report['field_leaf_recall']['rate'] < field_floor or
+                report['source_leaf_recall']['rate'] < source_floor):
+            continue
+        key = (report['nonleaf_rejection']['correct'],
+               report['field_leaf_recall']['correct'],
+               report['source_leaf_recall']['correct'])
+        if key > best[0]:
+            best = (key, threshold, report, {'lower_exclusive': float(low),
+                    'upper_inclusive': float(high), 'representative': 'midpoint'})
+    return best[1:]
+
+
 def fit(args):
     out=args.work;out.mkdir(parents=True,exist_ok=True)
     if (out/'fit_started.json').exists():raise FileExistsError('Use a new work directory for a new fit')
@@ -114,7 +148,7 @@ def fit(args):
       'negative_tune_manifest_sha256':sha(args.negatives/'tune.jsonl'),
       'negative_test_manifest_sha256':sha(args.negatives/'test.jsonl'),
       'C_grid':[.001,.01,.1,1.,10.], 'field_leaf_recall_floor':.95,'source_leaf_recall_floor':.98,
-      'selection':'max nonleaf TUNE rejection subject to positive recall floors; tie field recall then source recall',
+      'selection':'search all union-score intervals; max nonleaf TUNE rejection subject to positive recall floors; tie field recall then source recall; interior midpoint',
       'test_evaluated':False,'threshold_partition':'TUNE only','feature_scaler_partition':'TRAIN only',
       'preprocessing':'same RGB224 letterbox and ImageNet normalization as disease graph'}
     write(out/'fit_started.json',protocol)
@@ -136,12 +170,10 @@ def fit(args):
         clf.fit(x,y)
         cp={'mean':mean,'std':std,'coef':clf.coef_[0],'bias':clf.intercept_[0]}
         sp,fp,np_=score(source,cp),score(field,cp),score(negative_tune,cp)
-        field_allowed=int(np.floor((1-protocol['field_leaf_recall_floor'])*len(fp)))
-        source_allowed=int(np.floor((1-protocol['source_leaf_recall_floor'])*len(sp)))
-        threshold=float(max(1e-7,min(np.sort(fp)[field_allowed],np.sort(sp)[source_allowed])-1e-6))
-        report=rates(sp,fp,np_,threshold)
+        threshold, report, interval = select_threshold(sp, fp, np_,
+            protocol['field_leaf_recall_floor'], protocol['source_leaf_recall_floor'])
         key=(report['nonleaf_rejection']['rate'],report['field_leaf_recall']['rate'],report['source_leaf_recall']['rate'])
-        row={'C':C,'minimum_leaf_probability':threshold,'metrics':report,
+        row={'C':C,'minimum_leaf_probability':threshold,'threshold_interval':interval,'metrics':report,
              'pooled_tune_auc':float(roc_auc_score(np.r_[np.ones(len(fp)),np.zeros(len(np_))],np.r_[fp,np_]))}
         history.append(row)
         print(json.dumps({'event':'fit_candidate',**row}),flush=True)

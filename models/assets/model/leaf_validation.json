@@ -3,37 +3,37 @@
   "model_sha256": "31b29158cc1fc1c07bdf3acc07cb6bb6da39eccb1050ffe6ed1d499811179fba",
   "model_version": "mnv3-large-healthy-transfer-31b29158cc1f",
   "output_name": "leaf_logit",
-  "minimum_leaf_probability": 0.7736096007959162,
+  "minimum_leaf_probability": 0.4514392108851361,
+  "head_sha256": "e6101b13682242c24af901f69822f3f93f2336b466d75da77a163c374616d7a6",
   "protocol": {
     "schema_version": 1,
-    "task": "supported_crop_leaf_input_gate",
-    "train_positive_rows": 6956,
-    "negative_train_rows": 500,
-    "negative_tune_rows": 104,
-    "weights_sha256": "5c1a416349c4cf298f2a6a5e2600ed0ee55e604713578f5e74e6bc8bcaef7997",
-    "positive_cache_sha256": "713dfa555f60319cdb71f6b62e37fdf7f3c8cea707cdc49965691f0120b9fef9",
-    "positive_manifest_sha256": "9e486c7ef623ef2b871d9723ac51a208c9fe92eec3445c9467d0b939c3d2ece0",
-    "negative_train_manifest_sha256": "556b724a3f22fba14768d9cb45e9765590de9c9398db6335ad9b3973ce00d034",
-    "negative_tune_manifest_sha256": "ea0875c10ac9778a0575cc4d65af984054cb4a24c147f7e0d08868c2ad0d636a",
-    "negative_test_manifest_sha256": "1264ecd9cc039f75d462a19ca9423170acc79dee20da2fd4cda4025c477926ac",
-    "C_grid": [
-      0.001,
-      0.01,
-      0.1,
-      1.0,
-      10.0
-    ],
+    "task": "unchanged_leaf_head_threshold_selection_bugfix",
+    "selection_partition": "TUNE only",
+    "selection": "search all union-score intervals; maximize nonleaf rejection, then field recall, then source recall",
     "field_leaf_recall_floor": 0.95,
     "source_leaf_recall_floor": 0.98,
-    "selection": "max nonleaf TUNE rejection subject to positive recall floors; tie field recall then source recall",
-    "test_evaluated": false,
-    "threshold_partition": "TUNE only",
-    "feature_scaler_partition": "TRAIN only",
-    "preprocessing": "same RGB224 letterbox and ImageNet normalization as disease graph"
+    "representative": "interior midpoint of winning (lower, upper] interval",
+    "tune_cache_sha256": {
+      "source": "ac648633f7185be4b5b092db4d8702f5fbab9f5b2a1bc4110bac98ab8669beb1",
+      "field": "26b760417be97860ce573d461bf5cb10641480311f333f95f81694ff1bd7b1e6",
+      "negative": "0a87732f21c3a8dfd04c0a24ffcd22235fde08dfcb72b4796608b70c8b9041e3"
+    },
+    "head_sha256": "e6101b13682242c24af901f69822f3f93f2336b466d75da77a163c374616d7a6",
+    "model_sha256": "31b29158cc1fc1c07bdf3acc07cb6bb6da39eccb1050ffe6ed1d499811179fba",
+    "model_version": "mnv3-large-healthy-transfer-31b29158cc1f",
+    "disease_classifier_changed": false,
+    "leaf_head_changed": false,
+    "source_classifier_gates_changed": false,
+    "reused_test_policy": "comparison only after freezing; no threshold/model selection from TEST",
+    "field_diagnosis_validated": false
   },
   "selected_tune_metrics": {
-    "C": 0.001,
-    "minimum_leaf_probability": 0.7736096007959162,
+    "minimum_leaf_probability": 0.4514392108851361,
+    "threshold_interval": {
+      "lower_exclusive": 0.3384152012821985,
+      "upper_inclusive": 0.5644632204880737,
+      "representative": "midpoint"
+    },
     "metrics": {
       "source_leaf_recall": {
         "samples": 2228,
@@ -46,11 +46,11 @@
       },
       "field_leaf_recall": {
         "samples": 138,
-        "correct": 132,
-        "rate": 0.9565217391304348,
+        "correct": 137,
+        "rate": 0.9927536231884058,
         "wilson95": [
-          0.9083922334104801,
-          0.9799235033818243
+          0.9600972965279034,
+          0.998719689216171
         ]
       },
       "nonleaf_rejection": {
@@ -62,8 +62,36 @@
           0.9999999999999999
         ]
       }
+    }
+  },
+  "previous_tune_metrics": {
+    "source_leaf_recall": {
+      "samples": 2228,
+      "correct": 2228,
+      "rate": 1.0,
+      "wilson95": [
+        0.9982787940400015,
+        1.0
+      ]
     },
-    "pooled_tune_auc": 0.9999303232998885
+    "field_leaf_recall": {
+      "samples": 138,
+      "correct": 132,
+      "rate": 0.9565217391304348,
+      "wilson95": [
+        0.9083922334104801,
+        0.9799235033818243
+      ]
+    },
+    "nonleaf_rejection": {
+      "samples": 104,
+      "correct": 104,
+      "rate": 1.0,
+      "wilson95": [
+        0.9643786456275499,
+        0.9999999999999999
+      ]
+    }
   },
   "negative_test": {
     "samples": 125,
@@ -73,6 +101,8 @@
       0.9701846062916751,
       0.9999999999999999
     ],
+    "reused_test": true,
+    "independent_validation": false,
     "per_image": [
       {
         "sha256": "9b487f82e50089fb777d4a6a372822b556dde677634555c10f9d2c9267c8532b",
@@ -951,10 +981,87 @@
       }
     ]
   },
-  "head_sha256": "e6101b13682242c24af901f69822f3f93f2336b466d75da77a163c374616d7a6",
-  "scope": "prototype input validation; held-out examples are not proof for every nonleaf image",
-  "disease_classifier_changed": true,
+  "reused_test_comparison": {
+    "reused_test": true,
+    "independent_validation": false,
+    "candidate_frozen_sha256": "8ff77037d139f7978977251770624d9702157f83b1206ee417793409fb0ff60b",
+    "test_cache_sha256": {
+      "source": "a5a42490c5f8bf7a7d958ec12504af6c3fa9ee147dc5a0c34f0b0747b7be8ce6",
+      "field": "60d4a87f603297fc001b89f8efc666b1b9ac1c9e162dadaa35e1943ae9d91896",
+      "negative": "ba515d1ab688437c43cc3eb8933ee9e39fc74e314d2d1fa12d31427d1750c370"
+    },
+    "previous_threshold": 0.7736096007959162,
+    "candidate_threshold": 0.4514392108851361,
+    "previous": {
+      "source_leaf_recall": {
+        "samples": 3674,
+        "correct": 3668,
+        "rate": 0.9983669025585193,
+        "wilson95": [
+          0.9964414007051139,
+          0.999251328576976
+        ]
+      },
+      "field_leaf_recall": {
+        "samples": 80,
+        "correct": 76,
+        "rate": 0.95,
+        "wilson95": [
+          0.8783772379535725,
+          0.9803864454644552
+        ]
+      },
+      "nonleaf_rejection": {
+        "samples": 125,
+        "correct": 125,
+        "rate": 1.0,
+        "wilson95": [
+          0.9701846062916751,
+          0.9999999999999999
+        ]
+      }
+    },
+    "candidate": {
+      "source_leaf_recall": {
+        "samples": 3674,
+        "correct": 3674,
+        "rate": 1.0,
+        "wilson95": [
+          0.9989555126658651,
+          0.9999999999999998
+        ]
+      },
+      "field_leaf_recall": {
+        "samples": 80,
+        "correct": 77,
+        "rate": 0.9625,
+        "wilson95": [
+          0.8954527990995514,
+          0.9871654310800883
+        ]
+      },
+      "nonleaf_rejection": {
+        "samples": 125,
+        "correct": 125,
+        "rate": 1.0,
+        "wilson95": [
+          0.9701846062916751,
+          0.9999999999999999
+        ]
+      }
+    }
+  },
+  "previous_leaf_validation_sha256": "7920e52bf1ccff38a6041d4cb2410443226068f07006dc508e0aaca0d22f2c68",
+  "candidate_frozen_sha256": "8ff77037d139f7978977251770624d9702157f83b1206ee417793409fb0ff60b",
+  "disease_classifier_changed": false,
+  "leaf_head_changed": false,
   "leaf_gate_test_evaluated_once": false,
-  "leaf_branch_unchanged_from_model_sha256": "3332b5634fcb1a8bea17317a0a9db4d6e44f9c0da24e7b03718b3ced5d6b2d1e",
-  "leaf_validation_evidence": "Inherited unchanged backbone and leaf head; TRAIN-only runtime parity verified"
+  "source_classifier_evaluation": {
+    "file": "source_evaluation.json",
+    "sha256": "406047f01d8826684160bc8dcab35e4f2cefb9261eef937155669bf4b8f8b4a3",
+    "scope": "unchanged classifier weights and classifier gates only; historical receipt contains previous leaf-validation hash",
+    "input_gate_changed": true
+  },
+  "field_diagnosis_validated": false,
+  "scope": "prototype leaf input validation; reused examples do not establish field diagnosis accuracy or reject every nonleaf image"
 }

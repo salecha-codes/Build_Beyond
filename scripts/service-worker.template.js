@@ -21,14 +21,17 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     (async () => {
+      const oldCaches = (await caches.keys()).filter((key) => key.startsWith('crop-health-') && key !== CACHE);
       await Promise.all(
-        (await caches.keys())
-          .filter((key) => key.startsWith('crop-health-') && key !== CACHE)
-          .map((key) => caches.delete(key)),
+        oldCaches.map((key) => caches.delete(key)),
       );
       await self.clients.claim();
       for (const client of await self.clients.matchAll())
         client.postMessage({ type: 'CROP_OFFLINE_READY', version: CACHE });
+      // Older pages do not know about the leaf-check output. Reload once when
+      // replacing their offline bundle so stale JS cannot bypass new checks.
+      if (oldCaches.length) for (const client of await self.clients.matchAll({ type: 'window' }))
+        await client.navigate(client.url).catch(() => undefined);
     })(),
   );
 });
@@ -43,6 +46,10 @@ self.addEventListener('fetch', (event) => {
     (async () => {
       const cache = await caches.open(CACHE);
       const cached = await cache.match(event.request, { ignoreSearch: true });
+      if (event.request.mode === 'navigate') {
+        try { return await fetch(new Request(event.request, { cache: 'no-cache' })); }
+        catch { if (cached) return cached; }
+      }
       if (cached) return cached;
       try {
         return await fetch(event.request);

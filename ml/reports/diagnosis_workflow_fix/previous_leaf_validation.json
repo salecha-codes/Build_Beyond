@@ -1,0 +1,960 @@
+{
+  "schema_version": 1,
+  "model_sha256": "31b29158cc1fc1c07bdf3acc07cb6bb6da39eccb1050ffe6ed1d499811179fba",
+  "model_version": "mnv3-large-healthy-transfer-31b29158cc1f",
+  "output_name": "leaf_logit",
+  "minimum_leaf_probability": 0.7736096007959162,
+  "protocol": {
+    "schema_version": 1,
+    "task": "supported_crop_leaf_input_gate",
+    "train_positive_rows": 6956,
+    "negative_train_rows": 500,
+    "negative_tune_rows": 104,
+    "weights_sha256": "5c1a416349c4cf298f2a6a5e2600ed0ee55e604713578f5e74e6bc8bcaef7997",
+    "positive_cache_sha256": "713dfa555f60319cdb71f6b62e37fdf7f3c8cea707cdc49965691f0120b9fef9",
+    "positive_manifest_sha256": "9e486c7ef623ef2b871d9723ac51a208c9fe92eec3445c9467d0b939c3d2ece0",
+    "negative_train_manifest_sha256": "556b724a3f22fba14768d9cb45e9765590de9c9398db6335ad9b3973ce00d034",
+    "negative_tune_manifest_sha256": "ea0875c10ac9778a0575cc4d65af984054cb4a24c147f7e0d08868c2ad0d636a",
+    "negative_test_manifest_sha256": "1264ecd9cc039f75d462a19ca9423170acc79dee20da2fd4cda4025c477926ac",
+    "C_grid": [
+      0.001,
+      0.01,
+      0.1,
+      1.0,
+      10.0
+    ],
+    "field_leaf_recall_floor": 0.95,
+    "source_leaf_recall_floor": 0.98,
+    "selection": "max nonleaf TUNE rejection subject to positive recall floors; tie field recall then source recall",
+    "test_evaluated": false,
+    "threshold_partition": "TUNE only",
+    "feature_scaler_partition": "TRAIN only",
+    "preprocessing": "same RGB224 letterbox and ImageNet normalization as disease graph"
+  },
+  "selected_tune_metrics": {
+    "C": 0.001,
+    "minimum_leaf_probability": 0.7736096007959162,
+    "metrics": {
+      "source_leaf_recall": {
+        "samples": 2228,
+        "correct": 2228,
+        "rate": 1.0,
+        "wilson95": [
+          0.9982787940400015,
+          1.0
+        ]
+      },
+      "field_leaf_recall": {
+        "samples": 138,
+        "correct": 132,
+        "rate": 0.9565217391304348,
+        "wilson95": [
+          0.9083922334104801,
+          0.9799235033818243
+        ]
+      },
+      "nonleaf_rejection": {
+        "samples": 104,
+        "correct": 104,
+        "rate": 1.0,
+        "wilson95": [
+          0.9643786456275499,
+          0.9999999999999999
+        ]
+      }
+    },
+    "pooled_tune_auc": 0.9999303232998885
+  },
+  "negative_test": {
+    "samples": 125,
+    "rejected": 125,
+    "nonleaf_rejection": 1.0,
+    "wilson95": [
+      0.9701846062916751,
+      0.9999999999999999
+    ],
+    "per_image": [
+      {
+        "sha256": "9b487f82e50089fb777d4a6a372822b556dde677634555c10f9d2c9267c8532b",
+        "class_id": "n02086079",
+        "class_name": "Pekinese",
+        "leaf_probability": 0.006583700985774754,
+        "rejected": true
+      },
+      {
+        "sha256": "7dda2fa6b7dd3883a57a4e76b67638c9af66263921978651ef7529b870d2acd4",
+        "class_id": "n02086240",
+        "class_name": "Shih-Tzu",
+        "leaf_probability": 0.02575638833145734,
+        "rejected": true
+      },
+      {
+        "sha256": "495864f6bd27e71c2fd4b6c064ab9a51030cbf3279842de4a94b57d0cd7d684c",
+        "class_id": "n02089973",
+        "class_name": "English foxhound",
+        "leaf_probability": 0.0032468236924527963,
+        "rejected": true
+      },
+      {
+        "sha256": "8cb0e00b4047c661620912a574f8920cb440248e8e0fe56a1f45274c8563fbdb",
+        "class_id": "n02090721",
+        "class_name": "Irish wolfhound",
+        "leaf_probability": 0.007137898741818498,
+        "rejected": true
+      },
+      {
+        "sha256": "9adb0ef6286ca13fe38f07113f2c7c4e8695d4c66f16b6ff8d77ed05a94304d7",
+        "class_id": "n02091467",
+        "class_name": "Norwegian elkhound",
+        "leaf_probability": 0.023756489037442298,
+        "rejected": true
+      },
+      {
+        "sha256": "75db3f5eb3355e1c0b663751f866368a9cbdbcecf4cb50f00bfca565f9d85fde",
+        "class_id": "n02093256",
+        "class_name": "Staffordshire bullterrier",
+        "leaf_probability": 0.007119894991247573,
+        "rejected": true
+      },
+      {
+        "sha256": "1f979f7d0126e0b71d17af5bacaac2985a353a7ea8729efcb2be35b63b28fe41",
+        "class_id": "n02093428",
+        "class_name": "American Staffordshire terrier",
+        "leaf_probability": 0.014815754782150924,
+        "rejected": true
+      },
+      {
+        "sha256": "316d69f08f1ef7978654d6b5f5577387f3b8d74e30dcf9fb9bde9b23a584c73f",
+        "class_id": "n02094114",
+        "class_name": "Norfolk terrier",
+        "leaf_probability": 0.006660273383648248,
+        "rejected": true
+      },
+      {
+        "sha256": "6471daf3d434e86d4dcb66e9404a8ef806ea562a25c7bb7241ca38c00f259ba2",
+        "class_id": "n02094258",
+        "class_name": "Norwich terrier",
+        "leaf_probability": 0.0137219121566553,
+        "rejected": true
+      },
+      {
+        "sha256": "51f7776df94565bb34e2c02e0c8521d577bc26f84d143d039b1dca9ca6dcfadb",
+        "class_id": "n02095889",
+        "class_name": "Sealyham terrier",
+        "leaf_probability": 0.025714444511562965,
+        "rejected": true
+      },
+      {
+        "sha256": "7bb4476a51aa8b1c8d8810020fc89219b10563d4c4c466322877e074dba3303d",
+        "class_id": "n02097130",
+        "class_name": "giant schnauzer",
+        "leaf_probability": 0.01611018051620289,
+        "rejected": true
+      },
+      {
+        "sha256": "9808e9c5915248522aa3236a6d4f57cdbf60660e9e2af82b08815912e5fcd776",
+        "class_id": "n02099849",
+        "class_name": "Chesapeake Bay retriever",
+        "leaf_probability": 0.010494058960381417,
+        "rejected": true
+      },
+      {
+        "sha256": "a47dbf366be69cf212d2a445e73b0098de979b1ccdc3632de4d1495b43d07def",
+        "class_id": "n02100236",
+        "class_name": "German short-haired pointer",
+        "leaf_probability": 0.011962527846608362,
+        "rejected": true
+      },
+      {
+        "sha256": "0fff33b392e5db9f586e22185a054df991686503dd01cc8887c26b98b01c2c46",
+        "class_id": "n02101556",
+        "class_name": "clumber",
+        "leaf_probability": 0.013122047141448445,
+        "rejected": true
+      },
+      {
+        "sha256": "226762876a8433ad7ae13a40b0b1407548633c4552022ef6bba0df06d682298e",
+        "class_id": "n02105505",
+        "class_name": "komondor",
+        "leaf_probability": 0.1026403653951776,
+        "rejected": true
+      },
+      {
+        "sha256": "c93581e885c5eb4403c3e47e832071fe5ca01fe2c40a700344ec55dd1107372c",
+        "class_id": "n02107312",
+        "class_name": "miniature pinscher",
+        "leaf_probability": 0.004325574021604083,
+        "rejected": true
+      },
+      {
+        "sha256": "8f97500bf7b8325b397674c860a37d06c152c8cf9eb99c90cff04170ef36f548",
+        "class_id": "n02111889",
+        "class_name": "Samoyed",
+        "leaf_probability": 0.10707825521026763,
+        "rejected": true
+      },
+      {
+        "sha256": "9b4d4025b528d2cf72d388fec26c5d25210e5556b978d5970c84c1502ec3e06b",
+        "class_id": "n02112137",
+        "class_name": "chow",
+        "leaf_probability": 0.007526915983446734,
+        "rejected": true
+      },
+      {
+        "sha256": "0dbf5881015f2e24c045fba768371a4c601d0a348f56ced50fb2a888d677778b",
+        "class_id": "n02112706",
+        "class_name": "Brabancon griffon",
+        "leaf_probability": 0.005162282012793696,
+        "rejected": true
+      },
+      {
+        "sha256": "22c2cb675290c574225654a11898d4309751a8030c17f93bc0934a7b676970d8",
+        "class_id": "n02113978",
+        "class_name": "Mexican hairless",
+        "leaf_probability": 0.031831548646422875,
+        "rejected": true
+      },
+      {
+        "sha256": "f17a4cc2db548492c0ca7719a41f547734b64d82e76f52cd9fee96169ad03f73",
+        "class_id": "n02120505",
+        "class_name": "grey fox",
+        "leaf_probability": 0.044680468381020355,
+        "rejected": true
+      },
+      {
+        "sha256": "678cd3aca4149cf0ed354c19061cb51a0a972bbd713864b7cef3eba02c332984",
+        "class_id": "n02123045",
+        "class_name": "tabby",
+        "leaf_probability": 0.016967177098112664,
+        "rejected": true
+      },
+      {
+        "sha256": "2189979618c7fab594ccba1a259393977072bded45ea3992e5c9ec6ea96af2e4",
+        "class_id": "n02342885",
+        "class_name": "hamster",
+        "leaf_probability": 0.039578310329787356,
+        "rejected": true
+      },
+      {
+        "sha256": "dc929c0025255dd27aedbbc118df7ff35954fd2384e9409aef7e6b75dadb1265",
+        "class_id": "n02363005",
+        "class_name": "beaver",
+        "leaf_probability": 0.0172044632397863,
+        "rejected": true
+      },
+      {
+        "sha256": "81643a6f1949f60dd484fea6509699b8cf326f7a36641b816b4876d28c74d908",
+        "class_id": "n02364673",
+        "class_name": "guinea pig",
+        "leaf_probability": 0.012003289892677411,
+        "rejected": true
+      },
+      {
+        "sha256": "50a55c387a7a06c1e030c43215226f676717d9480929f839dd0df09ddd84a7ef",
+        "class_id": "n02410509",
+        "class_name": "bison",
+        "leaf_probability": 0.01064799955633202,
+        "rejected": true
+      },
+      {
+        "sha256": "ad6690c058a74e8b130e11e1a75adc888d3b2c204418993c811afa67b48dfa61",
+        "class_id": "n02417914",
+        "class_name": "ibex",
+        "leaf_probability": 0.015846968373797867,
+        "rejected": true
+      },
+      {
+        "sha256": "f199c51c48717c5842bc6ec439c3b7945e3183bb1a2e736887ecb31f105ce07e",
+        "class_id": "n02443114",
+        "class_name": "polecat",
+        "leaf_probability": 0.028669048525001635,
+        "rejected": true
+      },
+      {
+        "sha256": "bac9a2540b4da0fb7f36e721b4d623af9ecb403ef9dc2e2582ece48d4f67cc7a",
+        "class_id": "n02457408",
+        "class_name": "three-toed sloth",
+        "leaf_probability": 0.03296454907170961,
+        "rejected": true
+      },
+      {
+        "sha256": "9ce81327a9f4c96330af75df097571ac99527b830be1459444941ebfbaa2976f",
+        "class_id": "n02488702",
+        "class_name": "colobus",
+        "leaf_probability": 0.05246192336156661,
+        "rejected": true
+      },
+      {
+        "sha256": "62ada7877daf20e1d6633adc8b93e124f28c3e350fda7a93e75c34981bbcc6e0",
+        "class_id": "n02489166",
+        "class_name": "proboscis monkey",
+        "leaf_probability": 0.04569903408932142,
+        "rejected": true
+      },
+      {
+        "sha256": "530ccae6cf280ac25ed1eb4336cfb7caaddbff3827c94b1fad96e87732ec7c65",
+        "class_id": "n02493509",
+        "class_name": "titi",
+        "leaf_probability": 0.01695881023955827,
+        "rejected": true
+      },
+      {
+        "sha256": "76797970f4b4837f4cc40108f03b7dfc9d58a6b3234e91f29aa0b64459a820c4",
+        "class_id": "n02504458",
+        "class_name": "African elephant",
+        "leaf_probability": 0.02485810857095464,
+        "rejected": true
+      },
+      {
+        "sha256": "568d3a5f1e2482867cf893ce31dacb859f416bbe06fed5a297e687f8ea018b31",
+        "class_id": "n02526121",
+        "class_name": "eel",
+        "leaf_probability": 0.11697699506116008,
+        "rejected": true
+      },
+      {
+        "sha256": "58de6404a2dee90d7dd6c7f7ef46513c72b411c1f355df33a5011deb8a63b57e",
+        "class_id": "n02669723",
+        "class_name": "academic gown",
+        "leaf_probability": 0.018117290673176543,
+        "rejected": true
+      },
+      {
+        "sha256": "ebe552f098f3365663ddc30f59368e91b78713ba626c9bcbb4e0b999db604c34",
+        "class_id": "n02699494",
+        "class_name": "altar",
+        "leaf_probability": 0.00631331268626094,
+        "rejected": true
+      },
+      {
+        "sha256": "530e728fb1b65f5477c8e8d1f60a9b65ca97e83bd982cccca87e9e897703c18b",
+        "class_id": "n02747177",
+        "class_name": "ashcan",
+        "leaf_probability": 0.003310465630065265,
+        "rejected": true
+      },
+      {
+        "sha256": "e7f3a43f46a719f267c8d23abcd4c4ff7aa8ec4ed020a7179a6222a421523a85",
+        "class_id": "n02777292",
+        "class_name": "balance beam",
+        "leaf_probability": 0.004185165444738617,
+        "rejected": true
+      },
+      {
+        "sha256": "d771683a8395639fa2640468e7dfaa2cfefdec522c799f3888de76b236874efc",
+        "class_id": "n02790996",
+        "class_name": "barbell",
+        "leaf_probability": 0.03684628076508215,
+        "rejected": true
+      },
+      {
+        "sha256": "66aacab6c10dbdb20fdd38a8aa88d702d2a7b7941fcbce9cf3efef0ccb5687fe",
+        "class_id": "n02791270",
+        "class_name": "barbershop",
+        "leaf_probability": 0.0032536830990821967,
+        "rejected": true
+      },
+      {
+        "sha256": "f28c7a38a3cde6aa215aace2f2df45566717bc4aa60964a173a632d186d0a457",
+        "class_id": "n02814860",
+        "class_name": "beacon",
+        "leaf_probability": 0.011562737964905204,
+        "rejected": true
+      },
+      {
+        "sha256": "97dcfe63fc70346b6082f41b7292883380adaac9c2935cbd232f4196724b8475",
+        "class_id": "n02835271",
+        "class_name": "bicycle-built-for-two",
+        "leaf_probability": 0.006773390588287996,
+        "rejected": true
+      },
+      {
+        "sha256": "a58d082d1140fac34c6b2f707e57df1508bb8d198177ccaa2f77d5530fc357af",
+        "class_id": "n02840245",
+        "class_name": "binder",
+        "leaf_probability": 0.0003624365711585461,
+        "rejected": true
+      },
+      {
+        "sha256": "542d825afe3c69ad6ca2f7dc9bd838fffcb9620ecbcc8f1143b5e381a9f7efeb",
+        "class_id": "n02892201",
+        "class_name": "brass",
+        "leaf_probability": 0.1559889145433233,
+        "rejected": true
+      },
+      {
+        "sha256": "fdef6b1cb5b5348aaf7d53a0d240b6882acbd22b839448c5707aa9c31e155971",
+        "class_id": "n02965783",
+        "class_name": "car mirror",
+        "leaf_probability": 0.06250380722219197,
+        "rejected": true
+      },
+      {
+        "sha256": "51eeff022a95e91b308cc2795b940dd50d9dc996dd77a62085e8f2030a6d4fc9",
+        "class_id": "n02981792",
+        "class_name": "catamaran",
+        "leaf_probability": 0.02089967757402188,
+        "rejected": true
+      },
+      {
+        "sha256": "77e739b7774e1d2d52df8717c1e157fcfbdf419e53b4ef30c4fd81687b7bc26d",
+        "class_id": "n02992211",
+        "class_name": "cello",
+        "leaf_probability": 0.0278152191427397,
+        "rejected": true
+      },
+      {
+        "sha256": "279970ed850f3936d0fe553b380adc4637a7caafbd7821b146cecaf0be404be6",
+        "class_id": "n02992529",
+        "class_name": "cellular telephone",
+        "leaf_probability": 0.0051286628366751024,
+        "rejected": true
+      },
+      {
+        "sha256": "99b75e22e025734b0c7988782861ab9db310dbc9b5e628314f84c56a18417c5b",
+        "class_id": "n02999410",
+        "class_name": "chain",
+        "leaf_probability": 0.014477590411178796,
+        "rejected": true
+      },
+      {
+        "sha256": "3819125f03318ddf23269a3e42eef3aa364a353bac3aff6171e540e5f20999cf",
+        "class_id": "n03000134",
+        "class_name": "chainlink fence",
+        "leaf_probability": 0.004040689248941653,
+        "rejected": true
+      },
+      {
+        "sha256": "c7eec56d41bc7c329637a58be78e373bb07301a196eaf0cc598a85d80d906c7d",
+        "class_id": "n03028079",
+        "class_name": "church",
+        "leaf_probability": 0.005279361932329394,
+        "rejected": true
+      },
+      {
+        "sha256": "babd893111d68c02f61c63d7d160cdd789d246a541d46a49fb69cde79a925daa",
+        "class_id": "n03089624",
+        "class_name": "confectionery",
+        "leaf_probability": 0.005579859546431722,
+        "rejected": true
+      },
+      {
+        "sha256": "18883e0970700f9da69d92aef564511a4a711ce5942dc24185300953d0a96ee2",
+        "class_id": "n03197337",
+        "class_name": "digital watch",
+        "leaf_probability": 0.0001383790519165513,
+        "rejected": true
+      },
+      {
+        "sha256": "4a8b85ae143ab52aa5260e57954d74797c4316f218bab1089354d4e30493082e",
+        "class_id": "n03216828",
+        "class_name": "dock",
+        "leaf_probability": 0.002072272271912046,
+        "rejected": true
+      },
+      {
+        "sha256": "b4538f1802338a454ef8af607a130ad46b74c60518592885361b65fc31b546e1",
+        "class_id": "n03223299",
+        "class_name": "doormat",
+        "leaf_probability": 0.24887222955560634,
+        "rejected": true
+      },
+      {
+        "sha256": "2cb1ef482edeab5a720f211001f5ee134e993bf90cea6874a06aae639c3bf08b",
+        "class_id": "n03271574",
+        "class_name": "electric fan",
+        "leaf_probability": 0.0014481234829484834,
+        "rejected": true
+      },
+      {
+        "sha256": "74e09118fe5dc5c78ae306dec8c6a92c7b9ccd7b7d714df68ba6a7d31a870a8e",
+        "class_id": "n03272010",
+        "class_name": "electric guitar",
+        "leaf_probability": 0.016467116988002007,
+        "rejected": true
+      },
+      {
+        "sha256": "a4f1096dd661ae0cef636f0aabfba5437827fe4e32df430489b1dffb2ad95ab2",
+        "class_id": "n03325584",
+        "class_name": "feather boa",
+        "leaf_probability": 0.12077090281774701,
+        "rejected": true
+      },
+      {
+        "sha256": "1ce02134962d604e8f112ca85fadc7f40b568899601432c0ce3bde81a00ec845",
+        "class_id": "n03424325",
+        "class_name": "gasmask",
+        "leaf_probability": 0.18174981482613764,
+        "rejected": true
+      },
+      {
+        "sha256": "c3e721abc5e37ed461af4fa4351ec408d33d66e70acc516a2606a1e2640557ba",
+        "class_id": "n03425413",
+        "class_name": "gas pump",
+        "leaf_probability": 0.00023483502406423292,
+        "rejected": true
+      },
+      {
+        "sha256": "0e5f613d419771444e296f3a279a205de59335cd76dd41988f3925fe0c61c83d",
+        "class_id": "n03444034",
+        "class_name": "go-kart",
+        "leaf_probability": 0.021779611904162638,
+        "rejected": true
+      },
+      {
+        "sha256": "9adff14923e345a21a0376027ebc0742bce1506c2826df975c8c06123286b749",
+        "class_id": "n03452741",
+        "class_name": "grand piano",
+        "leaf_probability": 0.06744958624461356,
+        "rejected": true
+      },
+      {
+        "sha256": "6253eb65410be0cb6e815b7541937b536cb168324223d79bf16db2960f2aa81d",
+        "class_id": "n03467068",
+        "class_name": "guillotine",
+        "leaf_probability": 0.0031424750287804963,
+        "rejected": true
+      },
+      {
+        "sha256": "9d3a5ed9cc9a7d7c0d98eff4c6190ef34fc5dc4f3cf1eb52e1baea2943784f2a",
+        "class_id": "n03476684",
+        "class_name": "hair slide",
+        "leaf_probability": 0.07925147800134814,
+        "rejected": true
+      },
+      {
+        "sha256": "4450cae6ab530a5d428c1a2902c5fe82a01bd326d1710810fe230daa94ee31a5",
+        "class_id": "n03483316",
+        "class_name": "hand blower",
+        "leaf_probability": 0.004094391442851552,
+        "rejected": true
+      },
+      {
+        "sha256": "54cdb034a0a1ae868d54c729af295bac791586dc21b3a621106b45163269742a",
+        "class_id": "n03495258",
+        "class_name": "harp",
+        "leaf_probability": 0.004814331285810016,
+        "rejected": true
+      },
+      {
+        "sha256": "3cd0ccf1fd4bd9233b96c3d2f3c492838fd28f9ebc24968b9148fc704291a360",
+        "class_id": "n03529860",
+        "class_name": "home theater",
+        "leaf_probability": 0.002886285327964744,
+        "rejected": true
+      },
+      {
+        "sha256": "4d8d568dbcdd2630b7c7700a8f1177e2cda4e3151309d877d9f23c325ab6ddb8",
+        "class_id": "n03535780",
+        "class_name": "horizontal bar",
+        "leaf_probability": 0.0009639257992188997,
+        "rejected": true
+      },
+      {
+        "sha256": "09eda3a2d823834e59e3db73b9a0a02858d1180f54d620a5a143dceb2b7d691b",
+        "class_id": "n03642806",
+        "class_name": "laptop",
+        "leaf_probability": 2.816514872840565e-05,
+        "rejected": true
+      },
+      {
+        "sha256": "248ca9ddfeec7fec826be2643761db0197951ebe6897e942751ba5327b03a939",
+        "class_id": "n03692522",
+        "class_name": "loupe",
+        "leaf_probability": 0.0007840534965745507,
+        "rejected": true
+      },
+      {
+        "sha256": "3db962f81108e7d4afc480675238d1bce7cd9da35f7772d364c7e557e7ebb734",
+        "class_id": "n03710193",
+        "class_name": "mailbox",
+        "leaf_probability": 0.026389358790335927,
+        "rejected": true
+      },
+      {
+        "sha256": "38003ad2eb9ef4951d65acda425f263d244571dfc9a90bb5d248f023edc63f5b",
+        "class_id": "n03721384",
+        "class_name": "marimba",
+        "leaf_probability": 0.010806913009327733,
+        "rejected": true
+      },
+      {
+        "sha256": "dcecd40efee067c1c330a6c65db93ed96d365d1b2b41100f67392094d91760f4",
+        "class_id": "n03733805",
+        "class_name": "measuring cup",
+        "leaf_probability": 0.007316939890827193,
+        "rejected": true
+      },
+      {
+        "sha256": "201995f502351d5d3719baa7e5af2283c4d772135050cf979b7aaaf13ec6fc31",
+        "class_id": "n03764736",
+        "class_name": "milk can",
+        "leaf_probability": 0.08537698324672578,
+        "rejected": true
+      },
+      {
+        "sha256": "dce9f4e6602f98712bc8fa01bc27e2a9165c803d47939f6b1414305bbb3b4dad",
+        "class_id": "n03777754",
+        "class_name": "modem",
+        "leaf_probability": 0.006475537488971159,
+        "rejected": true
+      },
+      {
+        "sha256": "0c59857bc1ac155de02b390962ef30415e4f01083df127252ee6d0976591e3f8",
+        "class_id": "n03782006",
+        "class_name": "monitor",
+        "leaf_probability": 0.010417576567294837,
+        "rejected": true
+      },
+      {
+        "sha256": "b77e8b31bc1247b771b520a7860be9e7e12143f210d8d755df2423989fe560a0",
+        "class_id": "n03787032",
+        "class_name": "mortarboard",
+        "leaf_probability": 0.021904977281580102,
+        "rejected": true
+      },
+      {
+        "sha256": "a9a32d0157c0084c445ef12bb325b18be89d347e465729602c60ad3c127d428d",
+        "class_id": "n03793489",
+        "class_name": "mouse",
+        "leaf_probability": 0.002425160444000145,
+        "rejected": true
+      },
+      {
+        "sha256": "8e589a4b08f139ebd8feb7174e6c219a6697919a8db458607d27d08aac1e806b",
+        "class_id": "n03840681",
+        "class_name": "ocarina",
+        "leaf_probability": 0.030100122680796215,
+        "rejected": true
+      },
+      {
+        "sha256": "caf55ed274c4e0ddba81b529770ff29b0e6ae918660987585bd4fae9f8b1bba4",
+        "class_id": "n03877845",
+        "class_name": "palace",
+        "leaf_probability": 0.0032319603748395573,
+        "rejected": true
+      },
+      {
+        "sha256": "7361baf986269d11048521b860da246bb32b40933e0c12dde9dae80b2804f56c",
+        "class_id": "n03888257",
+        "class_name": "parachute",
+        "leaf_probability": 0.033266331112803325,
+        "rejected": true
+      },
+      {
+        "sha256": "e3c18900e474b5f130a74c50dca5eb0ccd072a1f8790e7096dc99f2cf48953ab",
+        "class_id": "n03899768",
+        "class_name": "patio",
+        "leaf_probability": 0.006447234307483309,
+        "rejected": true
+      },
+      {
+        "sha256": "7b5f02ff43e8cac1fe72e0535d19b860e267622e78ce222ab2a628449e0cc5e7",
+        "class_id": "n03920288",
+        "class_name": "Petri dish",
+        "leaf_probability": 0.0008513730059981709,
+        "rejected": true
+      },
+      {
+        "sha256": "3587ba57e23d28343682a6898cd6f2a5100e5230d68f9f5e96714aa1e5ea8b98",
+        "class_id": "n03929855",
+        "class_name": "pickelhaube",
+        "leaf_probability": 0.037740111453712,
+        "rejected": true
+      },
+      {
+        "sha256": "e586ddeeecc1e6e46587bd282dc1dcd80b19671ad56a063ae4231ae11f9e21b4",
+        "class_id": "n03958227",
+        "class_name": "plastic bag",
+        "leaf_probability": 0.013364004544316249,
+        "rejected": true
+      },
+      {
+        "sha256": "2c39852f78997198c432d5e0912c84c3d73c2db68fd847ab1d81c8d7d1b2d2df",
+        "class_id": "n03977966",
+        "class_name": "police van",
+        "leaf_probability": 0.0020125220582774984,
+        "rejected": true
+      },
+      {
+        "sha256": "35a158486b931f61166ef1f57803d88cb16b0486097896da27eb2735cdf32e9c",
+        "class_id": "n03982430",
+        "class_name": "pool table",
+        "leaf_probability": 0.0037785779874999832,
+        "rejected": true
+      },
+      {
+        "sha256": "6a5895d2c22811f399f3d669304896f162ea76a84e6376128c631a337bb96f1d",
+        "class_id": "n04019541",
+        "class_name": "puck",
+        "leaf_probability": 0.025895871644425843,
+        "rejected": true
+      },
+      {
+        "sha256": "458b7dbc8eb22ce6b03c0f03a3e03438a8162ef58997c7a432b6fd0d51ee03b1",
+        "class_id": "n04023962",
+        "class_name": "punching bag",
+        "leaf_probability": 0.013878301100597434,
+        "rejected": true
+      },
+      {
+        "sha256": "2b8a5c7a6f0c2663d0e98e4131c7312ea9d1ce6e85d74fa06d726a5d7cdd8dad",
+        "class_id": "n04033901",
+        "class_name": "quill",
+        "leaf_probability": 0.007214770005134529,
+        "rejected": true
+      },
+      {
+        "sha256": "79b6d9d523697692988844dd894c77a9490ba76b28bdd6a4bde071b64d4fc685",
+        "class_id": "n04037443",
+        "class_name": "racer",
+        "leaf_probability": 0.005486828052307504,
+        "rejected": true
+      },
+      {
+        "sha256": "2300bd537f3ccc2d5f8128f50689eb399d79567df852e8972c15a85cd1e9149b",
+        "class_id": "n04131690",
+        "class_name": "saltshaker",
+        "leaf_probability": 0.0038069877685799817,
+        "rejected": true
+      },
+      {
+        "sha256": "6d34a198fdf9ef56a00e8c401699a5f3fc529a7bf2f6aa164e7934e21413bca2",
+        "class_id": "n04146614",
+        "class_name": "school bus",
+        "leaf_probability": 0.006443231366303994,
+        "rejected": true
+      },
+      {
+        "sha256": "8f626e8d6efc9d707e17f9e920f7cf944b69d9ecb4fe3f8930d52c475d8f2789",
+        "class_id": "n04154565",
+        "class_name": "screwdriver",
+        "leaf_probability": 0.012470610621025426,
+        "rejected": true
+      },
+      {
+        "sha256": "9a806f4a03f4ec80194c3eb3d16f3b343f373f762a77ff3b28bcf012fb73e558",
+        "class_id": "n04192698",
+        "class_name": "shield",
+        "leaf_probability": 0.01213994209632476,
+        "rejected": true
+      },
+      {
+        "sha256": "b4d5423199e68e65fe2156d58a59f065735fc57b223ace4e3c8025709fa70eff",
+        "class_id": "n04208210",
+        "class_name": "shovel",
+        "leaf_probability": 0.0003657097359899971,
+        "rejected": true
+      },
+      {
+        "sha256": "d87f2ba1bef880eb15d63fda347ef51896aada00c18e28df6cd95d2b87c7bb01",
+        "class_id": "n04209239",
+        "class_name": "shower curtain",
+        "leaf_probability": 0.01589242299986262,
+        "rejected": true
+      },
+      {
+        "sha256": "7ba8e1c955e07b26a168b3f4e49f155073edac2cee78e8a9a189eae7eead0317",
+        "class_id": "n04228054",
+        "class_name": "ski",
+        "leaf_probability": 0.007439228076852748,
+        "rejected": true
+      },
+      {
+        "sha256": "6aac3605ecdbcedf3723a2b79cc4ca9fc207ad4c94a8ee2cbe3b2cd5babeef3c",
+        "class_id": "n04235860",
+        "class_name": "sleeping bag",
+        "leaf_probability": 0.024231880205693453,
+        "rejected": true
+      },
+      {
+        "sha256": "02797f0a429e4343d56ffb69afdf93bc9ee1849237ab06bfddba26084fed781b",
+        "class_id": "n04239074",
+        "class_name": "sliding door",
+        "leaf_probability": 0.0006496189017348343,
+        "rejected": true
+      },
+      {
+        "sha256": "fc5de7432fd44f7342606183abd8c2941532f3e3fde41ecb8d1f147a14c211cc",
+        "class_id": "n04251144",
+        "class_name": "snorkel",
+        "leaf_probability": 0.026789415362347878,
+        "rejected": true
+      },
+      {
+        "sha256": "bbb00c6c3719720694a1474cb112e2b8731d2d5724b1da5b0eba7650df059ba1",
+        "class_id": "n04263257",
+        "class_name": "soup bowl",
+        "leaf_probability": 0.00754734526875649,
+        "rejected": true
+      },
+      {
+        "sha256": "fe72a2717f466835f6cd07c73ffe6936c7b84ab8d2ebb0d20d4b7b4b023a374b",
+        "class_id": "n04265275",
+        "class_name": "space heater",
+        "leaf_probability": 0.0026193913038830216,
+        "rejected": true
+      },
+      {
+        "sha256": "b32124b067926b3ca29fa50e4671e711b10d465f56d3e046b153602488571178",
+        "class_id": "n04270147",
+        "class_name": "spatula",
+        "leaf_probability": 0.05818947777939287,
+        "rejected": true
+      },
+      {
+        "sha256": "81e1cde426b00a9266b44c2c6f6967ba5879e1a7d9a47fd2b570b7f69651b66f",
+        "class_id": "n04311004",
+        "class_name": "steel arch bridge",
+        "leaf_probability": 0.02300977346242962,
+        "rejected": true
+      },
+      {
+        "sha256": "e9e85316ab309ba3cd4a8a37a80b9c27cf298c5220270262ec341ebd13a178ff",
+        "class_id": "n04311174",
+        "class_name": "steel drum",
+        "leaf_probability": 0.018371091507296215,
+        "rejected": true
+      },
+      {
+        "sha256": "161d360c1d93d5d8d130af0b3fa4fa207ad98806ba5cf98ceb981b5bb628ea61",
+        "class_id": "n04326547",
+        "class_name": "stone wall",
+        "leaf_probability": 0.08551833117766498,
+        "rejected": true
+      },
+      {
+        "sha256": "05a865cc1724266a97ef7ea0e6471b8b806a3430a6103e9b4958eaf82bfe3aa5",
+        "class_id": "n04350905",
+        "class_name": "suit",
+        "leaf_probability": 0.025441944390765567,
+        "rejected": true
+      },
+      {
+        "sha256": "525ad812d14e0b939c3aaa6e9937d6c07ecdefa388a8093fa6c5b7b52c8a81c7",
+        "class_id": "n04355933",
+        "class_name": "sunglass",
+        "leaf_probability": 0.00844958589438064,
+        "rejected": true
+      },
+      {
+        "sha256": "5fea52aa3f2515adbe2504f653a97a74bd7a45582864f76b78eb58a8d9bd87fb",
+        "class_id": "n04356056",
+        "class_name": "sunglasses",
+        "leaf_probability": 0.013338040690778487,
+        "rejected": true
+      },
+      {
+        "sha256": "b4f2f1454dbf1c26463b53c2001ad310f3b81b8bf61ffed4fe2e3bfdf57fbf07",
+        "class_id": "n04370456",
+        "class_name": "sweatshirt",
+        "leaf_probability": 0.0005170098330664249,
+        "rejected": true
+      },
+      {
+        "sha256": "f0c76f6a55db6aebfacdbb3f7d82e33b2b53d8406dea6ef1dcc3876411ba2a7d",
+        "class_id": "n04371430",
+        "class_name": "swimming trunks",
+        "leaf_probability": 0.0006324192906511953,
+        "rejected": true
+      },
+      {
+        "sha256": "434c3766fdd27ff8882e791cebc399a45d80df1ff55989fae4adf31763747b37",
+        "class_id": "n04389033",
+        "class_name": "tank",
+        "leaf_probability": 0.0404397430300817,
+        "rejected": true
+      },
+      {
+        "sha256": "608a073f1d4ef4bb0269121da36cb2d352abba193e585d38ddd643d228b4a91d",
+        "class_id": "n04456115",
+        "class_name": "torch",
+        "leaf_probability": 0.010960344876492615,
+        "rejected": true
+      },
+      {
+        "sha256": "0d2f0862f55f56be9282c8931bef0515293cddbb19600d48965db4e409e81b47",
+        "class_id": "n04462240",
+        "class_name": "toyshop",
+        "leaf_probability": 0.017429457499443725,
+        "rejected": true
+      },
+      {
+        "sha256": "9f94f7b8c3e62bbb555985c40b5c7d58b23f0a637eb2b74ab6151032dba03d79",
+        "class_id": "n04493381",
+        "class_name": "tub",
+        "leaf_probability": 0.0004468015712748358,
+        "rejected": true
+      },
+      {
+        "sha256": "2062164cb0992e8b9c89847a58448e92a7657ea7af1e232ab25c75abfb89e579",
+        "class_id": "n04505470",
+        "class_name": "typewriter keyboard",
+        "leaf_probability": 0.04146270850145436,
+        "rejected": true
+      },
+      {
+        "sha256": "d6a93eb99137b0f672216f8cc38e1be27f61c79a286ac0a23bbaa7b44623e2e8",
+        "class_id": "n04515003",
+        "class_name": "upright",
+        "leaf_probability": 0.008769180881669798,
+        "rejected": true
+      },
+      {
+        "sha256": "e0fe3658bb4989276793061d81136c58d9fe1c4bb4e075cbc3345232ee4346d8",
+        "class_id": "n04523525",
+        "class_name": "vault",
+        "leaf_probability": 0.022667654287826525,
+        "rejected": true
+      },
+      {
+        "sha256": "64fa093fbb4531048e49dff895f9246d380f31c4eb505e28192ab2ff321e5344",
+        "class_id": "n04554684",
+        "class_name": "washer",
+        "leaf_probability": 0.0020173784303942235,
+        "rejected": true
+      },
+      {
+        "sha256": "e7022b762907c8c34004d7f077a889ed3f248632d1ca3dce3e4e38b6004f2ef2",
+        "class_id": "n04557648",
+        "class_name": "water bottle",
+        "leaf_probability": 0.00013129452910483892,
+        "rejected": true
+      },
+      {
+        "sha256": "caf3476a58aa7da8cb1442401a785d1979f45d14ada28cf7f0a189a0246929c5",
+        "class_id": "n04579432",
+        "class_name": "whistle",
+        "leaf_probability": 0.01209973735963989,
+        "rejected": true
+      },
+      {
+        "sha256": "1bd94dd76df7f8e14f80d6a37874d92fac9cbe211f0b4893d4e6bcdbb920a5ac",
+        "class_id": "n04584207",
+        "class_name": "wig",
+        "leaf_probability": 0.03292855242453611,
+        "rejected": true
+      },
+      {
+        "sha256": "bab17e94577bef4e9ae09cd3306d67d3416a00cac9bafb444fa9044fb0b867e9",
+        "class_id": "n04606251",
+        "class_name": "wreck",
+        "leaf_probability": 0.0009596267396503013,
+        "rejected": true
+      },
+      {
+        "sha256": "aecd23229fb9115628e7d5f25d35fa3fd4039427ffb983580f8be804a00b7589",
+        "class_id": "n10565667",
+        "class_name": "scuba diver",
+        "leaf_probability": 0.03388588034459029,
+        "rejected": true
+      }
+    ]
+  },
+  "head_sha256": "e6101b13682242c24af901f69822f3f93f2336b466d75da77a163c374616d7a6",
+  "scope": "prototype input validation; held-out examples are not proof for every nonleaf image",
+  "disease_classifier_changed": true,
+  "leaf_gate_test_evaluated_once": false,
+  "leaf_branch_unchanged_from_model_sha256": "3332b5634fcb1a8bea17317a0a9db4d6e44f9c0da24e7b03718b3ced5d6b2d1e",
+  "leaf_validation_evidence": "Inherited unchanged backbone and leaf head; TRAIN-only runtime parity verified"
+}

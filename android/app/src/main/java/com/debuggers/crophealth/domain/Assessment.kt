@@ -12,7 +12,8 @@ data class QualityConfig(
     val minLuminance: Double = 20.0,
     val maxLuminance: Double = 240.0,
     val minLaplacianVariance: Double = 25.0,
-    val minSide: Int = 224,
+    // Smaller usable uploads are resized to 224 for inference; prefer 224+ when capturing.
+    val minSide: Int = 128,
     val thresholdsValidated: Boolean = false,
 )
 
@@ -61,6 +62,8 @@ data class PredictionEvidence(
     val calibratedAndValidated: Boolean,
     val embeddingDistance: Float?,
     val sourceEvaluated: Boolean = false,
+    /** True only when an actual leaf output passed the configured artifact threshold. */
+    val leafGatePassed: Boolean = false,
 ) {
     val top: RankedPrediction get() = ranked.first()
     val margin: Float get() = top.score - (ranked.getOrNull(1)?.score ?: 0f)
@@ -101,6 +104,13 @@ sealed interface AssessmentResult {
     ) : AssessmentResult
 }
 
-/** Unsupported input must never be promoted to a visible disease prediction. */
+/** Unknown visual appearance is not itself proof of a nonleaf. Expose only leaf-checked candidates. */
 fun AssessmentResult.rejectsUnsupportedInput(): Boolean = this is AssessmentResult.Uncertain &&
-    reasons.any { it == UncertaintyReason.UNFAMILIAR_IMAGE || it == UncertaintyReason.CONDITION_DISABLED }
+    reasons.any { it == UncertaintyReason.UNFAMILIAR_IMAGE || it == UncertaintyReason.CONDITION_DISABLED } &&
+    !hasLeafCheckedCandidate()
+
+fun AssessmentResult.hasLeafCheckedCandidate(): Boolean = this is AssessmentResult.Uncertain &&
+    evidence.sourceEvaluated && evidence.leafGatePassed && evidence.ranked.isNotEmpty() &&
+    UncertaintyReason.MODEL_NOT_VALIDATED !in reasons
+
+const val LEAF_CHECKED_CANDIDATE_NOTE = "Leaf-checked uncertain candidate:"

@@ -54,4 +54,41 @@ class LeafGatePolicyTest {
         assertTrue(AssessmentResult.Uncertain(setOf(UncertaintyReason.CONDITION_DISABLED), evidence).rejectsUnsupportedInput())
         assertFalse(AssessmentResult.Uncertain(setOf(UncertaintyReason.LOW_SCORE), evidence).rejectsUnsupportedInput())
     }
+
+    @Test fun unfamiliarLeafRetainsUncertainCandidateButNeverBecomesAcceptedDiagnosis() {
+        val sourcePolicy = policy.copy(validated = false, sourceEvaluated = true,
+            classThresholds = Conditions.ids.associateWith { ClassAcceptanceThreshold(true, .8f, .15f, .1f) })
+        val result = DecisionPolicy.assess(Crop.TOMATO,
+            input.copy(leafProbability = .95f, embeddingDistance = .5f), sourcePolicy)
+        assertTrue(result is AssessmentResult.Uncertain)
+        assertEquals(setOf(UncertaintyReason.UNFAMILIAR_IMAGE), (result as AssessmentResult.Uncertain).reasons)
+        assertTrue(result.hasLeafCheckedCandidate())
+        assertFalse(result.rejectsUnsupportedInput())
+        assertEquals(target, result.evidence.top.condition)
+        assertFalse(result.evidence.calibratedAndValidated)
+    }
+
+    @Test fun disabledClassOnLeafStillShowsOnlyAnUncertainCandidate() {
+        val sourcePolicy = policy.copy(validated = false, sourceEvaluated = true,
+            classThresholds = Conditions.ids.associateWith { ClassAcceptanceThreshold(false, null, null) })
+        val result = DecisionPolicy.assess(Crop.TOMATO, input.copy(leafProbability = .8f), sourcePolicy)
+        assertEquals(setOf(UncertaintyReason.CONDITION_DISABLED), (result as AssessmentResult.Uncertain).reasons)
+        assertTrue(result.hasLeafCheckedCandidate())
+        assertFalse(result.rejectsUnsupportedInput())
+    }
+
+    @Test fun sourceQualificationWithoutConfiguredLeafGateCannotExposeUnknownCandidate() {
+        val sourcePolicy = policy.copy(validated = false, sourceEvaluated = true, minimumLeafProbability = null,
+            classThresholds = Conditions.ids.associateWith { ClassAcceptanceThreshold(false, null, null) })
+        val result = DecisionPolicy.assess(Crop.TOMATO, input.copy(leafProbability = .99f), sourcePolicy)
+        assertFalse(result.hasLeafCheckedCandidate())
+        assertTrue(result.rejectsUnsupportedInput())
+    }
+
+    @Test fun leafGateWithoutSourceQualificationCannotExposeUnknownCandidate() {
+        val result = DecisionPolicy.assess(Crop.TOMATO, input.copy(leafProbability = .99f),
+            policy.copy(validated = false))
+        assertFalse(result.hasLeafCheckedCandidate())
+        assertEquals(setOf(UncertaintyReason.MODEL_NOT_VALIDATED), (result as AssessmentResult.Uncertain).reasons)
+    }
 }

@@ -231,3 +231,12 @@ test('leaf threshold must match its exact evaluated receipt',async()=>{
 test('invalid leaf runtime output cannot produce disease candidates',async()=>{
   for(const kind of ['nonfinite','shape']){const value=leafFixture(6);if(kind==='nonfinite')value.ort.leafLogit=NaN;else value.ort.leafDims=[1];const {engine}=install(value);const output=await engine.analyzeLeaf(image(),'potato');assert.equal(output.type,'model_unavailable');assert.deepEqual(output.candidates,[]);}
 });
+
+test('unfamiliar disease evidence retains explicit successful leaf-check provenance',async()=>{
+  const value=leafFixture(6);value.ort.embedding=[0,1,...Array(958).fill(0)];const {engine}=install(value);
+  const output=await engine.analyzeLeaf(image(),'potato');assert.equal(output.type,'uncertain');assert.equal(output.leafCheckPassed,true);assert.deepEqual(output.reasons,['UNFAMILIAR_IMAGE']);assert.equal(output.candidates.length,17);
+});
+test('quality gate admits a clear128px photo and rejects below128px',()=>{
+  const {engine}=install(fixture());
+  for(const width of [127,128]){const rgb=new Uint8Array(width*128*3);for(let y=0;y<128;y++)for(let x=0;x<width;x++)for(let c=0;c<3;c++)rgb[(y*width+x)*3+c]=(x+y)%2?96:160;const issues=engine.photoQualityIssues(rgb,width,128);assert.equal(issues.includes('TOO_SMALL'),width<128);assert.equal(issues.includes('BLURRY'),false);}
+});

@@ -33,6 +33,14 @@ data class Observation(
     val validated: Boolean = false,
 )
 
+/** Persisted provenance is explicit; legacy unsupported records must never gain candidate status. */
+fun Observation.isLeafCheckedCandidate(): Boolean = resultType == "uncertain" &&
+    note.startsWith(LEAF_CHECKED_CANDIDATE_NOTE) && conditionId?.let(Conditions::byId) != null &&
+    score?.let { it.isFinite() && it in 0f..1f } == true
+
+fun Observation.hidesUnsupportedCandidate(): Boolean =
+    ("UNFAMILIAR_IMAGE" in note || "CONDITION_DISABLED" in note) && !isLeafCheckedCandidate()
+
 data class AppUiState(
     val screen: Screen = Screen.HOME,
     val language: AppLanguage = AppLanguage.ENGLISH,

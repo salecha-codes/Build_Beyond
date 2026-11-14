@@ -6,7 +6,7 @@ Android application and interactive browser preview for **PS 4.1**, built for Te
 
 **Team Debuggers · Team 8 · Problem Statement 4.1**
 
-Current prototype: **v0.4.2**, with an offline MobileNetV3-Large disease model and a leaf/object check. It supports tomato, potato and maize, English/Kannada/Hindi audio, symptom questions, general precautions and local history.
+Current prototype: **v0.4.3**, with an offline MobileNetV3-Large disease model and a leaf/object check. It supports tomato, potato and maize, English/Kannada/Hindi audio, symptom questions, general precautions and local history.
 
 [Open the browser demo](https://salecha-codes.github.io/Build_Beyond/) · [Review 2 implementation and checks](docs/REVIEW2_SUBMISSION.md)
 
@@ -100,7 +100,7 @@ Removing 14 exact duplicates left **24,150 unique source images**, partitioned i
 
 The model first checks whether the photo looks like a leaf. Rejected object photos return a retake request with **no disease name or score**. The leaf head shares the same offline backbone and adds about 15 KB.
 
-A frozen threshold rejected 125/125 held-out object/animal test photos, including computer mouse, hamster, cat, laptop and monitor. It retained 76/80 field leaf photos and all 31 correctly classified field cases, preserving 38.75% end-to-end field accuracy on the reused benchmark. Source end-to-end accuracy after leaf rejection is 92.11%. These are sample measurements, not universal guarantees; other plant leaves may still pass. See [leaf-check receipts](ml/reports/leaf_guard/) for data/protocols and limitations. Test photos are not bundled in the app.
+A frozen threshold rejected 125/125 held-out object/animal test photos, including computer mouse, hamster, cat, laptop and monitor. It retained 77/80 field leaf photos and all 31 correctly classified field cases, preserving 38.75% end-to-end field accuracy on the reused benchmark. The corrected leaf threshold retains all source test leaves; disease-classifier accuracy is 92.27%. These are sample measurements, not universal guarantees; other plant leaves may still pass. See [leaf-check receipts](ml/reports/leaf_guard/) for data/protocols and limitations. Test photos are not bundled in the app.
 
 ## Model status
 
@@ -120,6 +120,12 @@ Classifier-only accepted precision on source images is 96.72% at 85.44% coverage
 SHA-256: `31b29158cc1fc1c07bdf3acc07cb6bb6da39eccb1050ffe6ed1d499811179fba`.
 
 See [current training/evaluation receipts](ml/reports/field_upgrade_v3/) and [model card](models/assets/model/MODEL_CARD.md). Earlier V4 reports remain historical.
+
+## Diagnosis workflow fixes
+
+Version0.4.3 corrects two causes of missing output: an unnecessarily strict leaf threshold and hiding a genuine leaf’s uncertain disease candidate. The binary leaf check still precedes any disease display. Leaf-passed unfamiliar results now show the real closest model candidate and score with explicit uncertainty; disease acceptance gates remain intact. Clear photos down to128px can run (224px+recommended); blur and exposure checks remain.
+
+Threshold selection now searches TUNE score intervals. Field TUNE leaf recall rises132/138→137/138 while104/104 TUNE objects stay rejected. Reused comparison:125/125 objects remain rejected and77/80 field leaves pass. This is an input/workflow fix; it does not increase the classifier’s38.75% disease accuracy or turn predictions into confirmed field diagnoses. Older cached browser pages refresh when the new offline bundle activates. See ml/reports/diagnosis_workflow_fix and model card.
 
 ## Latest targeted field-data update
 

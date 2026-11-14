@@ -240,7 +240,8 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
     val accepted=result is AssessmentResult.LikelyCondition || result is AssessmentResult.HealthyLooking || stored?.isAcceptedModelMatch()==true
     val fieldValidated=evidence?.calibratedAndValidated ?: stored?.validated ?: false
     val top=evidence?.ranked?.firstOrNull()
-    val unsupported=result?.rejectsUnsupportedInput()==true || stored?.note?.let { "UNFAMILIAR_IMAGE" in it || "CONDITION_DISABLED" in it }==true
+    val unsupported=result?.rejectsUnsupportedInput()==true || stored?.hidesUnsupportedCandidate()==true
+    val uncertainCandidate=result?.hasLeafCheckedCandidate()==true || stored?.isLeafCheckedCandidate()==true
     val noLeaf=(result as? AssessmentResult.Retake)?.quality?.issues?.contains(QualityIssue.NOT_A_LEAF)==true
     val condition=if(unsupported) null else top?.condition ?: stored?.conditionId?.let(Conditions::byId)
     val cropMismatch=result is AssessmentResult.CropMismatch || stored?.resultType=="crop_mismatch"
@@ -251,7 +252,7 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
     val isRetake=result is AssessmentResult.Retake
     val unavailable=result is AssessmentResult.ModelUnavailable
     val title=when {
-        noLeaf || unsupported ->s.predictionText("No clear leaf detected","ಸ್ಪಷ್ಟ ಎಲೆ ಪತ್ತೆಯಾಗಲಿಲ್ಲ","साफ़ पत्ती नहीं मिली")
+        noLeaf ->s.predictionText("No clear leaf detected","ಸ್ಪಷ್ಟ ಎಲೆ ಪತ್ತೆಯಾಗಲಿಲ್ಲ","साफ़ पत्ती नहीं मिली")
         isRetake ->s.tr("Let's take another photo","ಇನ್ನೊಂದು ಫೋಟೋ ತೆಗೆಯೋಣ")
         unavailable ->s.tr("Assessment unavailable","ಪರಿಶೀಲನೆ ಲಭ್ಯವಿಲ್ಲ")
         accepted || prediction ->condition?.displayName(s.language) ?: s.tr("Leaf assessment","ಎಲೆಯ ಪರಿಶೀಲನೆ")
@@ -260,7 +261,7 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
     }
     Page {
         if(!accepted && !prediction) Notice(title,when {
-            noLeaf || unsupported ->s.predictionText("Take a close photo of one crop leaf. Objects and animals cannot be diagnosed.","ಒಂದು ಬೆಳೆ ಎಲೆಯ ಹತ್ತಿರದ ಫೋಟೋ ತೆಗೆಯಿರಿ. ವಸ್ತುಗಳು ಮತ್ತು ಪ್ರಾಣಿಗಳ ರೋಗನಿರ್ಣಯ ಸಾಧ್ಯವಿಲ್ಲ.","फसल की एक पत्ती की नज़दीकी तस्वीर लें। वस्तुओं और जानवरों में फसल रोग नहीं पहचान सकते।")
+            noLeaf ->s.predictionText("Take a close photo of one crop leaf. Objects and animals cannot be diagnosed.","ಒಂದು ಬೆಳೆ ಎಲೆಯ ಹತ್ತಿರದ ಫೋಟೋ ತೆಗೆಯಿರಿ. ವಸ್ತುಗಳು ಮತ್ತು ಪ್ರಾಣಿಗಳ ರೋಗನಿರ್ಣಯ ಸಾಧ್ಯವಿಲ್ಲ.","फसल की एक पत्ती की नज़दीकी तस्वीर लें। वस्तुओं और जानवरों में फसल रोग नहीं पहचान सकते।")
             isRetake ->s.tr("Try a brighter, sharper close-up of one leaf.","ಒಂದು ಎಲೆಯ ಹೆಚ್ಚು ಬೆಳಕಿನ ಸ್ಪಷ್ಟ ಫೋಟೋ ತೆಗೆಯಿರಿ.")
             unavailable ->s.tr("No diagnosis was produced. Your photo stays on this phone.","ಯಾವುದೇ ರೋಗನಿರ್ಣಯ ಮಾಡಲಾಗಿಲ್ಲ. ಫೋಟೋ ಈ ಫೋನ್‌ನಲ್ಲೇ ಉಳಿಯುತ್ತದೆ.")
             cropMismatch ->s.tr("The model candidate and selected crop differ. Please check and retake.","ಮಾದರಿಯ ಊಹೆ ಮತ್ತು ಆಯ್ಕೆ ಮಾಡಿದ ಬೆಳೆ ಬೇರೆ ಇವೆ. ಪರಿಶೀಲಿಸಿ ಮತ್ತೆ ಫೋಟೋ ತೆಗೆಯಿರಿ.")
@@ -269,7 +270,7 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
         Row(verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(14.dp)) {
             Photo(s.photoPath,Modifier.size(82.dp),256);Column(Modifier.weight(1f)) {
                 Text((if(prediction) condition?.crop else null)?.displayName(s.language) ?: s.selectedCrop.displayName(s.language),color=CropColors.Muted,fontSize=12.sp)
-                if(prediction) Text(s.predictionText("Predicted condition","ಊಹಿಸಿದ ಸ್ಥಿತಿ","अनुमानित स्थिति"),color=CropColors.Muted,fontSize=12.sp)
+                if(prediction) Text(if(uncertainCandidate) s.predictionText("Uncertain model candidate","ಅನಿಶ್ಚಿತ ಮಾದರಿ ಸಾಧ್ಯತೆ","मॉडल का अनिश्चित अनुमान") else s.predictionText("Predicted condition","ಊಹಿಸಿದ ಸ್ಥಿತಿ","अनुमानित स्थिति"),color=CropColors.Muted,fontSize=12.sp)
                 Text(if(accepted || prediction) title else s.tr("Leaf observation","ಎಲೆಯ ವೀಕ್ಷಣೆ"),fontSize=24.sp,fontWeight=FontWeight.Medium)
             }
         }
@@ -420,8 +421,8 @@ private fun dateGroup(time:Long,s:AppUiState):String {
 }
 private fun Observation.isAcceptedModelMatch():Boolean = resultType=="likely_condition" || resultType=="healthy_looking"
 private fun Observation.isPrototypePrediction(s:AppUiState):Boolean = resultType in setOf("uncertain","crop_mismatch") && conditionId!=null &&
-    "UNFAMILIAR_IMAGE" !in note && "CONDITION_DISABLED" !in note &&
-    (note.startsWith("Prototype prediction:") || (s.model.sourceEvaluated && modelVersion==s.model.version))
+    !hidesUnsupportedCandidate() &&
+    (isLeafCheckedCandidate() || note.startsWith("Prototype prediction:") || (s.model.sourceEvaluated && modelVersion==s.model.version))
 private fun AppUiState.predictionText(en:String,kn:String,hi:String):String = when(language) {
     AppLanguage.ENGLISH -> en
     AppLanguage.KANNADA -> kn

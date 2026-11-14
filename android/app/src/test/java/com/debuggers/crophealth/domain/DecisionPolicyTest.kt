@@ -77,4 +77,22 @@ class DecisionPolicyTest {
     @Test fun missingCoverageNeedsFollowUpRatherThanAssumedLowConcern() {
         assertEquals(ConcernLevel.SEEK_LOCAL_EXPERT, ConcernGuidance.summarize(ReportedSymptoms()).level)
     }
+
+    @Test fun minimumUsablePhotoSizePassesAt128Pixels() {
+        assertTrue(PhotoQuality.check(QualityMetrics(120.0, 100.0, 128, 128)).acceptable)
+        assertTrue(PhotoQuality.check(QualityMetrics(120.0, 100.0, 200, 300)).acceptable)
+    }
+    @Test fun photoBelow128PixelsStillRequiresRetake() {
+        for ((width, height) in listOf(127 to 224, 224 to 127)) {
+            val quality = PhotoQuality.check(QualityMetrics(120.0, 100.0, width, height))
+            assertEquals(setOf(QualityIssue.TOO_SMALL), quality.issues)
+            assertTrue(DecisionPolicy.assess(Crop.TOMATO, scores("tomato_early_blight"), quality = quality)
+                is AssessmentResult.Retake)
+        }
+    }
+    @Test fun smallerUsablePhotoStillRequiresExposureAndFocusChecks() {
+        assertTrue(PhotoQuality.check(QualityMetrics(10.0, 100.0, 128, 128)).issues.contains(QualityIssue.TOO_DARK))
+        assertTrue(PhotoQuality.check(QualityMetrics(250.0, 100.0, 128, 128)).issues.contains(QualityIssue.TOO_BRIGHT))
+        assertTrue(PhotoQuality.check(QualityMetrics(120.0, 1.0, 128, 128)).issues.contains(QualityIssue.BLURRY))
+    }
 }

@@ -79,14 +79,15 @@
   "leaf_gate": {
     "enabled": true,
     "output_name": "leaf_logit",
-    "minimum_leaf_probability": 0.7736096007959162,
+    "minimum_leaf_probability": 0.4514392108851361,
     "receipt_file": "leaf_validation.json",
-    "receipt_sha256": "7920e52bf1ccff38a6041d4cb2410443226068f07006dc508e0aaca0d22f2c68"
+    "receipt_sha256": "659dfd9cd8299f0568fa7bb5a223a5b4e5c8a11cc95dbf2ba967c7abccfa9fa4"
   },
   "source_evaluated": true,
   "source_thresholds_calibrated": true,
   "source_acceptance_qualified": true,
   "source_acceptance_enabled": true,
   "source_evaluation_file": "source_evaluation.json",
-  "source_evaluation_sha256": "406047f01d8826684160bc8dcab35e4f2cefb9261eef937155669bf4b8f8b4a3"
+  "source_evaluation_sha256": "406047f01d8826684160bc8dcab35e4f2cefb9261eef937155669bf4b8f8b4a3",
+  "pipeline_version": "0.4.3-diagnosis-flow-fix"
 }

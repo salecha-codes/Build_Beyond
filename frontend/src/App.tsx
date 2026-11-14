@@ -267,12 +267,13 @@ export default function App() {
   // Accepted prototype matches are not the same as independently field-validated results.
   const accepted = resultType === 'likely' || resultType === 'healthy';
   const nonLeaf = assessment?.qualityIssues?.includes('NOT_A_LEAF') === true || opened?.note === 'NOT_A_LEAF';
-  const unsupportedImage = assessment?.reasons?.some(reason => ['UNFAMILIAR_IMAGE', 'CONDITION_DISABLED'].includes(reason)) === true || opened?.note === 'UNSUPPORTED_IMAGE';
+  const unfamiliarLeaf = (assessment?.leafCheckPassed === true && assessment.reasons?.some(reason => ['UNFAMILIAR_IMAGE', 'CONDITION_DISABLED'].includes(reason)) === true) || opened?.note === 'LEAF_CHECKED_UNCERTAIN';
+  const unsupportedImage = (assessment?.leafCheckPassed !== true && assessment?.reasons?.some(reason => ['UNFAMILIAR_IMAGE', 'CONDITION_DISABLED'].includes(reason)) === true) || opened?.note === 'UNSUPPORTED_IMAGE';
   const top = unsupportedImage || nonLeaf ? undefined : assessment?.candidates[0];
   const conditionId = unsupportedImage || nonLeaf ? null : opened?.conditionId || top?.id || null;
   const score = unsupportedImage || nonLeaf ? null : opened?.score ?? top?.score ?? null;
   const provisionalPrediction = resultType === 'uncertain' && !!conditionId &&
-    (assessment?.sourceEvaluated === true ||
+    (assessment?.sourceEvaluated === true || opened?.note === 'LEAF_CHECKED_UNCERTAIN' ||
       (opened?.modelVersion === model?.version && model?.sourceEvaluated === true));
   const cropMismatchPrediction = resultType === 'crop_mismatch' && !!conditionId &&
     (assessment?.sourceEvaluated === true ||
@@ -313,7 +314,7 @@ export default function App() {
         inferenceMs: assessment.inferenceMs,
         validated: assessment.validated,
         concern,
-        note: nonLeaf ? 'NOT_A_LEAF' : unsupportedImage ? 'UNSUPPORTED_IMAGE' : '',
+        note: nonLeaf ? 'NOT_A_LEAF' : unsupportedImage ? 'UNSUPPORTED_IMAGE' : unfamiliarLeaf ? 'LEAF_CHECKED_UNCERTAIN' : '',
       });
       setSavedId(record.id);
       await refreshHistory();
@@ -439,7 +440,7 @@ export default function App() {
   function historyCard(record: ObservationRecord, deletable = false) {
     const acceptedRecord = record.resultType === 'likely' || record.resultType === 'healthy';
     const predictedRecord = (record.resultType === 'uncertain' || record.resultType === 'crop_mismatch') && !!record.conditionId &&
-      record.modelVersion === model?.version && model?.sourceEvaluated === true;
+      ((record.modelVersion === model?.version && model?.sourceEvaluated === true) || record.note === 'LEAF_CHECKED_UNCERTAIN');
     const label =
       (acceptedRecord || predictedRecord) && record.conditionId
         ? conditionName(record.conditionId, language)
@@ -455,7 +456,7 @@ export default function App() {
           <span className="history-copy">
             <strong>{label}</strong>
             <small>
-              {predictedRecord && `${record.resultType === 'crop_mismatch' ? t('Crop mismatch', 'ಬೆಳೆ ಹೊಂದಿಕೆಯಾಗಿಲ್ಲ') : t('Low confidence prediction', 'ಕಡಿಮೆ ವಿಶ್ವಾಸದ ಅಂದಾಜು')} · `}
+              {predictedRecord && `${record.resultType === 'crop_mismatch' ? t('Crop mismatch', 'ಬೆಳೆ ಹೊಂದಿಕೆಯಾಗಿಲ್ಲ') : record.note === 'LEAF_CHECKED_UNCERTAIN' ? t('Uncertain model candidate', 'ಅನಿಶ್ಚಿತ ಮಾದರಿ ಊಹೆ') : t('Low confidence prediction', 'ಕಡಿಮೆ ವಿಶ್ವಾಸದ ಅಂದಾಜು')} · `}
               {cropName(record.cropId, language)} ·{' '}
               {new Date(record.createdAt).toLocaleTimeString(
                 LANGUAGE_LOCALES[language],
@@ -665,7 +666,7 @@ export default function App() {
                   : cropMismatchPrediction
                     ? t('Crop mismatch', 'ಬೆಳೆ ಹೊಂದಿಕೆಯಾಗಿಲ್ಲ')
                   : provisionalPrediction
-                    ? t('Low confidence prediction', 'ಕಡಿಮೆ ವಿಶ್ವಾಸದ ಅಂದಾಜು')
+                    ? unfamiliarLeaf ? t('Uncertain model candidate', 'ಅನಿಶ್ಚಿತ ಮಾದರಿ ಊಹೆ') : t('Low confidence prediction', 'ಕಡಿಮೆ ವಿಶ್ವಾಸದ ಅಂದಾಜು')
                   : resultType === 'retake'
                     ? t('A clearer photo will help', 'ಸ್ಪಷ್ಟ ಚಿತ್ರ ಸಹಾಯ ಮಾಡುತ್ತದೆ')
                     : resultType === 'model_unavailable'
@@ -684,7 +685,9 @@ export default function App() {
               {t('Selected crop', 'ಆಯ್ಕೆ ಮಾಡಿದ ಬೆಳೆ')}: {cropName(activeCrop, language)}.<br />
               {t('Model predicts', 'ಮಾದರಿಯ ಅಂದಾಜು')}: {cropName(predictedCrop, language)}.<br />
               {t('Check the crop selection or retake a clear photo of one leaf.', 'ಬೆಳೆ ಆಯ್ಕೆಯನ್ನು ಪರಿಶೀಲಿಸಿ ಅಥವಾ ಒಂದು ಎಲೆಯ ಸ್ಪಷ್ಟ ಚಿತ್ರವನ್ನು ಮತ್ತೆ ತೆಗೆಯಿರಿ.')}
-            </p> : <p>{provisionalPrediction
+            </p> : <p>{unfamiliarLeaf
+              ? t('A leaf was detected. This is the closest model match, but the photo differs from its training examples. Check the result with a clearer photo or a crop expert.', 'ಎಲೆ ಪತ್ತೆಯಾಗಿದೆ. ಇದು ಮಾದರಿಯ ಹತ್ತಿರದ ಹೊಂದಾಣಿಕೆ, ಆದರೆ ಚಿತ್ರ ತರಬೇತಿ ಉದಾಹರಣೆಗಳಿಂದ ಭಿನ್ನವಾಗಿದೆ. ಸ್ಪಷ್ಟ ಚಿತ್ರ ಅಥವಾ ಕೃಷಿ ತಜ್ಞರಿಂದ ಫಲಿತಾಂಶ ಪರಿಶೀಲಿಸಿ.')
+              : provisionalPrediction
               ? t('This is the model’s top prediction for your leaf. Retake a clearer photo to check the result.', 'ಇದು ನಿಮ್ಮ ಎಲೆಗೆ ಮಾದರಿಯ ಪ್ರಮುಖ ಅಂದಾಜು. ಫಲಿತಾಂಶ ಪರಿಶೀಲಿಸಲು ಇನ್ನಷ್ಟು ಸ್ಪಷ್ಟ ಚಿತ್ರ ತೆಗೆಯಿರಿ.')
               : resultPrompt.message}</p>}
             {!accepted && !validated && !model?.sourceEvaluated && (
