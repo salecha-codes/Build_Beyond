@@ -63,6 +63,39 @@ The first browser visit downloads the model, WASM runtime, content and audio. Wa
 
 The target is Android 7.0+ on 3–4 GB RAM phones. Actual ARM-phone memory, latency, camera behavior, and Kannada pronunciation still require a physical-device check.
 
+## Dataset used — 17 categories
+
+We used the RGB subset of the [PlantVillage dataset](https://github.com/spMohanty/PlantVillage-Dataset) covering **tomato, potato and maize**. The counts below describe the available source files **before deduplication**, rather than the number of training images in every model experiment.
+
+| Crop | Categories | Available RGB files |
+|---|---:|---:|
+| Maize | 4 | 3,852 |
+| Potato | 3 | 2,152 |
+| Tomato | 10 | 18,160 |
+| **Total** | **17** | **24,164** |
+
+| Crop | Condition category | Files before deduplication |
+|---|---|---:|
+| Maize | Gray leaf spot | 513 |
+| Maize | Common rust | 1,192 |
+| Maize | Northern leaf blight | 985 |
+| Maize | Healthy | 1,162 |
+| Potato | Early blight | 1,000 |
+| Potato | Late blight | 1,000 |
+| Potato | Healthy | 152 |
+| Tomato | Bacterial spot | 2,127 |
+| Tomato | Early blight | 1,000 |
+| Tomato | Late blight | 1,909 |
+| Tomato | Leaf mold | 952 |
+| Tomato | Septoria leaf spot | 1,771 |
+| Tomato | Spider-mite symptoms | 1,676 |
+| Tomato | Target spot | 1,404 |
+| Tomato | Yellow leaf curl virus | 5,357 |
+| Tomato | Mosaic virus | 373 |
+| Tomato | Healthy | 1,591 |
+
+Removing 14 exact duplicates left **24,150 unique source images**, partitioned into 16,856 TRAIN, 2,228 TUNE, 1,392 calibration and 3,674 TEST images. The current V3 disease head used a capped subset of **6,324 PlantVillage TRAIN images plus 632 PlantDoc field TRAIN images**. Additional PlantDoc tuning/calibration/test photos and a separate leaf/object dataset support evaluation and input screening. See the [dataset audit](docs/DATASET_AUDIT.md), [training receipts](ml/reports/field_upgrade_v3/) and [leaf-check receipts](ml/reports/leaf_guard/) for the exact experiment scope.
+
 ## Leaf input check
 
 The model first checks whether the photo looks like a leaf. Rejected object photos return a retake request with **no disease name or score**. The leaf head shares the same offline backbone and adds about 15 KB.
