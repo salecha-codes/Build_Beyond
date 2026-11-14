@@ -2,10 +2,6 @@
 
 Android application and interactive browser preview for **PS 4.1**, built for Team Debuggers. The white/lavender/purple screens follow the supplied Figma screenshots. Both clients execute the same bundled MobileNet model locally.
 
-**Get the app:** [Download the Android APK](https://github.com/salecha-codes/Build_Beyond/releases/download/v0.6.0-preview.1/crop-health-universal-debug.apk) · [Open the browser app](https://salecha-codes.github.io/Build_Beyond/)
-
-The Android file is a debug-signed prototype for evaluation, distributed outside Google Play. Android may ask you to allow installation from your browser or file manager. The browser version needs an internet connection on its first visit to cache the app and model; after it says **Offline ready**, core features work offline.
-
 ## Review 2 submission
 
 **Team Debuggers · Team 8 · Problem Statement 4.1**
@@ -13,24 +9,6 @@ The Android file is a debug-signed prototype for evaluation, distributed outside
 Current prototype: **v0.6.0**, with an offline MobileNetV3-Large disease model, a leaf/object check and separate care/urgency and treatment/recovery models. It supports tomato, potato and maize, English/Kannada/Hindi audio, six observation questions, detailed condition-specific protocols and local history.
 
 [Open the browser demo](https://salecha-codes.github.io/Build_Beyond/) · [Review 2 implementation and checks](docs/REVIEW2_SUBMISSION.md)
-
-## Walk through the app
-
-1. **Choose a language.** Open the app and select English, Kannada or Hindi. Your choice is saved on that device.
-2. **Choose a crop.** Select tomato, potato or maize.
-3. **Take or choose a photo.** Use the camera or gallery. The app checks the image and screens for a leaf before running the disease model. If the picture is blurry, unsuitable or not leaf-like, it asks you to try another photo.
-4. **Review the model result.** The app runs MobileNetV3 on the device and displays its candidate and score, or an uncertain result. This is a prototype estimate, not a confirmed field diagnosis.
-5. **Answer the observation questions.** The app asks about visible damage and other reported signs. These answers feed a separate advisory rules model; they do not change or retrain MobileNetV3.
-6. **Read or listen to the care information.** Review the conditional care and urgency guidance, then play the bundled audio in your chosen language. This content is a prototype and still needs agronomist and language review; it is not a guaranteed cure or a pesticide prescription.
-7. **Save and revisit.** Save the observation to device-local history. Open it later to review the photo, result and answers, or delete it when you no longer need it. Android history and browser history are separate.
-
-### Install on Android
-
-Download the [universal Android APK](https://github.com/salecha-codes/Build_Beyond/releases/download/v0.6.0-preview.1/crop-health-universal-debug.apk) on your phone, open the downloaded file, and follow Android's install prompt. The universal APK supports the project's included Android ABIs and is larger than a device-specific build. The app targets Android 7.0 (API 24) and newer. Because this is a debug-signed prototype, it is intended for review and testing, not as a Google Play production release.
-
-### Use the browser app
-
-Open the [browser app](https://salecha-codes.github.io/Build_Beyond/) on a phone or computer. On the first visit, allow the required assets to load and wait for **Offline ready** before disconnecting. Camera access may require granting browser permission. Browser data stays in that browser's local storage and does not sync with Android history.
 
 ```mermaid
 flowchart LR
