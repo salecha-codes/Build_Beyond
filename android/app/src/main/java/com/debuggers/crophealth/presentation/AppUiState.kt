@@ -15,6 +15,8 @@ data class ModelStatus(
     val version: String = "Not installed",
     val message: String = "Checking local model…",
     val bytes: Long = 0,
+    val sourceEvaluated: Boolean = false,
+    val allowConditionSpecificAdvice: Boolean = false,
 )
 
 data class Observation(

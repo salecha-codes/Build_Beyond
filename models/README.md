@@ -1,20 +1,16 @@
 # Shared crop model assets
 
-`assets/model/` is the canonical six-file bundle used by both the Android app and the browser prototype. Android adds `models/assets` as an assets source directory, preserving runtime paths such as `model/crop_model.onnx`. The web build serves the same files at `<BASE_URL>assets/model/`. Do not keep a second model copy in either application source tree.
+`assets/model/` is the canonical bundle used by both the Android app and the browser prototype. Android adds `models/assets` as an assets source directory, preserving runtime paths such as `model/crop_model.onnx`. The web build serves the same files at `<BASE_URL>assets/model/`. Do not keep a second model copy in either application source tree.
 
-The actual model is MobileNetV4-Conv-Small (`timm` name `mobilenetv4_conv_small.e2400_r224_in1k`), exported as ONNX opset 17/IR 8, with 17 logits and a 960-dimensional pooled embedding. It was trained from scratch; pretrained weights were not available. The 10,032,309-byte model SHA-256 is:
+The actual model is MobileNetV4-Conv-Small (`timm` name `mobilenetv4_conv_small.e2400_r224_in1k`), exported as ONNX opset 17/IR 8, with 17 logits and a 960-dimensional pooled embedding. Training began from scratch; pretrained weights were unavailable. Read [model metadata](assets/model/model_metadata.json) for the exact exported SHA/version and [the model card](assets/model/MODEL_CARD.md) for the selected checkpoint and measured results.
 
-```
-d157e7c8401319a700039de467caba6728b7bdbf35b4cdae1818757cf0ba7e3c
-```
+`source_evaluation.json` records the exact model's frozen-calibration policy and independent source-test outcome; `embedding_centroids.json` contains normalized training-only class features. Both applications verify those sidecars' SHA, model/version binding and frozen per-class thresholds before allowing a source-tested likely condition or healthy-looking result. Low score, ambiguity, disabled classes and excessive feature distance remain uncertain. All scores are normalized globally over 17 classes before the selected crop is checked.
 
-Its version is `mnv4-conv-small-supervised_from_scratch-d157e7c84013`. Model metadata and the acceptance policy both retain `validated: false` / `diagnosis_validated: false`. Real model scores are visible as prototype evidence; they must not be presented as a confirmed disease or validated probabilities. The browser checks the model byte length, SHA-256, model/policy versions and the stable 17-label mapping before creating an ONNX Runtime Web CPU WASM session.
-
-The selected epoch 14 checkpoint follows 15 source-domain epochs (3 initial +12 continued), with 2,152 training images and 536 model-selection validation images. Source-validation accuracy 60.45% and macro F1 0.5902 are not independent test or field results. The older 3-epoch model has its own test receipt and those results do not describe this bundle. Provenance and export/calibration receipts are in [`ml/reports/review2_continued/`](../ml/reports/review2_continued/) and [the bundled model card](assets/model/MODEL_CARD.md).
+Source acceptance is separate from field diagnosis: `validated` / `diagnosis_validated` remain false. Accepted prototype results display the actual condition and model-match score, with general observation guidance. A separate `allow_condition_specific_advice` flag controls condition-specific advice; source qualification does not enable it. The source test and the small PlantDoc field-like test are reported separately, never pooled into one accuracy claim.
 
 Training data was acquired from PlantVillage RGB at Git commit `7f7ecc7e1eaca78107e3affe7cb5abd9427e139a`, with Git-blob verification, decoded-file checks and group-aware splits. See [`ml/README.md`](../ml/README.md) for acquisition, source licensing/provenance, split limitations and commands. Data, Python environments, training checkpoints and raw downloads stay outside this repository.
 
-Use `python tools/sync_model_bundle.py /path/to/exported/bundle` from the repository root to update all shared files after verifying the bundle. This installer validates the checksum and label/version contract before replacement.
+Use `python tools/sync_model_bundle.py /path/to/exported/bundle` from the repository root to update all shared files after verifying the bundle. This installer validates model/evidence checksums, labels, versions and the frozen policy before replacement. The Android package and web asset sync copy the same sidecars.
 
 ## Preprocessing
 

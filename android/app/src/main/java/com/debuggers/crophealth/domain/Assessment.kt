@@ -31,6 +31,13 @@ data class InferenceOutput(
 )
 
 /** Values must come from the artifact, not an invented universal confidence cutoff. */
+data class ClassAcceptanceThreshold(
+    val enabled: Boolean,
+    val minConfidence: Float?,
+    val minMargin: Float?,
+    val maxEmbeddingDistance: Float? = null,
+)
+
 data class PolicyConfig(
     val validated: Boolean = false,
     val temperature: Float = 1f,
@@ -38,6 +45,10 @@ data class PolicyConfig(
     val minMargin: Float = 0.15f,
     val maxEmbeddingDistance: Float? = null,
     val enabledConditionIds: Set<String> = Conditions.ids,
+    /** Source-test qualification permits a prototype estimate, never a field-validation claim. */
+    val sourceEvaluated: Boolean = false,
+    val classThresholds: Map<String, ClassAcceptanceThreshold> = emptyMap(),
+    val allowConditionSpecificAdvice: Boolean = false,
 )
 
 data class RankedPrediction(val condition: ConditionLabel, val score: Float)
@@ -47,6 +58,7 @@ data class PredictionEvidence(
     val modelVersion: String,
     val calibratedAndValidated: Boolean,
     val embeddingDistance: Float?,
+    val sourceEvaluated: Boolean = false,
 ) {
     val top: RankedPrediction get() = ranked.first()
     val margin: Float get() = top.score - (ranked.getOrNull(1)?.score ?: 0f)

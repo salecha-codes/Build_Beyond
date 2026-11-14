@@ -43,6 +43,17 @@ object DecisionPolicy {
             (policy.maxEmbeddingDistance != null && (!policy.maxEmbeddingDistance.isFinite() || policy.maxEmbeddingDistance < 0f))) {
             return AssessmentResult.ModelUnavailable(ModelFailure.INVALID_POLICY)
         }
+        if (policy.sourceEvaluated && (policy.classThresholds.keys != Conditions.ids ||
+            policy.classThresholds.values.any { threshold ->
+                (threshold.minConfidence != null && (!threshold.minConfidence.isFinite() || threshold.minConfidence !in 0f..1f)) ||
+                (threshold.minMargin != null && (!threshold.minMargin.isFinite() || threshold.minMargin !in 0f..1f)) ||
+                (threshold.enabled && (threshold.minConfidence == null || threshold.minMargin == null ||
+                    threshold.minConfidence <= 0f || threshold.minMargin <= 0f)) ||
+                (threshold.maxEmbeddingDistance != null &&
+                    (!threshold.maxEmbeddingDistance.isFinite() || threshold.maxEmbeddingDistance < 0f))
+            })) {
+            return AssessmentResult.ModelUnavailable(ModelFailure.INVALID_POLICY)
+        }
         val scaled = output.logits.map { it.toDouble() / policy.temperature }
         val maximum = scaled.max()
         val exps = scaled.map { exp(it - maximum) }
@@ -50,25 +61,28 @@ object DecisionPolicy {
         val ranked = output.labelIds.indices.map { i ->
             RankedPrediction(Conditions.byId(output.labelIds[i])!!, (exps[i] / sum).toFloat())
         }.sortedByDescending { it.score }
-        val evidence = PredictionEvidence(ranked, output.modelVersion, policy.validated, output.embeddingDistance)
+        val evidence = PredictionEvidence(ranked, output.modelVersion, policy.validated, output.embeddingDistance, policy.sourceEvaluated)
         // Unvalidated plumbing/model output must never assert that the farmer chose a wrong crop.
-        if (!policy.validated) {
+        if (!policy.validated && !policy.sourceEvaluated) {
             return AssessmentResult.Uncertain(setOf(UncertaintyReason.MODEL_NOT_VALIDATED), evidence)
         }
-        // Do not mask/renormalize to the farmer's crop and invent a confident disease.
-        if (evidence.top.condition.crop != selectedCrop) {
-            return AssessmentResult.CropMismatch(selectedCrop, evidence.top.condition.crop, evidence)
-        }
         val reasons = linkedSetOf<UncertaintyReason>()
-        if (!policy.validated) reasons += UncertaintyReason.MODEL_NOT_VALIDATED
-        if (evidence.top.score < policy.minConfidence) reasons += UncertaintyReason.LOW_SCORE
-        if (evidence.margin < policy.minMargin) reasons += UncertaintyReason.AMBIGUOUS
-        if (evidence.top.condition.id !in policy.enabledConditionIds) reasons += UncertaintyReason.CONDITION_DISABLED
-        policy.maxEmbeddingDistance?.let { maximumDistance ->
+        val threshold = if (policy.sourceEvaluated) policy.classThresholds[evidence.top.condition.id] else null
+        val minimumConfidence = if (policy.sourceEvaluated) threshold?.minConfidence else policy.minConfidence
+        val minimumMargin = if (policy.sourceEvaluated) threshold?.minMargin else policy.minMargin
+        if (minimumConfidence != null && evidence.top.score < minimumConfidence) reasons += UncertaintyReason.LOW_SCORE
+        if (minimumMargin != null && evidence.margin < minimumMargin) reasons += UncertaintyReason.AMBIGUOUS
+        if (threshold?.enabled == false || evidence.top.condition.id !in policy.enabledConditionIds) reasons += UncertaintyReason.CONDITION_DISABLED
+        (threshold?.maxEmbeddingDistance ?: policy.maxEmbeddingDistance)?.let { maximumDistance ->
             if (output.embeddingDistance == null) reasons += UncertaintyReason.MISSING_EMBEDDING_DISTANCE
             else if (output.embeddingDistance > maximumDistance) reasons += UncertaintyReason.UNFAMILIAR_IMAGE
         }
         if (reasons.isNotEmpty()) return AssessmentResult.Uncertain(reasons, evidence)
+        // Crop correction is meaningful only after the model passes acceptance checks.
+        // Never mask or renormalize scores to force the farmer's selected crop.
+        if (evidence.top.condition.crop != selectedCrop) {
+            return AssessmentResult.CropMismatch(selectedCrop, evidence.top.condition.crop, evidence)
+        }
         return if (evidence.top.condition.isHealthy) AssessmentResult.HealthyLooking(evidence.top.condition, evidence)
         else AssessmentResult.LikelyCondition(evidence.top.condition, evidence)
     }

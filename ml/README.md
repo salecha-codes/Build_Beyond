@@ -54,7 +54,7 @@ pytest ml/tests -q
 
 Omit `--checkpoint` only to produce a real executable **untrained pipeline-smoke model**. Export runs the ONNX checker and CPU runtime on zero and nonzero inputs, comparing both outputs with PyTorch. It writes actual desktop latency as desktop data, never phone performance.
 
-The bundle contains `crop_model.onnx`, labels, preprocessing metadata, decision policy, model card and execution receipts. The prototype policy is deliberately **validated=false**, so the app must show an uncertain/unvalidated state and block condition-specific advice even though the ONNX graph executes. Enabling accepted diagnoses requires independent evaluation and a properly calibrated shipped artifact; this pipeline never flips that flag based on a smoke test.
+The bundle contains `crop_model.onnx`, labels, preprocessing metadata, decision policy, model card and execution receipts. Export initially leaves all predictions uncertain. The separate two-phase qualification below can enable dataset-tested prototype matches for the exact exported artifact. **Field `validated=false` stays separate**; export parity or source accuracy cannot validate field diagnosis or chemical prescriptions.
 
 For a one-time exact-artifact comparison on a held-out source-domain test subset:
 
@@ -71,3 +71,30 @@ python -m crop_ml.calibrate --bundle /workspace/crop-artifacts/android_bundle --
 ```
 
 This is explicitly a source-validation fit, possibly on data also used for model selection. It does not validate the acceptance thresholds or enable diagnoses. Model identity derives from its architecture/training mode and actual ONNX hash; pipeline-smoke and trained artifacts have different identities.
+
+## Full-data retraining and source acceptance
+
+The replacement pipeline uses all 16,856 source training images. The original 3,620-image validation partition is divided by known groups into 2,228 tuning and 1,392 calibration images. Checkpoints are selected on tuning only; calibration fits temperature and per-class confidence/margin/distance gates. The original full 3,674-image source test is evaluated once after the selected model and gates are frozen. Historical exposure and incomplete physical-leaf metadata are recorded in the protocol receipt.
+
+```sh
+python -m crop_ml.prepare_qualification --data-root /workspace/crop-data --output /workspace/crop-artifacts/full_validation_protocol --prior-subset /workspace/crop-artifacts/scratch_continued/validation_subset.jsonl --replay-prior-sampler
+python -m crop_ml.training_improved --data-root /workspace/crop-data --output /workspace/crop-artifacts/full_training --selection-manifest /workspace/crop-artifacts/full_validation_protocol/tune.jsonl --calibration-manifest /workspace/crop-artifacts/full_validation_protocol/calibration.jsonl --resume-checkpoint /workspace/crop-artifacts/scratch_continued/best.pt --epochs 12 --threads 4 --precision bf16
+```
+
+The prior subset/checkpoint above come from the historical bounded experiment. Use fresh output directories: protocol CLIs refuse to overwrite frozen files. BF16 is a CPU training optimization; selection and export run in FP32.
+
+`crop_ml.field_data` supplies `inventory`, `acquire`, `audit` and `partition` commands for pinned PlantDoc commit `5467f6012d78d1c446145d5f582da6096f852ae8` (CC-BY-4.0). Source-label conflicts and exact/near duplicates are quarantined; the eligible original training pool supplies 632 train, 138 tune and 137 calibration images. Eighty eligible original-test images remain a separate external benchmark. These are internet-sourced, field-like pictures with mostly unreviewed disease labels, not a farmer trial.
+
+`training_improved --mode field-audit` audits the frozen base on field tuning; `--mode field` trains mixed source/field batches using only TRAIN images. The saved selection protocol declares source-retention floors, field-improvement criteria, epochs and partition hashes before candidate evaluation. The optional extension is a separate experiment with a recorded protocol; it does not rewrite earlier selection decisions. See the executed receipts for its exact warm start and selected candidate.
+
+After selecting and exporting the final checkpoint, run qualification in two explicit phases:
+
+```sh
+python -m crop_ml.qualify fit --bundle /workspace/crop-artifacts/final_bundle --work-dir /workspace/crop-artifacts/qualification --protocol /workspace/crop-artifacts/full_validation_protocol --field-protocol /workspace/crop-data/plantdoc-5467f601/partitions --include-field-train --threads 3
+python -m crop_ml.qualify finalize --bundle /workspace/crop-artifacts/final_bundle --work-dir /workspace/crop-artifacts/qualification --protocol /workspace/crop-artifacts/full_validation_protocol --field-protocol /workspace/crop-data/plantdoc-5467f601/partitions --threads 3
+python tools/sync_model_bundle.py /workspace/crop-artifacts/final_bundle
+```
+
+Omit `--include-field-train` for a model without field training; the selected training receipt must prove an exact manifest match. `fit` reads TRAIN and CAL only and freezes policy hashes. `finalize` checks those locks, marks the test operation before inference and rejects repeated finalization. It reports source accuracy/macro F1 and accepted precision/coverage, including per-class support and uncertainty bounds; external field results stay separate. Predeclared source qualification requires accuracy ≥85%, macro F1 ≥0.80, accepted precision ≥90%, and coverage ≥30%. Passing enables source prototype matches, never field validation or condition-specific prescriptions.
+
+Both apps check the evaluated artifact hash, receipt hash, frozen temperature/gates and normalized training-only centroids. A missing qualification stays uncertain; corrupt claimed evidence makes the model unavailable. The centroid gate is an unfamiliar-feature heuristic, with no validated unknown-image rejection guarantee.

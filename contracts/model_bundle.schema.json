@@ -10,8 +10,14 @@
     "model_file": {"const": "crop_model.onnx"},
     "model_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "class_count": {"const": 17},
-    "embedding_dimension": {"type": "integer", "minimum": 1},
+    "embedding_dimension": {"const": 960},
     "diagnosis_validated": {"type": "boolean"},
+    "source_evaluated": {"type": "boolean"},
+    "source_thresholds_calibrated": {"type": "boolean"},
+    "source_acceptance_qualified": {"type": "boolean"},
+    "source_acceptance_enabled": {"type": "boolean"},
+    "source_evaluation_file": {"const": "source_evaluation.json"},
+    "source_evaluation_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "input": {"type": "object", "required": ["name", "shape", "layout", "resize", "padding_rgb", "mean", "std"], "properties": {"name": {"const": "image"}, "shape": {"const": [1, 3, 224, 224]}, "layout": {"const": "NCHW"}, "resize": {"const": "letterbox"}}},
     "outputs": {"type": "object", "required": ["logits", "embeddings"]}
   }

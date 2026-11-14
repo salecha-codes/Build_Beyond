@@ -33,7 +33,7 @@ class UiSmokeTest {
         compose.runOnIdle {assertTrue(actions.contains(AppAction.Navigate(Screen.CAPTURE)))}
     }
 
-    @Test fun unvalidatedScoresRemainExplicitlyUncertain() {
+    @Test fun unqualifiedScoresRemainExplicitlyUncertain() {
         val evidence=PredictionEvidence(listOf(RankedPrediction(Conditions.all[0],.7f),RankedPrediction(Conditions.all[1],.2f)),"test-fixture",false,null)
         val result=AssessmentResult.Uncertain(setOf(UncertaintyReason.MODEL_NOT_VALIDATED),evidence)
         show(AppUiState(screen=Screen.RESULT,selectedCrop=Crop.MAIZE,assessment=result),CopyOnWriteArrayList())
@@ -41,6 +41,19 @@ class UiSmokeTest {
         compose.onNodeWithText("Model score · unvalidated").assertExists()
         compose.onNodeWithText("Model confidence").assertDoesNotExist()
         compose.onNodeWithText("Possible — not confirmed").assertExists()
+    }
+
+    @Test fun sourceTestedEstimateRetainsAnExplicitValidationBoundary() {
+        val condition=Conditions.byId("tomato_early_blight")!!
+        val evidence=PredictionEvidence(listOf(RankedPrediction(condition,.9f)),"test-source-qualified-fixture",false,.2f,sourceEvaluated=true)
+        val result=AssessmentResult.LikelyCondition(condition,evidence)
+        show(AppUiState(screen=Screen.RESULT,selectedCrop=Crop.TOMATO,assessment=result,
+            model=ModelStatus(ready=true,validated=false,sourceEvaluated=true,allowConditionSpecificAdvice=false)),CopyOnWriteArrayList())
+        compose.onNodeWithText("Early blight").assertExists()
+        compose.onNodeWithText("Model match score").assertExists()
+        compose.onNodeWithText("Model confidence").assertDoesNotExist()
+        compose.onNodeWithText("Dataset-tested estimate. Confirm the condition with a local crop expert.").assertExists()
+        compose.onNodeWithText("Not sure about this one").assertDoesNotExist()
     }
 
     @Test fun symptomQuestionRequiresAnExplicitAnswer() {

@@ -1,0 +1,15 @@
+# All commands ran from /workspace/Build_Beyond. Raw data/checkpoints/caches stayed outside checkout.
+# Environment prefix on each actual training/audit command:
+# PYTHONPATH=ml OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=4 MKL_NUM_THREADS=4
+
+/workspace/.venvs/crop-ml/bin/python -u -m crop_ml.training_improved --output /workspace/crop-artifacts/full_training --selection-manifest /workspace/crop-artifacts/full_validation_protocol/tune.jsonl --calibration-manifest /workspace/crop-artifacts/full_validation_protocol/calibration.jsonl --resume-checkpoint /workspace/crop-artifacts/scratch_continued/best.pt --epochs 12 --batch-size 32 --threads 4 --workers 2 --precision bf16 --learning-rate 0.0003
+
+/workspace/.venvs/crop-ml/bin/python -u -m crop_ml.training_improved --mode field-audit --output /workspace/crop-artifacts/full_training/field_adaptation --selection-manifest /workspace/crop-artifacts/full_validation_protocol/tune.jsonl --calibration-manifest /workspace/crop-artifacts/full_validation_protocol/calibration.jsonl --resume-checkpoint /workspace/crop-artifacts/full_training/best.pt --field-train-manifest /workspace/crop-data/plantdoc-5467f601/partitions/train.jsonl --field-tune-manifest /workspace/crop-data/plantdoc-5467f601/partitions/tune.jsonl --epochs 4 --batch-size 32 --threads 4 --workers 2 --precision bf16 --learning-rate 0.00003
+
+/workspace/.venvs/crop-ml/bin/python -u -m crop_ml.training_improved --mode field --output /workspace/crop-artifacts/full_training/field_adaptation --selection-manifest /workspace/crop-artifacts/full_validation_protocol/tune.jsonl --calibration-manifest /workspace/crop-artifacts/full_validation_protocol/calibration.jsonl --resume-checkpoint /workspace/crop-artifacts/full_training/best.pt --field-train-manifest /workspace/crop-data/plantdoc-5467f601/partitions/train.jsonl --field-tune-manifest /workspace/crop-data/plantdoc-5467f601/partitions/tune.jsonl --epochs 4 --batch-size 32 --threads 4 --workers 2 --precision bf16 --learning-rate 0.00003
+
+/workspace/.venvs/crop-ml/bin/python -u -m crop_ml.training_improved --mode field --output /workspace/crop-artifacts/full_training/field_extension --origin-output /workspace/crop-artifacts/full_training/field_adaptation --extension-protocol /workspace/crop-artifacts/full_training/field_extension_protocol.json --fallback-checkpoint /workspace/crop-artifacts/full_training/best.pt --selection-manifest /workspace/crop-artifacts/full_validation_protocol/tune.jsonl --calibration-manifest /workspace/crop-artifacts/full_validation_protocol/calibration.jsonl --resume-checkpoint /workspace/crop-artifacts/full_training/field_adaptation/best.pt --field-train-manifest /workspace/crop-data/plantdoc-5467f601/partitions/train.jsonl --field-tune-manifest /workspace/crop-data/plantdoc-5467f601/partitions/tune.jsonl --epochs 8 --batch-size 32 --threads 4 --workers 2 --precision bf16 --learning-rate 0.0001
+
+# Logs: training.log, field_audit.log, field_mixed.log, field_extension.log.
+# Final model lock and global candidate selection: final_selection.json.
+# Parent owns ONNX export and one-time CAL/final-test qualification; this child executed neither.

@@ -264,7 +264,8 @@ export default function App() {
   const activeCrop = opened?.cropId || crop;
   const resultType = opened?.resultType || assessment?.type || 'uncertain';
   const validated = opened?.validated ?? assessment?.validated ?? false;
-  const confirmed = validated && (resultType === 'likely' || resultType === 'healthy');
+  // Accepted prototype matches are not the same as independently field-validated results.
+  const accepted = resultType === 'likely' || resultType === 'healthy';
   const top = assessment?.candidates[0];
   const conditionId = opened?.conditionId || top?.id || null;
   const score = opened?.score ?? top?.score ?? null;
@@ -275,12 +276,18 @@ export default function App() {
         ? 'crop_mismatch'
         : resultType === 'model_unavailable'
           ? 'model_unavailable'
-          : confirmed && resultType === 'healthy'
+          : accepted && resultType === 'healthy'
             ? 'healthy'
-            : 'uncertain';
+            : accepted
+              ? 'model_prototype'
+              : 'uncertain';
   const resultPrompt = getPrompt(promptKey, language);
   const currentConcern = concern || opened?.concern || null;
-  const guidance = confirmed && conditionId ? getGuidance(conditionId, language) : null;
+  const conditionSpecificAdviceAllowed =
+    accepted && validated &&
+    (assessment as (AssessmentResult & { allowConditionSpecificAdvice?: boolean }) | null)
+      ?.allowConditionSpecificAdvice === true;
+  const guidance = conditionSpecificAdviceAllowed && conditionId ? getGuidance(conditionId, language) : null;
 
   async function saveScan() {
     if (saving || savedId || opened || !assessment || !photo) return;
@@ -420,8 +427,9 @@ export default function App() {
     </button>
   );
   function historyCard(record: ObservationRecord, deletable = false) {
+    const acceptedRecord = record.resultType === 'likely' || record.resultType === 'healthy';
     const label =
-      record.validated && record.conditionId
+      acceptedRecord && record.conditionId
         ? conditionName(record.conditionId, language)
         : t('Uncertain result', 'ಅನಿಶ್ಚಿತ ಫಲಿತಾಂಶ');
     return (
@@ -449,7 +457,9 @@ export default function App() {
                 ? t('Expert follow-up', 'ತಜ್ಞರ ಸಲಹೆ')
                 : record.concern
                   ? t('Observe & recheck', 'ಗಮನಿಸಿ, ಮರುಪರಿಶೀಲಿಸಿ')
-                  : t('Not confirmed', 'ಖಚಿತವಲ್ಲ')}
+                  : acceptedRecord
+                    ? t('Model match', 'ಮಾದರಿಯ ಹೊಂದಾಣಿಕೆ')
+                    : t('Not confirmed', 'ಖಚಿತವಲ್ಲ')}
             </span>
           </span>
         </button>
@@ -623,7 +633,7 @@ export default function App() {
             <div>
               <small>{cropName(activeCrop, language)}</small>
               <h2>
-                {confirmed && conditionId
+                {accepted && conditionId
                   ? conditionName(conditionId, language)
                   : resultType === 'retake'
                     ? t('Try another photo', 'ಮತ್ತೊಂದು ಚಿತ್ರ ಪ್ರಯತ್ನಿಸಿ')
@@ -633,12 +643,12 @@ export default function App() {
               </h2>
             </div>
           </div>
-          <div className="alert-card" data-testid="result-status" data-result-type={resultType}>
+          <div className={accepted ? 'soft-card' : 'alert-card'} data-testid="result-status" data-result-type={resultType}>
             <div className="alert-title">
-              <AlertCircle size={22} />
+              {accepted ? <CheckCircle2 size={22} /> : <AlertCircle size={22} />}
               <h2>
-                {confirmed
-                  ? t('Likely condition', 'ಸಂಭವನೀಯ ಸ್ಥಿತಿ')
+                {accepted
+                  ? t('Model match', 'ಮಾದರಿಯ ಹೊಂದಾಣಿಕೆ')
                   : resultType === 'retake'
                     ? t('A clearer photo will help', 'ಸ್ಪಷ್ಟ ಚಿತ್ರ ಸಹಾಯ ಮಾಡುತ್ತದೆ')
                     : resultType === 'model_unavailable'
@@ -646,8 +656,15 @@ export default function App() {
                       : t('Not sure about this one', 'ಈ ಬಗ್ಗೆ ಖಚಿತವಿಲ್ಲ')}
               </h2>
             </div>
-            <p>{resultPrompt.message}</p>
-            {!validated && (
+            {accepted ? (
+              <p>
+                {t(
+                  'Dataset-tested estimate. Confirm the condition with a local crop expert.',
+                  'ಡೇಟಾಸೆಟ್‌ನಲ್ಲಿ ಪರೀಕ್ಷಿಸಿದ ಅಂದಾಜು. ಸ್ಥಳೀಯ ಕೃಷಿ ತಜ್ಞರಿಂದ ಸ್ಥಿತಿಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.',
+                )}
+              </p>
+            ) : <p>{resultPrompt.message}</p>}
+            {!accepted && !validated && (
               <p>
                 {t(
                   'This prototype model has not been validated for disease diagnosis. Scores below are model outputs, not diagnostic confidence.',
@@ -659,14 +676,17 @@ export default function App() {
           {score !== null && (
             <div className="soft-card">
               <div className="score-heading">
-                <span>{t('Top model score', 'ಅತ್ಯಧಿಕ ಮಾದರಿ ಅಂಕ')}</span>
+                <span>{accepted ? t('Model match score', 'ಮಾದರಿಯ ಹೊಂದಾಣಿಕೆ ಅಂಕ') : t('Top model score', 'ಅತ್ಯಧಿಕ ಮಾದರಿ ಅಂಕ')}</span>
                 <strong>{Math.round(score * 100)}%</strong>
               </div>
-              <div className={`score-track ${confirmed ? 'validated' : ''}`}>
+              <div className={`score-track ${validated ? 'validated' : ''}`}>
                 <i style={{ width: `${Math.max(0, Math.min(100, score * 100))}%` }} />
               </div>
               <span className="score-note">
-                {t(
+                {accepted ? t(
+                  'Model score for this image, not field accuracy.',
+                  'ಈ ಚಿತ್ರದ ಮಾದರಿ ಅಂಕ; ಹೊಲದಲ್ಲಿ ಅಳೆಯಲಾದ ನಿಖರತೆ ಅಲ್ಲ.',
+                ) : t(
                   'A high score does not prove that the diagnosis is correct.',
                   'ಹೆಚ್ಚಿನ ಅಂಕ ಬಂದರೂ ರೋಗನಿರ್ಣಯ ಸರಿಯಾಗಿದೆ ಎಂದರ್ಥವಲ್ಲ.',
                 )}
@@ -674,15 +694,15 @@ export default function App() {
               {opened && conditionId && (
                 <div className="prediction">
                   <strong>{conditionName(conditionId, language)}</strong>
-                  <span>{t('Stored candidate · not confirmed', 'ಉಳಿಸಿದ ಸಾಧ್ಯತೆ · ಖಚಿತವಲ್ಲ')}</span>
+                  <span>{accepted ? t('Saved model match', 'ಉಳಿಸಿದ ಮಾದರಿಯ ಹೊಂದಾಣಿಕೆ') : t('Stored candidate · not confirmed', 'ಉಳಿಸಿದ ಸಾಧ್ಯತೆ · ಖಚಿತವಲ್ಲ')}</span>
                 </div>
               )}
-              {assessment?.candidates.slice(0, 2).map((item) => (
+              {assessment?.candidates.slice(0, 2).map((item, index) => (
                 <div className="prediction" key={item.id}>
                   <div>
                     <strong>{conditionName(item.id, language)}</strong>
                     <p>
-                      {cropName(item.cropId, language)} · {t('not confirmed', 'ಖಚಿತವಲ್ಲ')}
+                      {cropName(item.cropId, language)} · {accepted ? index === 0 ? t('Model match', 'ಮಾದರಿಯ ಹೊಂದಾಣಿಕೆ') : t('Other candidate', 'ಇನ್ನೊಂದು ಸಾಧ್ಯತೆ') : t('not confirmed', 'ಖಚಿತವಲ್ಲ')}
                     </p>
                   </div>
                   <span>{(item.score * 100).toFixed(1)}%</span>
@@ -718,7 +738,7 @@ export default function App() {
             </div>
           )}
           <div className="button-stack">
-            {!confirmed && expertButton}
+            {!accepted && expertButton}
             <button className="primary" onClick={beginConcern}>
               {t('Check concern (3 questions)', 'ಲಕ್ಷಣ ಪರಿಶೀಲನೆ (3 ಪ್ರಶ್ನೆಗಳು)')}
             </button>
@@ -758,7 +778,7 @@ export default function App() {
       </>
     );
   else if (screen === 'guidance') {
-    const generic = getPrompt('uncertain', language);
+    const generic = getPrompt(accepted ? 'check_expert' : 'uncertain', language);
     page = (
       <>
         {topBar('result', languageToggle)}
@@ -1115,7 +1135,7 @@ export default function App() {
             </strong>
           </div>
           <p>
-            {t(
+            {model?.sourceEvaluated ? t('Dataset-tested model · Field confirmation is still needed.', 'ಡೇಟಾಸೆಟ್‌ನಲ್ಲಿ ಪರೀಕ್ಷಿಸಿದ ಮಾದರಿ · ಹೊಲದಲ್ಲಿ ದೃಢೀಕರಣ ಇನ್ನೂ ಅಗತ್ಯ.') : t(
               'Prototype model · Disease diagnosis is not validated.',
               'ಮಾದರಿ ಆವೃತ್ತಿ · ರೋಗನಿರ್ಣಯವನ್ನು ದೃಢೀಕರಿಸಿಲ್ಲ.',
             )}
@@ -1153,7 +1173,7 @@ export default function App() {
                 '17 ಚಿತ್ರ ವರ್ಗಗಳು · ಟೊಮ್ಯಾಟೊ, ಆಲೂಗಡ್ಡೆ ಮತ್ತು ಮೆಕ್ಕೆಜೋಳ',
               )}
               <br />
-              {t(
+              {model?.sourceEvaluated ? t('Source test passed · Field diagnosis is not validated.', 'ಮೂಲ ಡೇಟಾ ಪರೀಕ್ಷೆಯಲ್ಲಿ ತೇರ್ಗಡೆ · ಹೊಲದ ರೋಗನಿರ್ಣಯವನ್ನು ದೃಢೀಕರಿಸಿಲ್ಲ.') : t(
                 'Validation: not validated for disease diagnosis',
                 'ದೃಢೀಕರಣ: ರೋಗನಿರ್ಣಯಕ್ಕೆ ದೃಢೀಕರಿಸಿಲ್ಲ',
               )}
@@ -1259,7 +1279,7 @@ export default function App() {
           </div>
         </div>
         <div className="preview-notice">
-          <strong>{t('Browser preview', 'Browser preview')}</strong> · {t('This is a working web app. The native Android APK uses CameraX and the same model bundle. This research prototype always marks unvalidated predictions as uncertain; model scores are not a diagnosis.', 'This is a working web app. The native Android APK uses CameraX and the same model bundle. This research prototype always marks unvalidated predictions as uncertain; model scores are not a diagnosis.')}
+          <strong>{t('Browser preview', 'Browser preview')}</strong> · {t('This browser preview runs the same model as the Android app. Dataset-tested matches are estimates; uncertain photos ask for a retake or expert review. Model scores are not a field diagnosis.', 'ಈ ಬ್ರೌಸರ್ ಆವೃತ್ತಿ Android ಆಪ್‌ನ ಅದೇ ಮಾದರಿಯನ್ನು ಬಳಸುತ್ತದೆ. ಡೇಟಾಸೆಟ್‌ನಲ್ಲಿ ಪರೀಕ್ಷಿಸಿದ ಹೊಂದಾಣಿಕೆಗಳು ಅಂದಾಜುಗಳು; ಅನಿಶ್ಚಿತ ಚಿತ್ರಗಳಿಗೆ ಮತ್ತೆ ಫೋಟೋ ಅಥವಾ ತಜ್ಞರ ಪರಿಶೀಲನೆ ಕೇಳಲಾಗುತ್ತದೆ. ಮಾದರಿಯ ಅಂಕಗಳು ಹೊಲದಲ್ಲಿನ ರೋಗನಿರ್ಣಯವಲ್ಲ.')}
         </div>
       </aside>
       <div className="device-frame">

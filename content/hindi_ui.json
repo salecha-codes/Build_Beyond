@@ -339,5 +339,16 @@
   "Tap the preview to start your camera.": "कैमरा शुरू करने के लिए तस्वीर वाले हिस्से पर टैप करें।",
   "Camera is unavailable. You can still choose a leaf photo.": "कैमरा उपलब्ध नहीं है। पत्ती की तस्वीर चुन सकते हैं।",
   "Could not capture this photo. Please try again.": "यह तस्वीर नहीं ली जा सकी। फिर कोशिश करें।",
-  "Flash is unavailable on this camera.": "इस कैमरे में फ्लैश उपलब्ध नहीं है।"
+  "Flash is unavailable on this camera.": "इस कैमरे में फ्लैश उपलब्ध नहीं है।",
+  "Dataset-tested estimate. Confirm the condition with a local crop expert.": "डेटासेट पर परखा गया अनुमान। स्थानीय कृषि विशेषज्ञ से स्थिति की पुष्टि कराएँ।",
+  "Model match": "मॉडल का मिलान",
+  "Model match score": "मॉडल मिलान का अंक",
+  "Model score for this image, not field accuracy.": "यह इस तस्वीर का मॉडल अंक है, खेत में मापी गई सटीकता नहीं।",
+  "Saved model match": "सहेजा गया मॉडल मिलान",
+  "Other candidate": "दूसरी संभावना",
+  "This browser preview runs the same model as the Android app. Dataset-tested matches are estimates; uncertain photos ask for a retake or expert review. Model scores are not a field diagnosis.": "यह ब्राउज़र संस्करण Android ऐप वाला मॉडल चलाता है। डेटासेट पर परखे गए मिलान अनुमान हैं; अस्पष्ट तस्वीर पर नई तस्वीर या विशेषज्ञ जाँच का सुझाव मिलता है। मॉडल के अंक खेत में रोग की पुष्टि नहीं हैं।",
+  "Dataset-tested prototype model": "डेटासेट पर परखा गया प्रोटोटाइप मॉडल",
+  "Source-tested prototype is ready. Field diagnosis is not validated.": "डेटासेट पर परखा गया प्रोटोटाइप तैयार है। खेत में रोग की पुष्टि का परीक्षण अभी बाकी है।",
+  "Dataset-tested model · Field confirmation is still needed.": "डेटासेट पर परखा गया मॉडल · खेत में पुष्टि अभी भी ज़रूरी है।",
+  "Source test passed · Field diagnosis is not validated.": "डेटासेट परीक्षण सफल · खेत में रोग की पुष्टि का परीक्षण बाकी है।"
 }

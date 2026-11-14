@@ -1,0 +1,122 @@
+{
+  "protocol_version": "plantdoc-original-train-grouped-v1",
+  "created_at_utc": "2026-11-14T11:00:09.513457+00:00",
+  "source_commit": "5467f6012d78d1c446145d5f582da6096f852ae8",
+  "seed": "build-beyond-plantdoc-domain-v1-seed-42",
+  "requested_ratios": {
+    "train": 0.7,
+    "tune": 0.15,
+    "calibration": 0.15
+  },
+  "source_candidate_count": 910,
+  "limited_review_count": 10,
+  "limited_review_exclusions": 3,
+  "eligible_original_train_count": 907,
+  "source_group_count": 875,
+  "multi_image_groups": 31,
+  "largest_group_size": 3,
+  "similarity_rule": "Original-training images only; union exact SHA-256 or 64-bit dHash distance <=4, transitive closure; conservative grouping without duplicate identity claims.",
+  "assignment_method": "Deterministic greedy minimum normalized squared deviation from per-class and total 70/15/15 targets; all groups stay in one partition.",
+  "split_counts": {
+    "train": 632,
+    "tune": 138,
+    "calibration": 137
+  },
+  "per_class_counts": {
+    "maize_common_rust": {
+      "train": 73,
+      "tune": 16,
+      "calibration": 16
+    },
+    "maize_gray_leaf_spot": {
+      "train": 44,
+      "tune": 9,
+      "calibration": 9
+    },
+    "potato_early_blight": {
+      "train": 72,
+      "tune": 16,
+      "calibration": 16
+    },
+    "potato_late_blight": {
+      "train": 66,
+      "tune": 14,
+      "calibration": 14
+    },
+    "tomato_bacterial_spot": {
+      "train": 69,
+      "tune": 15,
+      "calibration": 15
+    },
+    "tomato_early_blight": {
+      "train": 54,
+      "tune": 12,
+      "calibration": 12
+    },
+    "tomato_late_blight": {
+      "train": 69,
+      "tune": 15,
+      "calibration": 15
+    },
+    "tomato_leaf_mold": {
+      "train": 59,
+      "tune": 13,
+      "calibration": 13
+    },
+    "tomato_mosaic_virus": {
+      "train": 30,
+      "tune": 7,
+      "calibration": 6
+    },
+    "tomato_septoria_leaf_spot": {
+      "train": 96,
+      "tune": 21,
+      "calibration": 21
+    }
+  },
+  "files": {
+    "train": {
+      "file": "train.jsonl",
+      "rows": 632,
+      "sha256": "f171b4018ef86f828ec7d9c1be973e1079ea430fec5c9edcd47bac0fb841712a"
+    },
+    "tune": {
+      "file": "tune.jsonl",
+      "rows": 138,
+      "sha256": "4538bfbc03b742f26d2418b45939006a54abccc764ffc2c38d8cf17188273683"
+    },
+    "calibration": {
+      "file": "calibration.jsonl",
+      "rows": 137,
+      "sha256": "ee28ce6bed8534d4b8da8af1dbf36737625f0524d62ed9e556183e681e5ec0f6"
+    },
+    "eligible_original_train_pool": {
+      "file": "eligible_original_train_pool.jsonl",
+      "rows": 907,
+      "sha256": "32eec6e90b420cd3d3f2ee12e72182dd616ba7ab13ace55c5b1055290a2d26a0"
+    },
+    "limited_review_exclusions": {
+      "file": "limited_review_exclusions.jsonl",
+      "rows": 3,
+      "sha256": "06437ef6cd6b9c8cb6cdf0162fedd484369f665bf1d185dc93fc5dcc6bdb9c56"
+    },
+    "external_test_all_original": {
+      "file": "external_test_all_original.jsonl",
+      "rows": 85,
+      "sha256": "f478c0418fae0b272cb720dbf54a148c2fa85dcd1adcbd1ffb529cb4aa23887f"
+    },
+    "external_test_locked": {
+      "file": "external_test_locked.jsonl",
+      "rows": 80,
+      "sha256": "28f0987dc20c1fdb5b6a0f680fac2e4403347d25ac7cd68d24b7e0a29bc5106d"
+    }
+  },
+  "source_manifest_sha256": "0d60d57a225199f2402a16f2591cb02bc7255b36f8fa4f3ff47d521b416091e5",
+  "external_test_metadata_manifest_sha256": "cb3ceda3053f6245f7dfbb76cb9374b407b747a12757f83c12dedf9fbf7e1b01",
+  "original_test_used_for_split_decisions": false,
+  "original_test_pixels_read_by_partition_script": false,
+  "model_metrics_used": false,
+  "training_or_inference_performed": false,
+  "label_status": "Candidate mappings and source labels remain unreviewed by an agricultural expert. Limited image review checked quality/filename consistency only.",
+  "release_policy": "Freeze this receipt before optional domain adaptation. Train only on train.jsonl; select checkpoint on tune.jsonl; reserve calibration.jsonl for the final fixed model/policy. external_test_locked.jsonl is final external evaluation only. Do not combine with PlantVillage tests as one field-accuracy claim."
+}

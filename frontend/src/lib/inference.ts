@@ -25,6 +25,7 @@ export interface ModelStatus {
   message: string;
   modelSha256?: string;
   executionProvider?: 'wasm';
+  sourceEvaluated?: boolean;
 }
 export interface AssessmentResult {
   type: AssessmentType;
@@ -38,6 +39,9 @@ export interface AssessmentResult {
   executionProvider?: 'wasm';
   outputShapes?: number[][];
   preprocessingMs?: number;
+  sourceEvaluated?: boolean;
+  allowConditionSpecificAdvice?: boolean;
+  embeddingDistance?: number;
 }
 export interface PreprocessSpec {
   width: number;
@@ -57,6 +61,10 @@ interface Metadata {
   class_count: number;
   embedding_dimension: number;
   diagnosis_validated: boolean;
+  source_evaluated?: boolean;
+  source_thresholds_calibrated?: boolean;
+  source_acceptance_qualified?: boolean;
+  source_acceptance_enabled?: boolean;
   training_status: string;
   input: PreprocessSpec & {
     name: string;
@@ -77,6 +85,7 @@ interface Metadata {
 interface Policy {
   schema_version: number;
   model_version: string;
+  model_sha256?: string;
   validated: boolean;
   temperature: number;
   min_confidence: number;
@@ -84,12 +93,34 @@ interface Policy {
   thresholds_calibrated: boolean;
   enabled_condition_ids?: string[];
   allow_condition_specific_advice: boolean;
+  source_evaluated?: boolean;
+  source_thresholds_calibrated?: boolean;
+  source_acceptance_qualified?: boolean;
+  source_acceptance_enabled?: boolean;
+  source_evaluation_file?: string;
+  source_evaluation_sha256?: string;
+  embedding_centroids_file?: string;
+  embedding_centroids_sha256?: string;
+  class_thresholds?: Record<string, ClassThreshold>;
+  max_embedding_distance?: number | null;
+}
+interface ClassThreshold {
+  enabled: boolean;
+  minimum_confidence: number | null;
+  minimum_margin: number | null;
+  max_embedding_distance?: number | null;
+}
+interface SourceAcceptance {
+  thresholds: Record<string, ClassThreshold>;
+  centroids: Record<string, readonly number[]>;
 }
 interface Bundle {
   metadata: Metadata;
   policy: Policy;
   session: ort.InferenceSession;
   validated: boolean;
+  sourceEvaluated: boolean;
+  sourceAcceptance?: SourceAcceptance;
 }
 
 export const DEFAULT_PREPROCESS: Readonly<PreprocessSpec> = Object.freeze({
@@ -332,6 +363,105 @@ async function jsonAsset(path: string): Promise<unknown> {
   if (!response.ok) throw new Error(`Packaged model asset could not load (${response.status}).`);
   return response.json();
 }
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+async function sha256Bytes(bytes: ArrayBuffer): Promise<string> {
+  requireThat(!!globalThis.crypto?.subtle, 'A secure context is required to verify the model.');
+  const digest = await crypto.subtle.digest('SHA-256', bytes);
+  return Array.from(new Uint8Array(digest), value => value.toString(16).padStart(2, '0')).join('');
+}
+async function verifiedJsonAsset(filename: string, expectedHash: unknown): Promise<unknown> {
+  requireThat(typeof expectedHash === 'string' && /^[a-f0-9]{64}$/.test(expectedHash),
+    'Missing source-evidence checksum.');
+  const response = await fetch(assetUrl(`model/${filename}`), { credentials: 'same-origin', cache: 'force-cache' });
+  requireThat(response.ok, `Packaged source evidence could not load (${response.status}).`);
+  const bytes = await response.arrayBuffer();
+  requireThat(await sha256Bytes(bytes) === expectedHash, 'Source evidence checksum does not match.');
+  return JSON.parse(new TextDecoder().decode(bytes));
+}
+
+/** Both vectors are normalized here; zero/nonfinite vectors are invalid runtime evidence. */
+export function unitEmbeddingDistance(embedding: ArrayLike<number>, centroid: readonly number[]): number {
+  requireThat(embedding.length === centroid.length && embedding.length > 0, 'Embedding dimensions disagree.');
+  let embeddingSquared = 0, centroidSquared = 0;
+  for (let i = 0; i < embedding.length; i++) {
+    requireThat(Number.isFinite(embedding[i]) && Number.isFinite(centroid[i]), 'Embedding values must be finite.');
+    embeddingSquared += embedding[i] * embedding[i];
+    centroidSquared += centroid[i] * centroid[i];
+  }
+  requireThat(Number.isFinite(embeddingSquared) && Number.isFinite(centroidSquared) &&
+    embeddingSquared > 0 && centroidSquared > 0, 'The model returned an invalid embedding.');
+  const embeddingNorm = Math.sqrt(embeddingSquared), centroidNorm = Math.sqrt(centroidSquared);
+  let squaredDistance = 0;
+  for (let i = 0; i < embedding.length; i++) {
+    const difference = embedding[i] / embeddingNorm - centroid[i] / centroidNorm;
+    squaredDistance += difference * difference;
+  }
+  return Math.sqrt(squaredDistance);
+}
+
+export function validateSourceAcceptance(
+  metadata: Pick<Metadata, 'model_version' | 'model_sha256'>,
+  policy: Pick<Policy, 'temperature' | 'class_thresholds'>, receipt: unknown, centroidFile: unknown,
+): SourceAcceptance {
+  requireThat(isRecord(receipt) && receipt.schema_version === 1 &&
+    receipt.model_version === metadata.model_version && receipt.model_sha256 === metadata.model_sha256 &&
+    receipt.scope === 'source_domain_only' && receipt.source_acceptance_qualified === true,
+  'Source evaluation does not qualify this exact model.');
+  const frozen = receipt.frozen_policy;
+  requireThat(isRecord(frozen) && frozen.temperature === policy.temperature && isRecord(frozen.class_thresholds),
+    'Source evaluation and calibrated policy disagree.');
+  const thresholds = policy.class_thresholds;
+  requireThat(isRecord(thresholds) && Object.keys(thresholds).length === CONDITIONS.length &&
+    Object.keys(frozen.class_thresholds).length === CONDITIONS.length,
+  'Source class thresholds do not match the label contract.');
+  let enabled = 0;
+  for (const label of CONDITIONS) {
+    const row = thresholds[label.id], reference = frozen.class_thresholds[label.id];
+    requireThat(isRecord(row) && typeof row.enabled === 'boolean' && isRecord(reference) &&
+      row.enabled === reference.enabled && row.minimum_confidence === reference.minimum_confidence &&
+      row.minimum_margin === reference.minimum_margin && row.max_embedding_distance === reference.max_embedding_distance,
+    'Frozen source thresholds do not match the packaged policy.');
+    const nullableProbability = (value: unknown) => value === null ||
+      (typeof value === 'number' && Number.isFinite(value) && value >= 0 && value <= 1);
+    requireThat(nullableProbability(row.minimum_confidence) && nullableProbability(row.minimum_margin) &&
+      (row.max_embedding_distance == null || (typeof row.max_embedding_distance === 'number' &&
+        Number.isFinite(row.max_embedding_distance) && row.max_embedding_distance >= 0 && row.max_embedding_distance <= 2 + 1e-6)),
+    'Invalid source class threshold values.');
+    if (row.enabled) {
+      requireThat(typeof row.minimum_confidence === 'number' && Number.isFinite(row.minimum_confidence) &&
+        row.minimum_confidence > 0 && row.minimum_confidence < 1 &&
+        typeof row.minimum_margin === 'number' && Number.isFinite(row.minimum_margin) &&
+        row.minimum_margin > 0 && row.minimum_margin < 1 &&
+        typeof row.max_embedding_distance === 'number' && Number.isFinite(row.max_embedding_distance) &&
+        row.max_embedding_distance >= 0 && row.max_embedding_distance <= 2 + 1e-6,
+      'Enabled source classes require calibrated confidence, margin and distance thresholds.');
+      enabled++;
+    }
+  }
+  requireThat(enabled > 0, 'Source acceptance has no enabled classes.');
+  requireThat(isRecord(centroidFile) && centroidFile.schema_version === 1 &&
+    centroidFile.model_version === metadata.model_version && centroidFile.model_sha256 === metadata.model_sha256 &&
+    centroidFile.embedding_dimension === 960 &&
+    centroidFile.normalization === 'l2_per_embedding_mean_then_l2_centroid' &&
+    centroidFile.distance === 'l2_unit_embedding_to_predicted_class_centroid' &&
+    Array.isArray(centroidFile.label_ids) && centroidFile.label_ids.length === CONDITIONS.length &&
+    centroidFile.label_ids.every((id, index) => id === CONDITIONS[index].id) &&
+    Array.isArray(centroidFile.centroids) && centroidFile.centroids.length === CONDITIONS.length,
+  'Embedding centroids do not match this model and label contract.');
+  const centroids: Record<string, readonly number[]> = {};
+  for (let index = 0; index < CONDITIONS.length; index++) {
+    const vector: unknown = centroidFile.centroids[index];
+    requireThat(Array.isArray(vector) && vector.length === 960 && vector.every(value => typeof value === 'number' && Number.isFinite(value)),
+      'Invalid embedding centroid dimensions or values.');
+    const norm = Math.sqrt(vector.reduce((sum: number, value: number) => sum + value * value, 0));
+    requireThat(Number.isFinite(norm) && Math.abs(norm - 1) <= 1e-3, 'Embedding centroids must have unit norm.');
+    centroids[CONDITIONS[index].id] = vector;
+  }
+  return { thresholds, centroids };
+}
+
 async function loadBundle(): Promise<Bundle> {
   const [metadataJson, policyJson, labelsJson] = await Promise.all([
     jsonAsset('model_metadata.json'),
@@ -397,17 +527,19 @@ async function loadBundle(): Promise<Bundle> {
       }),
     'Model labels disagree with the stable application contract.',
   );
-  requireThat(
-    Number.isFinite(policy.temperature) &&
-      policy.temperature > 0 &&
-      Number.isFinite(policy.min_confidence) &&
-      policy.min_confidence >= 0 &&
-      policy.min_confidence <= 1 &&
-      Number.isFinite(policy.min_margin) &&
-      policy.min_margin >= 0 &&
-      policy.min_margin <= 1,
-    'Invalid model acceptance policy.',
-  );
+  requireThat(Number.isFinite(policy.temperature) && policy.temperature > 0, 'Invalid model temperature.');
+  const validated = metadata.diagnosis_validated === true && policy.validated === true && policy.thresholds_calibrated === true;
+  const sourceClaimed = metadata.source_evaluated === true && policy.source_evaluated === true &&
+    metadata.source_thresholds_calibrated === true && metadata.source_acceptance_qualified === true &&
+    metadata.source_acceptance_enabled === true && policy.source_thresholds_calibrated === true &&
+    policy.source_acceptance_qualified === true && policy.source_acceptance_enabled === true;
+  if (validated && !sourceClaimed) {
+    requireThat(Number.isFinite(policy.min_confidence) && policy.min_confidence >= 0 && policy.min_confidence <= 1 &&
+      Number.isFinite(policy.min_margin) && policy.min_margin >= 0 && policy.min_margin <= 1 &&
+      (policy.max_embedding_distance == null || (Number.isFinite(policy.max_embedding_distance) && policy.max_embedding_distance >= 0)),
+    'Invalid model acceptance policy.');
+  }
+  if (policy.model_sha256 !== undefined) requireThat(policy.model_sha256 === metadata.model_sha256, 'Policy and model checksums disagree.');
   requireThat(/^[a-f0-9]{64}$/.test(metadata.model_sha256), 'Missing model checksum.');
   const response = await fetch(assetUrl(`model/${metadata.model_file}`), {
     credentials: 'same-origin',
@@ -419,12 +551,19 @@ async function loadBundle(): Promise<Bundle> {
     bytes.byteLength === metadata.model_size_bytes,
     'The local model file has an unexpected size.',
   );
-  requireThat(!!globalThis.crypto?.subtle, 'A secure context is required to verify the model.');
-  const digest = await crypto.subtle.digest('SHA-256', bytes);
-  const sha256 = Array.from(new Uint8Array(digest), (value) =>
-    value.toString(16).padStart(2, '0'),
-  ).join('');
+  const sha256 = await sha256Bytes(bytes);
   requireThat(sha256 === metadata.model_sha256, 'The local model checksum does not match.');
+  let sourceAcceptance: SourceAcceptance | undefined;
+  if (sourceClaimed) {
+    requireThat(policy.source_evaluation_file === 'source_evaluation.json' &&
+      policy.embedding_centroids_file === 'embedding_centroids.json', 'Unsupported source evidence filenames.');
+    const [receipt, centroids] = await Promise.all([
+      verifiedJsonAsset(policy.source_evaluation_file, policy.source_evaluation_sha256),
+      verifiedJsonAsset(policy.embedding_centroids_file, policy.embedding_centroids_sha256),
+    ]);
+    sourceAcceptance = validateSourceAcceptance(metadata, policy, receipt, centroids);
+  }
+  const sourceEvaluated = sourceAcceptance !== undefined;
   // Single thread runs without SharedArrayBuffer/cross-origin isolation. All runtime
   // code and WASM come from this build; no CDN or arbitrary remote code is loaded.
   ort.env.wasm.numThreads = 1;
@@ -440,10 +579,6 @@ async function loadBundle(): Promise<Bundle> {
       session.outputNames.includes(metadata.outputs.embeddings.name),
     'The model input/output names do not match metadata.',
   );
-  const validated =
-    metadata.diagnosis_validated === true &&
-    policy.validated === true &&
-    policy.thresholds_calibrated === true;
   lastStatus = {
     ready: true,
     validated,
@@ -452,11 +587,14 @@ async function loadBundle(): Promise<Bundle> {
     bytes: bytes.byteLength,
     message: validated
       ? 'Local model is ready.'
-      : 'Local scratch-trained prototype is ready. Disease diagnosis is not validated.',
+      : sourceAcceptance
+        ? 'Source-tested prototype is ready. Field diagnosis is not validated.'
+        : 'Local scratch-trained prototype is ready. Disease diagnosis is not validated.',
     modelSha256: sha256,
     executionProvider: 'wasm',
+    sourceEvaluated,
   };
-  return { metadata, policy, session, validated };
+  return { metadata, policy, session, validated, sourceEvaluated, sourceAcceptance };
 }
 function getBundle(): Promise<Bundle> {
   if (!bundlePromise)
@@ -465,6 +603,7 @@ function getBundle(): Promise<Bundle> {
         ...lastStatus,
         ready: false,
         validated: false,
+        sourceEvaluated: false,
         message: error instanceof Error ? error.message : 'The local model is unavailable.',
       };
       bundlePromise = null;
@@ -495,6 +634,8 @@ async function analyzeOnce(file: File, cropId: CropId): Promise<AssessmentResult
     inferenceMs: 0,
     modelVersion: lastStatus.version,
     validated: false,
+    sourceEvaluated: false,
+    allowConditionSpecificAdvice: false,
   });
   let decoded: Awaited<ReturnType<typeof decodeLeafImage>>;
   const preparationStart = performance.now();
@@ -517,7 +658,7 @@ async function analyzeOnce(file: File, cropId: CropId): Promise<AssessmentResult
   } catch (error) {
     return { ...base(), reasons: [error instanceof Error ? error.message : 'MODEL_UNAVAILABLE'] };
   }
-  const { metadata, policy, validated, session } = bundle;
+  const { metadata, policy, validated, session, sourceEvaluated, sourceAcceptance } = bundle;
   const input = preprocessRgb(decoded.rgb, decoded.width, decoded.height, metadata.input);
   const preprocessingMs = performance.now() - preparationStart;
   // Give the processing screen a rendering opportunity before a CPU WASM call.
@@ -564,22 +705,37 @@ async function analyzeOnce(file: File, cropId: CropId): Promise<AssessmentResult
       inferenceMs,
       modelVersion: metadata.model_version,
       validated,
+      sourceEvaluated,
+      allowConditionSpecificAdvice: validated && policy.allow_condition_specific_advice === true,
       reasons: [],
       modelSha256: metadata.model_sha256,
       executionProvider: 'wasm',
       preprocessingMs,
       outputShapes: [Array.from(logits.dims), Array.from(embeddings.dims)],
     };
-    // Gate precedes crop mismatch: an unvalidated model cannot assert a wrong crop.
-    if (!validated) return { ...result, reasons: ['MODEL_NOT_VALIDATED'] };
+    // Source-qualified prototype acceptance is distinct from field validation.
+    // Old or failed-qualification bundles remain ready but explicitly uncertain.
+    if (!validated && !sourceAcceptance) return { ...result, reasons: ['MODEL_NOT_VALIDATED'] };
     const top = candidates[0];
-    if (top.cropId !== cropId)
-      return { ...result, type: 'crop_mismatch', reasons: ['CROP_MISMATCH'] };
-    if (top.score < policy.min_confidence) result.reasons!.push('LOW_SCORE');
-    if (top.score - candidates[1].score < policy.min_margin) result.reasons!.push('AMBIGUOUS');
-    if (policy.enabled_condition_ids && !policy.enabled_condition_ids.includes(top.id))
-      result.reasons!.push('CONDITION_DISABLED');
+    if (sourceAcceptance) {
+      const threshold = sourceAcceptance.thresholds[top.id];
+      if (!threshold.enabled) result.reasons!.push('CONDITION_DISABLED');
+      else {
+        if (top.score < threshold.minimum_confidence!) result.reasons!.push('LOW_SCORE');
+        if (top.score - candidates[1].score < threshold.minimum_margin!) result.reasons!.push('AMBIGUOUS');
+        const distance = unitEmbeddingDistance(embeddings.data as Float32Array, sourceAcceptance.centroids[top.id]);
+        result.embeddingDistance = distance;
+        if (distance > threshold.max_embedding_distance!) result.reasons!.push('UNFAMILIAR_IMAGE');
+      }
+    } else {
+      if (top.score < policy.min_confidence) result.reasons!.push('LOW_SCORE');
+      if (top.score - candidates[1].score < policy.min_margin) result.reasons!.push('AMBIGUOUS');
+      if (policy.enabled_condition_ids && !policy.enabled_condition_ids.includes(top.id)) result.reasons!.push('CONDITION_DISABLED');
+      if (policy.max_embedding_distance != null) result.reasons!.push('MISSING_EMBEDDING_DISTANCE');
+    }
     if (result.reasons!.length) return result;
+    // Crop corrections also require all source-confidence and unfamiliar-image gates.
+    if (top.cropId !== cropId) return { ...result, type: 'crop_mismatch', reasons: ['CROP_MISMATCH'] };
     return { ...result, type: top.id.endsWith('_healthy') ? 'healthy' : 'likely' };
   } catch (error) {
     return {

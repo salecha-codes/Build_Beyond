@@ -45,7 +45,7 @@ class Review2IntegrationTest {
         assertFalse("Offline diagnosis must not request Internet access", Manifest.permission.INTERNET in permissions)
     }
 
-    @Test fun bundledV4ExecutesOnAndroidAndRemainsExplicitlyUnvalidated() {
+    @Test fun bundledV4ExecutesAndSeparatesSourceQualificationFromDiagnosisValidation() {
         val fixture = leafFixture()
         val photo = ImagePreparation.decode(fixture)
         try {
@@ -53,28 +53,43 @@ class Review2IntegrationTest {
             assertTrue(photo.quality.laplacianVariance.isFinite())
             assertTrue(photo.bitmap.width <= 1024 && photo.bitmap.height <= 1024)
             val metadata = app.assets.open("model/model_metadata.json").bufferedReader().use { JSONObject(it.readText()) }
+            val artifactPolicy = app.assets.open("model/decision_policy.json").bufferedReader().use { JSONObject(it.readText()) }
             LocalModelEngine(app).use { engine ->
                 val status = engine.load()
                 assertTrue("Real bundled model must load: ${status.message}", status.ready)
                 assertEquals("MobileNetV4-Conv-Small", status.name)
                 assertFalse("Prototype must not advertise validated diagnosis", status.validated)
+                assertFalse("Source qualification must not enable condition-specific treatment advice", status.allowConditionSpecificAdvice)
+                assertEquals(BundledModelContract.sourceQualificationEnabled(metadata, artifactPolicy), status.sourceEvaluated)
                 val prediction = engine.infer(photo.bitmap)
                 assertEquals(Conditions.ids, prediction.output.labelIds.toSet())
                 assertEquals(metadata.getInt("class_count"), prediction.output.logits.size)
                 assertEquals(17, prediction.output.logits.size)
                 assertTrue("Native ONNX outputs must be finite", prediction.output.logits.all { it.isFinite() })
                 assertFalse(prediction.policy.validated)
+                assertEquals(status.sourceEvaluated, prediction.policy.sourceEvaluated)
+                assertFalse(prediction.policy.allowConditionSpecificAdvice)
                 assertEquals(status.version, prediction.output.modelVersion)
                 // The engine checks its actual embedding against this model-specific dimension.
-                assertTrue(metadata.getInt("embedding_dimension") > 0)
+                assertEquals(960, metadata.getInt("embedding_dimension"))
                 val highest = prediction.output.logits.indices.maxBy { prediction.output.logits[it] }
                 val predictedCrop = Conditions.byId(prediction.output.labelIds[highest])!!.crop
                 val result = DecisionPolicy.assess(predictedCrop, prediction.output, prediction.policy)
-                assertTrue("Unvalidated inference must not become a confident diagnosis", result is AssessmentResult.Uncertain)
-                val uncertain = result as AssessmentResult.Uncertain
-                assertTrue(UncertaintyReason.MODEL_NOT_VALIDATED in uncertain.reasons)
-                assertEquals(17, uncertain.evidence.ranked.size)
-                assertFalse(uncertain.evidence.calibratedAndValidated)
+                val evidence = requireNotNull(result.evidence)
+                assertEquals(17, evidence.ranked.size)
+                assertFalse("A dataset-tested estimate must retain diagnosis_validated=false", evidence.calibratedAndValidated)
+                assertEquals(status.sourceEvaluated, evidence.sourceEvaluated)
+                if (!status.sourceEvaluated) {
+                    assertTrue("An unqualified bundle must remain uncertain", result is AssessmentResult.Uncertain)
+                    assertTrue(UncertaintyReason.MODEL_NOT_VALIDATED in (result as AssessmentResult.Uncertain).reasons)
+                } else {
+                    assertTrue("Source qualification permits an estimate or threshold-based uncertainty",
+                        result is AssessmentResult.LikelyCondition || result is AssessmentResult.HealthyLooking || result is AssessmentResult.Uncertain)
+                    if (result is AssessmentResult.Uncertain) {
+                        assertFalse("A qualified bundle may reject this photo for score/distance, not a missing qualification",
+                            UncertaintyReason.MODEL_NOT_VALIDATED in result.reasons)
+                    }
+                }
                 assertNotNull("Verified model copy must exist", File(app.filesDir, "model").listFiles()?.firstOrNull {
                     it.name == metadata.getString("model_sha256") + ".onnx"
                 })
@@ -85,7 +100,7 @@ class Review2IntegrationTest {
         }
     }
 
-    @Test fun unvalidatedModelCannotAssertTheFarmerSelectedTheWrongCrop() {
+    @Test fun unqualifiedModelCannotAssertTheFarmerSelectedTheWrongCrop() {
         val logits = Conditions.all.map { if (it.id == "potato_early_blight") 20f else -20f }
         val result = DecisionPolicy.assess(
             Crop.TOMATO,

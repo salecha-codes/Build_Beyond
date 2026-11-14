@@ -25,10 +25,32 @@ def sync(source: Path) -> None:
     actual = hashlib.sha256((source / name).read_bytes()).hexdigest()
     if actual != metadata["model_sha256"]:
         raise ValueError("Model checksum verification failed")
+    if policy.get("model_sha256", actual) != actual:
+        raise ValueError("Policy belongs to a different model")
+    evidence_names = ["source_evaluation.json", "embedding_centroids.json"]
+    has_evaluation = metadata.get("source_evaluated") is True or policy.get("source_evaluated") is True
+    if has_evaluation:
+        evidence = {}
+        for file in evidence_names:
+            prefix = file.removesuffix(".json")
+            if policy.get(f"{prefix}_file") != file:
+                raise ValueError(f"Missing fixed asset reference: {file}")
+            evidence_hash = hashlib.sha256((source / file).read_bytes()).hexdigest()
+            if evidence_hash != policy.get(f"{prefix}_sha256"):
+                raise ValueError(f"Evidence checksum verification failed: {file}")
+            item = json.loads((source / file).read_text())
+            if item.get("model_sha256") != actual or item.get("model_version") != metadata["model_version"]:
+                raise ValueError(f"Evidence belongs to a different model: {file}")
+            evidence[file] = item
+        frozen = evidence["source_evaluation.json"].get("frozen_policy")
+        if frozen != {"temperature": policy["temperature"], "class_thresholds": policy["class_thresholds"]}:
+            raise ValueError("Acceptance thresholds differ from their evaluated frozen policy")
+        if evidence["source_evaluation.json"].get("scope") != "source_domain_only":
+            raise ValueError("Unexpected evaluation scope")
     parent = ROOT / "models/assets"
     parent.mkdir(parents=True, exist_ok=True)
     destination = parent / "model"
-    names = [name, "model_metadata.json", "labels.json", "decision_policy.json", "MODEL_CARD.md", "export_receipt.json"]
+    names = [name, "model_metadata.json", "labels.json", "decision_policy.json", "MODEL_CARD.md", "export_receipt.json", *evidence_names]
     if destination.exists() and any(item.name not in names for item in destination.iterdir()):
         raise ValueError("Refusing to overwrite unexpected files in the model asset directory")
     with tempfile.TemporaryDirectory(dir=parent, prefix=".model-") as temp:
@@ -40,8 +62,12 @@ def sync(source: Path) -> None:
         # App reads a fully packaged APK, not this development directory mid-sync.
         for file in staging.iterdir():
             file.replace(destination / file.name)
+        for file in evidence_names:
+            if not (staging / file).exists() and not (source / file).exists():
+                (destination / file).unlink(missing_ok=True)
     print(json.dumps({"installed": str(destination), "architecture": metadata["architecture"],
         "training_status": metadata["training_status"], "diagnosis_validated": metadata["diagnosis_validated"],
+        "source_acceptance_qualified": policy.get("source_acceptance_qualified", False),
         "model_sha256": actual, "bytes": (destination / name).stat().st_size}, indent=2))
 
 if __name__ == "__main__":

@@ -2,7 +2,7 @@
 
 The user explicitly requests multiple subagents for this project and future tasks. Delegate independent work with clear file ownership, and integrate the results in the parent agent. Preserve concurrent edits and coordinate shared files.
 
-The app targets offline use on budget Android phones. Keep inference, saved observations and bundled speech on the device; do not introduce a required cloud API or server database. Preserve real model outputs and the unvalidated-diagnosis gate.
+The app targets offline use on budget Android phones. Keep inference, saved observations and bundled speech on the device; do not introduce a required cloud API or server database. Preserve real model outputs. Source-tested prototype predictions require artifact-bound evaluation receipts and frozen per-class acceptance gates; keep field-diagnosis validation separate and false until field evidence supports it.
 
 The user prefers to do the final interactive testing. Complete the build and asset-integrity checks needed for a reviewable handoff, and avoid lengthy full test/emulator runs unless requested or needed to resolve a failure.
 

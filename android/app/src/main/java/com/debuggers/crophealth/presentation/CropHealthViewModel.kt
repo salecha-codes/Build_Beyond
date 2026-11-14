@@ -153,15 +153,26 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
                 is AssessmentResult.HealthyLooking -> result.condition
                 else -> null
             }
-            val saved = current.openedObservation?.takeIf { it.validated }?.conditionId
+            val savedRecord = current.openedObservation
+            val saved = savedRecord?.takeIf { it.validated }?.conditionId
+            val savedKey = when (savedRecord?.resultType) {
+                "likely_condition" -> "model_prototype"
+                "healthy_looking" -> "healthy"
+                "retake" -> "retake"
+                "model_unavailable" -> "model_unavailable"
+                "crop_mismatch" -> "crop_mismatch"
+                else -> "uncertain"
+            }
             val key = when (current.assessment) {
                 is AssessmentResult.Retake -> "retake"
                 is AssessmentResult.ModelUnavailable -> "model_unavailable"
                 is AssessmentResult.CropMismatch -> "crop_mismatch"
                 is AssessmentResult.HealthyLooking -> "healthy"
-                else -> "uncertain"
+                is AssessmentResult.LikelyCondition -> "model_prototype"
+                else -> savedKey
             }
-            current.copy(guidance = (condition?.id ?: saved)?.let { catalog?.guidance(it, current.language) },
+            val adviceAllowed = current.model.validated && current.model.allowConditionSpecificAdvice
+            current.copy(guidance = if (adviceAllowed) (condition?.id ?: saved)?.let { catalog?.guidance(it, current.language) } else null,
                 prompt = catalog?.prompt(key, current.language))
         }
     }
@@ -184,7 +195,9 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
             is AssessmentResult.Retake -> "Photo needs retaking: ${result.quality.issues.joinToString()}."
             is AssessmentResult.ModelUnavailable -> "Local model unavailable: ${result.reason}. No diagnosis produced."
             is AssessmentResult.CropMismatch -> "Selected crop and model output differ. Retake or check with an expert."
-            else -> "Model assessment; confirm with a crop expert when needed."
+            else -> if (result.evidence?.sourceEvaluated == true && result.evidence?.calibratedAndValidated != true)
+                "Dataset-tested prototype model match; field diagnosis has not been validated."
+                else "Model assessment; confirm with a crop expert when needed."
         }
         val record = Observation(UUID.randomUUID().toString(), System.currentTimeMillis(), snapshot.selectedCrop,
             snapshot.photoPath, type, evidence?.top?.condition?.id, evidence?.top?.score,
@@ -212,12 +225,17 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
         val condition = stored?.conditionId?.let(Conditions::byId) ?: value.assessment?.evidence?.top?.condition
         val name = condition?.displayName(value.language) ?: localized("Uncertain observation", "ಅನಿಶ್ಚಿತ ವೀಕ್ಷಣೆ", "अनिश्चित अवलोकन")
         val validated = stored?.validated ?: value.assessment?.evidence?.calibratedAndValidated ?: false
+        val accepted = stored?.resultType in setOf("likely_condition", "healthy_looking") ||
+            value.assessment is AssessmentResult.LikelyCondition || value.assessment is AssessmentResult.HealthyLooking
         val shareText = buildString {
             appendLine(localized("Crop Health — observation", "ಬೆಳೆ ಆರೋಗ್ಯ — ವೀಕ್ಷಣೆ", "फसल स्वास्थ्य — अवलोकन"))
             appendLine("${localized("Crop", "ಬೆಳೆ", "फसल")}: ${value.selectedCrop.displayName(value.language)}")
             appendLine("${localized("Model candidate", "ಮಾದರಿಯ ಸಾಧ್ಯತೆ", "मॉडल का संभावित परिणाम")}: $name")
             appendLine(if (validated) localized("Model assessment; expert confirmation may be needed.",
                 "ಮಾದರಿಯ ಪರಿಶೀಲನೆ; ತಜ್ಞರ ದೃಢೀಕರಣ ಬೇಕಾಗಬಹುದು.", "मॉडल का आकलन; विशेषज्ञ की पुष्टि आवश्यक हो सकती है।")
+                else if (accepted) localized("Dataset-tested prototype estimate. Confirm the condition with a local crop expert.",
+                    "ಡೇಟಾಸೆಟ್‌ನಲ್ಲಿ ಪರೀಕ್ಷಿಸಿದ ಪ್ರಾಯೋಗಿಕ ಅಂದಾಜು. ಸ್ಥಳೀಯ ಕೃಷಿ ತಜ್ಞರಿಂದ ಸ್ಥಿತಿಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.",
+                    "डेटासेट पर परखा गया प्रोटोटाइप अनुमान। स्थानीय कृषि विशेषज्ञ से स्थिति की पुष्टि करें।")
                 else localized("Prototype / uncertain output. This is not a confirmed diagnosis or treatment recommendation.",
                     "ಪ್ರಾಯೋಗಿಕ / ಅನಿಶ್ಚಿತ ಫಲಿತಾಂಶ. ಇದು ದೃಢಪಟ್ಟ ರೋಗನಿರ್ಣಯ ಅಥವಾ ಚಿಕಿತ್ಸೆಯ ಸಲಹೆಯಲ್ಲ.",
                     "प्रोटोटाइप / अनिश्चित परिणाम। यह पुष्टि किया गया निदान या उपचार की सलाह नहीं है।"))

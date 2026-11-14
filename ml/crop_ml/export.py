@@ -29,7 +29,16 @@ def export_bundle(output: Path, checkpoint: Path | None = None, threads: int = 3
         if not receipt_path.exists():
             raise ValueError("A training checkpoint must have its training receipt")
         training_receipt = json.loads(receipt_path.read_text())
-        selected_epoch = state.get("epoch", max(training_receipt["history"], key=lambda x: x["validation_macro_f1"])["epoch"])
+        if training_receipt.get("running"):
+            raise ValueError("Finish checkpoint selection before exporting a release bundle")
+        selected_epoch = state.get("epoch")
+        if selected_epoch is None:
+            selected_epoch = training_receipt.get("best_epoch")
+        if selected_epoch is None:
+            raise ValueError("The checkpoint receipt must identify the selected training epoch")
+        recorded_hash = training_receipt.get("best_checkpoint_sha256")
+        if recorded_hash and recorded_hash != sha256(checkpoint):
+            raise ValueError("Selected checkpoint checksum differs from its completed training receipt")
     output.mkdir(parents=True, exist_ok=True)
     example = torch.zeros(1, 3, IMAGE_SIZE, IMAGE_SIZE)
     with torch.inference_mode():
@@ -61,7 +70,7 @@ def export_bundle(output: Path, checkpoint: Path | None = None, threads: int = 3
     training_mode = training_receipt["training_mode"] if training_receipt else "untrained_smoke"
     model_version = f"mnv4-conv-small-{training_mode}-{artifact_hash[:12]}"
     metadata = {"schema_version": 1, "model_version": model_version, "architecture": "MobileNetV4-Conv-Small", "timm_model": MODEL_NAME, "model_file": model_path.name, "model_sha256": artifact_hash, "model_size_bytes": model_path.stat().st_size, "class_count": 17, "embedding_dimension": int(actual_embeddings.shape[1]), "input": {"name": "image", "dtype": "float32", "shape": [1, 3, 224, 224], "layout": "NCHW", "color_order": "RGB", "width": 224, "height": 224, "resize": "letterbox", "resize_rounding": "half_up", "interpolation": "bilinear", "padding_rgb": list(PADDING_RGB), "pixel_scale": 255.0, "mean": list(MEAN), "std": list(STD), "exif_orientation": True}, "outputs": {"logits": {"name": "logits", "shape": [1, 17]}, "embeddings": {"name": "embeddings", "shape": [1, int(actual_embeddings.shape[1])]}}, "labels_file": "labels.json", "policy_file": "decision_policy.json", "precision": "fp32", "onnx_opset": 17, "onnx_ir_version": exported.ir_version, "runtime_tested": f"onnxruntime-python-{ort.__version__}-cpu", "training_status": "trained_prototype" if checkpoint else "untrained_pipeline_smoke_only", "diagnosis_validated": False, "test_scope": "Desktop CPU export/runtime parity only. This is not phone performance or clinical/field validation."}
-    policy = {"schema_version": 1, "model_version": metadata["model_version"], "validated": False, "validation_status": "not_validated_for_diagnosis", "temperature": 1.0, "min_confidence": 0.75, "min_margin": 0.15, "thresholds_calibrated": False, "reason": "MODEL_NOT_VALIDATED", "allow_condition_specific_advice": False, "note": "Thresholds are provisional plumbing values, not calibrated acceptance criteria. All predictions must remain uncertain until the validated gate is enabled through an independently evaluated artifact."}
+    policy = {"schema_version": 1, "model_version": metadata["model_version"], "model_sha256": artifact_hash, "validated": False, "validation_status": "awaiting_source_evaluation", "temperature": 1.0, "min_confidence": 0.75, "min_margin": 0.15, "thresholds_calibrated": False, "source_evaluated": False, "source_acceptance_enabled": False, "reason": "MODEL_NOT_VALIDATED", "allow_condition_specific_advice": False, "note": "Run the separate frozen-calibration and final-test qualification stages before enabling source-tested prototype predictions."}
     write_json(output / "model_metadata.json", metadata)
     write_json(output / "decision_policy.json", policy)
     shutil.copyfile(LABELS_PATH, output / "labels.json")
