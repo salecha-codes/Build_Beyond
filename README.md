@@ -6,22 +6,31 @@ AgriScan is an Android and browser prototype for checking leaf photos and readin
 
 ## Try AgriScan
 
-- **Browser app:** [salecha-codes.github.io/Build_Beyond](https://salecha-codes.github.io/Build_Beyond/)
+- **Android APK:** [Download the hackathon preview APK](https://github.com/salecha-codes/Build_Beyond/releases/download/v0.6.0-preview.2/crop-health-universal-debug.apk) · [Open the GitHub release page](https://github.com/salecha-codes/Build_Beyond/releases/tag/v0.6.0-preview.2)
+- **Browser app:** [Open AgriScan](https://salecha-codes.github.io/Build_Beyond/)
 - **Source code:** [github.com/salecha-codes/Build_Beyond](https://github.com/salecha-codes/Build_Beyond)
 - **Project report:** [Hackathon Final Report PDF](https://salecha-codes.github.io/Build_Beyond/downloads/Hackathon_Final_Report.pdf)
 
-The browser downloads its model, runtime, content, and audio the first time it is opened. Wait for **Offline ready** before disconnecting. After the assets are cached, the service worker supports offline reload and inference. Browser storage is local to that browser and device.
+The APK is a universal, debug-signed preview build shared through GitHub for hackathon evaluation. It is not a Google Play release. Download it on an Android phone, open the file, and follow Android's installation prompt; Android may ask you to allow installs from the browser or file manager you used. The app targets Android 7.0 (API 24) and newer.
 
-The native Android app bundles its model, content, and audio in the APK. It does not need a server or internet connection at runtime. Android requests camera access when needed and does not request Internet permission. To build and install it, follow [Build and install AgriScan](docs/BUILD_ANDROID.md).
+The browser downloads its model, runtime, content, and audio the first time it is opened. Wait for **Offline ready** before disconnecting. After the assets are cached, the service worker supports offline reload and inference. Browser storage is local to that browser and device; it is separate from Android history.
 
-## What it does
+## Walk through the app
 
-1. Choose tomato, potato, or maize; take a photo or select one from the gallery.
-2. The app checks photo quality and whether the image looks like a leaf. It asks for another photo when the input is unsuitable.
-3. A bundled MobileNetV3-Large model ranks 17 supported condition labels. The app shows the model output and score with uncertainty language; a high score is not proof of a correct diagnosis.
-4. Answer six questions about visible damage, spread, affected plants, wilting, fruit or stem symptoms, and wet weather.
-5. A separate offline advisory system summarizes the reported damage and suggests when to recheck or seek help. It does not calculate severity from the photo or classifier score.
-6. Review condition-specific care and recovery steps, play guidance in English, Kannada, or Hindi, and save the observation locally.
+1. **Open AgriScan and choose a language.** English, Kannada, and Hindi are available. The selection is saved on your device.
+2. **Choose a crop.** Select tomato, potato, or maize.
+3. **Start a scan.** Tap the scan action and take a photo, or choose one from the gallery. Give camera access if Android asks.
+4. **Check the photo.** The app checks image quality and whether it looks like a leaf. If the picture is unsuitable, it explains that and asks you to try again.
+5. **Review the image-model result.** MobileNetV3-Large ranks 17 supported labels and shows the model's candidate and score. Treat this as a prototype suggestion, not a confirmed diagnosis.
+6. **Answer the six observation questions.** Report visible damage, spread, nearby affected plants, wilting, fruit or stem symptoms, and wet weather. These answers feed a separate offline advisory system; they do not train or change the image model.
+7. **Review care guidance.** Read the conditional care and recovery information, or browse the Care library without scanning. The guidance is a prototype that needs agronomist and language review; it is not a guaranteed cure or a pesticide prescription.
+8. **Listen and save.** Play the bundled English, Kannada, or Hindi audio. Save the observation to local history to reopen or delete it later.
+
+### Use the browser instead
+
+Open [AgriScan in your browser](https://salecha-codes.github.io/Build_Beyond/). On first visit, allow the model and other assets to load and wait for **Offline ready** before disconnecting. Allow camera access if you want to take a photo. The browser stores history locally in that browser; it does not sync with the Android app.
+
+The native Android app bundles its model, content, and audio in the APK. Its scan flow does not need a server or internet connection at runtime. Android requests camera access when needed and does not request Internet permission. For local builds and device-specific APKs, see [Build and install AgriScan](docs/BUILD_ANDROID.md).
 
 The searchable **Care library** can also be used without a photo. A manually selected condition is clearly marked as a library choice; it does not change a scan, photo, prediction, or saved record. Unknown answers do not silently select the mild-care pathway.
 
