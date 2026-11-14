@@ -212,7 +212,7 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
                 }
             }
         }
-        Column(verticalArrangement=Arrangement.spacedBy(10.dp)) {Section(s.tr("Choose your crop","ಬೆಳೆ ಆಯ್ಕೆಮಾಡಿ"));CropChips(s,a)}
+        Column(verticalArrangement=Arrangement.spacedBy(10.dp)) {Section(s.tr("Choose your crop","ಬೆಳೆ ಆಯ್ಕೆಮಾಡಿ"));CropChips(s,a,order=listOf(Crop.MAIZE,Crop.POTATO,Crop.TOMATO))}
         Secondary(s.careText("Treatment & recovery library","ಚಿಕಿತ್ಸೆ ಮತ್ತು ಚೇತರಿಕೆ ಮಾಹಿತಿ","उपचार और सुधार पुस्तकालय"),{a(AppAction.OpenCareLibrary)})
         Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween,verticalAlignment=Alignment.CenterVertically) {Section(s.tr("Recent scans","ಇತ್ತೀಚಿನ ಪರಿಶೀಲನೆಗಳು"));TextButton(onClick={a(AppAction.Navigate(Screen.HISTORY))}) {Text(s.tr("View all","ಎಲ್ಲವನ್ನೂ ನೋಡಿ"),fontSize=12.sp)}}
         if(s.observations.isEmpty()) {
@@ -222,10 +222,10 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
     }
 }
 
-@Composable private fun CropChips(s:AppUiState,a:(AppAction)->Unit,all:Boolean=false,selected:Crop?=s.selectedCrop,onSelect:((Crop?)->Unit)?=null) {
+@Composable private fun CropChips(s:AppUiState,a:(AppAction)->Unit,all:Boolean=false,selected:Crop?=s.selectedCrop,onSelect:((Crop?)->Unit)?=null,order:List<Crop> = Crop.entries) {
     Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(8.dp)) {
         if(all) CropChip(s.tr("All","ಎಲ್ಲಾ"),selected==null,null) {onSelect?.invoke(null)}
-        Crop.entries.forEach {crop ->CropChip(crop.displayName(s.language),selected==crop,crop) {if(onSelect!=null) onSelect(crop) else a(AppAction.SelectCrop(crop))}}
+        order.forEach {crop ->CropChip(crop.displayName(s.language),selected==crop,crop) {if(onSelect!=null) onSelect(crop) else a(AppAction.SelectCrop(crop))}}
     }
 }
 @Composable private fun RowScope.CropChip(label:String,selected:Boolean,crop:Crop?,click:()->Unit) {

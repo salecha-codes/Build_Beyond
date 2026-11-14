@@ -51,7 +51,7 @@ fun Observation.hidesUnsupportedCandidate(): Boolean =
 data class AppUiState(
     val screen: Screen = Screen.HOME,
     val language: AppLanguage = AppLanguage.ENGLISH,
-    val selectedCrop: Crop = Crop.TOMATO,
+    val selectedCrop: Crop = Crop.MAIZE,
     val photoPath: String? = null,
     val assessment: AssessmentResult? = null,
     val guidance: Guidance? = null,
