@@ -32,9 +32,13 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
     init {
         HindiUi.load(application)
         viewModelScope.launch {
-            preferences.state.collect { preference -> mutableState.update {
-                it.copy(language = preference.language, autoAudio = preference.autoAudio)
-            }; refreshCopy() }
+            preferences.state.collect { preference ->
+                mutableState.update { current ->
+                    val screen = if (!preference.welcomed && current.screen == Screen.HOME) Screen.WELCOME else current.screen
+                    current.copy(language = preference.language, autoAudio = preference.autoAudio, screen = screen)
+                }
+                refreshCopy()
+            }
         }
         viewModelScope.launch { history.observations.collect { records -> mutableState.update { it.copy(observations = records) } } }
         viewModelScope.launch {

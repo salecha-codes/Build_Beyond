@@ -373,5 +373,20 @@
   "No clear leaf detected": "साफ़ पत्ती नहीं मिली",
   "This does not look like a clear leaf photo. Take a close-up of one tomato, potato or maize leaf.": "यह पत्ती की साफ़ तस्वीर जैसी नहीं लगती। टमाटर, आलू या मक्के की एक पत्ती की नज़दीकी तस्वीर लें।",
   "Uncertain model candidate": "मॉडल का अनिश्चित अनुमान",
-  "A leaf was detected. This is the closest model match, but the photo differs from its training examples. Check the result with a clearer photo or a crop expert.": "पत्ती मिली है। यह मॉडल का सबसे निकट अनुमान है, लेकिन तस्वीर उसके प्रशिक्षण के उदाहरणों से अलग है। अधिक साफ़ तस्वीर या कृषि विशेषज्ञ से परिणाम की जाँच करें।"
+  "A leaf was detected. This is the closest model match, but the photo differs from its training examples. Check the result with a clearer photo or a crop expert.": "पत्ती मिली है। यह मॉडल का सबसे निकट अनुमान है, लेकिन तस्वीर उसके प्रशिक्षण के उदाहरणों से अलग है। अधिक साफ़ तस्वीर या कृषि विशेषज्ञ से परिणाम की जाँच करें।",
+"Share or export observation": "अवलोकन साझा या निर्यात करें",
+  "Export your observation summary and photo from this device.": "इस उपकरण से अपने अवलोकन का सारांश और तस्वीर निर्यात करें।",
+  "Copy summary text": "सारांश टेक्स्ट कॉपी करें",
+  "Copied to clipboard!": "क्लिपबोर्ड पर कॉपी किया गया!",
+  "Download summary (.txt)": "सारांश डाउनलोड करें (.txt)",
+  "Download leaf photo": "पत्ती की तस्वीर डाउनलोड करें",
+  "Close": "बंद करें",
+  "Crop Health — observation": "फसल स्वास्थ्य — अवलोकन",
+  "Crop Health observation": "फसल स्वास्थ्य अवलोकन",
+  "Concern level": "चिंता का स्तर",
+  "Please review the original leaf photo and observed symptoms with a qualified local expert.": "कृपया मूल पत्ती की तस्वीर और देखे गए लक्षणों की योग्य स्थानीय विशेषज्ञ से जाँच कराएँ।",
+  "First-run experience": "पहली बार का अनुभव",
+  "View the onboarding screen to change your starting language.": "अपनी प्रारंभिक भाषा बदलने के लिए स्वागत स्क्रीन देखें।",
+  "Show welcome screen": "स्वागत स्क्रीन देखें",
+  "Offline-first prototype · All photos and processing stay on this device.": "ऑफ़लाइन प्रोटोटाइप · सभी तस्वीरें और प्रक्रिया इसी उपकरण पर रहती हैं।"
 }

@@ -1132,3 +1132,76 @@ html[lang="hi"] .heading-copy h1,html[lang="hi"] .question-title{letter-spacing:
 .advisory-reasons{padding:12px;border:1px solid #e6dff0;border-radius:12px;font-size:13px}
 .advisory-reasons summary{cursor:pointer;font-weight:600}.advisory-reasons li{margin:9px 0;line-height:1.5}
 .advisory-panel .guidance-card p{line-height:1.6;font-size:14px}.advisory-panel a{color:#56349b;overflow-wrap:anywhere}
+
+/* Welcome / Onboarding Screen */
+.welcome-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 100%;
+  padding: 32px 24px;
+  text-align: center;
+}
+.welcome-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto 0;
+  width: 100%;
+  max-width: 340px;
+}
+.welcome-icon {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: var(--lavender);
+  color: var(--purple);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+.welcome-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+.welcome-subtitle {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+.welcome-language {
+  margin-bottom: 32px;
+}
+.welcome-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* Share / Export Modal */
+.share-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+.share-preview-text {
+  max-height: 140px;
+  overflow-y: auto;
+  font-size: 11px;
+  background: var(--lavender);
+  padding: 10px;
+  border-radius: 12px;
+  color: var(--ink);
+  white-space: pre-wrap;
+  text-align: left;
+  line-height: 1.4;
+  margin: 12px 0;
+}

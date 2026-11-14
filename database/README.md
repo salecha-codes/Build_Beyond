@@ -6,7 +6,7 @@ This prototype has **two local implementations**, not a central database service
 |---|---|---|
 | Native Android | Room / SQLite (`crop-observations.db`) and app-private image files | Saved observations and their photo paths |
 | Browser preview | IndexedDB (`debuggers-crop-health`, version 1) | Saved observation metadata and the actual photo `Blob` in one atomic record |
-| Browser preference | `localStorage` key `crophealth.language` | `en`, `kn` or `hi` interface preference |
+ | Browser preference | `localStorage` keys `crophealth.language` and `crophealth.onboarded` | `en`, `kn` and `hi` interface preference and first-run onboarding status |
 
 There is no remote observation API, shared cloud database, authentication service, or automatic Android/browser synchronization. The web preview and Android APK keep separate histories. No mock or demonstration rows are inserted. An empty history means no observation has been saved in that installation/origin.
 

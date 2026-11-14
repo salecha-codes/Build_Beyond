@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Asset/contract checks; these are not agricultural or native-language validation."""
-import hashlib, json, pathlib, subprocess, unittest
+import hashlib, json, pathlib, shutil, subprocess, unittest
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 ASSETS=ROOT/'android/app/src/main/assets'
 CATALOG=json.loads((ASSETS/'content/catalog.json').read_text())
@@ -44,6 +44,8 @@ class OfflineContentTests(unittest.TestCase):
             self.assertLess(clip['duration_seconds'],45.0)
             self.assertGreater(clip['bytes'],1000)
     def test_all_ogg_assets_decode_offline(self):
+        if shutil.which('ffmpeg') is None:
+            self.skipTest('ffmpeg is not installed on this system')
         for clip in MANIFEST['clips']:
             result=subprocess.run(['ffmpeg','-hide_banner','-loglevel','error','-i',str(ASSETS/clip['path']),'-f','null','-'],capture_output=True)
             self.assertEqual(result.returncode,0,(clip['path'],result.stderr.decode()))

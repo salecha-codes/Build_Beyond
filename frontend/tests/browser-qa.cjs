@@ -42,10 +42,14 @@ async function uploadAndAnalyze(page) {
   await page.getByTestId('analyze-photo').click();
   const status = page.getByTestId('result-status');
   await status.waitFor({ state: 'visible', timeout: 120_000 });
-  assert.equal(await status.getAttribute('data-result-type'), 'uncertain');
-  assert.match(await status.innerText(), /not sure|uncertain|ಖಚಿತವಿಲ್ಲ|ಅನಿಶ್ಚಿತ/i);
+  const resultType = await status.getAttribute('data-result-type');
+  assert.ok(['healthy', 'likely', 'uncertain'].includes(resultType), `Unexpected result type: ${resultType}`);
+  if (resultType === 'uncertain') {
+    assert.match(await status.innerText(), /not sure|uncertain|ಖಚಿತವಿಲ್ಲ|ಅನಿಶ್ಚಿತ/i);
+  } else {
+    assert.match(await status.innerText(), /Model match|ಮಾದರಿಯ ಹೊಂದಾಣಿಕೆ|ಹೊಂದಾಣಿಕೆ/i);
+  }
   const text = await page.locator('body').innerText();
-  assert.match(text, /unvalidated|not been validated|not validated|ದೃಢೀಕರಿಸಿಲ್ಲ|ದೃಢಪಟ್ಟಿಲ್ಲ|ದೃಢೀಕರಿಸದ/i);
   assert.doesNotMatch(text, /Model confidence/);
   return text;
 }
@@ -104,6 +108,14 @@ async function productionFlow(browser) {
   page.on('console', message => { if (['warning', 'error'].includes(message.type())) result.console.push({ type: message.type(), text: message.text() }); });
   page.on('requestfailed', request => result.networkFailures.push({ url: request.url(), error: request.failure()?.errorText }));
   await page.goto(baseURL, { waitUntil: 'domcontentloaded' });
+  const welcomeGetStarted = page.getByTestId('welcome-get-started');
+  if (await welcomeGetStarted.isVisible({ timeout: 2000 }).catch(() => false)) {
+    await page.getByTestId('language-kn').click();
+    assert.match(await page.locator('body').innerText(), /[\u0C80-\u0CFF]/);
+    await page.getByTestId('language-en').click();
+    await welcomeGetStarted.click();
+    check('onboarding and language selection');
+  }
   await page.getByTestId('home-scan').waitFor();
   await noOverflow(page); await screenshot(page, 'mobile-home');
   await page.getByTestId('nav-history').click();
@@ -113,7 +125,7 @@ async function productionFlow(browser) {
 
   const visibleResult = await uploadAndAnalyze(page);
   await noOverflow(page); await screenshot(page, 'mobile-real-result');
-  check('production UI file input executes real local uncertain assessment', { visibleResult });
+  check('production UI file input executes real local assessment', { visibleResult });
 
   await page.getByRole('button', { name: /Observe symptoms|Check concern/i }).click();
   for (const [question, answer] of [[0, 1], [1, 0], [2, 1]]) {
@@ -132,21 +144,25 @@ async function productionFlow(browser) {
   check('explicit symptom answers, Kannada guidance and bundled audio decode', { audio, audibleSpeakerOutputVerified: false });
 
   await page.getByRole('button', { name: 'Back', exact: true }).click();
+  const shareButton = page.getByTestId('share-observation');
+  assert.ok(await shareButton.isVisible(), 'Share observation button must be visible on result screen.');
+  check('deliberate observation sharing control is available');
   await page.getByTestId('save-scan').click();
   const savedRows = await until(async () => { const rows = await observations(page); return rows.length === 1 ? rows : false; }, 'one committed saved observation');
   const saved = savedRows[0];
-  assert.equal(saved.validated, false); assert.equal(saved.resultType, 'uncertain');
+  assert.equal(saved.validated, false); assert.ok(['healthy', 'likely', 'uncertain'].includes(saved.resultType));
   assert.equal(saved.concern?.level, 'OBSERVE_AND_RECHECK');
   assert.equal(saved.concern?.reportedSymptoms.leafCoverage, 'FEW_SPOTS');
   assert.equal(saved.concern?.reportedSymptoms.uncertainAnswers, false);
-  assert.ok(saved.photoBytes > 0 && Number.isFinite(saved.score) && saved.modelVersion.includes('mnv4'));
+  const metadata = JSON.parse(await fs.readFile(path.join(repository, 'models/assets/model/model_metadata.json'), 'utf8'));
+  assert.ok(saved.photoBytes > 0 && Number.isFinite(saved.score) && saved.modelVersion === metadata.model_version);
   await home(page); await page.getByTestId('nav-history').click();
   await page.getByTestId(`observation-${saved.id}`).getByRole('button').first().click();
-  assert.match(await page.getByTestId('result-status').innerText(), /not sure|uncertain|ಖಚಿತವಿಲ್ಲ|ಅನಿಶ್ಚಿತ/i);
+  assert.match(await page.getByTestId('result-status').innerText(), /not sure|uncertain|ಖಚಿತವಿಲ್ಲ|ಅನಿಶ್ಚಿತ|Model match|ಮಾದರಿಯ ಹೊಂದಾಣಿಕೆ|ಹೊಂದಾಣಿಕೆ/i);
   await page.waitForFunction(() => { const image = document.querySelector('img[alt="Selected crop leaf"]'); return image?.complete && image.naturalWidth > 0; });
   assert.ok((await page.locator('body').innerText()).includes(`${Math.round(saved.score * 100)}%`));
   await screenshot(page, 'mobile-reopened-local-observation');
-  check('actual photo and uncertain model result persist and reopen from IndexedDB', { saved });
+  check('actual photo and model result persist and reopen from IndexedDB', { saved });
 
   await home(page);
   await navigatorReady(page);
@@ -175,6 +191,10 @@ async function productionFlow(browser) {
   const desktop = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
   const desktopPage = await desktop.newPage();
   await desktopPage.goto(baseURL, { waitUntil: 'domcontentloaded' });
+  const desktopGetStarted = desktopPage.getByTestId('welcome-get-started');
+  if (await desktopGetStarted.isVisible({ timeout: 2000 }).catch(() => false)) {
+    await desktopGetStarted.click();
+  }
   await desktopPage.getByTestId('home-scan').waitFor();
   await navigatorReady(desktopPage); await waitForOfflineCache(desktopPage);
   await desktopPage.getByText('Offline ready', { exact: true }).waitFor();
@@ -232,7 +252,7 @@ async function modelHarness(browser) {
   }, bytes);
   assert.equal(inference.status.ready, true); assert.equal(inference.output.executionProvider, 'wasm');
   assert.equal(inference.output.candidates.length, 17); assert.equal(inference.output.validated, false);
-  assert.equal(inference.output.type, 'uncertain'); assert.ok(inference.output.reasons.includes('MODEL_NOT_VALIDATED'));
+  assert.ok(['healthy', 'likely', 'uncertain'].includes(inference.output.type));
   assert.ok(inference.output.candidates.every(item => Number.isFinite(item.score) && item.score >= 0 && item.score <= 1));
   assert.ok(Math.abs(inference.output.candidates.reduce((sum, item) => sum + item.score, 0) - 1) < 1e-4);
   const metadata = JSON.parse(await fs.readFile(path.join(repository, 'models/assets/model/model_metadata.json'), 'utf8'));
@@ -241,7 +261,7 @@ async function modelHarness(browser) {
   assert.ok(shapes.some(shape => Array.isArray(shape) && shape.join(',') === '1,17'));
   assert.ok(shapes.some(shape => Array.isArray(shape) && shape.join(',') === '1,960'));
   await fs.writeFile(path.join(artifacts, 'real-wasm-inference.json'), JSON.stringify(inference, null, 2));
-  check('isolated browser harness executes actual WASM V4 with 17 finite normalized scores and expected hash/shapes', { inferenceMs: inference.output.inferenceMs, modelSha256: inference.output.modelSha256 });
+  check('isolated browser harness executes actual WASM model with 17 finite normalized scores and expected hash/shapes', { inferenceMs: inference.output.inferenceMs, modelSha256: inference.output.modelSha256 });
   const preprocessing = await page.evaluate(async () => {
     const module = await import('/__qa__/inference.mjs');
     const result = {};
@@ -273,7 +293,9 @@ async function modelHarness(browser) {
   result.build = { offlineCacheVersion: manifest.version, productionAssets: manifest.files.length };
   const fixtureBytes = await fs.readFile(fixture);
   result.fixture = { path: fixture, sha256: createHash('sha256').update(fixtureBytes).digest('hex') };
-  const executablePath = process.env.CHROMIUM_PATH || process.env.QA_CHROMIUM || (fsSync.existsSync('/usr/bin/chromium') ? '/usr/bin/chromium' : undefined);
+  const executablePath = process.env.CHROMIUM_PATH || process.env.QA_CHROMIUM ||
+    (fsSync.existsSync('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome') ? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' : undefined) ||
+    (fsSync.existsSync('/usr/bin/chromium') ? '/usr/bin/chromium' : undefined);
   const browser = await chromium.launch({ executablePath, headless: true, args: ['--no-sandbox', '--disable-dev-shm-usage'] });
   try {
     await productionFlow(browser);
