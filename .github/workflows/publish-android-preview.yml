@@ -1,0 +1,45 @@
+name: Publish Android preview APK
+
+on:
+  push:
+    tags:
+      - 'v*-preview.*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out tagged source
+        uses: actions/checkout@v7
+
+      - name: Set up Java
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v4
+
+      - name: Configure Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Build universal debug APK
+        run: ./gradlew :app:assembleDebug
+
+      - name: Prepare release asset
+        run: cp android/app/build/outputs/apk/debug/app-universal-debug.apk crop-health-universal-debug.apk
+
+      - name: Publish APK on GitHub Releases
+        uses: softprops/action-gh-release@v3
+        with:
+          name: Offline Crop Health ${{ github.ref_name }}
+          prerelease: true
+          body: |
+            Prototype APK for evaluation and testing. This debug-signed build is distributed outside Google Play and is not a production release.
+
+            Install on Android 7.0 (API 24) or newer. Android may ask you to allow installation from the app used to download this file.
+          files: crop-health-universal-debug.apk
