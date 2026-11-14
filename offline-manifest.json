@@ -1,5 +1,5 @@
 {
-  "version": "93c76310315a7dd4",
+  "version": "48d730819ae6e573",
   "files": [
     "assets/audio/en/advisory_maize_common_rust.ogg",
     "assets/audio/en/advisory_maize_gray_leaf_spot.ogg",
@@ -238,8 +238,8 @@
     "assets/content/catalog.json",
     "assets/content/hindi_ui.json",
     "assets/content/treatment_audio_manifest.json",
-    "assets/index-N8E6FD6U.css",
-    "assets/index-k_A7exTO.js",
+    "assets/index-3TI_Ccna.js",
+    "assets/index-Ckzatqcj.css",
     "assets/model/MODEL_CARD.md",
     "assets/model/crop_model.onnx",
     "assets/model/decision_policy.json",

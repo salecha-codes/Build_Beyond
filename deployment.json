@@ -1,5 +1,5 @@
 {
-  "source_commit": "7e45c82",
+  "source_commit": "6fbc462",
   "version": "0.6.0-treatment-recovery",
   "model_architecture": "MobileNetV3-Large",
   "model_sha256": "31b29158cc1fc1c07bdf3acc07cb6bb6da39eccb1050ffe6ed1d499811179fba",
@@ -14,5 +14,5 @@
   ],
   "diagnosis_validated": false,
   "treatment_field_validated": false,
-  "browser_workflow_test": "passed locally: all17 care-library entries, real inference, stage actions, full audio/offline/history, welcome/export and loading retry"
+  "browser_workflow_test": "passed locally: returning visit welcome animation repeats on refresh, transitions to Home, no browser errors; offline care, history and export remain verified"
 }
