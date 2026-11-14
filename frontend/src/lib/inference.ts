@@ -44,6 +44,7 @@ export interface AssessmentResult {
   embeddingDistance?: number;
   leafProbability?: number;
   leafCheckPassed?: boolean;
+  normalizedEntropy?: number;
 }
 export interface PreprocessSpec {
   width: number;
@@ -113,6 +114,7 @@ interface Policy {
   embedding_centroids_sha256?: string;
   class_thresholds?: Record<string, ClassThreshold>;
   max_embedding_distance?: number | null;
+  max_normalized_entropy?: number | null;
 }
 interface ClassThreshold {
   enabled: boolean;
@@ -413,7 +415,7 @@ export function unitEmbeddingDistance(embedding: ArrayLike<number>, centroid: re
 
 export function validateSourceAcceptance(
   metadata: Pick<Metadata, 'model_version' | 'model_sha256'>,
-  policy: Pick<Policy, 'temperature' | 'class_thresholds'>, receipt: unknown, centroidFile: unknown,
+  policy: Pick<Policy, 'temperature' | 'class_thresholds' | 'max_normalized_entropy'>, receipt: unknown, centroidFile: unknown,
 ): SourceAcceptance {
   requireThat(isRecord(receipt) && receipt.schema_version === 1 &&
     receipt.model_version === metadata.model_version && receipt.model_sha256 === metadata.model_sha256 &&
@@ -422,6 +424,9 @@ export function validateSourceAcceptance(
   const frozen = receipt.frozen_policy;
   requireThat(isRecord(frozen) && frozen.temperature === policy.temperature && isRecord(frozen.class_thresholds),
     'Source evaluation and calibrated policy disagree.');
+  requireThat(policy.max_normalized_entropy == null ||
+    (typeof frozen.max_normalized_entropy === 'number' && frozen.max_normalized_entropy === policy.max_normalized_entropy),
+  'Entropy gate is not bound to source evaluation evidence.');
   const thresholds = policy.class_thresholds;
   requireThat(isRecord(thresholds) && Object.keys(thresholds).length === CONDITIONS.length &&
     Object.keys(frozen.class_thresholds).length === CONDITIONS.length,
@@ -538,6 +543,9 @@ async function loadBundle(): Promise<Bundle> {
     'Model labels disagree with the stable application contract.',
   );
   requireThat(Number.isFinite(policy.temperature) && policy.temperature > 0, 'Invalid model temperature.');
+  requireThat(policy.max_normalized_entropy == null ||
+    (Number.isFinite(policy.max_normalized_entropy) && policy.max_normalized_entropy >= 0 && policy.max_normalized_entropy <= 1),
+  'Invalid entropy gate.');
   const validated = metadata.diagnosis_validated === true && policy.validated === true && policy.thresholds_calibrated === true;
   const sourceClaimed = metadata.source_evaluated === true && policy.source_evaluated === true &&
     metadata.source_thresholds_calibrated === true && metadata.source_acceptance_qualified === true &&
@@ -645,12 +653,12 @@ export async function getModelStatus(): Promise<ModelStatus> {
 
 let inferenceQueue: Promise<unknown> = Promise.resolve();
 /** Runs at most one real model call at a time; all scores retain the global17-label normalization. */
-export function analyzeLeaf(file: File, cropId: CropId): Promise<AssessmentResult> {
-  const pending = inferenceQueue.then(() => analyzeOnce(file, cropId));
+export function analyzeLeaf(file: File, cropId: CropId, useHorizontalFlipTta = false): Promise<AssessmentResult> {
+  const pending = inferenceQueue.then(() => analyzeOnce(file, cropId, useHorizontalFlipTta));
   inferenceQueue = pending.catch(() => undefined);
   return pending;
 }
-async function analyzeOnce(file: File, cropId: CropId): Promise<AssessmentResult> {
+async function analyzeOnce(file: File, cropId: CropId, useHorizontalFlipTta: boolean): Promise<AssessmentResult> {
   const base = (): AssessmentResult => ({
     type: 'model_unavailable',
     candidates: [],
@@ -688,9 +696,15 @@ async function analyzeOnce(file: File, cropId: CropId): Promise<AssessmentResult
   await new Promise<void>((resolve) => setTimeout(resolve, 0));
   const tensor = new ort.Tensor('float32', input, metadata.input.shape);
   let outputs: ort.InferenceSession.ReturnType | undefined;
+  let ttaOutputs: ort.InferenceSession.ReturnType | undefined;
+  let ttaTensor: ort.Tensor | undefined;
   const started = performance.now();
   try {
     outputs = await session.run({ [metadata.input.name]: tensor });
+    if (useHorizontalFlipTta) {
+      ttaTensor = new ort.Tensor('float32', horizontallyFlipNchw(input, metadata.input.shape), metadata.input.shape);
+      ttaOutputs = await session.run({ [metadata.input.name]: ttaTensor });
+    }
     const inferenceMs = performance.now() - started;
     let leafProbability: number | undefined;
     if (metadata.leaf_gate?.enabled) {
@@ -717,6 +731,14 @@ async function analyzeOnce(file: File, cropId: CropId): Promise<AssessmentResult
       'The local model returned invalid output dimensions.',
     );
     const values = Array.from(logits.data as Float32Array);
+    if (ttaOutputs) {
+      const mirroredLogits = ttaOutputs[metadata.outputs.logits.name];
+      requireThat(mirroredLogits?.type === 'float32' && mirroredLogits.data.length === 17 &&
+        JSON.stringify(mirroredLogits.dims) === '[1,17]', 'The augmented model returned invalid score dimensions.');
+      const mirroredValues = Array.from(mirroredLogits.data as Float32Array);
+      requireThat(mirroredValues.every(Number.isFinite), 'The augmented model returned invalid scores.');
+      for (let index = 0; index < values.length; index++) values[index] = (values[index] + mirroredValues[index]) * 0.5;
+    }
     requireThat(
       values.every(Number.isFinite) &&
         Array.from(embeddings.data as Float32Array).every(Number.isFinite),
@@ -735,6 +757,8 @@ async function analyzeOnce(file: File, cropId: CropId): Promise<AssessmentResult
         score: exps[index] / sum,
       }),
     ).sort((a, b) => b.score - a.score);
+    const normalizedEntropy = Math.max(0, Math.min(1, -candidates.reduce((entropy, candidate) =>
+      candidate.score > 0 ? entropy + candidate.score * Math.log(candidate.score) : entropy, 0) / Math.log(candidates.length)));
     const result: AssessmentResult = {
       type: 'uncertain',
       candidates,
@@ -750,6 +774,7 @@ async function analyzeOnce(file: File, cropId: CropId): Promise<AssessmentResult
       outputShapes: [Array.from(logits.dims), Array.from(embeddings.dims)],
       leafProbability,
       leafCheckPassed: metadata.leaf_gate?.enabled === true && leafProbability !== undefined,
+      normalizedEntropy,
     };
     // Source-qualified prototype acceptance is distinct from field validation.
     // Old or failed-qualification bundles remain ready but explicitly uncertain.
@@ -771,6 +796,8 @@ async function analyzeOnce(file: File, cropId: CropId): Promise<AssessmentResult
       if (policy.enabled_condition_ids && !policy.enabled_condition_ids.includes(top.id)) result.reasons!.push('CONDITION_DISABLED');
       if (policy.max_embedding_distance != null) result.reasons!.push('MISSING_EMBEDDING_DISTANCE');
     }
+    if (typeof policy.max_normalized_entropy === 'number' && normalizedEntropy > policy.max_normalized_entropy)
+      result.reasons!.push('HIGH_ENTROPY');
     if (result.reasons!.length) return result;
     // Crop corrections also require all source-confidence and unfamiliar-image gates.
     if (top.cropId !== cropId) return { ...result, type: 'crop_mismatch', reasons: ['CROP_MISMATCH'] };
@@ -783,6 +810,26 @@ async function analyzeOnce(file: File, cropId: CropId): Promise<AssessmentResult
     };
   } finally {
     tensor.dispose();
+    ttaTensor?.dispose();
     if (outputs) for (const output of Object.values(outputs)) output.dispose();
+    if (ttaOutputs) for (const output of Object.values(ttaOutputs)) output.dispose();
   }
+}
+
+/** Horizontal mirror of a normalized, letterboxed [1,C,H,W] model tensor. */
+function horizontallyFlipNchw(input: Float32Array, shape: number[]): Float32Array {
+  requireThat(shape.length === 4 && shape[0] === 1 && shape[1] === 3 && shape[2] > 0 && shape[3] > 0,
+    'Unsupported tensor shape for horizontal-flip augmentation.');
+  const [, channels, height, width] = shape;
+  const plane = height * width;
+  requireThat(input.length === channels * plane, 'Invalid tensor size for horizontal-flip augmentation.');
+  const mirrored = new Float32Array(input.length);
+  for (let channel = 0; channel < channels; channel++) {
+    const channelOffset = channel * plane;
+    for (let y = 0; y < height; y++) {
+      const row = channelOffset + y * width;
+      for (let x = 0; x < width; x++) mirrored[row + x] = input[row + width - x - 1];
+    }
+  }
+  return mirrored;
 }

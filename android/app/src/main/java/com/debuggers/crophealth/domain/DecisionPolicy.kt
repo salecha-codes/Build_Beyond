@@ -1,6 +1,7 @@
 package com.debuggers.crophealth.domain
 
 import kotlin.math.exp
+import kotlin.math.ln
 
 object PhotoQuality {
     /** Prototype capture heuristics, not a guarantee that the image contains a leaf. */
@@ -49,6 +50,7 @@ object DecisionPolicy {
         if (!policy.temperature.isFinite() || policy.temperature <= 0f ||
             !policy.minConfidence.isFinite() || policy.minConfidence !in 0f..1f ||
             !policy.minMargin.isFinite() || policy.minMargin !in 0f..1f ||
+            (policy.maxNormalizedEntropy != null && (!policy.maxNormalizedEntropy.isFinite() || policy.maxNormalizedEntropy !in 0f..1f)) ||
             (policy.maxEmbeddingDistance != null && (!policy.maxEmbeddingDistance.isFinite() || policy.maxEmbeddingDistance < 0f))) {
             return AssessmentResult.ModelUnavailable(ModelFailure.INVALID_POLICY)
         }
@@ -70,9 +72,13 @@ object DecisionPolicy {
         val ranked = output.labelIds.indices.map { i ->
             RankedPrediction(Conditions.byId(output.labelIds[i])!!, (exps[i] / sum).toFloat())
         }.sortedByDescending { it.score }
+        val normalizedEntropy = if (ranked.size <= 1) 0f else
+            (-ranked.sumOf { p -> if (p.score <= 0f) 0.0 else p.score.toDouble() * ln(p.score.toDouble()) } /
+                ln(ranked.size.toDouble())).coerceIn(0.0, 1.0).toFloat()
         val evidence = PredictionEvidence(ranked, output.modelVersion, policy.validated, output.embeddingDistance, policy.sourceEvaluated,
             leafGatePassed = policy.minimumLeafProbability != null && output.leafProbability != null &&
-                output.leafProbability >= policy.minimumLeafProbability)
+                output.leafProbability >= policy.minimumLeafProbability,
+            normalizedEntropy = normalizedEntropy)
         // Unvalidated plumbing/model output must never assert that the farmer chose a wrong crop.
         if (!policy.validated && !policy.sourceEvaluated) {
             return AssessmentResult.Uncertain(setOf(UncertaintyReason.MODEL_NOT_VALIDATED), evidence)
@@ -83,6 +89,7 @@ object DecisionPolicy {
         val minimumMargin = if (policy.sourceEvaluated) threshold?.minMargin else policy.minMargin
         if (minimumConfidence != null && evidence.top.score < minimumConfidence) reasons += UncertaintyReason.LOW_SCORE
         if (minimumMargin != null && evidence.margin < minimumMargin) reasons += UncertaintyReason.AMBIGUOUS
+        policy.maxNormalizedEntropy?.let { if (evidence.normalizedEntropy > it) reasons += UncertaintyReason.HIGH_ENTROPY }
         if (threshold?.enabled == false || evidence.top.condition.id !in policy.enabledConditionIds) reasons += UncertaintyReason.CONDITION_DISABLED
         (threshold?.maxEmbeddingDistance ?: policy.maxEmbeddingDistance)?.let { maximumDistance ->
             if (output.embeddingDistance == null) reasons += UncertaintyReason.MISSING_EMBEDDING_DISTANCE

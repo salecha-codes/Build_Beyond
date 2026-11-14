@@ -130,6 +130,21 @@ def _ece(confidence, correct, bins=15):
     return result
 
 
+def _reliability_bins(confidence, correct, bins=15):
+    """Serializable equal-width reliability bins for charts and audit receipts."""
+    result = []
+    for index in range(bins):
+        lower, upper = index / bins, (index + 1) / bins
+        mask = (confidence >= lower) & ((confidence <= 1) if index == bins - 1 else (confidence < upper))
+        count = int(mask.sum())
+        result.append({
+            'lower_bound': lower, 'upper_bound': upper, 'count': count,
+            'mean_confidence': float(confidence[mask].mean()) if count else None,
+            'accuracy': float(correct[mask].mean()) if count else None,
+        })
+    return result
+
+
 def _accepted(predicted, confidence, margin, policy, names, embedding_distances=None):
     accepted = np.zeros(len(predicted), dtype=bool)
     if not policy.get('source_acceptance_enabled', False):
@@ -220,6 +235,7 @@ def evaluate_source_acceptance(logits, targets, policy: dict, label_ids: Sequenc
         'samples': len(x), **_classification_summary(y, predicted, names),
         'temperature': float(policy['temperature']), 'nll': _nll(x, y, float(policy['temperature'])),
         'expected_calibration_error_15_bins': _ece(confidence, correct),
+        'reliability_bins_15': _reliability_bins(confidence, correct),
         'accepted_predictions': total, 'accepted_correct': successes, 'accepted_errors': total-successes,
         'accepted_precision': successes/total if total else None,
         'accepted_precision_wilson95': wilson_interval(successes, total),

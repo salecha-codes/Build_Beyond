@@ -52,6 +52,8 @@ data class PolicyConfig(
     val classThresholds: Map<String, ClassAcceptanceThreshold> = emptyMap(),
     val allowConditionSpecificAdvice: Boolean = false,
     val minimumLeafProbability: Float? = null,
+    /** Optional CAL-fitted gate. Null keeps the frozen acceptance policy unchanged. */
+    val maxNormalizedEntropy: Float? = null,
 )
 
 data class RankedPrediction(val condition: ConditionLabel, val score: Float)
@@ -64,6 +66,7 @@ data class PredictionEvidence(
     val sourceEvaluated: Boolean = false,
     /** True only when an actual leaf output passed the configured artifact threshold. */
     val leafGatePassed: Boolean = false,
+    val normalizedEntropy: Float = 0f,
 ) {
     val top: RankedPrediction get() = ranked.first()
     val margin: Float get() = top.score - (ranked.getOrNull(1)?.score ?: 0f)
@@ -72,6 +75,7 @@ data class PredictionEvidence(
 enum class UncertaintyReason {
     MODEL_NOT_VALIDATED, LOW_SCORE, AMBIGUOUS, UNFAMILIAR_IMAGE,
     CONDITION_DISABLED, MISSING_EMBEDDING_DISTANCE,
+    HIGH_ENTROPY,
 }
 
 enum class ModelFailure { NOT_READY, LABEL_MISMATCH, INVALID_SCORES, INVALID_POLICY }

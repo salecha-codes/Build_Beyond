@@ -1031,7 +1031,7 @@ export default function App() {
             </p> : <p>{unfamiliarLeaf
               ? t('A leaf was detected. This is the closest model match, but the photo differs from its training examples. Check the result with a clearer photo or a crop expert.', 'ಎಲೆ ಪತ್ತೆಯಾಗಿದೆ. ಇದು ಮಾದರಿಯ ಹತ್ತಿರದ ಹೊಂದಾಣಿಕೆ, ಆದರೆ ಚಿತ್ರ ತರಬೇತಿ ಉದಾಹರಣೆಗಳಿಂದ ಭಿನ್ನವಾಗಿದೆ. ಸ್ಪಷ್ಟ ಚಿತ್ರ ಅಥವಾ ಕೃಷಿ ತಜ್ಞರಿಂದ ಫಲಿತಾಂಶ ಪರಿಶೀಲಿಸಿ.')
               : provisionalPrediction
-              ? t('This is the model’s top prediction for your leaf. Retake a clearer photo to check the result.', 'ಇದು ನಿಮ್ಮ ಎಲೆಗೆ ಮಾದರಿಯ ಪ್ರಮುಖ ಅಂದಾಜು. ಫಲಿತಾಂಶ ಪರಿಶೀಲಿಸಲು ಇನ್ನಷ್ಟು ಸ್ಪಷ್ಟ ಚಿತ್ರ ತೆಗೆಯಿರಿ.')
+              ? t('The model is unsure. Retake a close, sharp photo of one leaf in daylight, with the leaf filling most of the frame. Check with a crop expert before choosing treatment.', 'ಮಾದರಿಗೆ ಖಚಿತತೆ ಇಲ್ಲ. ಹಗಲಿನ ಬೆಳಕಿನಲ್ಲಿ ಒಂದೇ ಎಲೆಯ ಹತ್ತಿರದ, ಸ್ಪಷ್ಟ ಚಿತ್ರ ತೆಗೆಯಿರಿ; ಎಲೆಯನ್ನು ಚಿತ್ರದ ಹೆಚ್ಚಿನ ಭಾಗದಲ್ಲಿ ಇರಿಸಿ. ಚಿಕಿತ್ಸೆ ಆಯ್ಕೆ ಮಾಡುವ ಮೊದಲು ಕೃಷಿ ತಜ್ಞರನ್ನು ಸಂಪರ್ಕಿಸಿ.')
               : resultPrompt.message}</p>}
             {!accepted && !validated && !model?.sourceEvaluated && (
               <p>
@@ -1066,7 +1066,10 @@ export default function App() {
                   <span>{accepted ? t('Saved model match', 'ಉಳಿಸಿದ ಮಾದರಿಯ ಹೊಂದಾಣಿಕೆ') : cropMismatchPrediction ? t('Crop mismatch', 'ಬೆಳೆ ಹೊಂದಿಕೆಯಾಗಿಲ್ಲ') : provisionalPrediction ? t('Saved prediction · low confidence', 'ಉಳಿಸಿದ ಅಂದಾಜು · ಕಡಿಮೆ ವಿಶ್ವಾಸ') : t('Stored candidate · not confirmed', 'ಉಳಿಸಿದ ಸಾಧ್ಯತೆ · ಖಚಿತವಲ್ಲ')}</span>
                 </div>
               )}
-              {!unsupportedImage && assessment?.candidates.slice(0, 2).map((item, index) => (
+              {!unsupportedImage && assessment?.candidates.slice(0, 3).some(item => item.id === 'tomato_early_blight') && assessment?.candidates.slice(0, 3).some(item => item.id === 'tomato_target_spot') && (
+                <p className="hint">{t('These tomato candidates can look alike: brown leaf spots (early blight or target spot). The photo does not distinguish them reliably.', 'ಈ ಟೊಮ್ಯಾಟೊ ಸ್ಥಿತಿಗಳು ಒಂದೇ ರೀತಿಯಾಗಿ ಕಾಣಬಹುದು: ಕಂದು ಎಲೆ ಚುಕ್ಕೆಗಳು (ಆರಂಭಿಕ ಅಂಗಮಾರಿ ಅಥವಾ ಗುರಿ ಆಕಾರದ ಚುಕ್ಕೆ). ಈ ಚಿತ್ರದಿಂದ ಅವುಗಳನ್ನು ಖಚಿತವಾಗಿ ಬೇರ್ಪಡಿಸಲಾಗುವುದಿಲ್ಲ.')}</p>
+              )}
+              {!unsupportedImage && assessment?.candidates.slice(0, 3).map((item, index) => (
                 <div className="prediction" key={item.id}>
                   <div>
                     <strong>{conditionName(item.id, language)}</strong>

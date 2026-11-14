@@ -21,7 +21,9 @@ Perform training-only augmentation. Fit preprocessing statistics, class centroid
 
 Report per-class support, precision, recall and F1; macro F1; balanced accuracy; and confusion matrices. Provide overall accuracy as a secondary metric. For each crop, report healthy-class false positives and disease-to-healthy mistakes. Never hide a weak class in a crop aggregate.
 
-For confidence, report reliability/ECE or Brier score, plus accepted-prediction accuracy versus acceptance coverage. For unfamiliar-input rejection, report the challenge-set composition, false-acceptance rate, false rejection of supported images and examples of failure. Confidence and embedding gates do not establish complete unknown detection.
+For confidence, report temperature fitting, NLL, 15-bin ECE, a reliability diagram, and accepted-prediction accuracy versus acceptance coverage. Preserve per-bin counts, accuracy and mean confidence so diagrams are reproducible from the receipt. Report precision, recall, F1 and support per class; include the confusion matrix. For unfamiliar-input rejection, report the challenge-set composition, false-acceptance rate, false rejection of supported images and examples of failure. Confidence and embedding gates do not establish complete unknown detection.
+
+The active V3 evaluation receipt records temperature fitting, NLL, ECE and per-class evaluation, but predates retained reliability-bin counts. Its reliability diagram cannot be reconstructed from the aggregate ECE alone; rerun exact-artifact qualification with the current reporter before publishing a diagram. All such results must identify their data domain. They do not establish field-diagnosis validation.
 
 External evaluation is separate from internal source test results. The ten candidate PlantDoc disease matches provide just 85 official test images before cleaning; do not combine them with internal tests to advertise a single general field-accuracy number. Classes without external coverage must be identified. Bootstrap intervals should resample independent groups when feasible, not related images.
 

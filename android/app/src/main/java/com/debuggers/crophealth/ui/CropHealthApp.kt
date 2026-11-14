@@ -281,15 +281,21 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
             s.predictionText("Model predicts: ","ಮಾದರಿಯ ಊಹೆ: ","मॉडल का अनुमान: ")+(condition?.crop?.displayName(s.language) ?: "")+". "+
             s.predictionText("Check the crop selection or retake the photo.","ಬೆಳೆ ಆಯ್ಕೆಯನ್ನು ಪರಿಶೀಲಿಸಿ ಅಥವಾ ಮತ್ತೆ ಚಿತ್ರ ತೆಗೆಯಿರಿ.","फसल का चयन जाँचें या फिर से तस्वीर लें।"))
         if(prediction && !cropMismatch) Notice(s.predictionText("Low confidence","ಕಡಿಮೆ ವಿಶ್ವಾಸ","कम भरोसा"),s.predictionText(
-            "This is the model's top prediction. A clearer photo or expert check is needed before choosing treatment.",
-            "ಇದು ಮಾದರಿಯ ಮೊದಲ ಊಹೆ. ಚಿಕಿತ್ಸೆ ಆಯ್ಕೆ ಮಾಡುವ ಮೊದಲು ಸ್ಪಷ್ಟ ಚಿತ್ರ ಅಥವಾ ತಜ್ಞರ ಪರಿಶೀಲನೆ ಅಗತ್ಯ.",
-            "यह मॉडल का सबसे संभावित अनुमान है। उपचार चुनने से पहले साफ़ तस्वीर या विशेषज्ञ की जाँच ज़रूरी है।"))
+            "The model is unsure. Retake a close photo of one leaf in daylight, keeping it sharp and filling most of the frame. Check with a crop expert before choosing treatment.",
+            "ಮಾದರಿಗೆ ಖಚಿತತೆ ಇಲ್ಲ. ಹಗಲಿನ ಬೆಳಕಿನಲ್ಲಿ ಒಂದೇ ಎಲೆಯ ಹತ್ತಿರದ, ಸ್ಪಷ್ಟ ಚಿತ್ರ ತೆಗೆಯಿರಿ; ಎಲೆಯನ್ನು ಚಿತ್ರದ ಹೆಚ್ಚಿನ ಭಾಗದಲ್ಲಿ ಇರಿಸಿ. ಚಿಕಿತ್ಸೆ ಆಯ್ಕೆ ಮಾಡುವ ಮೊದಲು ಕೃಷಿ ತಜ್ಞರನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+            "मॉडल को यक़ीन नहीं है। दिन की रोशनी में एक पत्ती की साफ़, नज़दीकी तस्वीर लें और पत्ती को फ़्रेम में बड़ा रखें। उपचार चुनने से पहले कृषि विशेषज्ञ से पूछें।"))
         val score=if(unsupported) null else top?.score ?: stored?.score
         if(score!=null) ScoreCard(s,score,fieldValidated,accepted,prediction)
         if(accepted && !fieldValidated) Text(s.tr("Dataset-tested estimate. Confirm the condition with a local crop expert.","ಡೇಟಾಸೆಟ್‌ನಲ್ಲಿ ಪರೀಕ್ಷಿಸಿದ ಅಂದಾಜು. ಸ್ಥಳೀಯ ಕೃಷಿ ತಜ್ಞರಿಂದ ಸ್ಥಿತಿಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ."),fontSize=12.sp,color=CropColors.Muted)
         if(!accepted && !unsupported && (evidence?.ranked?.isNotEmpty()==true || condition!=null)) SoftCard {
             Text(if(prediction) s.predictionText("Model predictions","ಮಾದರಿಯ ಊಹೆಗಳು","मॉडल के अनुमान") else s.tr("Possible — not confirmed","ಸಾಧ್ಯತೆ — ದೃಢಪಟ್ಟಿಲ್ಲ"),fontSize=15.sp,fontWeight=FontWeight.Medium)
-            val ranked=evidence?.ranked?.take(2)
+            val ranked=evidence?.ranked?.take(3)
+            val candidateIds=ranked?.map { it.condition.id }.orEmpty()
+            if(candidateIds.containsAll(listOf("tomato_early_blight","tomato_target_spot"))) Text(
+                s.predictionText("These tomato candidates can look alike: brown leaf spots (early blight or target spot). The photo does not distinguish them reliably.",
+                    "ಈ ಟೊಮ್ಯಾಟೊ ಸ್ಥಿತಿಗಳು ಒಂದೇ ರೀತಿಯಾಗಿ ಕಾಣಬಹುದು: ಕಂದು ಎಲೆ ಚುಕ್ಕೆಗಳು (ಆರಂಭಿಕ ಅಂಗಮಾರಿ ಅಥವಾ ಗುರಿ ಆಕಾರದ ಚುಕ್ಕೆ). ಈ ಚಿತ್ರದಿಂದ ಅವುಗಳನ್ನು ಖಚಿತವಾಗಿ ಬೇರ್ಪಡಿಸಲಾಗುವುದಿಲ್ಲ.",
+                    "टमाटर की ये स्थितियाँ मिलती-जुलती दिख सकती हैं: भूरे पत्ती धब्बे (अर्ली ब्लाइट या टार्गेट स्पॉट)। यह तस्वीर दोनों में भरोसेमंद अंतर नहीं बता पाती।"),
+                fontSize=12.sp,color=CropColors.Muted)
             if(ranked!=null) ranked.forEach {PredictionRow(it.condition.displayName(s.language),it.score)}
             else condition?.let {Text(it.displayName(s.language),fontSize=16.sp)}
         }

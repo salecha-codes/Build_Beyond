@@ -100,6 +100,15 @@ python -m crop_ml.qualify finalize --bundle /workspace/crop-artifacts/final_bund
 python tools/sync_model_bundle.py /workspace/crop-artifacts/final_bundle
 ```
 
+Qualification receipts report the fitted temperature, NLL, 15-bin ECE, and per-class precision/recall/F1 and accepted coverage. New receipts also retain equal-width reliability-bin counts, accuracy and mean confidence. Render the diagram from an individual evaluation report with:
+
+```sh
+python -m crop_ml.reliability_diagram --receipt /workspace/crop-artifacts/final_bundle/source_evaluation.json --domain source_test --output /workspace/crop-artifacts/final_bundle/reliability-source-test.svg
+python -m crop_ml.reliability_diagram --receipt /workspace/crop-artifacts/final_bundle/source_evaluation.json --domain calibration_report --output /workspace/crop-artifacts/final_bundle/reliability-calibration.svg
+```
+
+The checked-in V3 receipt predates stored reliability bins; its aggregate ECE cannot reconstruct a reliability diagram. Rerun the exact-artifact qualification to produce the bins and diagram. Calibration and per-class results describe the named source or field-like benchmark only. Field diagnosis validation remains false.
+
 Omit `--include-field-train` for a model without field training; the selected training receipt must prove an exact manifest match. `fit` reads TRAIN and CAL only and freezes policy hashes. `finalize` checks those locks, marks the test operation before inference and rejects repeated finalization. It reports source accuracy/macro F1 and accepted precision/coverage, including per-class support and uncertainty bounds; external field results stay separate. Predeclared source qualification requires accuracy ≥85%, macro F1 ≥0.80, accepted precision ≥90%, and coverage ≥30%. Passing enables source prototype matches, never field validation or condition-specific prescriptions.
 
 Both apps check the evaluated artifact hash, receipt hash, frozen temperature/gates and normalized training-only centroids. A missing qualification stays uncertain; corrupt claimed evidence makes the model unavailable. The centroid gate is an unfamiliar-feature heuristic, with no validated unknown-image rejection guarantee.

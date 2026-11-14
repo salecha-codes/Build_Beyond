@@ -93,7 +93,9 @@ class LocalModelEngine(private val context: Context) : AutoCloseable {
                 } ?: Conditions.ids,
                 sourceEvaluated = sourceEvaluated, classThresholds = thresholds,
                 allowConditionSpecificAdvice = validated && artifactPolicy.optBoolean("allow_condition_specific_advice", false),
-                minimumLeafProbability = minimumLeafProbability)
+                minimumLeafProbability = minimumLeafProbability,
+                maxNormalizedEntropy = artifactPolicy.takeIf { it.has("max_normalized_entropy") && !it.isNull("max_normalized_entropy") }
+                    ?.getDouble("max_normalized_entropy")?.toFloat())
             val fileName = metadata.getString("model_file")
             require(fileName == "crop_model.onnx")
             val modelFile = verifiedModelFile(fileName, expected)
@@ -126,37 +128,23 @@ class LocalModelEngine(private val context: Context) : AutoCloseable {
         }
     }
 
-    @Synchronized fun infer(bitmap: Bitmap): EnginePrediction {
+    @Synchronized fun infer(bitmap: Bitmap, useHorizontalFlipTta: Boolean = false): EnginePrediction {
         val active = session ?: error("The local model is unavailable.")
         val data = ImagePreparation.tensor(bitmap, spec)
         lateinit var logits: FloatArray
         lateinit var features: FloatArray
         var leafProbability: Float? = null
-        var nanos = 0L
-        OnnxTensor.createTensor(environment, FloatBuffer.wrap(data), longArrayOf(1, 3, spec.height.toLong(), spec.width.toLong())).use { input ->
-            nanos = measureNanoTime {
-                active.run(mapOf(spec.name to input)).use { result ->
-                    val logitsTensor = result.get(outputName).orElseThrow { IllegalStateException("Model scores missing") }
-                    val embeddingTensor = result.get(embeddingName).orElseThrow { IllegalStateException("Model embedding missing") }
-                    @Suppress("UNCHECKED_CAST")
-                    val rows = logitsTensor.value as Array<FloatArray>
-                    @Suppress("UNCHECKED_CAST")
-                    val embeddings = embeddingTensor.value as Array<FloatArray>
-                    require(rows.size == 1 && rows[0].size == labelIds.size)
-                    require(embeddings.size == 1 && embeddings[0].size == embeddingDimension)
-                    require(rows[0].all { it.isFinite() } && embeddings[0].all { it.isFinite() })
-                    logits = rows[0].copyOf()
-                    features = embeddings[0].copyOf()
-                    leafOutputName?.let { name ->
-                        val leafTensor = result.get(name).orElseThrow { IllegalStateException("Leaf check output missing") }
-                        @Suppress("UNCHECKED_CAST")
-                        val leafRows = leafTensor.value as Array<FloatArray>
-                        require(leafRows.size == 1 && leafRows[0].size == 1 && leafRows[0][0].isFinite())
-                        val value = leafRows[0][0].toDouble()
-                        leafProbability = (if (value >= 0) 1.0 / (1.0 + exp(-value))
-                            else exp(value) / (1.0 + exp(value))).toFloat()
-                    }
-                }
+        val nanos = measureNanoTime {
+            val original = runView(active, data, includeLeaf = true)
+            logits = original.logits
+            features = original.features
+            leafProbability = original.leafProbability
+            if (useHorizontalFlipTta) {
+                // Flip the already letterboxed, normalized NCHW tensor. This preserves
+                // the original preprocessing contract and requires no extra bitmap copy.
+                val mirrored = runView(active, horizontallyFlipNchw(data), includeLeaf = false)
+                require(mirrored.logits.size == logits.size)
+                for (i in logits.indices) logits[i] = (logits[i] + mirrored.logits[i]) * 0.5f
             }
         }
         val top = logits.indices.maxBy { logits[it] }
@@ -169,6 +157,48 @@ class LocalModelEngine(private val context: Context) : AutoCloseable {
             }).toFloat()
         }
         return EnginePrediction(InferenceOutput(labelIds, logits.toList(), status.version, true, distance, leafProbability), policy, nanos / 1_000_000)
+    }
+
+    private data class ModelView(val logits: FloatArray, val features: FloatArray, val leafProbability: Float?)
+
+    private fun runView(active: OrtSession, data: FloatArray, includeLeaf: Boolean): ModelView =
+        OnnxTensor.createTensor(environment, FloatBuffer.wrap(data), longArrayOf(1, 3, spec.height.toLong(), spec.width.toLong())).use { input ->
+            active.run(mapOf(spec.name to input)).use { result ->
+                val logitsTensor = result.get(outputName).orElseThrow { IllegalStateException("Model scores missing") }
+                val embeddingTensor = result.get(embeddingName).orElseThrow { IllegalStateException("Model embedding missing") }
+                @Suppress("UNCHECKED_CAST")
+                val rows = logitsTensor.value as Array<FloatArray>
+                @Suppress("UNCHECKED_CAST")
+                val embeddings = embeddingTensor.value as Array<FloatArray>
+                require(rows.size == 1 && rows[0].size == labelIds.size)
+                require(embeddings.size == 1 && embeddings[0].size == embeddingDimension)
+                require(rows[0].all { it.isFinite() } && embeddings[0].all { it.isFinite() })
+                var leafProbability: Float? = null
+                if (includeLeaf) leafOutputName?.let { name ->
+                    val leafTensor = result.get(name).orElseThrow { IllegalStateException("Leaf check output missing") }
+                    @Suppress("UNCHECKED_CAST")
+                    val leafRows = leafTensor.value as Array<FloatArray>
+                    require(leafRows.size == 1 && leafRows[0].size == 1 && leafRows[0][0].isFinite())
+                    val value = leafRows[0][0].toDouble()
+                    leafProbability = (if (value >= 0) 1.0 / (1.0 + exp(-value))
+                        else exp(value) / (1.0 + exp(value))).toFloat()
+                }
+                ModelView(rows[0].copyOf(), embeddings[0].copyOf(), leafProbability)
+            }
+        }
+
+    private fun horizontallyFlipNchw(data: FloatArray): FloatArray {
+        val plane = spec.width * spec.height
+        require(data.size == plane * 3)
+        val flipped = FloatArray(data.size)
+        for (channel in 0 until 3) {
+            val offset = channel * plane
+            for (y in 0 until spec.height) {
+                val row = offset + y * spec.width
+                for (x in 0 until spec.width) flipped[row + x] = data[row + spec.width - 1 - x]
+            }
+        }
+        return flipped
     }
 
     private fun loadLeafGate(metadata: JSONObject, expected: String, version: String): Float? {
@@ -206,6 +236,12 @@ class LocalModelEngine(private val context: Context) : AutoCloseable {
             report.getBoolean("source_acceptance_qualified")) { "Source evaluation does not qualify this model" }
         val frozen = report.getJSONObject("frozen_policy")
         require(abs(frozen.getDouble("temperature") - candidate.getDouble("temperature")) < 1e-10)
+        if (candidate.has("max_normalized_entropy") && !candidate.isNull("max_normalized_entropy")) {
+            require(frozen.has("max_normalized_entropy") &&
+                abs(frozen.getDouble("max_normalized_entropy") - candidate.getDouble("max_normalized_entropy")) < 1e-10) {
+                "Entropy gate is not bound to source evaluation evidence"
+            }
+        }
         val table = candidate.getJSONObject("class_thresholds")
         val recorded = frozen.getJSONObject("class_thresholds")
         require(table.keys().asSequence().toSet() == Conditions.ids && recorded.keys().asSequence().toSet() == Conditions.ids)
