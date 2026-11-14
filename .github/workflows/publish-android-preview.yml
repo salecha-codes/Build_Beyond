@@ -28,18 +28,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v6
 
       - name: Build universal debug APK
-        shell: bash
-        run: |
-          set -o pipefail
-          ./gradlew :app:assembleDebug --stacktrace --no-daemon 2>&1 | tee android-build.log
-
-      - name: Surface Gradle failure summary
-        if: failure()
-        shell: bash
-        run: |
-          if [[ -f android-build.log ]]; then
-            grep -E 'What went wrong|Could not|Execution failed|FAILURE:|e: |Exception|Error:' android-build.log | tail -n 25 | sed 's/^/::error::/' || true
-          fi
+        run: ./gradlew :app:assembleDebug
 
       - name: Prepare release asset
         run: cp android/app/build/outputs/apk/debug/app-universal-debug.apk crop-health-universal-debug.apk
