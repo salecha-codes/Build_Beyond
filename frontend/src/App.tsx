@@ -663,8 +663,10 @@ export default function App() {
                   'ಡೇಟಾಸೆಟ್‌ನಲ್ಲಿ ಪರೀಕ್ಷಿಸಿದ ಅಂದಾಜು. ಸ್ಥಳೀಯ ಕೃಷಿ ತಜ್ಞರಿಂದ ಸ್ಥಿತಿಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.',
                 )}
               </p>
-            ) : <p>{resultPrompt.message}</p>}
-            {!accepted && !validated && (
+            ) : <p>{model?.sourceEvaluated && resultType === 'uncertain'
+              ? t('This photo did not pass the model’s reliability checks. Try a clear close-up of one leaf in daylight, or ask a local agriculture adviser.', 'ಈ ಚಿತ್ರ ಮಾದರಿಯ ವಿಶ್ವಾಸಾರ್ಹತೆ ಪರಿಶೀಲನೆಯನ್ನು ಪೂರೈಸಲಿಲ್ಲ. ಹಗಲು ಬೆಳಕಿನಲ್ಲಿ ಒಂದು ಎಲೆಯ ಸ್ಪಷ್ಟ ಹತ್ತಿರದ ಚಿತ್ರ ತೆಗೆಯಿರಿ ಅಥವಾ ಸ್ಥಳೀಯ ಕೃಷಿ ಸಲಹೆಗಾರರನ್ನು ಸಂಪರ್ಕಿಸಿ.')
+              : resultPrompt.message}</p>}
+            {!accepted && !validated && !model?.sourceEvaluated && (
               <p>
                 {t(
                   'This prototype model has not been validated for disease diagnosis. Scores below are model outputs, not diagnostic confidence.',
