@@ -347,7 +347,7 @@ let bundlePromise: Promise<Bundle> | null = null;
 let lastStatus: ModelStatus = {
   ready: false,
   validated: false,
-  name: 'MobileNetV4-Conv-Small',
+  name: 'Crop disease model',
   version: '',
   bytes: 0,
   message: 'Preparing the local model…',
@@ -479,7 +479,7 @@ async function loadBundle(): Promise<Bundle> {
     'Incompatible model bundle schema.',
   );
   requireThat(
-    metadata.architecture === 'MobileNetV4-Conv-Small' &&
+    ['MobileNetV4-Conv-Small', 'MobileNetV3-Large'].includes(metadata.architecture) &&
       metadata.class_count === 17 &&
       metadata.embedding_dimension === 960,
     'The packaged model architecture does not match this application.',

@@ -1,0 +1,25 @@
+{
+  "architecture": "MobileNetV3-Large",
+  "model_sha256": "9f330bb88adffa64460c4e84faf808529a1a1fdc667977766f648cb28b51fa63",
+  "checkpoint": "/workspace/crop-artifacts/v3_comparator/best_head.pt",
+  "onnx_checker_passed": true,
+  "zero_input_max_abs_error": 0.00030994415283203125,
+  "nonzero_input_max_abs_error": 2.9087066650390625e-05,
+  "output_shapes": [
+    [
+      1,
+      17
+    ],
+    [
+      1,
+      960
+    ]
+  ],
+  "desktop_cpu_latency_ms": {
+    "iterations": 10,
+    "p50": 3.8128365013108123,
+    "p95": 14.444251549139134
+  },
+  "phone_benchmark_executed": false,
+  "diagnosis_validated": false
+}

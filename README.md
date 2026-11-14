@@ -1,6 +1,6 @@
 # Offline Crop Health — Build Beyond ’26
 
-Android application and interactive browser preview for **PS 4.1**, built for Team Debuggers. The white/lavender/purple screens follow the supplied Figma screenshots. Both clients execute the same bundled MobileNetV4 model locally.
+Android application and interactive browser preview for **PS 4.1**, built for Team Debuggers. The white/lavender/purple screens follow the supplied Figma screenshots. Both clients execute the same bundled MobileNet model locally.
 
 ## Repository structure
 
@@ -36,7 +36,7 @@ The first browser visit downloads the model, WASM runtime, content and audio. Wa
 ## What is implemented
 
 - Camera capture and gallery import with bounded decoding and EXIF orientation.
-- Local **MobileNetV4-Conv-Small** inference through ONNX Runtime, with 17 tomato, potato, and maize condition labels.
+- Local **MobileNetV3-Large** inference through ONNX Runtime, with 17 tomato, potato, and maize condition labels.
 - Photo-quality checks, real ranked scores, and explicit uncertain results.
 - Three questions about observed symptoms, producing a user-reported concern level.
 - English, Kannada and Hindi interface and general precautions, with **90 bundled neural-voice audio clips**: AI4Bharat Indic-TTS for Kannada and Piper for English/Hindi. Playback requires no speech API, installed language pack or phone TTS model. The selected language is remembered locally.
@@ -47,20 +47,20 @@ The target is Android 7.0+ on 3–4 GB RAM phones. Actual ARM-phone memory, late
 
 ## Model status
 
-The bundled MobileNetV4-Conv-Small has been retrained on all 16,856 source training images, followed by mixed-domain training with 632 PlantDoc images. It has 2,514,801 parameters, 17 logits, a 960-dimensional embedding, and a 10,032,309-byte FP32 ONNX graph. Training started from scratch; no ImageNet pretrained weights are claimed.
+The current model is **MobileNetV3-Large**, using official ImageNet-pretrained visual features and a trained17-class disease head with TRAIN-only feature standardization embedded in ONNX. It replaces MobileNetV4 after tuning and frozen evaluation showed a stronger field result. The exact FP32 ONNX graph is11,950,683bytes and outputs17logits plus960visual features.
 
-| Frozen final test | Images | Accuracy | Accepted precision | Coverage |
-|---|---:|---:|---:|---:|
-| PlantVillage source | 3,674 | 94.67% | 96.92% | 92.81% |
-| PlantDoc field-like | 80 | 22.50% | 30.77% | 32.50% |
+| Same frozen comparison | Images | V4 accuracy | Current V3 accuracy |
+|---|---:|---:|---:|
+| PlantVillage source | 3,674 | 94.67% | 92.11% |
+| PlantDoc field-like | 80 | 22.50% | 38.75% |
 
-**Field recognition remains poor. This is a source-tested prototype, not reliable farmer-photo diagnosis.** Source accuracy must not be presented as field accuracy. Source-test macro F1 is 0.9401; external labels are mostly unreviewed and the external set is small.
+Field recognition improves by16.25percentage points (18→31correct of80). **Field accuracy is still limited.** This80-photo set was already used for V4; it is a reused comparison benchmark, not newly blind independent data. Source accuracy must not be presented as field accuracy. External labels are mostly unreviewed.
 
-The app now shows actual likely-condition/healthy-looking matches when frozen per-class score, margin and feature-distance checks pass, rather than forcing every result to uncertainty. Low-confidence or rejected inputs remain uncertain. Both clients verify exact-model evaluation and centroid sidecars before enabling source matches. Field diagnosis and condition-specific advice remain disabled; scores are model-match estimates and guidance is general observation advice. Symptom concern comes from the farmer's questionnaire, not a severity model.
+Source accepted precision is96.47% at87.02%coverage. Field accepted precision is50.00% at47.50%coverage. Field validation and condition-specific advice remain false. Both apps show the actual predicted condition, with low-confidence or crop-mismatch labels when applicable; numeric gates and global17-class score semantics remain intact.
 
-SHA-256: `4a0c82796188dce8c81d3840ec2817ee27cf29e9c148eeeefeb90662aa888b03`.
+SHA-256: `9f330bb88adffa64460c4e84faf808529a1a1fdc667977766f648cb28b51fa63`.
 
-See [executed training/evaluation receipts](ml/reports/review2_full/) and [the model card](models/assets/model/MODEL_CARD.md) for the frozen protocol, historical exposure boundaries, per-class results and limitations.
+See [current training/evaluation receipts](ml/reports/field_upgrade_v3/) and [model card](models/assets/model/MODEL_CARD.md). Earlier V4 reports remain historical.
 
 ## Build and try it
 
@@ -78,7 +78,7 @@ For a demonstration, enable airplane mode, open the app, choose the crop, scan o
 
 - [Executed checks and device evidence](docs/REVIEW2_VALIDATION.md)
 - [Current architecture and tools](docs/ARCHITECTURE.md)
-- [Current model receipts](ml/reports/review2_full/)
+- [Current model receipts](ml/reports/field_upgrade_v3/)
 - [Offline content and audio generation](content/README.md)
 - [ML acquisition, training, and export](ml/README.md)
 - [Product scope](docs/PRODUCT_SCOPE.md)

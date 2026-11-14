@@ -1,0 +1,37 @@
+{
+  "architecture": "MobileNetV3-Large-ImageNet-V2-frozen-backbone-plus-trained-linear-head",
+  "candidate_only": true,
+  "model_sha256": "9f330bb88adffa64460c4e84faf808529a1a1fdc667977766f648cb28b51fa63",
+  "bytes": 11950683,
+  "teacher_weights_sha256": "5c1a416349c4cf298f2a6a5e2600ed0ee55e604713578f5e74e6bc8bcaef7997",
+  "head_checkpoint_sha256": "e2d134092557153de057968804d16ea406429c9263a85119aaa7ab33c9e5ee6a",
+  "train_manifest_sha256": "9e486c7ef623ef2b871d9723ac51a208c9fe92eec3445c9467d0b939c3d2ece0",
+  "source_tune_manifest_sha256": "d218c4bf8e40dbac946dcc019cb319373c11e49ae4c12630277b3ca7fa07254c",
+  "field_tune_manifest_sha256": "646816bb4cf9a1da313bf758711bb19727eb0fef6de6542ca6b01ba3366fce56",
+  "head_selection": {
+    "field_weight": 1,
+    "step": 100
+  },
+  "input_shape": [
+    1,
+    3,
+    224,
+    224
+  ],
+  "output_shapes": [
+    [
+      1,
+      17
+    ],
+    [
+      1,
+      960
+    ]
+  ],
+  "random_probe_max_abs_error": 2.9087066650390625e-05,
+  "zero_probe_max_abs_error": 0.00030994415283203125,
+  "one_tune_image_max_abs_error": 3.814697265625e-05,
+  "labels_sha256": "b59d8b59be74737e029375cd2f6dcd1fd313fe15ca12e8dc4eb2d87b8e5a3623",
+  "calibration_or_final_test_executed": false,
+  "field_diagnosis_validated": false
+}

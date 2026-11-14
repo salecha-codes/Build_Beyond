@@ -11,7 +11,7 @@ enum class Screen { WELCOME, HOME, CAPTURE, PHOTO_REVIEW, PROCESSING, RESULT, GU
 data class ModelStatus(
     val ready: Boolean = false,
     val validated: Boolean = false,
-    val name: String = "MobileNetV4-Conv-Small",
+    val name: String = "Crop disease model",
     val version: String = "Not installed",
     val message: String = "Checking local model…",
     val bytes: Long = 0,

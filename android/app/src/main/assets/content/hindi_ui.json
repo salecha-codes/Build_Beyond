@@ -362,5 +362,9 @@
   "Selected crop": "चुनी गई फसल",
   "Model predicts": "मॉडल का अनुमान",
   "Check the crop selection or retake a clear photo of one leaf.": "फसल का चयन जाँचें या एक पत्ती की साफ़ तस्वीर फिर से लें।",
-  "Change selected crop": "चुनी गई फसल बदलें"
+  "Change selected crop": "चुनी गई फसल बदलें",
+  "Running the crop model on this device. The first check may take a little longer.": "इस फ़ोन पर फसल का मॉडल चल रहा है। पहली जाँच में थोड़ा अधिक समय लग सकता है।",
+  "Crop disease model": "फसल रोग का मॉडल",
+  "Installed": "तैयार",
+  "On-device disease model. No photo upload.": "रोग का मॉडल फ़ोन पर चलता है। तस्वीर अपलोड नहीं होती।"
 }

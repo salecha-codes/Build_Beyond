@@ -27,7 +27,7 @@ import org.junit.runner.RunWith
 /** Executes the shipped graph on two photographic inputs; this is not an accuracy benchmark. */
 @RunWith(AndroidJUnit4::class)
 class BundledModelSmokeTest {
-    @Test fun exactBundledV4HasBoundEvidenceAndInputDependentSeventeenScoresAnd960Features() {
+    @Test fun exactBundledModelHasBoundEvidenceAndInputDependentSeventeenScoresAnd960Features() {
         val instrumentation = InstrumentationRegistry.getInstrumentation()
         val app = instrumentation.targetContext
         val metadata = BundledModelContract.json(app, "model_metadata.json")

@@ -1,0 +1,64 @@
+{
+  "model_sha256": "9f330bb88adffa64460c4e84faf808529a1a1fdc667977766f648cb28b51fa63",
+  "source_qualified": true,
+  "source_criteria": {
+    "source_acceptance_qualified": true,
+    "criteria": {
+      "accuracy_min": 0.85,
+      "macro_f1_min": 0.8,
+      "accepted_precision_min": 0.9,
+      "coverage_min": 0.3
+    },
+    "checks": {
+      "accuracy": true,
+      "macro_f1_all_labels": true,
+      "accepted_precision": true,
+      "coverage": true
+    },
+    "failure_reasons": []
+  },
+  "source": {
+    "samples": 3674,
+    "raw_accuracy": 0.9210669569951007,
+    "macro_f1_all_labels": 0.9086586650454493,
+    "macro_f1_supported_labels": 0.9086586650454493,
+    "accepted_predictions": 3197,
+    "accepted_correct": 3084,
+    "accepted_precision": 0.9646543634657492,
+    "coverage": 0.8701687534022864,
+    "after_correct_selected_crop": {
+      "delivered_condition_results": 3193,
+      "correct": 3084,
+      "precision": 0.9658628249295333,
+      "precision_wilson95": [
+        0.9589837122561462,
+        0.9716223369714152
+      ],
+      "coverage": 0.8690800217746325,
+      "crop_mismatch_abstentions": 4
+    },
+    "reused_source_for_comparison": false
+  },
+  "external_field_reused": {
+    "samples": 80,
+    "raw_accuracy": 0.3875,
+    "macro_f1_all_labels": 0.21809135117093592,
+    "macro_f1_supported_labels": 0.37075529699059107,
+    "accepted_predictions": 38,
+    "accepted_correct": 19,
+    "accepted_precision": 0.5,
+    "coverage": 0.475,
+    "after_correct_selected_crop": {
+      "delivered_condition_results": 34,
+      "correct": 19,
+      "precision": 0.5588235294117647,
+      "precision_wilson95": [
+        0.3945389925620307,
+        0.7111651775375785
+      ],
+      "coverage": 0.425,
+      "crop_mismatch_abstentions": 4
+    },
+    "reused_source_for_comparison": true
+  }
+}

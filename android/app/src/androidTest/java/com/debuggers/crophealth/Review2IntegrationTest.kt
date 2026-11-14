@@ -45,7 +45,7 @@ class Review2IntegrationTest {
         assertFalse("Offline diagnosis must not request Internet access", Manifest.permission.INTERNET in permissions)
     }
 
-    @Test fun bundledV4ExecutesAndSeparatesSourceQualificationFromDiagnosisValidation() {
+    @Test fun bundledModelExecutesAndSeparatesSourceQualificationFromDiagnosisValidation() {
         val fixture = leafFixture()
         val photo = ImagePreparation.decode(fixture)
         try {
@@ -57,7 +57,7 @@ class Review2IntegrationTest {
             LocalModelEngine(app).use { engine ->
                 val status = engine.load()
                 assertTrue("Real bundled model must load: ${status.message}", status.ready)
-                assertEquals("MobileNetV4-Conv-Small", status.name)
+                assertEquals(metadata.getString("architecture"), status.name)
                 assertFalse("Prototype must not advertise validated diagnosis", status.validated)
                 assertFalse("Source qualification must not enable condition-specific treatment advice", status.allowConditionSpecificAdvice)
                 assertEquals(BundledModelContract.sourceQualificationEnabled(metadata, artifactPolicy), status.sourceEvaluated)

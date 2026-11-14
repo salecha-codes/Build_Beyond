@@ -1,35 +1,24 @@
-# MobileNetV4 offline crop classifier — Review 2
+# MobileNetV3-Large field prototype
 
-This is a trained, executable MobileNetV4-Conv-Small prototype, initialized from scratch and continued on full PlantVillage training data plus a smaller PlantDoc training partition. It is not an untrained placeholder.
+This release uses official ImageNet-pretrained torchvision MobileNetV3-Large visual features and a TRAIN-only fitted 17-class linear head. Feature standardization fitted on TRAIN is embedded in ONNX. It replaces the weaker from-scratch MobileNetV4 model following tuning-only candidate selection.
 
 ## Exact artifact
 
-- Model version: `mnv4-conv-small-supervised_from_scratch_mixed_domain_continuation-4a0c82796188`
-- ONNX SHA-256: `4a0c82796188dce8c81d3840ec2817ee27cf29e9c148eeeefeb90662aa888b03`
-- Size: 10,032,309 bytes; FP32, 17 classes, 960 pooled features, 224 × 224 RGB input.
-- Selected checkpoint lineage epoch: 37. New work ran 12 full-source epochs and 12 mixed-domain epochs, with checkpoint selection on tuning partitions only. Earlier bounded training is preserved in receipts.
+Model: `mnv3-large-imagenet-v2-field-head-9f330bb88adf`. ONNX SHA-256: `9f330bb88adffa64460c4e84faf808529a1a1fdc667977766f648cb28b51fa63`. Size: 11,950,683 bytes. Inputs: RGB FP32 NCHW224×224, identical letterbox/ImageNet normalization contract. Outputs:17 logits and960 pooled visual features. Both apps verify the actual graph and bound evaluation/centroid sidecars.
 
-## Measured results — keep domains separate
+## Frozen evaluation
 
-| Frozen final test | Images | Raw accuracy | Accepted precision | Coverage |
+| Domain | Images | Raw accuracy | Accepted precision | Coverage |
 |---|---:|---:|---:|---:|
-| PlantVillage source domain | 3674 | 94.67% | 96.92% | 92.81% |
-| PlantDoc external field-like photos | 80 | 22.50% | 30.77% | 32.50% |
+| PlantVillage source | 3674 | 92.11% | 96.47% | 87.02% |
+| PlantDoc external field-like | 80 | 38.75% | 50.00% | 47.50% |
 
-Source all-class macro F1: 0.9401. Field performance is poor: this model is not ready for reliable farmer-photo diagnosis. Source acceptance is not a field-accuracy guarantee. PlantDoc labels are mostly unreviewed and the 80-image external set is small.
+Field accuracy improves from V4's22.50% to38.75% on the same80-photo comparison benchmark (+16.25percentage points). This set was already evaluated for V4; it is a reused comparison benchmark, not newly blind independent data. New model selection used TRAIN/TUNE only; CAL fitted gates, and the frozen candidate was evaluated once. Source macro F1 0.9087.
 
-## What the app does
+Field performance remains poor. The model is a prototype and does not establish reliable farmer-photo diagnosis. External labels are mostly unreviewed and80images is small. No chemical prescriptions are enabled. `diagnosis_validated=false` and `allow_condition_specific_advice=false` remain explicit. Low-confidence results display a real predicted condition with uncertainty; crop mismatch retains selected/predicted crop comparison. Scores are model outputs, not field accuracy.
 
-Both Android and browser verify the actual ONNX bytes and the bound evaluation/centroid sidecars. Source qualification passed the declared source-test criteria. High-scoring matches that pass frozen per-class confidence, margin and feature-distance gates can show a likely condition or healthy-looking result; ambiguous, disabled or rejected unfamiliar inputs remain uncertain. Scores are globally normalized over all 17 classes, then checked against the selected crop.
+## Training/data scope
 
-`diagnosis_validated=false`, `validated=false` and `allow_condition_specific_advice=false` remain unchanged. Accepted results are dataset-tested estimates, not confirmed diagnoses or chemical prescriptions. General observation guidance and user-reported symptom concern remain separate from classifier output. The centroid heuristic is not a validated unknown-image detector.
+A frozen pretrained backbone and17-class head used the audited source TRAIN cap400/class plus632PlantDoc TRAIN photos. Exact counts, weighting, selected iteration and official weight SHA are in training_receipt.json/export receipts. Source TUNE2228 and field TUNE138 selected the candidate. Source CAL1392+field CAL137 fit temperature, score/margin and training-centroid distance gates. Source full TEST3674 and external80 were not used to train or choose the candidate. Historical exposure and source physical-leaf grouping limits remain in the evaluation receipt.
 
-## Data and evaluation boundaries
-
-PlantVillage: 16,856 TRAIN, 2,228 tuning, 1,392 CAL, 3,674 final source test. PlantDoc: 632 TRAIN, 138 tuning, 137 CAL, 80 eligible original external-test images. Temperature and acceptance gates used CAL only; normalized centroids used 17,488 TRAIN images. Model selection did not use these final test results. Historical source-test inspection for an earlier artifact and eight rare-class CAL images previously used for historical selection are disclosed in the protocol receipt; complete physical-leaf independence is not established.
-
-Natural field photos differ substantially from isolated-leaf source images. More curated local field photos, better generalization and agricultural review are required before field use. See `source_evaluation.json` for per-class support, errors, intervals, protocol hashes and full domain-specific reports.
-
-## Runtime evidence
-
-ONNX checker and zero/nonzero PyTorch parity passed (maximum absolute difference 4.29e-06). Desktop CPU export microbenchmark p50 1.03 ms; this is not a physical-phone benchmark. Android and browser use the same bundled graph. Physical ARM-phone latency/RAM measurements remain pending.
+Deployment remains entirely offline: the pretrained teacher weights and training tools are not required by the phone. ONNX checker and zero/nonzero/real-photo PyTorch parity passed. Actual ARM-phone latency and peak RAM have not been measured. See source_evaluation.json for full errors/support/intervals and protocol identities.

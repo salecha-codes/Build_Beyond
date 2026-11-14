@@ -44,7 +44,7 @@ class LocalModelEngine(private val context: Context) : AutoCloseable {
                 id
             }
             require(labelIds.size == 17 && labelIds.toSet() == Conditions.ids)
-            require(metadata.getString("architecture") == "MobileNetV4-Conv-Small")
+            require(metadata.getString("architecture") in setOf("MobileNetV4-Conv-Small", "MobileNetV3-Large"))
             require(metadata.getInt("class_count") == labelIds.size)
             val input = metadata.getJSONObject("input")
             require(input.getString("layout") == "NCHW" && input.getString("color_order") == "RGB")

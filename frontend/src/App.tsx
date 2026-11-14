@@ -178,7 +178,7 @@ export default function App() {
         setModel({
           ready: false,
           validated: false,
-          name: 'MobileNetV4',
+          name: 'Crop disease model',
           version: '',
           bytes: 0,
           message: 'Model could not be loaded.',
@@ -621,8 +621,8 @@ export default function App() {
           <h2>{t('Looking at your leaf', 'ಎಲೆಯನ್ನು ಪರಿಶೀಲಿಸಲಾಗುತ್ತಿದೆ')}</h2>
           <p>
             {t(
-              'Running MobileNetV4 on this device. The first check may take a little longer.',
-              'ಈ ಸಾಧನದಲ್ಲಿ MobileNetV4 ಚಾಲನೆಯಲ್ಲಿದೆ. ಮೊದಲ ಪರಿಶೀಲನೆಗೆ ಸ್ವಲ್ಪ ಹೆಚ್ಚು ಸಮಯ ಬೇಕಾಗಬಹುದು.',
+              'Running the crop model on this device. The first check may take a little longer.',
+              'ಈ ಸಾಧನದಲ್ಲಿ ಬೆಳೆ ಮಾದರಿ ಚಾಲನೆಯಲ್ಲಿದೆ. ಮೊದಲ ಪರಿಶೀಲನೆಗೆ ಸ್ವಲ್ಪ ಹೆಚ್ಚು ಸಮಯ ಬೇಕಾಗಬಹುದು.',
             )}
           </p>
           <span className="offline-badge">{t('Photo stays here', 'ಚಿತ್ರ ಇಲ್ಲೇ ಇರುತ್ತದೆ')}</span>
@@ -1152,7 +1152,7 @@ export default function App() {
             {model?.ready ? <CheckCircle2 size={18} /> : <LoaderCircle size={18} />}
             <strong>
               {model?.ready
-                ? t('MobileNetV4 installed', 'MobileNetV4 ಸಿದ್ಧ')
+                ? `${model.name} · ${t('Installed', 'ಸಿದ್ಧ')}`
                 : model
                   ? t('Model unavailable', 'ಮಾದರಿ ಲಭ್ಯವಿಲ್ಲ')
                   : t('Preparing model', 'ಮಾದರಿ ಸಿದ್ಧವಾಗುತ್ತಿದೆ')}
@@ -1184,7 +1184,7 @@ export default function App() {
         <main className="app-page with-top">
           <h1>{t('About this prototype', 'ಈ ಮಾದರಿಯ ಬಗ್ಗೆ')}</h1>
           <div className="soft-card">
-            <h3>MobileNetV4</h3>
+            <h3>{model?.name || t('Crop disease model', 'ಬೆಳೆ ರೋಗ ಮಾದರಿ')}</h3>
             <p>
               {model?.message ? t(model.message, model.message) : t('Preparing the local model…', 'ಸ್ಥಳೀಯ ಮಾದರಿ ಸಿದ್ಧವಾಗುತ್ತಿದೆ…')}
             </p>
@@ -1289,7 +1289,7 @@ export default function App() {
             </span>
             <div>
               <strong>{t('Your photo stays on your device', 'Your photo stays on your device')}</strong>
-              <p>{t('Real MobileNetV4 inference. No photo upload.', 'Real MobileNetV4 inference. No photo upload.')}</p>
+              <p>{t('On-device disease model. No photo upload.', 'ಸಾಧನದಲ್ಲೇ ರೋಗದ ಮಾದರಿ. ಚಿತ್ರ ಅಪ್‌ಲೋಡ್ ಇಲ್ಲ.')}</p>
             </div>
           </div>
           <div className="preview-point">

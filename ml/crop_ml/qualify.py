@@ -158,8 +158,9 @@ def _load_bundle(bundle: Path):
                 'resize': 'letterbox', 'resize_rounding': 'half_up', 'interpolation': 'bilinear',
                 'padding_rgb': [124, 116, 104], 'mean': [.485, .456, .406], 'std': [.229, .224, .225],
                 'pixel_scale': 255.0, 'exif_orientation': True}
-    if metadata.get('architecture') != 'MobileNetV4-Conv-Small' or metadata.get('embedding_dimension') != 960:
-        raise ValueError('Only the actual V4-Conv-Small/960 embedding contract is supported')
+    supported = {'MobileNetV4-Conv-Small', 'MobileNetV3-Large'}
+    if metadata.get('architecture') not in supported or metadata.get('embedding_dimension') != 960:
+        raise ValueError('Only the verified V4-Conv-Small or V3-Large 960-feature contracts are supported')
     if metadata.get('class_count') != 17 or metadata.get('model_file') != 'crop_model.onnx':
         raise ValueError('Model file or class count differs from the bundle contract')
     if metadata.get('outputs') != {'logits': {'name': 'logits', 'shape': [1, 17]},

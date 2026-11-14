@@ -1,3 +1,7 @@
+# Current field upgrade
+
+The current shipped architecture is MobileNetV3-Large, replacing V4 after TRAIN/TUNE selection and frozen evaluation. Source accuracy92.11%; reused80-photo field benchmark38.75% versus V4 22.5%. Field accuracy remains limited. Exact current evidence is in [field_upgrade_v3](../ml/reports/field_upgrade_v3/) and the canonical model card. Historical V4 evidence below does not describe the current model.
+
 # Retrained MobileNetV4 — executed evidence
 
 The previous small-subset model and unconditional unvalidated gate caused every scan to remain uncertain. The replacement was trained on the full source TRAIN partition and continued on a separate mixed source/field TRAIN pool. Selection used TUNE only; temperature/gates used CAL, then the exact exported graph and frozen policy were evaluated once on the original full source test and separate external field-like test.
