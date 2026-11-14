@@ -65,7 +65,7 @@ Arrows from development represent files packaged into the APK, not network calls
 | History | Room 2.7.1, private files | Structured observations and owned images |
 | Preferences | AndroidX DataStore | Language, onboarding and saved contact preferences |
 | Structured assets | kotlinx.serialization JSON | Versioned labels, policy and advice |
-| Audio | Android MediaPlayer; build-time eSpeak NG | Play bundled English/Kannada audio; no phone TTS dependency |
+| Audio | Android MediaPlayer / browser audio; build-time AI4Bharat Indic-TTS and Piper | Play bundled Kannada/English neural narration; no phone TTS dependency or paid speech API |
 | Build | JDK 17, Gradle 8.11.1, Android Gradle Plugin 8.9.2, SDK 35 | Reproducible APK builds |
 | UI versions | Compose BOM 2025.04.01, KSP 2.1.20-1.0.32 | Stable dependency set with Room code generation |
 | Tests | Pytest, JUnit, Compose UI tests, Android instrumentation | Data/model parity and meaningful user-flow checks |
@@ -116,7 +116,7 @@ Bundle the runtime, model, guidance and audio in the installed APK. Assert that 
 
 ## Content and audio pipeline
 
-Maintain source-backed English records, translate them to Kannada, check semantics and pronunciation, then generate short local audio clips. eSpeak NG's source explicitly contains a Kannada voice definition; naturalness and intelligibility still require testing. Use build-time synthesis, not a required phone speech engine. The phone packages audio outputs; it need not package the synthesizer itself.
+Maintain source-backed English records, translate them to Kannada, check semantics and pronunciation, then generate short local audio clips. The current narration uses AI4Bharat Indic-TTS FastPitch/HiFiGAN for Kannada and Piper LJSpeech VITS for English. Concise spoken scripts are versioned separately from longer screen copy. Generation runs locally during development; only normalized 24 kHz mono OGG outputs are packaged. The former eSpeak clips were replaced after user feedback about clarity. Technical decode/checksum checks do not establish native-speaker pronunciation quality, which remains a listening-review task.
 
 Advice records have a verification flag. Unverified condition-specific treatment is not enabled. A generic retake/consultation message remains available. UC IPM and TNAU are selected primary advisory sources to consult, but their pages were blocked in this environment and have not been read. Source availability and translation review are content-validation gates, not reasons to change the offline architecture.
 

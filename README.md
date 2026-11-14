@@ -39,7 +39,7 @@ The first browser visit downloads the model, WASM runtime, content and audio. Wa
 - Local **MobileNetV4-Conv-Small** inference through ONNX Runtime, with 17 tomato, potato, and maize condition labels.
 - Photo-quality checks, real ranked scores, and explicit uncertain results.
 - Three questions about observed symptoms, producing a user-reported concern level.
-- English/Kannada interface and general precautions, with **60 bundled offline audio clips**. Speech does not require a network service or installed language pack.
+- English/Kannada interface and general precautions, with **60 bundled neural-voice audio clips**: AI4Bharat Indic-TTS for Kannada and Piper for English. Playback requires no speech API, installed language pack or phone TTS model.
 - Room-backed Android history and IndexedDB-backed browser history, with crop filters and targeted deletion.
 - Offline help and model status. The installed Android app requests camera permission and has **no Internet permission**; the browser downloads assets on its first visit.
 

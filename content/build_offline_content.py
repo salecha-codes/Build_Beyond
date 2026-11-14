@@ -110,10 +110,10 @@ class Synthesizer:
         return len(pcm)/2/self.sample_rate
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--skip-audio',action='store_true');parser.add_argument('--audio-python-path',type=pathlib.Path);args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('--skip-audio',action='store_true');parser.add_argument('--legacy-espeak',action='store_true',help='Explicitly regenerate the former robotic prototype voice; current neural clips are preserved by default.');parser.add_argument('--audio-python-path',type=pathlib.Path);args=parser.parse_args()
     if args.audio_python_path:sys.path.insert(0,str(args.audio_python_path))
     catalog,speech=build_catalog();rows=[]
-    if not args.skip_audio:
+    if args.legacy_espeak and not args.skip_audio:
         synth=Synthesizer()
         for lang,asset,text in speech:
             path=ASSETS/asset;duration=synth.write(lang,text,path)
