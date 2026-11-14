@@ -1,48 +1,112 @@
-# Offline Crop Health — Build Beyond ’26
+# AgriScan — Offline Crop Health
 
-Android application and interactive browser preview for **PS 4.1**, built for Team Debuggers. The white/lavender/purple screens follow the supplied Figma screenshots. Both clients execute the same bundled MobileNet model locally.
+AgriScan is an Android and browser prototype for checking leaf photos and reading crop-care guidance. Disease inference runs on the device. It supports tomato, potato, and maize, with English, Kannada, and Hindi text and bundled audio.
 
-## Review 2 submission
+> **Prototype limitation:** the image model has not been validated for field diagnosis. Treat its output as a suggestion to inspect, not a confirmed disease identification. Care instructions are conditional prototype guidance and have not been reviewed by an agronomist. Seek local agricultural advice before disease-specific treatment.
 
-**Team Debuggers · Team 8 · Problem Statement 4.1**
+## Try AgriScan
 
-Current prototype: **v0.6.0**, with an offline MobileNetV3-Large disease model, a leaf/object check and separate care/urgency and treatment/recovery models. It supports tomato, potato and maize, English/Kannada/Hindi audio, six observation questions, detailed condition-specific protocols and local history.
+- **Browser app:** [salecha-codes.github.io/Build_Beyond](https://salecha-codes.github.io/Build_Beyond/)
+- **Source code:** [github.com/salecha-codes/Build_Beyond](https://github.com/salecha-codes/Build_Beyond)
+- **Project report:** [Hackathon Final Report PDF](https://salecha-codes.github.io/Build_Beyond/downloads/Hackathon_Final_Report.pdf)
 
-[Open the browser demo](https://salecha-codes.github.io/Build_Beyond/) · [Review 2 implementation and checks](docs/REVIEW2_SUBMISSION.md)
+The browser downloads its model, runtime, content, and audio the first time it is opened. Wait for **Offline ready** before disconnecting. After the assets are cached, the service worker supports offline reload and inference. Browser storage is local to that browser and device.
+
+The native Android app bundles its model, content, and audio in the APK. It does not need a server or internet connection at runtime. Android requests camera access when needed and does not request Internet permission. To build and install it, follow [Build and install AgriScan](docs/BUILD_ANDROID.md).
+
+## What it does
+
+1. Choose tomato, potato, or maize; take a photo or select one from the gallery.
+2. The app checks photo quality and whether the image looks like a leaf. It asks for another photo when the input is unsuitable.
+3. A bundled MobileNetV3-Large model ranks 17 supported condition labels. The app shows the model output and score with uncertainty language; a high score is not proof of a correct diagnosis.
+4. Answer six questions about visible damage, spread, affected plants, wilting, fruit or stem symptoms, and wet weather.
+5. A separate offline advisory system summarizes the reported damage and suggests when to recheck or seek help. It does not calculate severity from the photo or classifier score.
+6. Review condition-specific care and recovery steps, play guidance in English, Kannada, or Hindi, and save the observation locally.
+
+The searchable **Care library** can also be used without a photo. A manually selected condition is clearly marked as a library choice; it does not change a scan, photo, prediction, or saved record. Unknown answers do not silently select the mild-care pathway.
+
+## Features
+
+- Local photo inference with an ONNX MobileNetV3-Large image model and leaf/object input check.
+- Tomato, potato, and maize support across 17 image labels.
+- Six farmer-reported symptom questions and a separate condition/urgency rule system.
+- Care protocols in three languages: confirmation checks, look-alikes, immediate steps, treatment options, limitations, prevention, recovery and failure signs, and follow-up checkpoints.
+- Bundled English and Hindi Piper speech and Kannada AI4Bharat Indic-TTS speech; no runtime speech API is required.
+- Local history: Android Room/SQLite; browser IndexedDB.
+- No cloud inference, photo upload, account, or paid API is required.
+
+## How the system is organized
 
 ```mermaid
-flowchart LR
-    A[Camera or gallery] --> B[Photo quality and leaf check]
-    B -->|Leaf| C[On-device disease prediction]
-    B -->|Object or unclear photo| D[Retake photo]
-    C --> E[Condition and model score]
-    E --> F[Six farmer observation questions]
-    F --> H[Second model: reported damage and urgency]
-    E --> H
-    H --> I[Conditional care plan for the suspected condition]
-    I --> G[Regional audio and local history]
+flowchart TD
+    A[Camera or gallery photo] --> B[Photo quality and leaf check]
+    B -->|Unsuitable input| C[Explain and retake]
+    B -->|Leaf-like input| D[MobileNetV3-Large · 17 image labels]
+    D --> E[Prediction and model score]
+    E --> F[Six farmer observations]
+    F --> G[Separate offline care and urgency rules]
+    E --> G
+    G --> H[Conditional care and recovery plan]
+    H --> I[English · Kannada · Hindi text and audio]
+    E --> J[Local history]
+    F --> J
 ```
 
-## Repository structure
+The Android client is Kotlin/Jetpack Compose with CameraX, ONNX Runtime Android, and Room. The browser client is React/TypeScript with ONNX Runtime Web and IndexedDB. Both package the shared ONNX model and content. The optional Node host serves static browser files and a health endpoint; it does not receive photos or perform inference.
 
-| Directory | Responsibility |
+### Repository map
+
+| Path | Contents |
 |---|---|
-| [`frontend/`](frontend/) | React/TypeScript browser preview, screens, local inference, offline cache and browser storage |
-| [`backend/`](backend/README.md) | Node preview host and health endpoint; no photo uploads or remote diagnosis |
-| [`models/`](models/README.md) | Canonical ONNX model, class order, metadata, policy, checksum and model card, shared by Android and web |
-| [`database/`](database/README.md) | Actual Android Room/SQLite schema and browser IndexedDB schema/documentation |
-| [`android/`](android/) | Native Kotlin/Compose app, CameraX, application logic, Room and ONNX Runtime Android |
-| [`ml/`](ml/README.md) | Dataset acquisition, training, calibration, export and recorded results |
-| [`content/`](content/README.md) | Trilingual content and reproducible offline audio generation |
-| [`contracts/`](contracts/) | Stable 17-class taxonomy and independent preprocessing fixtures |
-| [`scripts/`](scripts/) | Shared-asset synchronization and offline web packaging |
-| [`docs/`](docs/) | Architecture, setup, demonstration and validation records |
+| `android/` | Native Android UI, camera, local inference, and persistence |
+| `frontend/` | Browser UI, local inference, care flows, and offline support |
+| `backend/` | Static preview host and health endpoint |
+| `models/` | Shared ONNX model, labels, policies, model card, and evaluation receipts |
+| `ml/` | Data preparation, training, evaluation, model export, and reliability tools |
+| `content/` | Care protocols, translations, audio scripts, and asset manifests |
+| `contracts/` | Stable label taxonomy and model preprocessing fixtures |
+| `database/` | Android Room and browser IndexedDB schemas |
+| `docs/` | Architecture, setup, research, evaluation, and validation notes |
+| `scripts/`, `tools/` | Asset synchronization, offline packaging, and model/care build tools |
 
-See [repository architecture](docs/REPOSITORY_STRUCTURE.md) for the request/data flow. A central database is unnecessary: browser history stays in IndexedDB and Android history stays in Room/SQLite.
+See [repository architecture](docs/REPOSITORY_STRUCTURE.md) for the full source layout.
 
-## Run the browser preview
+## Image model and data
 
-Use Node.js 22 or newer:
+The current image classifier is **MobileNetV3-Large** with a trained 17-class disease head and an additional leaf/object check. MobileNetV4 was evaluated but was not selected for the shipped model: on the repository's frozen comparison it scored lower on the reused field-like set. See the [model card](models/assets/model/MODEL_CARD.md) and [training receipts](ml/reports/field_upgrade_v3/) for artifact details.
+
+The primary dataset is the RGB subset of [PlantVillage](https://github.com/spMohanty/PlantVillage-Dataset). The inventory has **24,164 available files before deduplication** across three crops and 17 categories. After removing 14 exact duplicates, the audit records 24,150 unique source images. Training also used a documented subset of PlantDoc field images and 448 additional maize Healthy images. The exact splits and experiment data are in the [dataset audit](docs/DATASET_AUDIT.md) and [ML documentation](ml/README.md).
+
+| Crop | Labels | Available RGB files before deduplication |
+|---|---:|---:|
+| Maize | 4 | 3,852 |
+| Potato | 3 | 2,152 |
+| Tomato | 10 | 18,160 |
+| **Total** | **17** | **24,164** |
+
+The 17 labels are: maize—gray leaf spot, common rust, northern leaf blight, healthy; potato—early blight, late blight, healthy; tomato—bacterial spot, early blight, late blight, leaf mold, Septoria leaf spot, spider-mite symptoms, target spot, yellow leaf curl virus, mosaic virus, healthy.
+
+### Evaluation and limits
+
+- The repository reports **92.27% accuracy** on 3,674 PlantVillage source test images.
+- On a reused **80-photo PlantDoc field-like comparison**, the current model scored **38.75%**. This small, reused set indicates weak field generalization and is not a blind independent field trial.
+- The separate leaf/object check rejected 125/125 held-out object/animal sample images in its recorded test. This does not guarantee rejection of every unseen object or non-crop leaf.
+- Field diagnosis is not validated. Actual memory, speed, battery use, and camera behavior on physical 3–4 GB phones have not been measured.
+- Reliability and acceptance tooling is available in the repository. Metrics from existing receipts have limits; see the [evaluation notes](docs/MODEL_RETRAINING_VALIDATION.md) and [evaluation receipts](ml/reports/field_upgrade_v3/).
+
+Do not present the source-dataset score as field accuracy. Do not use the app's output alone to choose a pesticide or treatment.
+
+## Care, severity, and recovery guidance
+
+The advisory system is a separate authored decision model, not a trained severity neural network. It combines the selected or predicted condition with farmer-reported observations. It keeps uncertainty explicit and distinguishes damage from urgency; for example, a limited visible area can still call for prompt expert advice for a high-risk suspected condition.
+
+The canonical [care protocol library](content/care_protocols.json) covers all 17 labels in English, Kannada, and Hindi. Each protocol has confirmation checks, look-alikes, care options, limitations, avoidances, recovery/failure signs, follow-ups, and adviser questions. Actions are conditional and do not promise a cure. No medicine dose is generated from a photo. The guidance and translations still need agronomist and native-speaker review; see the [care research](docs/CARE_V2_RESEARCH.md) and [treatment model card](models/advisory/TREATMENT_MODEL.md).
+
+## Build and run locally
+
+### Browser
+
+Requirements: Node.js 22 or newer.
 
 ```sh
 npm ci
@@ -50,150 +114,48 @@ npm run build
 npm start
 ```
 
-Open `http://localhost:3000`. For development, run `npm run dev` and open `http://localhost:5173`.
+Open `http://localhost:3000`. For hot-reload development, run `npm run dev` and open `http://localhost:5173`.
 
-The first browser visit downloads the model, WASM runtime, content and audio. Wait for **Offline ready** before disconnecting. The service worker then supports offline reload and local inference. Browser and Android histories are separate device-local stores. Browser performance is not a native-phone benchmark.
+### Android
 
-## What is implemented
-
-- Camera capture and gallery import with bounded decoding and EXIF orientation.
-- Local **MobileNetV3-Large** inference through ONNX Runtime, with 17 tomato, potato, and maize condition labels.
-- Photo-quality checks, real ranked scores, and explicit uncertain results.
-- Six questions about visible damage, spread, affected plants, wilting, fruit/stem symptoms and wet weather. The separate advisory model produces reported damage and action urgency, including unknown, mild, moderate, severe, routine monitoring, advice within 48 hours, same-day advice and urgent help.
-- A conditional care profile for every dataset category: what to do now, management, prevention, escalation and whether a cure is possible. Viral profiles explain the lack of a curative treatment; spider mites are treated as pests rather than fungal disease.
-- A searchable offline Care library for all 17 categories without requiring a successful diagnosis. Manual selections are labeled and never relabel a saved photo.
-- Detailed treatment options with numbered steps, use cases, limitations, mistakes to avoid, improvement/failure signs and follow-up checkpoints. Actual action plans differ for mild, moderate and severe reports; unknown severity does not default to mild.
-- English, Kannada and Hindi interface and care, with 228 bundled neural narration clips: AI4Bharat Indic-TTS for Kannada and Piper for English/Hindi. Playback requires no speech API, installed language pack or phone TTS model. The selected language is remembered locally.
-- Room-backed Android history and IndexedDB-backed browser history, with crop filters and targeted deletion.
-- Offline help and model status. The installed Android app requests camera permission and has **no Internet permission**; the browser downloads assets on its first visit.
-
-The target is Android 7.0+ on 3–4 GB RAM phones. Actual ARM-phone memory, latency, camera behavior, and Kannada pronunciation still require a physical-device check.
-
-## Second model: care, severity and urgency
-
-The [offline advisory model](models/advisory/README.md) is a transparent expert decision system with **17 profiles in three languages**. It is a separate model from image recognition and does not require another large neural network or cloud API. It combines the suspected condition with farmer observations. The result includes reported damage, when to act, the reasons for that priority and a conditional care plan. Saved answers can be reopened with the observation.
-
-Damage and urgency are different: a few spots on suspected potato late blight can warrant same-day advice; a healthy-looking photo accompanied by reported wilting prompts urgent help rather than reassurance. Disease-model confidence never becomes a severity measurement. Unanswered questions remain unknown, and a mouse/object photo cannot receive a disease-specific care plan.
-
-This model is **authored, not trained on PlantVillage severity labels**: those labels are absent from our dataset. Its rules, care text, translations and urgency intervals are prototypes requiring agronomist and language review. Source-reference access limitations are recorded honestly. It does not improve the image classifier's field accuracy, guarantee cures or generate pesticide doses. See the [advisory model card](docs/ADVISORY_MODEL_CARD.md) and [research notes](docs/ADVISORY_RESEARCH.md).
-
-### Treatment and recovery expansion
-
-Version 2 adds [treatment protocols](models/advisory/TREATMENT_MODEL.md) for all
-17 conditions in all three languages. The earlier advisory changed the urgency
-badge while its care arrays stayed static; now the selected severity changes
-the action pathway too. Each option explains when it applies, the steps, its
-limits and its references. Recovery checks focus on new growth, new lesions,
-spread and the affected crop parts rather than promising dead tissue will heal.
-
-Use **Care library** from Home to read a protocol without scanning. Manual
-questionnaire answers remain separate from actual scan answers and classifier
-results. The ordinary scan care screen displays the same complete protocol.
-Both screens show loading failures and offer retry rather than silently
-displaying an empty plan. Completed known answers are prefilled when edited.
-
-The new canonical artifact is `content/care_protocols.json`; package it with
-`python3 tools/build_care_protocols.py`. Treatment speech has its own provenance
-manifest. The original 165 recordings retain their original hashes.
-[Source and dataset research](docs/CARE_V2_RESEARCH.md) records what was actually
-retrieved, including the limited secondary Spanish IPM data inspected for potato.
-No verified treatment-outcome dataset for all three crops was found, and no
-treatment efficacy or registered pesticide dose is inferred from the image dataset.
-
-## Dataset used — 17 categories
-
-We used the RGB subset of the [PlantVillage dataset](https://github.com/spMohanty/PlantVillage-Dataset) covering **tomato, potato and maize**. The counts below describe the available source files **before deduplication**, rather than the number of training images in every model experiment.
-
-| Crop | Categories | Available RGB files |
-|---|---:|---:|
-| Maize | 4 | 3,852 |
-| Potato | 3 | 2,152 |
-| Tomato | 10 | 18,160 |
-| **Total** | **17** | **24,164** |
-
-| Crop | Condition category | Files before deduplication |
-|---|---|---:|
-| Maize | Gray leaf spot | 513 |
-| Maize | Common rust | 1,192 |
-| Maize | Northern leaf blight | 985 |
-| Maize | Healthy | 1,162 |
-| Potato | Early blight | 1,000 |
-| Potato | Late blight | 1,000 |
-| Potato | Healthy | 152 |
-| Tomato | Bacterial spot | 2,127 |
-| Tomato | Early blight | 1,000 |
-| Tomato | Late blight | 1,909 |
-| Tomato | Leaf mold | 952 |
-| Tomato | Septoria leaf spot | 1,771 |
-| Tomato | Spider-mite symptoms | 1,676 |
-| Tomato | Target spot | 1,404 |
-| Tomato | Yellow leaf curl virus | 5,357 |
-| Tomato | Mosaic virus | 373 |
-| Tomato | Healthy | 1,591 |
-
-Removing 14 exact duplicates left **24,150 unique source images**, partitioned into 16,856 TRAIN, 2,228 TUNE, 1,392 calibration and 3,674 TEST images. The current V3 disease head used a capped subset of **6,324 PlantVillage TRAIN images, 632 PlantDoc field TRAIN images and 448 additional maize Healthy field TRAIN images**. Additional PlantDoc tuning/calibration/test photos and a separate leaf/object dataset support evaluation and input screening. See the [dataset audit](docs/DATASET_AUDIT.md), [training receipts](ml/reports/field_upgrade_v3/) and [leaf-check receipts](ml/reports/leaf_guard/) for the exact experiment scope.
-
-## Leaf input check
-
-The model first checks whether the photo looks like a leaf. Rejected object photos return a retake request with **no disease name or score**. The leaf head shares the same offline backbone and adds about 15 KB.
-
-A frozen threshold rejected 125/125 held-out object/animal test photos, including computer mouse, hamster, cat, laptop and monitor. It retained 77/80 field leaf photos and all 31 correctly classified field cases, preserving 38.75% end-to-end field accuracy on the reused benchmark. The corrected leaf threshold retains all source test leaves; disease-classifier accuracy is 92.27%. These are sample measurements, not universal guarantees; other plant leaves may still pass. See [leaf-check receipts](ml/reports/leaf_guard/) for data/protocols and limitations. Test photos are not bundled in the app.
-
-## Model status
-
-The current model is **MobileNetV3-Large**, using official ImageNet-pretrained visual features and a trained 17-class disease head with TRAIN-only feature standardization embedded in ONNX. It replaces MobileNetV4 after tuning and frozen evaluation showed a stronger field result. The exact FP32 ONNX graph is 11,965,503 bytes and outputs 17 disease logits, 960 visual features and one leaf-check logit.
-
-The following table measures the disease classifier before the separate leaf check.
-
-| Same frozen comparison | Images | V4 accuracy | Current V3 accuracy |
-|---|---:|---:|---:|
-| PlantVillage source | 3,674 | 94.67% | 92.27% |
-| PlantDoc field-like | 80 | 22.50% | 38.75% |
-
-Field recognition improves by 16.25 percentage points (18 → 31 correct out of 80). **Field accuracy is still limited.** This 80-photo set was already used for V4; it is a reused comparison benchmark, not newly blind independent data. Source accuracy must not be presented as field accuracy. External labels are mostly unreviewed.
-
-Classifier-only accepted precision on source images is 96.72% at 85.44% coverage. Field accepted precision is 52.63% at 47.50% coverage. The classifier's field validation and authorization for confirmed treatment advice remain false. The separate advisory model can display conditional care without asserting a confirmed disease. Both apps show the actual predicted condition, with low-confidence or crop-mismatch labels when applicable; numeric gates and global 17-class score semantics remain intact.
-
-SHA-256: `31b29158cc1fc1c07bdf3acc07cb6bb6da39eccb1050ffe6ed1d499811179fba`.
-
-See [current training/evaluation receipts](ml/reports/field_upgrade_v3/) and [model card](models/assets/model/MODEL_CARD.md). Earlier V4 reports remain historical.
-
-## Diagnosis workflow fixes
-
-Version0.4.3 corrects two causes of missing output: an unnecessarily strict leaf threshold and hiding a genuine leaf’s uncertain disease candidate. The binary leaf check still precedes any disease display. Leaf-passed unfamiliar results now show the real closest model candidate and score with explicit uncertainty; disease acceptance gates remain intact. Clear photos down to128px can run (224px+recommended); blur and exposure checks remain.
-
-Threshold selection now searches TUNE score intervals. Field TUNE leaf recall rises132/138→137/138 while104/104 TUNE objects stay rejected. Reused comparison:125/125 objects remain rejected and77/80 field leaves pass. This is an input/workflow fix; it does not increase the classifier’s38.75% disease accuracy or turn predictions into confirmed field diagnoses. Older cached browser pages refresh when the new offline bundle activates. See ml/reports/diagnosis_workflow_fix and model card.
-
-## Latest targeted field-data update
-
-The latest head adds 448 audited maize Healthy field photos. The existing 80-photo disease benchmark remains 31/80 (38.75%). On a separate, small 14-photo healthy-maize test, the old model made zero correct visible predictions and the updated model made one provisional correct prediction; neither produced a strict accepted Healthy result. This is a small targeted gain, not a broad accuracy breakthrough. The leaf/object check is preserved. See [exact comparison and provenance](ml/reports/healthy_field_update/) and [dataset tooling](ml/KANDAHAR_DATA.md). Broad new Blight/Spot labels were excluded from the 17-class disease training.
-
-## Build and try it
-
-See [Android build instructions](docs/BUILD_ANDROID.md). With JDK 17 and Android SDK 35 configured, run from the repository root:
+Requirements: JDK 17 and Android SDK Platform 35. Configure `ANDROID_HOME` or `local.properties`, then run:
 
 ```sh
-./gradlew :app:assembleDebug :app:testDebugUnitTest
+./gradlew :app:assembleDebug
 ```
 
-Phone outputs are in `android/app/build/outputs/apk/debug/`: use `app-arm64-v8a-debug.apk` for most current Android phones, or `app-armeabi-v7a-debug.apk` for a 32-bit device. `app-universal-debug.apk` contains all supported ABIs. These are debug-signed prototype builds.
+To run the unit tests and build the Android test APK:
 
-For a demonstration, enable airplane mode, open the app, choose the crop, scan or import a clear leaf photo, and run the assessment. Review its actual model match or uncertain result. Complete the symptom questions, play English/Kannada/Hindi audio, save the observation, and reopen it from History. The production app starts with empty history.
+```sh
+./gradlew :app:assembleDebugAndroidTest :app:testDebugUnitTest
+```
 
-## Additional experiments
+See [Android build instructions](docs/BUILD_ANDROID.md) for SDK setup, ABI-specific APKs, installation, and device tests. A debug APK requires allowing installation from the file source when sideloaded.
 
-The current shipped model remains the leaf-guarded V3 model. Further neural-head, kernel-head and partial fine-tuning experiments are included for reproducibility. They did not improve the reserved field comparison enough to replace it. Tuning scores from these experiments are not deployed accuracy. See [experiment outcomes](ml/reports/additional_field_trials/STATUS.md).
+### Shared assets
 
-## Validation and project references
+The shared model, labels, protocols, and audio are copied and validated during the build. To rebuild the care protocol package:
 
-- [Current Review 2 implementation and checks](docs/REVIEW2_SUBMISSION.md)
-- [Earlier device evidence](docs/REVIEW2_VALIDATION.md)
-- [Current architecture and tools](docs/ARCHITECTURE.md)
-- [Current model receipts](ml/reports/healthy_field_update/)
-- [Offline content and audio generation](content/README.md)
-- [ML acquisition, training, and export](ml/README.md)
-- [Product scope](docs/PRODUCT_SCOPE.md)
+```sh
+python3 tools/build_care_protocols.py
+```
+
+To inspect model bundle synchronization options:
+
+```sh
+python3 tools/sync_model_bundle.py --help
+```
+
+## Privacy and data storage
+
+Photos are processed locally and are not uploaded for diagnosis. Android observations use the app's private Room/SQLite database and photo storage. Browser observations use IndexedDB and browser-managed local storage. Clearing app/browser data removes the corresponding local history; there is no cloud backup or cross-device sync.
+
+## Further documentation
+
+- [Architecture](docs/ARCHITECTURE.md)
+- [Build and install Android](docs/BUILD_ANDROID.md)
 - [Dataset audit](docs/DATASET_AUDIT.md)
-- [Review 1 presentation notes](docs/REVIEW_1.md)
-
-Earlier planning documents describe intended release gates; the Review 2 validation record and current model receipts state what has actually been executed.
+- [Model card](models/assets/model/MODEL_CARD.md)
+- [Evaluation and validation](docs/REVIEW2_VALIDATION.md)
+- [Care and treatment research](docs/CARE_V2_RESEARCH.md)
+- [Public project report](https://salecha-codes.github.io/Build_Beyond/downloads/Hackathon_Final_Report.pdf)
