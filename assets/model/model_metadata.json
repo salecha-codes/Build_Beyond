@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "model_version": "mnv4-conv-small-supervised_from_scratch-d157e7c84013",
+  "model_version": "mnv4-conv-small-supervised_from_scratch_mixed_domain_continuation-4a0c82796188",
   "architecture": "MobileNetV4-Conv-Small",
   "timm_model": "mobilenetv4_conv_small.e2400_r224_in1k",
   "model_file": "crop_model.onnx",
-  "model_sha256": "d157e7c8401319a700039de467caba6728b7bdbf35b4cdae1818757cf0ba7e3c",
+  "model_sha256": "4a0c82796188dce8c81d3840ec2817ee27cf29e9c148eeeefeb90662aa888b03",
   "model_size_bytes": 10032309,
   "class_count": 17,
   "embedding_dimension": 960,
@@ -66,5 +66,11 @@
   "runtime_tested": "onnxruntime-python-1.23.2-cpu",
   "training_status": "trained_prototype",
   "diagnosis_validated": false,
-  "test_scope": "Desktop CPU export/runtime parity only. This is not phone performance or clinical/field validation."
+  "test_scope": "Full original source-domain test with frozen CAL gates; no field diagnosis or phone-performance validation.",
+  "source_evaluated": true,
+  "source_thresholds_calibrated": true,
+  "source_acceptance_qualified": true,
+  "source_acceptance_enabled": true,
+  "source_evaluation_file": "source_evaluation.json",
+  "source_evaluation_sha256": "6d075f9796dfb819843a428df22d68a4114734acafa0e81cb13ff328e3a495b1"
 }
