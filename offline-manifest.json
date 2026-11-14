@@ -1,5 +1,5 @@
 {
-  "version": "80dc2c51e2f682c6",
+  "version": "4453535bf0a62161",
   "files": [
     "app-logo.png",
     "assets/app-logo.png",
@@ -240,8 +240,8 @@
     "assets/content/catalog.json",
     "assets/content/hindi_ui.json",
     "assets/content/treatment_audio_manifest.json",
-    "assets/index-B5uQHrDR.js",
-    "assets/index-Brhqg5sP.css",
+    "assets/index-EUBZC6If.css",
+    "assets/index-NQJ4GABI.js",
     "assets/model/MODEL_CARD.md",
     "assets/model/crop_model.onnx",
     "assets/model/decision_policy.json",
