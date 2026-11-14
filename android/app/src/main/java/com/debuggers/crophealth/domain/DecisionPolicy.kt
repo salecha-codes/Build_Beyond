@@ -29,6 +29,15 @@ object DecisionPolicy {
     ): AssessmentResult {
         if (quality != null && !quality.acceptable) return AssessmentResult.Retake(quality)
         if (!output.modelReady) return AssessmentResult.ModelUnavailable(ModelFailure.NOT_READY)
+        policy.minimumLeafProbability?.let { minimum ->
+            if (!minimum.isFinite() || minimum <= 0f || minimum > 1f)
+                return AssessmentResult.ModelUnavailable(ModelFailure.INVALID_POLICY)
+            val probability = output.leafProbability
+            if (probability == null || !probability.isFinite() || probability !in 0f..1f)
+                return AssessmentResult.ModelUnavailable(ModelFailure.INVALID_SCORES)
+            if (probability < minimum)
+                return AssessmentResult.Retake(QualityCheck(setOf(QualityIssue.NOT_A_LEAF), false))
+        }
         if (output.labelIds.size != output.logits.size || output.labelIds.size != Conditions.all.size ||
             output.labelIds.toSet() != Conditions.ids) {
             return AssessmentResult.ModelUnavailable(ModelFailure.LABEL_MISMATCH)

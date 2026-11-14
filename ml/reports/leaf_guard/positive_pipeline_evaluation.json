@@ -1,0 +1,98 @@
+{
+  "model_sha256": "3332b5634fcb1a8bea17317a0a9db4d6e44f9c0da24e7b03718b3ced5d6b2d1e",
+  "model_version": "mnv3-large-leaf-guard-3332b5634fcb",
+  "minimum_leaf_probability": 0.7736096007959162,
+  "threshold_locked_before_positive_test": true,
+  "selection_or_threshold_changed": false,
+  "scope": "Frozen positive-test leaf recall and raw crop-correct-and-leaf-pass counts; reused crop comparison test partitions, not a new field trial",
+  "domains": {
+    "source": {
+      "samples": 3674,
+      "manifest_sha256": "47687628b390c4bfdfe3cdb93479d41668d94ce504fd42f662cb9c3e66e1a15a",
+      "leaf_accepted": 3668,
+      "leaf_rejected": 6,
+      "leaf_recall": 0.9983669025585193,
+      "raw_crop_correct": 3384,
+      "raw_crop_accuracy": 0.9210669569951007,
+      "crop_correct_and_leaf_accepted": 3378,
+      "end_to_end_raw_accuracy": 0.91943385955362,
+      "rejected_photos": [
+        {
+          "sha256": "cbc797ed2b91f533a58dc4a39f3bc3e9925826ec759aa873db0ebe3b514dcc7d",
+          "label_id": "maize_gray_leaf_spot",
+          "leaf_probability": 0.6844425797462463,
+          "crop_classification_correct": true
+        },
+        {
+          "sha256": "f1027b64340cb2191a3a8aca592701963a95a4bc9dae763305b9eafd118484d2",
+          "label_id": "maize_healthy",
+          "leaf_probability": 0.7637462019920349,
+          "crop_classification_correct": true
+        },
+        {
+          "sha256": "43e0f96faa2160e8d3a9a4c724cb71c8f3bb70525789fb6b96797f03e027cd2c",
+          "label_id": "maize_healthy",
+          "leaf_probability": 0.711632251739502,
+          "crop_classification_correct": true
+        },
+        {
+          "sha256": "6724fafac8b9595d6428ca0c41904bb55327fca315195dc94fea5286473494d2",
+          "label_id": "maize_healthy",
+          "leaf_probability": 0.6055321097373962,
+          "crop_classification_correct": true
+        },
+        {
+          "sha256": "b1891f268857193d6ac947e20e919830931749031c018076cc096bb93c830987",
+          "label_id": "tomato_yellow_leaf_curl_virus",
+          "leaf_probability": 0.7451385855674744,
+          "crop_classification_correct": true
+        },
+        {
+          "sha256": "ea26a68de2448f05f9f1c15a41a65ca5d190324c3832f0b9131f2314428867d5",
+          "label_id": "tomato_yellow_leaf_curl_virus",
+          "leaf_probability": 0.7154175043106079,
+          "crop_classification_correct": true
+        }
+      ],
+      "elapsed_seconds": 17.87551945800078
+    },
+    "field": {
+      "samples": 80,
+      "manifest_sha256": "28f0987dc20c1fdb5b6a0f680fac2e4403347d25ac7cd68d24b7e0a29bc5106d",
+      "leaf_accepted": 76,
+      "leaf_rejected": 4,
+      "leaf_recall": 0.95,
+      "raw_crop_correct": 31,
+      "raw_crop_accuracy": 0.3875,
+      "crop_correct_and_leaf_accepted": 31,
+      "end_to_end_raw_accuracy": 0.3875,
+      "rejected_photos": [
+        {
+          "sha256": "7d9c5c6947554d5fc6e98df5fbc1beb6363255128bd56446960e29a73242c02e",
+          "label_id": "tomato_early_blight",
+          "leaf_probability": 0.25871214270591736,
+          "crop_classification_correct": false
+        },
+        {
+          "sha256": "c7e82b8ce320acec30c35a89e73490618e425c76d3c80d2d88a3053d39e9709e",
+          "label_id": "tomato_septoria_leaf_spot",
+          "leaf_probability": 0.6419604420661926,
+          "crop_classification_correct": false
+        },
+        {
+          "sha256": "b609929106ab0044de24717ceb091163e7630ec3460ec18c6d9c7bf2b996121c",
+          "label_id": "tomato_bacterial_spot",
+          "leaf_probability": 0.394230455160141,
+          "crop_classification_correct": false
+        },
+        {
+          "sha256": "4d61613d92bdb576e294d12be4e4c8a78fd92c683eed9cdaf8f43b2eaa9bdad5",
+          "label_id": "tomato_leaf_mold",
+          "leaf_probability": 0.05246966332197189,
+          "crop_classification_correct": false
+        }
+      ],
+      "elapsed_seconds": 3.11166721599875
+    }
+  }
+}

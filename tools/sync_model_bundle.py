@@ -28,6 +28,19 @@ def sync(source: Path) -> None:
     if policy.get("model_sha256", actual) != actual:
         raise ValueError("Policy belongs to a different model")
     evidence_names = ["source_evaluation.json", "embedding_centroids.json"]
+    leaf_name = "leaf_validation.json"
+    leaf_gate = metadata.get("leaf_gate", {})
+    if leaf_gate.get("enabled"):
+        if leaf_gate.get("receipt_file") != leaf_name:
+            raise ValueError("Unexpected leaf-validation asset name")
+        leaf_path = source / leaf_name
+        if hashlib.sha256(leaf_path.read_bytes()).hexdigest() != leaf_gate.get("receipt_sha256"):
+            raise ValueError("Leaf-validation checksum differs")
+        leaf_report = json.loads(leaf_path.read_text())
+        if (leaf_report.get("model_sha256") != actual or leaf_report.get("model_version") != metadata["model_version"]
+                or leaf_report.get("output_name") != leaf_gate.get("output_name")
+                or leaf_report.get("minimum_leaf_probability") != leaf_gate.get("minimum_leaf_probability")):
+            raise ValueError("Leaf-validation identity/threshold differs")
     has_evaluation = metadata.get("source_evaluated") is True or policy.get("source_evaluated") is True
     if has_evaluation:
         evidence = {}
@@ -50,7 +63,7 @@ def sync(source: Path) -> None:
     parent = ROOT / "models/assets"
     parent.mkdir(parents=True, exist_ok=True)
     destination = parent / "model"
-    names = [name, "model_metadata.json", "labels.json", "decision_policy.json", "MODEL_CARD.md", "export_receipt.json", *evidence_names]
+    names = [name, "model_metadata.json", "labels.json", "decision_policy.json", "MODEL_CARD.md", "export_receipt.json", *evidence_names, leaf_name]
     if destination.exists() and any(item.name not in names for item in destination.iterdir()):
         raise ValueError("Refusing to overwrite unexpected files in the model asset directory")
     with tempfile.TemporaryDirectory(dir=parent, prefix=".model-") as temp:
@@ -62,7 +75,7 @@ def sync(source: Path) -> None:
         # App reads a fully packaged APK, not this development directory mid-sync.
         for file in staging.iterdir():
             file.replace(destination / file.name)
-        for file in evidence_names:
+        for file in [*evidence_names, leaf_name]:
             if not (staging / file).exists() and not (source / file).exists():
                 (destination / file).unlink(missing_ok=True)
     print(json.dumps({"installed": str(destination), "architecture": metadata["architecture"],

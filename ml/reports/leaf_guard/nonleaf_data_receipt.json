@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "source_repository": "https://github.com/EliSchwartz/imagenet-sample-images",
+  "source_commit": "bc69043e2862758a1906c6a24a792bb28c6bb2ff",
+  "source_images": 1000,
+  "eligible_images": 729,
+  "files": {
+    "train": {
+      "path": "/workspace/crop-data/nonleaf/train.jsonl",
+      "rows": 500,
+      "sha256": "556b724a3f22fba14768d9cb45e9765590de9c9398db6335ad9b3973ce00d034"
+    },
+    "tune": {
+      "path": "/workspace/crop-data/nonleaf/tune.jsonl",
+      "rows": 104,
+      "sha256": "ea0875c10ac9778a0575cc4d65af984054cb4a24c147f7e0d08868c2ad0d636a"
+    },
+    "test": {
+      "path": "/workspace/crop-data/nonleaf/test.jsonl",
+      "rows": 125,
+      "sha256": "1264ecd9cc039f75d462a19ca9423170acc79dee20da2fd4cda4025c477926ac"
+    },
+    "excluded": {
+      "path": "/workspace/crop-data/nonleaf/excluded.jsonl",
+      "rows": 268,
+      "sha256": "7b0f01d788122ce19699bd4f46af447a918fe8c72796363e7da9e728ce018536"
+    },
+    "quarantine": {
+      "path": "/workspace/crop-data/nonleaf/quarantine.jsonl",
+      "rows": 3,
+      "sha256": "14fb2ad0b8b42a33f4bc0c4ea270955f383b4025d7a0194a25cc544d1cbc9454"
+    }
+  },
+  "group_counts": {
+    "train": 500,
+    "tune": 104,
+    "test": 125
+  },
+  "split_seed": "nonleaf-2601",
+  "split_method": "sha256-stable group split 70/15/15; exact/class and dHash<=4 groups kept together",
+  "forced_locked_test_synsets": [
+    "n02123045",
+    "n02342885",
+    "n03642806",
+    "n03782006",
+    "n03793489"
+  ],
+  "computer_mouse_class_index": 673,
+  "verified_git_blob_and_decoded": 729,
+  "calibration_or_test_inference_executed": false,
+  "limitations": [
+    "One public sample per ImageNet class; category labels are inherited, not image-by-image expert review.",
+    "This does not establish universal unknown-image rejection.",
+    "No leaf CAL/TUNE/test image was read by this data preparation.",
+    "Photographs remain external internal-research inputs; do not copy them into app assets."
+  ]
+}

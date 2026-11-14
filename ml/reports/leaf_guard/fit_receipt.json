@@ -1,0 +1,238 @@
+{
+  "protocol": {
+    "schema_version": 1,
+    "task": "supported_crop_leaf_input_gate",
+    "train_positive_rows": 6956,
+    "negative_train_rows": 500,
+    "negative_tune_rows": 104,
+    "weights_sha256": "5c1a416349c4cf298f2a6a5e2600ed0ee55e604713578f5e74e6bc8bcaef7997",
+    "positive_cache_sha256": "713dfa555f60319cdb71f6b62e37fdf7f3c8cea707cdc49965691f0120b9fef9",
+    "positive_manifest_sha256": "9e486c7ef623ef2b871d9723ac51a208c9fe92eec3445c9467d0b939c3d2ece0",
+    "negative_train_manifest_sha256": "556b724a3f22fba14768d9cb45e9765590de9c9398db6335ad9b3973ce00d034",
+    "negative_tune_manifest_sha256": "ea0875c10ac9778a0575cc4d65af984054cb4a24c147f7e0d08868c2ad0d636a",
+    "negative_test_manifest_sha256": "1264ecd9cc039f75d462a19ca9423170acc79dee20da2fd4cda4025c477926ac",
+    "C_grid": [
+      0.001,
+      0.01,
+      0.1,
+      1.0,
+      10.0
+    ],
+    "field_leaf_recall_floor": 0.95,
+    "source_leaf_recall_floor": 0.98,
+    "selection": "max nonleaf TUNE rejection subject to positive recall floors; tie field recall then source recall",
+    "test_evaluated": false,
+    "threshold_partition": "TUNE only",
+    "feature_scaler_partition": "TRAIN only",
+    "preprocessing": "same RGB224 letterbox and ImageNet normalization as disease graph"
+  },
+  "selected": {
+    "C": 0.001,
+    "minimum_leaf_probability": 0.7736096007959162,
+    "metrics": {
+      "source_leaf_recall": {
+        "samples": 2228,
+        "correct": 2228,
+        "rate": 1.0,
+        "wilson95": [
+          0.9982787940400015,
+          1.0
+        ]
+      },
+      "field_leaf_recall": {
+        "samples": 138,
+        "correct": 132,
+        "rate": 0.9565217391304348,
+        "wilson95": [
+          0.9083922334104801,
+          0.9799235033818243
+        ]
+      },
+      "nonleaf_rejection": {
+        "samples": 104,
+        "correct": 104,
+        "rate": 1.0,
+        "wilson95": [
+          0.9643786456275499,
+          0.9999999999999999
+        ]
+      }
+    },
+    "pooled_tune_auc": 0.9999303232998885
+  },
+  "history": [
+    {
+      "C": 0.001,
+      "minimum_leaf_probability": 0.7736096007959162,
+      "metrics": {
+        "source_leaf_recall": {
+          "samples": 2228,
+          "correct": 2228,
+          "rate": 1.0,
+          "wilson95": [
+            0.9982787940400015,
+            1.0
+          ]
+        },
+        "field_leaf_recall": {
+          "samples": 138,
+          "correct": 132,
+          "rate": 0.9565217391304348,
+          "wilson95": [
+            0.9083922334104801,
+            0.9799235033818243
+          ]
+        },
+        "nonleaf_rejection": {
+          "samples": 104,
+          "correct": 104,
+          "rate": 1.0,
+          "wilson95": [
+            0.9643786456275499,
+            0.9999999999999999
+          ]
+        }
+      },
+      "pooled_tune_auc": 0.9999303232998885
+    },
+    {
+      "C": 0.01,
+      "minimum_leaf_probability": 0.933352230354175,
+      "metrics": {
+        "source_leaf_recall": {
+          "samples": 2228,
+          "correct": 2220,
+          "rate": 0.9964093357271095,
+          "wilson95": [
+            0.9929303902775339,
+            0.9981794357621805
+          ]
+        },
+        "field_leaf_recall": {
+          "samples": 138,
+          "correct": 132,
+          "rate": 0.9565217391304348,
+          "wilson95": [
+            0.9083922334104801,
+            0.9799235033818243
+          ]
+        },
+        "nonleaf_rejection": {
+          "samples": 104,
+          "correct": 104,
+          "rate": 1.0,
+          "wilson95": [
+            0.9643786456275499,
+            0.9999999999999999
+          ]
+        }
+      },
+      "pooled_tune_auc": 1.0
+    },
+    {
+      "C": 0.1,
+      "minimum_leaf_probability": 0.9857953533302843,
+      "metrics": {
+        "source_leaf_recall": {
+          "samples": 2228,
+          "correct": 2218,
+          "rate": 0.9955116696588869,
+          "wilson95": [
+            0.9917574014362086,
+            0.997560182603434
+          ]
+        },
+        "field_leaf_recall": {
+          "samples": 138,
+          "correct": 132,
+          "rate": 0.9565217391304348,
+          "wilson95": [
+            0.9083922334104801,
+            0.9799235033818243
+          ]
+        },
+        "nonleaf_rejection": {
+          "samples": 104,
+          "correct": 104,
+          "rate": 1.0,
+          "wilson95": [
+            0.9643786456275499,
+            0.9999999999999999
+          ]
+        }
+      },
+      "pooled_tune_auc": 1.0
+    },
+    {
+      "C": 1.0,
+      "minimum_leaf_probability": 0.9968273117093547,
+      "metrics": {
+        "source_leaf_recall": {
+          "samples": 2228,
+          "correct": 2223,
+          "rate": 0.9977558348294434,
+          "wilson95": [
+            0.9947571314123309,
+            0.9990410576274911
+          ]
+        },
+        "field_leaf_recall": {
+          "samples": 138,
+          "correct": 132,
+          "rate": 0.9565217391304348,
+          "wilson95": [
+            0.9083922334104801,
+            0.9799235033818243
+          ]
+        },
+        "nonleaf_rejection": {
+          "samples": 104,
+          "correct": 104,
+          "rate": 1.0,
+          "wilson95": [
+            0.9643786456275499,
+            0.9999999999999999
+          ]
+        }
+      },
+      "pooled_tune_auc": 1.0
+    },
+    {
+      "C": 10.0,
+      "minimum_leaf_probability": 0.9960720032434571,
+      "metrics": {
+        "source_leaf_recall": {
+          "samples": 2228,
+          "correct": 2217,
+          "rate": 0.9950628366247756,
+          "wilson95": [
+            0.9911805495550539,
+            0.9972409134845526
+          ]
+        },
+        "field_leaf_recall": {
+          "samples": 138,
+          "correct": 132,
+          "rate": 0.9565217391304348,
+          "wilson95": [
+            0.9083922334104801,
+            0.9799235033818243
+          ]
+        },
+        "nonleaf_rejection": {
+          "samples": 104,
+          "correct": 104,
+          "rate": 1.0,
+          "wilson95": [
+            0.9643786456275499,
+            0.9999999999999999
+          ]
+        }
+      },
+      "pooled_tune_auc": 1.0
+    }
+  ],
+  "head_sha256": "e6101b13682242c24af901f69822f3f93f2336b466d75da77a163c374616d7a6",
+  "fit_complete": true,
+  "negative_test_evaluated": false
+}

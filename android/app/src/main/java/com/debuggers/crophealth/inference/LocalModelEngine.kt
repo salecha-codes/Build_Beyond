@@ -12,6 +12,7 @@ import java.security.MessageDigest
 import kotlin.system.measureNanoTime
 import kotlin.math.abs
 import kotlin.math.sqrt
+import kotlin.math.exp
 
 data class EnginePrediction(val output: InferenceOutput, val policy: PolicyConfig, val inferenceMs: Long)
 
@@ -24,6 +25,7 @@ class LocalModelEngine(private val context: Context) : AutoCloseable {
     private var outputName = "logits"
     private var embeddingName = "embeddings"
     private var embeddingDimension = 0
+    private var leafOutputName: String? = null
     private var policy = PolicyConfig()
     private var centroids: Map<String, FloatArray> = emptyMap()
     var status: ModelStatus = ModelStatus()
@@ -69,6 +71,7 @@ class LocalModelEngine(private val context: Context) : AutoCloseable {
             val validated = metadata.optBoolean("diagnosis_validated", false) &&
                 artifactPolicy.optBoolean("validated", false) && artifactPolicy.optBoolean("thresholds_calibrated", false)
             val sourceEvaluated = loadSourceQualification(metadata, artifactPolicy, expected, version)
+            val minimumLeafProbability = loadLeafGate(metadata, expected, version)
             val thresholds = if (sourceEvaluated) artifactPolicy.getJSONObject("class_thresholds").let { table ->
                 require(table.keys().asSequence().toSet() == Conditions.ids)
                 labelIds.associateWith { id -> table.getJSONObject(id).let { row ->
@@ -89,7 +92,8 @@ class LocalModelEngine(private val context: Context) : AutoCloseable {
                     (0 until ids.length()).map { ids.getString(it) }.toSet()
                 } ?: Conditions.ids,
                 sourceEvaluated = sourceEvaluated, classThresholds = thresholds,
-                allowConditionSpecificAdvice = validated && artifactPolicy.optBoolean("allow_condition_specific_advice", false))
+                allowConditionSpecificAdvice = validated && artifactPolicy.optBoolean("allow_condition_specific_advice", false),
+                minimumLeafProbability = minimumLeafProbability)
             val fileName = metadata.getString("model_file")
             require(fileName == "crop_model.onnx")
             val modelFile = verifiedModelFile(fileName, expected)
@@ -102,6 +106,9 @@ class LocalModelEngine(private val context: Context) : AutoCloseable {
             try {
                 require((newSession.inputInfo.getValue(spec.name).info as TensorInfo).shape.contentEquals(longArrayOf(1, 3, 224, 224)))
                 require(newSession.outputNames.containsAll(listOf(outputName, embeddingName)))
+                leafOutputName?.let { name ->
+                    require((newSession.outputInfo.getValue(name).info as TensorInfo).shape.contentEquals(longArrayOf(1, 1)))
+                }
                 session = newSession
             } catch (failure: Exception) { newSession.close(); throw failure }
             val training = metadata.optString("training_status", "unknown")
@@ -124,6 +131,7 @@ class LocalModelEngine(private val context: Context) : AutoCloseable {
         val data = ImagePreparation.tensor(bitmap, spec)
         lateinit var logits: FloatArray
         lateinit var features: FloatArray
+        var leafProbability: Float? = null
         var nanos = 0L
         OnnxTensor.createTensor(environment, FloatBuffer.wrap(data), longArrayOf(1, 3, spec.height.toLong(), spec.width.toLong())).use { input ->
             nanos = measureNanoTime {
@@ -139,6 +147,15 @@ class LocalModelEngine(private val context: Context) : AutoCloseable {
                     require(rows[0].all { it.isFinite() } && embeddings[0].all { it.isFinite() })
                     logits = rows[0].copyOf()
                     features = embeddings[0].copyOf()
+                    leafOutputName?.let { name ->
+                        val leafTensor = result.get(name).orElseThrow { IllegalStateException("Leaf check output missing") }
+                        @Suppress("UNCHECKED_CAST")
+                        val leafRows = leafTensor.value as Array<FloatArray>
+                        require(leafRows.size == 1 && leafRows[0].size == 1 && leafRows[0][0].isFinite())
+                        val value = leafRows[0][0].toDouble()
+                        leafProbability = (if (value >= 0) 1.0 / (1.0 + exp(-value))
+                            else exp(value) / (1.0 + exp(value))).toFloat()
+                    }
                 }
             }
         }
@@ -151,7 +168,27 @@ class LocalModelEngine(private val context: Context) : AutoCloseable {
                 difference * difference
             }).toFloat()
         }
-        return EnginePrediction(InferenceOutput(labelIds, logits.toList(), status.version, true, distance), policy, nanos / 1_000_000)
+        return EnginePrediction(InferenceOutput(labelIds, logits.toList(), status.version, true, distance, leafProbability), policy, nanos / 1_000_000)
+    }
+
+    private fun loadLeafGate(metadata: JSONObject, expected: String, version: String): Float? {
+        leafOutputName = null
+        val gate = metadata.optJSONObject("leaf_gate") ?: return null
+        if (!gate.optBoolean("enabled", false)) return null
+        val name = gate.getString("output_name")
+        require(name == "leaf_logit") { "Unsupported leaf check output" }
+        val threshold = gate.getDouble("minimum_leaf_probability")
+        require(threshold.isFinite() && threshold > 0.0 && threshold <= 1.0)
+        val report = checkedAssetJson(gate, "receipt_file", "receipt_sha256", "leaf_validation.json")
+        require(report.getInt("schema_version") == 1 && report.getString("model_sha256") == expected &&
+            report.getString("model_version") == version && report.getString("output_name") == name &&
+            abs(report.getDouble("minimum_leaf_probability") - threshold) < 1e-10) { "Leaf check evidence mismatch" }
+        val declared = metadata.getJSONObject("outputs").getJSONObject("leaf_logit")
+        require(declared.getString("name") == name && declared.getJSONArray("shape").let { shape ->
+            shape.length() == 2 && shape.getInt(0) == 1 && shape.getInt(1) == 1
+        })
+        leafOutputName = name
+        return threshold.toFloat()
     }
 
     /** A source-tested estimate is enabled only by evidence for this exact exported file. */

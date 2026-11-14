@@ -266,9 +266,11 @@ export default function App() {
   const validated = opened?.validated ?? assessment?.validated ?? false;
   // Accepted prototype matches are not the same as independently field-validated results.
   const accepted = resultType === 'likely' || resultType === 'healthy';
-  const top = assessment?.candidates[0];
-  const conditionId = opened?.conditionId || top?.id || null;
-  const score = opened?.score ?? top?.score ?? null;
+  const nonLeaf = assessment?.qualityIssues?.includes('NOT_A_LEAF') === true || opened?.note === 'NOT_A_LEAF';
+  const unsupportedImage = assessment?.reasons?.some(reason => ['UNFAMILIAR_IMAGE', 'CONDITION_DISABLED'].includes(reason)) === true || opened?.note === 'UNSUPPORTED_IMAGE';
+  const top = unsupportedImage || nonLeaf ? undefined : assessment?.candidates[0];
+  const conditionId = unsupportedImage || nonLeaf ? null : opened?.conditionId || top?.id || null;
+  const score = unsupportedImage || nonLeaf ? null : opened?.score ?? top?.score ?? null;
   const provisionalPrediction = resultType === 'uncertain' && !!conditionId &&
     (assessment?.sourceEvaluated === true ||
       (opened?.modelVersion === model?.version && model?.sourceEvaluated === true));
@@ -311,7 +313,7 @@ export default function App() {
         inferenceMs: assessment.inferenceMs,
         validated: assessment.validated,
         concern,
-        note: '',
+        note: nonLeaf ? 'NOT_A_LEAF' : unsupportedImage ? 'UNSUPPORTED_IMAGE' : '',
       });
       setSavedId(record.id);
       await refreshHistory();
@@ -441,7 +443,7 @@ export default function App() {
     const label =
       (acceptedRecord || predictedRecord) && record.conditionId
         ? conditionName(record.conditionId, language)
-        : t('Uncertain result', 'ಅನಿಶ್ಚಿತ ಫಲಿತಾಂಶ');
+        : record.note === 'NOT_A_LEAF' ? t('No clear leaf detected', 'ಸ್ಪಷ್ಟ ಎಲೆ ಪತ್ತೆಯಾಗಲಿಲ್ಲ') : t('Uncertain result', 'ಅನಿಶ್ಚಿತ ಫಲಿತಾಂಶ');
     return (
       <div className="history-card" key={record.id} data-testid={`observation-${record.id}`}>
         <button
@@ -644,7 +646,7 @@ export default function App() {
             <div>
               <small>{cropName(hasPrediction ? predictedCrop : activeCrop, language)}</small>
               <h2>
-                {hasPrediction && conditionId
+                {nonLeaf ? t('No clear leaf detected', 'ಸ್ಪಷ್ಟ ಎಲೆ ಪತ್ತೆಯಾಗಲಿಲ್ಲ') : hasPrediction && conditionId
                   ? conditionName(conditionId, language)
                   : resultType === 'retake'
                     ? t('Try another photo', 'ಮತ್ತೊಂದು ಚಿತ್ರ ಪ್ರಯತ್ನಿಸಿ')
@@ -658,7 +660,7 @@ export default function App() {
             <div className="alert-title">
               {accepted ? <CheckCircle2 size={22} /> : <AlertCircle size={22} />}
               <h2>
-                {accepted
+                {nonLeaf ? t('Please photograph a crop leaf', 'ಬೆಳೆ ಎಲೆಯ ಚಿತ್ರ ತೆಗೆಯಿರಿ') : accepted
                   ? t('Model match', 'ಮಾದರಿಯ ಹೊಂದಾಣಿಕೆ')
                   : cropMismatchPrediction
                     ? t('Crop mismatch', 'ಬೆಳೆ ಹೊಂದಿಕೆಯಾಗಿಲ್ಲ')
@@ -671,7 +673,7 @@ export default function App() {
                       : t('Not sure about this one', 'ಈ ಬಗ್ಗೆ ಖಚಿತವಿಲ್ಲ')}
               </h2>
             </div>
-            {accepted ? (
+            {nonLeaf ? <p>{t('This does not look like a clear leaf photo. Take a close-up of one tomato, potato or maize leaf.', 'ಸ್ಪಷ್ಟ ಎಲೆಯ ಚಿತ್ರ ಕಾಣಿಸುತ್ತಿಲ್ಲ. ಒಂದು ಟೊಮ್ಯಾಟೊ, ಆಲೂಗಡ್ಡೆ ಅಥವಾ ಮೆಕ್ಕೆಜೋಳದ ಎಲೆಯ ಹತ್ತಿರದ ಚಿತ್ರ ತೆಗೆಯಿರಿ.')}</p> : accepted ? (
               <p>
                 {t(
                   'Dataset-tested estimate. Confirm the condition with a local crop expert.',
@@ -718,7 +720,7 @@ export default function App() {
                   <span>{accepted ? t('Saved model match', 'ಉಳಿಸಿದ ಮಾದರಿಯ ಹೊಂದಾಣಿಕೆ') : cropMismatchPrediction ? t('Crop mismatch', 'ಬೆಳೆ ಹೊಂದಿಕೆಯಾಗಿಲ್ಲ') : provisionalPrediction ? t('Saved prediction · low confidence', 'ಉಳಿಸಿದ ಅಂದಾಜು · ಕಡಿಮೆ ವಿಶ್ವಾಸ') : t('Stored candidate · not confirmed', 'ಉಳಿಸಿದ ಸಾಧ್ಯತೆ · ಖಚಿತವಲ್ಲ')}</span>
                 </div>
               )}
-              {assessment?.candidates.slice(0, 2).map((item, index) => (
+              {!unsupportedImage && assessment?.candidates.slice(0, 2).map((item, index) => (
                 <div className="prediction" key={item.id}>
                   <div>
                     <strong>{conditionName(item.id, language)}</strong>
@@ -731,7 +733,7 @@ export default function App() {
               ))}
             </div>
           )}
-          {assessment?.qualityIssues && assessment.qualityIssues.length > 0 && (
+          {!nonLeaf && assessment?.qualityIssues && assessment.qualityIssues.length > 0 && (
             <p className="hint">
               {t('Photo check: ', 'ಚಿತ್ರ ಪರಿಶೀಲನೆ: ')}
               {assessment.qualityIssues.map(issue => t(issue.replaceAll('_', ' '), issue.replaceAll('_', ' '))).join(', ')}
@@ -762,13 +764,15 @@ export default function App() {
             {cropMismatchPrediction && <button className="secondary" onClick={() => navigate('home')}>
               {t('Change selected crop', 'ಆಯ್ಕೆ ಮಾಡಿದ ಬೆಳೆಯನ್ನು ಬದಲಿಸಿ')}
             </button>}
-            {!accepted && expertButton}
+            {!accepted && !nonLeaf && expertButton}
+            {!nonLeaf && <>
             <button className="primary" onClick={beginConcern}>
               {t('Check concern (3 questions)', 'ಲಕ್ಷಣ ಪರಿಶೀಲನೆ (3 ಪ್ರಶ್ನೆಗಳು)')}
             </button>
             <button className="secondary" onClick={() => navigate('guidance')}>
               {t('See guidance', 'ಸಲಹೆ ನೋಡಿ')}
             </button>
+            </>}
             <button className="secondary" onClick={() => navigate('capture')}>
               {t('Retake photo', 'ಮತ್ತೆ ಚಿತ್ರ ತೆಗೆಯಿರಿ')}
             </button>

@@ -42,6 +42,7 @@ export interface AssessmentResult {
   sourceEvaluated?: boolean;
   allowConditionSpecificAdvice?: boolean;
   embeddingDistance?: number;
+  leafProbability?: number;
 }
 export interface PreprocessSpec {
   width: number;
@@ -66,6 +67,13 @@ interface Metadata {
   source_acceptance_qualified?: boolean;
   source_acceptance_enabled?: boolean;
   training_status: string;
+  leaf_gate?: {
+    enabled: boolean;
+    output_name: string;
+    minimum_leaf_probability: number;
+    receipt_file: string;
+    receipt_sha256: string;
+  };
   input: PreprocessSpec & {
     name: string;
     shape: number[];
@@ -80,6 +88,7 @@ interface Metadata {
   outputs: {
     logits: { name: string; shape: number[] };
     embeddings: { name: string; shape: number[] };
+    leaf_logit?: { name: string; shape: number[] };
   };
 }
 interface Policy {
@@ -564,6 +573,18 @@ async function loadBundle(): Promise<Bundle> {
     sourceAcceptance = validateSourceAcceptance(metadata, policy, receipt, centroids);
   }
   const sourceEvaluated = sourceAcceptance !== undefined;
+  if (metadata.leaf_gate?.enabled) {
+    const gate = metadata.leaf_gate;
+    requireThat(gate.output_name === 'leaf_logit' && metadata.outputs.leaf_logit?.name === gate.output_name &&
+      JSON.stringify(metadata.outputs.leaf_logit.shape) === '[1,1]' &&
+      Number.isFinite(gate.minimum_leaf_probability) && gate.minimum_leaf_probability > 0 && gate.minimum_leaf_probability < 1 &&
+      gate.receipt_file === 'leaf_validation.json', 'Invalid leaf-check contract.');
+    const receipt = await verifiedJsonAsset(gate.receipt_file, gate.receipt_sha256);
+    requireThat(isRecord(receipt) && receipt.schema_version === 1 &&
+      receipt.model_sha256 === metadata.model_sha256 && receipt.model_version === metadata.model_version &&
+      receipt.output_name === gate.output_name && receipt.minimum_leaf_probability === gate.minimum_leaf_probability,
+    'Leaf-check evidence does not match this model.');
+  }
   // Single thread runs without SharedArrayBuffer/cross-origin isolation. All runtime
   // code and WASM come from this build; no CDN or arbitrary remote code is loaded.
   ort.env.wasm.numThreads = 1;
@@ -579,6 +600,7 @@ async function loadBundle(): Promise<Bundle> {
       session.outputNames.includes(metadata.outputs.embeddings.name),
     'The model input/output names do not match metadata.',
   );
+  requireThat(!metadata.leaf_gate?.enabled || session.outputNames.includes(metadata.leaf_gate.output_name), 'Leaf-check output is missing.');
   lastStatus = {
     ready: true,
     validated,
@@ -669,6 +691,19 @@ async function analyzeOnce(file: File, cropId: CropId): Promise<AssessmentResult
   try {
     outputs = await session.run({ [metadata.input.name]: tensor });
     const inferenceMs = performance.now() - started;
+    let leafProbability: number | undefined;
+    if (metadata.leaf_gate?.enabled) {
+      const leaf = outputs[metadata.leaf_gate.output_name];
+      requireThat(leaf?.type === 'float32' && leaf.data.length === 1 && JSON.stringify(leaf.dims) === '[1,1]', 'Invalid leaf-check output.');
+      const leafLogit = Number(leaf.data[0]);
+      requireThat(Number.isFinite(leafLogit), 'Invalid leaf-check score.');
+      leafProbability = leafLogit >= 0 ? 1 / (1 + Math.exp(-leafLogit)) : Math.exp(leafLogit) / (1 + Math.exp(leafLogit));
+      if (leafProbability < metadata.leaf_gate.minimum_leaf_probability) return {
+        ...base(), type: 'retake', candidates: [], inferenceMs, modelVersion: metadata.model_version,
+        modelSha256: metadata.model_sha256, leafProbability,
+        qualityIssues: ['NOT_A_LEAF'], reasons: ['NOT_A_LEAF'], executionProvider: 'wasm',
+      };
+    }
     const logits = outputs[metadata.outputs.logits.name],
       embeddings = outputs[metadata.outputs.embeddings.name];
     requireThat(
@@ -712,6 +747,7 @@ async function analyzeOnce(file: File, cropId: CropId): Promise<AssessmentResult
       executionProvider: 'wasm',
       preprocessingMs,
       outputShapes: [Array.from(logits.dims), Array.from(embeddings.dims)],
+      leafProbability,
     };
     // Source-qualified prototype acceptance is distinct from field validation.
     // Old or failed-qualification bundles remain ready but explicitly uncertain.

@@ -17,3 +17,7 @@ Use `python tools/sync_model_bundle.py /path/to/exported/bundle` from the reposi
 The model consumes RGB float32 NCHW `[1,3,224,224]`. Resizing uses half-up letterbox dimensions, `[124,116,104]` padding, and the Pillow antialiased bilinear 22-bit separable filter before ImageNet normalization. The Android helper and browser `preprocessRgb` port use the same convention, including rounding after each resize axis. Independent golden image/tensor fixtures live in [`contracts/fixtures/`](../contracts/fixtures/).
 
 The browser uses `createImageBitmap` to apply EXIF orientation once and caps working images at 1024 px. Browser codec/large-image downsampling can differ from Android camera decoding; exact tensor parity is specified from identical decoded RGB input. ONNX Runtime's WASM/glue files are bundled locally. First load needs the static assets; offline reload depends on the application's service worker/cache, rather than a remote inference service.
+
+## Leaf validation sidecar
+
+The current graph adds leaf_logit[1,1]. metadata.leaf_gate names its frozen probability threshold and hash-bound leaf_validation.json receipt. Both clients validate that receipt before enabling the gate; a negative input produces no disease candidates. Read ml/reports/leaf_guard for negative testing and source/field leaf-recall impact.

@@ -1,0 +1,25 @@
+{
+  "architecture": "MobileNetV3-Large",
+  "model_sha256": "3332b5634fcb1a8bea17317a0a9db4d6e44f9c0da24e7b03718b3ced5d6b2d1e",
+  "onnx_checker_passed": true,
+  "parity_max_abs_errors": [
+    0.00031375885009765625,
+    3.719329833984375e-05
+  ],
+  "output_shapes": [
+    [
+      1,
+      17
+    ],
+    [
+      1,
+      960
+    ],
+    [
+      1,
+      1
+    ]
+  ],
+  "leaf_validation_sha256": "64bf1e922d98143251aa8d026e2d92fb36e797c02f7de4160c3153ef77e4a6ef",
+  "phone_benchmark_executed": false
+}

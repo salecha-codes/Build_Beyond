@@ -16,7 +16,7 @@ data class QualityConfig(
     val thresholdsValidated: Boolean = false,
 )
 
-enum class QualityIssue { UNREADABLE, TOO_SMALL, TOO_DARK, TOO_BRIGHT, BLURRY }
+enum class QualityIssue { UNREADABLE, TOO_SMALL, TOO_DARK, TOO_BRIGHT, BLURRY, NOT_A_LEAF }
 
 data class QualityCheck(val issues: Set<QualityIssue>, val thresholdsValidated: Boolean) {
     val acceptable: Boolean get() = issues.isEmpty()
@@ -28,6 +28,7 @@ data class InferenceOutput(
     val modelVersion: String,
     val modelReady: Boolean = true,
     val embeddingDistance: Float? = null,
+    val leafProbability: Float? = null,
 )
 
 /** Values must come from the artifact, not an invented universal confidence cutoff. */
@@ -49,6 +50,7 @@ data class PolicyConfig(
     val sourceEvaluated: Boolean = false,
     val classThresholds: Map<String, ClassAcceptanceThreshold> = emptyMap(),
     val allowConditionSpecificAdvice: Boolean = false,
+    val minimumLeafProbability: Float? = null,
 )
 
 data class RankedPrediction(val condition: ConditionLabel, val score: Float)
@@ -98,3 +100,7 @@ sealed interface AssessmentResult {
         override val evidence: PredictionEvidence,
     ) : AssessmentResult
 }
+
+/** Unsupported input must never be promoted to a visible disease prediction. */
+fun AssessmentResult.rejectsUnsupportedInput(): Boolean = this is AssessmentResult.Uncertain &&
+    reasons.any { it == UncertaintyReason.UNFAMILIAR_IMAGE || it == UncertaintyReason.CONDITION_DISABLED }

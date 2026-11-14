@@ -32,10 +32,11 @@ before(async () => {
           export function configureFixture(value){fixture=value;}
           export class Tensor{constructor(type,data,dims){this.type=type;this.data=data;this.dims=dims;}dispose(){}}
           export const InferenceSession={async create(){fixture.creates++;return{
-            inputNames:['image'],outputNames:['logits','embeddings'],
+            inputNames:['image'],outputNames:['logits','embeddings',...(fixture.leafLogit===undefined?[]:['leaf_logit'])],
             async run(){if(fixture.runError)throw new Error(fixture.runError);return{
               logits:new Tensor('float32',Float32Array.from(fixture.logits),[1,17]),
-              embeddings:new Tensor('float32',Float32Array.from(fixture.embedding),[1,960])};},async release(){}
+              embeddings:new Tensor('float32',Float32Array.from(fixture.embedding),[1,960]),
+              ...(fixture.leafLogit===undefined?{}:{leaf_logit:new Tensor('float32',Float32Array.from([fixture.leafLogit]),fixture.leafDims||[1,1])})};},async release(){}
           };}};`, loader: 'js' }));
         build.onResolve({ filter: /\?url$/ }, args => ({ path: args.path, namespace: 'unit-url' }));
         build.onLoad({ filter: /.*/, namespace: 'unit-url' }, () => ({ contents: `export default '/unused-unit-only-runtime';`, loader: 'js' }));
@@ -85,12 +86,19 @@ function seal(value) {
   const source = Buffer.from(JSON.stringify(value.receipt)), centroids = Buffer.from(JSON.stringify(value.centroids));
   value.policy.source_evaluation_sha256 = hash(source);
   value.policy.embedding_centroids_sha256 = hash(centroids);
-  return new Map([
+  const assets = new Map([
     ['model_metadata.json', Buffer.from(JSON.stringify(value.metadata))],
     ['decision_policy.json', Buffer.from(JSON.stringify(value.policy))],
     ['labels.json', Buffer.from(JSON.stringify(labels))],
     ['crop_model.onnx', value.model], ['source_evaluation.json', source], ['embedding_centroids.json', centroids],
   ]);
+  if(value.leafReceipt){
+    const bytes=Buffer.from(JSON.stringify(value.leafReceipt));
+    value.metadata.leaf_gate.receipt_sha256=hash(bytes);
+    assets.set('leaf_validation.json',bytes);
+    assets.set('model_metadata.json',Buffer.from(JSON.stringify(value.metadata)));
+  }
+  return assets;
 }
 function install(value, assets = seal(value)) {
   const requests = [];
@@ -195,4 +203,31 @@ test('unit embedding distance normalizes vectors and rejects zero/nonfinite evid
   assert.ok(Math.abs(engine.unitEmbeddingDistance([0,4],[1,0])-Math.sqrt(2))<1e-12);
   assert.throws(()=>engine.unitEmbeddingDistance([0,0],[1,0]),/invalid embedding/);
   assert.throws(()=>engine.unitEmbeddingDistance([NaN,0],[1,0]),/finite/);
+});
+
+function leafFixture(logit=-6) {
+  const value=fixture();value.ort.leafLogit=logit;
+  value.metadata.outputs.leaf_logit={name:'leaf_logit',shape:[1,1]};
+  value.metadata.leaf_gate={enabled:true,output_name:'leaf_logit',minimum_leaf_probability:.8,receipt_file:'leaf_validation.json',receipt_sha256:''};
+  value.leafReceipt={schema_version:1,model_version:value.metadata.model_version,model_sha256:value.metadata.model_sha256,output_name:'leaf_logit',minimum_leaf_probability:.8};
+  return value;
+}
+test('negative leaf check rejects before strong disease or crop-mismatch output',async()=>{
+  const {engine}=install(leafFixture());const output=await engine.analyzeLeaf(image(),'tomato');
+  assert.equal(output.type,'retake');assert.deepEqual(output.candidates,[]);assert.deepEqual(output.qualityIssues,['NOT_A_LEAF']);assert.ok(output.leafProbability<.01);
+});
+test('positive leaf check preserves real disease acceptance',async()=>{
+  const {engine}=install(leafFixture(6));const output=await engine.analyzeLeaf(image(),'potato');assert.equal(output.type,'likely');assert.ok(output.leafProbability>.99);assert.equal(output.candidates.length,17);
+});
+test('missing leaf output makes claimed leaf-check bundle unavailable',async()=>{
+  const value=leafFixture();delete value.ort.leafLogit;const {engine}=install(value);assert.equal((await engine.getModelStatus()).ready,false);
+});
+test('tampered leaf evidence fails before model session creation',async()=>{
+  const value=leafFixture(),assets=seal(value);assets.set('leaf_validation.json',Buffer.from('{}'));const {engine}=install(value,assets);assert.equal((await engine.getModelStatus()).ready,false);assert.equal(value.ort.creates,0);
+});
+test('leaf threshold must match its exact evaluated receipt',async()=>{
+  const value=leafFixture();value.leafReceipt.minimum_leaf_probability=.7;const {engine}=install(value);assert.equal((await engine.getModelStatus()).ready,false);
+});
+test('invalid leaf runtime output cannot produce disease candidates',async()=>{
+  for(const kind of ['nonfinite','shape']){const value=leafFixture(6);if(kind==='nonfinite')value.ort.leafLogit=NaN;else value.ort.leafDims=[1];const {engine}=install(value);const output=await engine.analyzeLeaf(image(),'potato');assert.equal(output.type,'model_unavailable');assert.deepEqual(output.candidates,[]);}
 });

@@ -45,9 +45,15 @@ The first browser visit downloads the model, WASM runtime, content and audio. Wa
 
 The target is Android 7.0+ on 3–4 GB RAM phones. Actual ARM-phone memory, latency, camera behavior, and Kannada pronunciation still require a physical-device check.
 
+## Leaf input check
+
+The model first checks whether the photo looks like a leaf. Rejected object photos return a retake request with **no disease name or score**. The leaf head shares the same offline backbone and adds about15KB.
+
+A frozen threshold rejected125/125 held-out object/animal test photos, including computer mouse, hamster, cat, laptop and monitor. It retained76/80 field leaf photos and all31 correctly classified field cases, preserving38.75% end-to-end field accuracy on the reused benchmark. Source end-to-end accuracy after leaf rejection is91.94%. These are sample measurements, not universal guarantees; other plant leaves may still pass. See [leaf-check receipts](ml/reports/leaf_guard/) for data/protocols and limitations. Test photos are not bundled in the app.
+
 ## Model status
 
-The current model is **MobileNetV3-Large**, using official ImageNet-pretrained visual features and a trained17-class disease head with TRAIN-only feature standardization embedded in ONNX. It replaces MobileNetV4 after tuning and frozen evaluation showed a stronger field result. The exact FP32 ONNX graph is11,950,683bytes and outputs17logits plus960visual features.
+The current model is **MobileNetV3-Large**, using official ImageNet-pretrained visual features and a trained17-class disease head with TRAIN-only feature standardization embedded in ONNX. It replaces MobileNetV4 after tuning and frozen evaluation showed a stronger field result. The exact FP32 ONNX graph is11,965,503bytes and outputs17logits plus960visual features.
 
 | Same frozen comparison | Images | V4 accuracy | Current V3 accuracy |
 |---|---:|---:|---:|
@@ -58,7 +64,7 @@ Field recognition improves by16.25percentage points (18→31correct of80). **Fie
 
 Source accepted precision is96.47% at87.02%coverage. Field accepted precision is50.00% at47.50%coverage. Field validation and condition-specific advice remain false. Both apps show the actual predicted condition, with low-confidence or crop-mismatch labels when applicable; numeric gates and global17-class score semantics remain intact.
 
-SHA-256: `9f330bb88adffa64460c4e84faf808529a1a1fdc667977766f648cb28b51fa63`.
+SHA-256: `3332b5634fcb1a8bea17317a0a9db4d6e44f9c0da24e7b03718b3ced5d6b2d1e`.
 
 See [current training/evaluation receipts](ml/reports/field_upgrade_v3/) and [model card](models/assets/model/MODEL_CARD.md). Earlier V4 reports remain historical.
 

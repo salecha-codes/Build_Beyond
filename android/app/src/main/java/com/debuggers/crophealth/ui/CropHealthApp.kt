@@ -240,15 +240,18 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
     val accepted=result is AssessmentResult.LikelyCondition || result is AssessmentResult.HealthyLooking || stored?.isAcceptedModelMatch()==true
     val fieldValidated=evidence?.calibratedAndValidated ?: stored?.validated ?: false
     val top=evidence?.ranked?.firstOrNull()
-    val condition=top?.condition ?: stored?.conditionId?.let(Conditions::byId)
+    val unsupported=result?.rejectsUnsupportedInput()==true || stored?.note?.let { "UNFAMILIAR_IMAGE" in it || "CONDITION_DISABLED" in it }==true
+    val noLeaf=(result as? AssessmentResult.Retake)?.quality?.issues?.contains(QualityIssue.NOT_A_LEAF)==true
+    val condition=if(unsupported) null else top?.condition ?: stored?.conditionId?.let(Conditions::byId)
     val cropMismatch=result is AssessmentResult.CropMismatch || stored?.resultType=="crop_mismatch"
     val prediction=((result is AssessmentResult.Uncertain || result is AssessmentResult.CropMismatch) &&
         evidence?.sourceEvaluated==true && condition!=null &&
-        (result !is AssessmentResult.Uncertain || UncertaintyReason.MODEL_NOT_VALIDATED !in result.reasons)) ||
+        (result !is AssessmentResult.Uncertain || (UncertaintyReason.MODEL_NOT_VALIDATED !in result.reasons && !unsupported))) ||
         stored?.isPrototypePrediction(s)==true
     val isRetake=result is AssessmentResult.Retake
     val unavailable=result is AssessmentResult.ModelUnavailable
     val title=when {
+        noLeaf || unsupported ->s.predictionText("No clear leaf detected","ಸ್ಪಷ್ಟ ಎಲೆ ಪತ್ತೆಯಾಗಲಿಲ್ಲ","साफ़ पत्ती नहीं मिली")
         isRetake ->s.tr("Let's take another photo","ಇನ್ನೊಂದು ಫೋಟೋ ತೆಗೆಯೋಣ")
         unavailable ->s.tr("Assessment unavailable","ಪರಿಶೀಲನೆ ಲಭ್ಯವಿಲ್ಲ")
         accepted || prediction ->condition?.displayName(s.language) ?: s.tr("Leaf assessment","ಎಲೆಯ ಪರಿಶೀಲನೆ")
@@ -257,6 +260,7 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
     }
     Page {
         if(!accepted && !prediction) Notice(title,when {
+            noLeaf || unsupported ->s.predictionText("Take a close photo of one crop leaf. Objects and animals cannot be diagnosed.","ಒಂದು ಬೆಳೆ ಎಲೆಯ ಹತ್ತಿರದ ಫೋಟೋ ತೆಗೆಯಿರಿ. ವಸ್ತುಗಳು ಮತ್ತು ಪ್ರಾಣಿಗಳ ರೋಗನಿರ್ಣಯ ಸಾಧ್ಯವಿಲ್ಲ.","फसल की एक पत्ती की नज़दीकी तस्वीर लें। वस्तुओं और जानवरों में फसल रोग नहीं पहचान सकते।")
             isRetake ->s.tr("Try a brighter, sharper close-up of one leaf.","ಒಂದು ಎಲೆಯ ಹೆಚ್ಚು ಬೆಳಕಿನ ಸ್ಪಷ್ಟ ಫೋಟೋ ತೆಗೆಯಿರಿ.")
             unavailable ->s.tr("No diagnosis was produced. Your photo stays on this phone.","ಯಾವುದೇ ರೋಗನಿರ್ಣಯ ಮಾಡಲಾಗಿಲ್ಲ. ಫೋಟೋ ಈ ಫೋನ್‌ನಲ್ಲೇ ಉಳಿಯುತ್ತದೆ.")
             cropMismatch ->s.tr("The model candidate and selected crop differ. Please check and retake.","ಮಾದರಿಯ ಊಹೆ ಮತ್ತು ಆಯ್ಕೆ ಮಾಡಿದ ಬೆಳೆ ಬೇರೆ ಇವೆ. ಪರಿಶೀಲಿಸಿ ಮತ್ತೆ ಫೋಟೋ ತೆಗೆಯಿರಿ.")
@@ -277,10 +281,10 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
             "This is the model's top prediction. A clearer photo or expert check is needed before choosing treatment.",
             "ಇದು ಮಾದರಿಯ ಮೊದಲ ಊಹೆ. ಚಿಕಿತ್ಸೆ ಆಯ್ಕೆ ಮಾಡುವ ಮೊದಲು ಸ್ಪಷ್ಟ ಚಿತ್ರ ಅಥವಾ ತಜ್ಞರ ಪರಿಶೀಲನೆ ಅಗತ್ಯ.",
             "यह मॉडल का सबसे संभावित अनुमान है। उपचार चुनने से पहले साफ़ तस्वीर या विशेषज्ञ की जाँच ज़रूरी है।"))
-        val score=top?.score ?: stored?.score
+        val score=if(unsupported) null else top?.score ?: stored?.score
         if(score!=null) ScoreCard(s,score,fieldValidated,accepted,prediction)
         if(accepted && !fieldValidated) Text(s.tr("Dataset-tested estimate. Confirm the condition with a local crop expert.","ಡೇಟಾಸೆಟ್‌ನಲ್ಲಿ ಪರೀಕ್ಷಿಸಿದ ಅಂದಾಜು. ಸ್ಥಳೀಯ ಕೃಷಿ ತಜ್ಞರಿಂದ ಸ್ಥಿತಿಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ."),fontSize=12.sp,color=CropColors.Muted)
-        if(!accepted && (evidence?.ranked?.isNotEmpty()==true || condition!=null)) SoftCard {
+        if(!accepted && !unsupported && (evidence?.ranked?.isNotEmpty()==true || condition!=null)) SoftCard {
             Text(if(prediction) s.predictionText("Model predictions","ಮಾದರಿಯ ಊಹೆಗಳು","मॉडल के अनुमान") else s.tr("Possible — not confirmed","ಸಾಧ್ಯತೆ — ದೃಢಪಟ್ಟಿಲ್ಲ"),fontSize=15.sp,fontWeight=FontWeight.Medium)
             val ranked=evidence?.ranked?.take(2)
             if(ranked!=null) ranked.forEach {PredictionRow(it.condition.displayName(s.language),it.score)}
@@ -315,12 +319,12 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
     }
 }
 @Composable private fun PredictionRow(label:String,score:Float) {Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween) {Text(label,Modifier.weight(1f),fontSize=14.sp);Text("${(score*100).roundToInt()}%",fontSize=13.sp,color=CropColors.Muted)}}
-private fun qualityCopy(issue:QualityIssue,s:AppUiState)=when(issue) {QualityIssue.BLURRY->s.tr("Hold steady and focus on one leaf.","ಸ್ಥಿರವಾಗಿ ಹಿಡಿದು ಒಂದು ಎಲೆಯ ಮೇಲೆ ಕೇಂದ್ರೀಕರಿಸಿ.");QualityIssue.TOO_DARK->s.tr("Move into natural light.","ನೈಸರ್ಗಿಕ ಬೆಳಕಿಗೆ ಸರಿಸಿ.");QualityIssue.TOO_BRIGHT->s.tr("Avoid glare or direct flash.","ಪ್ರಖರ ಬೆಳಕು ಅಥವಾ ನೇರ ಫ್ಲ್ಯಾಶ್ ತಪ್ಪಿಸಿ.");QualityIssue.TOO_SMALL->s.tr("Choose a larger, closer photo.","ದೊಡ್ಡದಾದ ಹತ್ತಿರದ ಫೋಟೋ ಆಯ್ಕೆಮಾಡಿ.");QualityIssue.UNREADABLE->s.tr("This image could not be opened.","ಈ ಚಿತ್ರವನ್ನು ತೆರೆಯಲಾಗಲಿಲ್ಲ.")}
+private fun qualityCopy(issue:QualityIssue,s:AppUiState)=when(issue) {QualityIssue.BLURRY->s.tr("Hold steady and focus on one leaf.","ಸ್ಥಿರವಾಗಿ ಹಿಡಿದು ಒಂದು ಎಲೆಯ ಮೇಲೆ ಕೇಂದ್ರೀಕರಿಸಿ.");QualityIssue.TOO_DARK->s.tr("Move into natural light.","ನೈಸರ್ಗಿಕ ಬೆಳಕಿಗೆ ಸರಿಸಿ.");QualityIssue.TOO_BRIGHT->s.tr("Avoid glare or direct flash.","ಪ್ರಖರ ಬೆಳಕು ಅಥವಾ ನೇರ ಫ್ಲ್ಯಾಶ್ ತಪ್ಪಿಸಿ.");QualityIssue.TOO_SMALL->s.tr("Choose a larger, closer photo.","ದೊಡ್ಡದಾದ ಹತ್ತಿರದ ಫೋಟೋ ಆಯ್ಕೆಮಾಡಿ.");QualityIssue.UNREADABLE->s.tr("This image could not be opened.","ಈ ಚಿತ್ರವನ್ನು ತೆರೆಯಲಾಗಲಿಲ್ಲ.");QualityIssue.NOT_A_LEAF->s.predictionText("No crop leaf detected. Photograph one crop leaf.","ಬೆಳೆ ಎಲೆ ಪತ್ತೆಯಾಗಲಿಲ್ಲ. ಒಂದು ಬೆಳೆ ಎಲೆಯ ಫೋಟೋ ತೆಗೆಯಿರಿ.","फसल की पत्ती नहीं मिली। एक पत्ती की तस्वीर लें।")}
 
 @Composable private fun GuidanceScreen(s:AppUiState,a:(AppAction)->Unit,prompt:(String)->Prompt) {
     val g=s.guidance
     val accepted=s.assessment is AssessmentResult.LikelyCondition || s.assessment is AssessmentResult.HealthyLooking || s.openedObservation?.isAcceptedModelMatch()==true
-    val prediction=((s.assessment is AssessmentResult.Uncertain || s.assessment is AssessmentResult.CropMismatch) && s.assessment?.evidence?.sourceEvaluated==true) || s.openedObservation?.isPrototypePrediction(s)==true
+    val prediction=((s.assessment is AssessmentResult.Uncertain || s.assessment is AssessmentResult.CropMismatch) && s.assessment?.evidence?.sourceEvaluated==true && s.assessment.rejectsUnsupportedInput().not()) || s.openedObservation?.isPrototypePrediction(s)==true
     val genericPrompt=prompt(if(accepted || prediction) "check_expert" else "uncertain")
     Page {
         Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.End) {LanguageToggle(s,a)}
@@ -416,6 +420,7 @@ private fun dateGroup(time:Long,s:AppUiState):String {
 }
 private fun Observation.isAcceptedModelMatch():Boolean = resultType=="likely_condition" || resultType=="healthy_looking"
 private fun Observation.isPrototypePrediction(s:AppUiState):Boolean = resultType in setOf("uncertain","crop_mismatch") && conditionId!=null &&
+    "UNFAMILIAR_IMAGE" !in note && "CONDITION_DISABLED" !in note &&
     (note.startsWith("Prototype prediction:") || (s.model.sourceEvaluated && modelVersion==s.model.version))
 private fun AppUiState.predictionText(en:String,kn:String,hi:String):String = when(language) {
     AppLanguage.ENGLISH -> en

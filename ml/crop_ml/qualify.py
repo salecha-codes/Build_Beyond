@@ -163,8 +163,27 @@ def _load_bundle(bundle: Path):
         raise ValueError('Only the verified V4-Conv-Small or V3-Large 960-feature contracts are supported')
     if metadata.get('class_count') != 17 or metadata.get('model_file') != 'crop_model.onnx':
         raise ValueError('Model file or class count differs from the bundle contract')
-    if metadata.get('outputs') != {'logits': {'name': 'logits', 'shape': [1, 17]},
-                                   'embeddings': {'name': 'embeddings', 'shape': [1, 960]}}:
+    declared_outputs = {'logits': {'name': 'logits', 'shape': [1, 17]},
+                        'embeddings': {'name': 'embeddings', 'shape': [1, 960]}}
+    leaf_gate = metadata.get('leaf_gate')
+    if leaf_gate is not None:
+        if not isinstance(leaf_gate, dict) or leaf_gate.get('enabled') is not True or \
+                leaf_gate.get('output_name') != 'leaf_logit' or \
+                leaf_gate.get('receipt_file') != 'leaf_validation.json' or \
+                not isinstance(leaf_gate.get('minimum_leaf_probability'), (float, int)) or \
+                not 0 < leaf_gate['minimum_leaf_probability'] < 1:
+            raise ValueError('Invalid declared leaf gate')
+        receipt_path = bundle/'leaf_validation.json'
+        if sha256(receipt_path) != leaf_gate.get('receipt_sha256'):
+            raise ValueError('Leaf validation receipt SHA differs from metadata')
+        leaf_receipt = json.loads(receipt_path.read_text())
+        if leaf_receipt.get('model_sha256') != actual_hash or \
+                leaf_receipt.get('model_version') != metadata.get('model_version') or \
+                leaf_receipt.get('output_name') != 'leaf_logit' or \
+                leaf_receipt.get('minimum_leaf_probability') != leaf_gate['minimum_leaf_probability']:
+            raise ValueError('Leaf validation receipt belongs to a different graph or threshold')
+        declared_outputs['leaf_logit'] = {'name': 'leaf_logit', 'shape': [1, 1]}
+    if metadata.get('outputs') != declared_outputs:
         raise ValueError('Declared model outputs differ from supported inference contract')
     for key, value in expected.items():
         if metadata['input'].get(key) != value:
@@ -390,6 +409,8 @@ def finalize_bundle(bundle: Path, protocol_dir: Path, work_dir: Path, threads=3,
     qualified = decision['source_acceptance_qualified'] and policy['source_acceptance_enabled']
     receipt = {'schema_version': 1, 'model_version': metadata['model_version'], 'model_sha256': metadata['model_sha256'],
                'scope': 'source_domain_only', 'source_evaluated': True, 'source_acceptance_qualified': qualified,
+               'classifier_metrics_exclude_leaf_gate': metadata.get('leaf_gate') is not None,
+               'leaf_gate_receipt_sha256': metadata.get('leaf_gate', {}).get('receipt_sha256'),
                'thresholds_sha256': fit_receipt['thresholds_sha256'], 'class_thresholds': policy['class_thresholds'],
                'frozen_policy': {'temperature': policy['temperature'], 'class_thresholds': deepcopy(policy['class_thresholds'])},
                'thresholds_hash_encoding': 'UTF-8 JSON, sorted object keys, compact separators, ensure_ascii=false',

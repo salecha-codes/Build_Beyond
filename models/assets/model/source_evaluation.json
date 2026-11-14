@@ -1,10 +1,12 @@
 {
   "schema_version": 1,
-  "model_version": "mnv3-large-imagenet-v2-field-head-9f330bb88adf",
-  "model_sha256": "9f330bb88adffa64460c4e84faf808529a1a1fdc667977766f648cb28b51fa63",
+  "model_version": "mnv3-large-leaf-guard-3332b5634fcb",
+  "model_sha256": "3332b5634fcb1a8bea17317a0a9db4d6e44f9c0da24e7b03718b3ced5d6b2d1e",
   "scope": "source_domain_only",
   "source_evaluated": true,
   "source_acceptance_qualified": true,
+  "classifier_metrics_exclude_leaf_gate": true,
+  "leaf_gate_receipt_sha256": "64bf1e922d98143251aa8d026e2d92fb36e797c02f7de4160c3153ef77e4a6ef",
   "thresholds_sha256": "c76990173924bb5b9980ba9a173918199e76706acfaee79ba617a094ea9767c5",
   "class_thresholds": {
     "maize_gray_leaf_spot": {
@@ -593,7 +595,7 @@
   },
   "thresholds_hash_encoding": "UTF-8 JSON, sorted object keys, compact separators, ensure_ascii=false",
   "temperature": 1.7641813209074506,
-  "embedding_centroids_sha256": "cd53b43c10adfa2424c6f8e8d9d4b387153812970a6b18d6b2385b3b04385ff3",
+  "embedding_centroids_sha256": "89d76493ca189ea491f6416e653a5ff990b0fb86dbde4461c90826db1ff483ff",
   "calibration_report": {
     "scope": "Source-domain image evaluation of frozen global-softmax thresholds; not field diagnosis validation",
     "samples": 1529,
@@ -4345,10 +4347,10 @@
     "full_original_source_test": true,
     "execution": {
       "samples": 3674,
-      "elapsed_seconds": 13.384565690001182,
+      "elapsed_seconds": 11.878130147000775,
       "desktop_inference_only_latency_ms": {
-        "p50": 1.8392814999970142,
-        "p95": 2.7714910504073482
+        "p50": 1.7468009991716826,
+        "p95": 2.5870123490676633
       },
       "phone_benchmark_executed": false
     },
@@ -5305,10 +5307,10 @@
     "domain": "plantdoc_internet_field_like",
     "execution": {
       "samples": 80,
-      "elapsed_seconds": 1.792121988000872,
+      "elapsed_seconds": 1.6639031490012712,
       "desktop_inference_only_latency_ms": {
-        "p50": 2.3932550011522835,
-        "p95": 3.127579099418653
+        "p50": 2.089620500555611,
+        "p95": 3.9368844005366546
       },
       "phone_benchmark_executed": false
     },
@@ -5452,7 +5454,7 @@
     "release_policy": "Freeze this receipt before optional domain adaptation. Train only on train.jsonl; select checkpoint on tune.jsonl; reserve calibration.jsonl for the final fixed model/policy. external_test_locked.jsonl is final external evaluation only. Do not combine with PlantVillage tests as one field-accuracy claim."
   },
   "field_protocol_sha256": "bd62adb096737f931b93d3db150574c00f1f3dabd339cd2baba439ca543883ce",
-  "fit_receipt_sha256": "66f7d3dde1d50dc636870a7b091e1887592b34bed039565d722535b9e3b195c6",
+  "fit_receipt_sha256": "8da3669eaa08ccf8b42670caffb4d9de9c90968481f8b39f3e626ae4aa6056a2",
   "protocol_sha256": "d49b3b5c34fe62545945beaa136c384671056881efdc55970d5148a0c1f9f320",
   "source_protocol": {
     "schema_version": 1,
@@ -5796,7 +5798,7 @@
     ],
     "diagnosis_validated": false
   },
-  "completed_at": "2026-11-14T12:31:44.747090+00:00",
+  "completed_at": "2026-11-14T12:50:44.526232+00:00",
   "unknown_detection_validated": false,
   "field_trial_executed": false,
   "diagnosis_validated": false,
