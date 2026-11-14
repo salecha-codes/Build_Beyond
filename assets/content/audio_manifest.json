@@ -1,0 +1,606 @@
+{
+  "schema_version": 1,
+  "content_version": "review2-observation-1",
+  "clips": [
+    {
+      "path": "audio/en/maize_gray_leaf_spot.ogg",
+      "language": "en",
+      "duration_seconds": 17.973,
+      "bytes": 78984,
+      "sha256": "fedfda222e5dfec29809ea3234d632c3d9f2a2c4cfb274ce2c6fc768cf1fb997",
+      "source_text_sha256": "337d40caa703d9ad1ff4d9d2556b7d55072598f05847bfaae34ce6c3cb1e7a16",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/maize_gray_leaf_spot.ogg",
+      "language": "kn",
+      "duration_seconds": 24.621,
+      "bytes": 112305,
+      "sha256": "56228be489895ac7e3940e269133fefbf50a3e37e3ed12695ea08d14c078a3d5",
+      "source_text_sha256": "1565e0687ca77eeaf897a8488afc5e71fbab3ff54c81399c04c8ef93f7fa5f56",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/en/maize_common_rust.ogg",
+      "language": "en",
+      "duration_seconds": 16.977,
+      "bytes": 78096,
+      "sha256": "fb1b171b99d74756639089fa5f850d226efc439556e44ceacf208092a283786c",
+      "source_text_sha256": "581a20f78f0c9f07a8039a2d4ad13e213a6f49f1ab2355ca02a3def0c11f18d8",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/maize_common_rust.ogg",
+      "language": "kn",
+      "duration_seconds": 24.967,
+      "bytes": 113445,
+      "sha256": "d093652535f83515ae59681de7ecad556ac03b868b5a8e7a049351272d3ddb18",
+      "source_text_sha256": "f7b6d6ed98879adfd4f4a261af4843fc9aa592b87c4e42f5340ede6a884d8462",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/en/maize_northern_leaf_blight.ogg",
+      "language": "en",
+      "duration_seconds": 19.542,
+      "bytes": 87667,
+      "sha256": "595b84348d53fa538cab48c9a3763db8ef85ff3da7bb5beff291f0510ff474f3",
+      "source_text_sha256": "13b53144b0a1de7f28cee03af31c59ff5a19da4d5e683ab4f752da9a82cee970",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/maize_northern_leaf_blight.ogg",
+      "language": "kn",
+      "duration_seconds": 28.504,
+      "bytes": 129521,
+      "sha256": "f0541481883358cfe5d02ffcbdd40aa775c299712227e8e6967292265841ecb8",
+      "source_text_sha256": "893dffaf8e1203d4dba3f20c06ab87a01ecfd4abdea89f7c201e89b8a2f79a26",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/en/maize_healthy.ogg",
+      "language": "en",
+      "duration_seconds": 18.65,
+      "bytes": 85037,
+      "sha256": "ca6c85304455a21293b9f74363b72fae749a5e58a0a0765084d73c1fee04dc73",
+      "source_text_sha256": "4a4d71566cae7ef2760ff74d78395047e72abede18ab82efb310cfcc2f5cffe6",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/maize_healthy.ogg",
+      "language": "kn",
+      "duration_seconds": 29.103,
+      "bytes": 135023,
+      "sha256": "db738ba9630694523b662ba32b771ccf1331e71c37b92dd4e32294f48a079676",
+      "source_text_sha256": "281624f35314f33acdfa4373057eb2edbb51b5c0673f88be9b81a0aebb2e229e",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/en/potato_early_blight.ogg",
+      "language": "en",
+      "duration_seconds": 17.359,
+      "bytes": 77996,
+      "sha256": "205b2cd9aa264648593e52ed193716ee1711e4f90f5ef4e9ac0b6dcd0daa8e83",
+      "source_text_sha256": "55ae48b233c4a6ba73b8f6807e4c95a9622565f96c4b356dddb5d99e624a5658",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/potato_early_blight.ogg",
+      "language": "kn",
+      "duration_seconds": 23.929,
+      "bytes": 109878,
+      "sha256": "a827ff40f6fa4c08151e39955c254447c89e5776589e9803d40ac2acf69340de",
+      "source_text_sha256": "9cb6e09da43f699a01f26de0a27b8c7b8215e4a46b35795201b1f20c68048137",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/en/potato_late_blight.ogg",
+      "language": "en",
+      "duration_seconds": 18.698,
+      "bytes": 83705,
+      "sha256": "b97b401bbbc114a543859ff3983085dd9c26821ec4dcce600025e200c375f57b",
+      "source_text_sha256": "649e76dbffa58f8c5bf9c1d89b65677b8a5646d1709de007a5ceca703168b086",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/potato_late_blight.ogg",
+      "language": "kn",
+      "duration_seconds": 28.321,
+      "bytes": 129088,
+      "sha256": "4cce23b8338fbe8dc25cf071424a88b7b02a354d8d9addf90baadc2955ec90e8",
+      "source_text_sha256": "761b095ef167cce79e8f17b871e95320cb24f3055233b3c4da1efc13d1195560",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/en/potato_healthy.ogg",
+      "language": "en",
+      "duration_seconds": 18.67,
+      "bytes": 85124,
+      "sha256": "047ef64b6c7b7d6e7741618c6a3ec9fa6d253dc77bfa52f8084922b00cc1862e",
+      "source_text_sha256": "4a4d71566cae7ef2760ff74d78395047e72abede18ab82efb310cfcc2f5cffe6",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/potato_healthy.ogg",
+      "language": "kn",
+      "duration_seconds": 29.125,
+      "bytes": 133853,
+      "sha256": "46e3cb315d703f15d300b5359b4a848df8636bee69251778ec4cae266f5c7cae",
+      "source_text_sha256": "281624f35314f33acdfa4373057eb2edbb51b5c0673f88be9b81a0aebb2e229e",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/en/tomato_bacterial_spot.ogg",
+      "language": "en",
+      "duration_seconds": 17.341,
+      "bytes": 77178,
+      "sha256": "f09355766e2a821ed422b61563b6f289f047a5f7d8ce33c39a76f1955a34ac84",
+      "source_text_sha256": "3baa9d60db839375f84f13d13491413ca4a500bbcde56c90dd12e6d9020d724c",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/tomato_bacterial_spot.ogg",
+      "language": "kn",
+      "duration_seconds": 24.317,
+      "bytes": 110632,
+      "sha256": "8b8b4c6e762b810a264b7a5e44d137a89699632bc052b24a5a40ef8c431d5a21",
+      "source_text_sha256": "da70b64630a67c5ab2b8497b54db775ae65adb37ef22268fb945b499597d868e",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/en/tomato_early_blight.ogg",
+      "language": "en",
+      "duration_seconds": 17.36,
+      "bytes": 78279,
+      "sha256": "bcf791d04c2f1af44c8f9e057f49622a3cdab487fe3654b380c22feb8ad59b0f",
+      "source_text_sha256": "55ae48b233c4a6ba73b8f6807e4c95a9622565f96c4b356dddb5d99e624a5658",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/tomato_early_blight.ogg",
+      "language": "kn",
+      "duration_seconds": 23.941,
+      "bytes": 109755,
+      "sha256": "be8de7172709fd445aa4ac94d4ac5892d462294e1828ee489ec93550734f5331",
+      "source_text_sha256": "9cb6e09da43f699a01f26de0a27b8c7b8215e4a46b35795201b1f20c68048137",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/en/tomato_late_blight.ogg",
+      "language": "en",
+      "duration_seconds": 18.688,
+      "bytes": 82763,
+      "sha256": "a1e17bd4356f1ed9a3d2289ae770f856229027592815651c6f633d3ed0ec0bad",
+      "source_text_sha256": "649e76dbffa58f8c5bf9c1d89b65677b8a5646d1709de007a5ceca703168b086",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/tomato_late_blight.ogg",
+      "language": "kn",
+      "duration_seconds": 28.342,
+      "bytes": 129156,
+      "sha256": "ca3e3228d9ff32f826234b3b9e5fd58cf931d472847a2689c029238bd77ca91e",
+      "source_text_sha256": "761b095ef167cce79e8f17b871e95320cb24f3055233b3c4da1efc13d1195560",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/en/tomato_leaf_mold.ogg",
+      "language": "en",
+      "duration_seconds": 18.566,
+      "bytes": 82648,
+      "sha256": "6c8622350b131231411d95d250f9d6405a647d9f4a04cdc48c2c47f41547928d",
+      "source_text_sha256": "9eeddb0c1ce5958942431824ae42ff883585e82db61e7390bbf73b577af57eb3",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/tomato_leaf_mold.ogg",
+      "language": "kn",
+      "duration_seconds": 27.386,
+      "bytes": 125572,
+      "sha256": "74f0d1cfa62595fb0f547d1df74a3a066b61b7c5cffe2d6d830b9f112fbfeccc",
+      "source_text_sha256": "49a54e8ba506c5a20b4c48109737260f3f9516efd6aeb8416044db97eb7a7f9f",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/en/tomato_septoria_leaf_spot.ogg",
+      "language": "en",
+      "duration_seconds": 17.883,
+      "bytes": 81653,
+      "sha256": "b9bf26aed7b89ceef87b80e2199fa07ee5fa23665e408dddc12ddf909dede1ad",
+      "source_text_sha256": "5292c1a181ee96f72bcfb1159a951f9786d1e7a8e4b0a463a45841512e317510",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/tomato_septoria_leaf_spot.ogg",
+      "language": "kn",
+      "duration_seconds": 25.435,
+      "bytes": 115469,
+      "sha256": "7e9a09fc1d1e6021b3d87328a9936fc8e1d4ab038dc70b04441809b289566eb8",
+      "source_text_sha256": "6ee10a8e76fe6b27e58b4b1223ca7a8b452329107535d7aaed33c6bae3fb2674",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/en/tomato_spider_mites.ogg",
+      "language": "en",
+      "duration_seconds": 19.28,
+      "bytes": 85620,
+      "sha256": "35eeafc5b298aaf157912179c588c2ea0a23b32da9954f02f1ae54d17a3ca246",
+      "source_text_sha256": "19e517869a21446ee7ebcffcd1016785a958f1312f4f203382b29d170e2b5d42",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/tomato_spider_mites.ogg",
+      "language": "kn",
+      "duration_seconds": 26.617,
+      "bytes": 122137,
+      "sha256": "2f49e0094bb7a48f77b70360beb617cbd3ffe3f03c93404fc461b7a4921fb261",
+      "source_text_sha256": "00b411cfc1112a18fd1b617383f3409d45dd366a868a22402c80e18ab8bb425e",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/en/tomato_target_spot.ogg",
+      "language": "en",
+      "duration_seconds": 18.337,
+      "bytes": 83427,
+      "sha256": "6526f8e29eef446b851b34a17b26455f8beeb3531208da3256554db75fe47d5b",
+      "source_text_sha256": "f67dd5ca34e5c892bf8d11d9a31f343b07869bfe6ed7aea62e8680509f0a6bc9",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/tomato_target_spot.ogg",
+      "language": "kn",
+      "duration_seconds": 27.352,
+      "bytes": 124864,
+      "sha256": "8955c2bc04d777af4a25920a5adf7bb937f1079828a57980fda620b96e11fabb",
+      "source_text_sha256": "b230bbe2823766b59cdf60ae810791e021a5dbeadf2448aa471b7b366db3a59f",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/en/tomato_yellow_leaf_curl_virus.ogg",
+      "language": "en",
+      "duration_seconds": 19.409,
+      "bytes": 85829,
+      "sha256": "849a029b8fc4e64409762974025771f79a33f54ca22255e960981682eaf6da02",
+      "source_text_sha256": "7ee8e457664c7fac1862d09eefaa99d5367fe4e3727dd724ac5c42d665046847",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/tomato_yellow_leaf_curl_virus.ogg",
+      "language": "kn",
+      "duration_seconds": 30.146,
+      "bytes": 137773,
+      "sha256": "5cba62dea4fd99ddf308122974ba74f8f67f0ef500eb636e26f3b460818a40bd",
+      "source_text_sha256": "63f173e8acd5723fdef309c0d43787a3e51739717c4d98fc26484e1771a167ab",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/en/tomato_mosaic_virus.ogg",
+      "language": "en",
+      "duration_seconds": 17.767,
+      "bytes": 80180,
+      "sha256": "28abbe6a89669a3706c6267f359b28afa112f32e612e6e5be2d859ed870f7d90",
+      "source_text_sha256": "16db066bdf9c8eac907ac709339c2d3ccb849613d119cabc40774c71afd8f73c",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/tomato_mosaic_virus.ogg",
+      "language": "kn",
+      "duration_seconds": 25.449,
+      "bytes": 115907,
+      "sha256": "18eb743faca88802050130f497713f0b1c90be603ddff5bb741d6b36cc49baaa",
+      "source_text_sha256": "5fcd47d0516daf87c0f500836608dbeb37ba0b367b19abd7745fa5e07def60fb",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/en/tomato_healthy.ogg",
+      "language": "en",
+      "duration_seconds": 18.649,
+      "bytes": 85720,
+      "sha256": "7736fed00d8d71116add306c5332316a71e81bf7d49e35ae40bd776f98d248ba",
+      "source_text_sha256": "4a4d71566cae7ef2760ff74d78395047e72abede18ab82efb310cfcc2f5cffe6",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/tomato_healthy.ogg",
+      "language": "kn",
+      "duration_seconds": 29.104,
+      "bytes": 134620,
+      "sha256": "c79cdd0cd313fc46a4b3743436deb80812854eef42fd858bcea3c3872af4bda1",
+      "source_text_sha256": "281624f35314f33acdfa4373057eb2edbb51b5c0673f88be9b81a0aebb2e229e",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/en/prompt_uncertain.ogg",
+      "language": "en",
+      "duration_seconds": 11.995,
+      "bytes": 56358,
+      "sha256": "ff61e50ddfed398b48c351c58b5768b19519672cf4c8e579386fec4af89231c8",
+      "source_text_sha256": "c4cdd8cc33114b6fd0784186d5bb7cd5fab4f9b33f5231a57f893cfd9cb38a7a",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/prompt_uncertain.ogg",
+      "language": "kn",
+      "duration_seconds": 14.396,
+      "bytes": 67610,
+      "sha256": "38ea772367435213bb77ce4bc0287a0892b9cc11722bbe3d24e6212670a7a8b7",
+      "source_text_sha256": "6b0625e1174a325d19174531b461454dc753c69f542f0076f43bd8280123fc7d",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/en/prompt_retake.ogg",
+      "language": "en",
+      "duration_seconds": 6.189,
+      "bytes": 28497,
+      "sha256": "271eb190440e80db6627c6ac999e34d9a6552595107ec7f90912783190183d5f",
+      "source_text_sha256": "8f4378aed1709554f9ce4b177f6ecaddc58a581430cf40cdcb8f137877300dd8",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/prompt_retake.ogg",
+      "language": "kn",
+      "duration_seconds": 8.751,
+      "bytes": 40220,
+      "sha256": "486d55ef0debfaa802a4d93956a7aa3324c0cf8f035a5c10e8a6e1b03a3ddfda",
+      "source_text_sha256": "0ccec1f472f2baaa7ef4a5976b33a9faf8a43dc3d43e3c69361ed740068bc83c",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/en/prompt_offline.ogg",
+      "language": "en",
+      "duration_seconds": 6.871,
+      "bytes": 33184,
+      "sha256": "acdd0251de2a3705be15466a012eddf5156b78ac03191f94124e5e30dd66aabc",
+      "source_text_sha256": "3a29d4ba728fe2b12d87ccc3ed97c2c330d6e2284c58c4c6c668f9a5309c1493",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/prompt_offline.ogg",
+      "language": "kn",
+      "duration_seconds": 11.476,
+      "bytes": 53606,
+      "sha256": "d9bd20149b1632d25e43fffff2c72af61531bae170b83b3c90a27301791f6799",
+      "source_text_sha256": "6fb69db127bd05c6ea42ca81b6220bd01381fc054a19977e03c9bd30d92bcd58",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/en/prompt_crop_mismatch.ogg",
+      "language": "en",
+      "duration_seconds": 8.878,
+      "bytes": 43862,
+      "sha256": "7416005c0efedd140c54312c0e488932d92e7e499f53fb9b1eef30f3eef9420e",
+      "source_text_sha256": "cee90cd677acb187d670a5ebfc4b36b1bf2291d845da00af49606787a13d4171",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/prompt_crop_mismatch.ogg",
+      "language": "kn",
+      "duration_seconds": 9.766,
+      "bytes": 47358,
+      "sha256": "5c0355485aeefe4cbfd40bda47fdff85b542ba878264d9c4992e348d7e285d3c",
+      "source_text_sha256": "b54c4036c9ff1c300bde427c986c782af4684791d96b696de39463e6602c748f",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/en/prompt_model_unavailable.ogg",
+      "language": "en",
+      "duration_seconds": 8.079,
+      "bytes": 40393,
+      "sha256": "c814a200ef3cb8a74a45f88818e00501d37ee169e019c9ecb713124ca044bff4",
+      "source_text_sha256": "a63e4f59ee8169623a39f19d663db87d4af5b08e29870a530f139442f2af73f0",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/prompt_model_unavailable.ogg",
+      "language": "kn",
+      "duration_seconds": 11.607,
+      "bytes": 54918,
+      "sha256": "9e5ce9f473d51da569c1e7368e3e93540c7ded33842154944f0684a5690efd1e",
+      "source_text_sha256": "e3dec54baa8c064dce2f9a86ddf1fc6e2adb062a532e5e833d0b8ba8e80b46be",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/en/prompt_model_prototype.ogg",
+      "language": "en",
+      "duration_seconds": 4.888,
+      "bytes": 25325,
+      "sha256": "105386c1c633f6dc79e16c3c9a1eb66434d6765e3c1e6c0ded22c40d59c7cffb",
+      "source_text_sha256": "7b32a6944c5eeeedf4d8754178bf04a9c389afa1862679932ae902642fce72f4",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/prompt_model_prototype.ogg",
+      "language": "kn",
+      "duration_seconds": 6.562,
+      "bytes": 31201,
+      "sha256": "96651d3ebddda121143516f35e38a56c7ae0d73ceab52fe35ad5cc119ac1c75d",
+      "source_text_sha256": "6e1eeaa39d3f078fd2fbb793da5723a118aed9fab464e217acbb54084067f407",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/en/prompt_healthy.ogg",
+      "language": "en",
+      "duration_seconds": 7.689,
+      "bytes": 36593,
+      "sha256": "e1fe6b2b178444a97d7a6a727ca57edcce129976af15783c14a31434fd97c205",
+      "source_text_sha256": "6731b84bf8e5c995b6aee96f972f6828d636ccda696bc7b2110db587298deafe",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/prompt_healthy.ogg",
+      "language": "kn",
+      "duration_seconds": 11.7,
+      "bytes": 56223,
+      "sha256": "b4efa09f6a1d95726a738fef96c44c9ff99cf0ced5191f22f920a62b5ebcf62e",
+      "source_text_sha256": "f9752b6cfa1a3165a67475767f7ed775bb502ddc123ff942689b18f776ac868f",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/en/prompt_concern_spreading.ogg",
+      "language": "en",
+      "duration_seconds": 3.842,
+      "bytes": 19915,
+      "sha256": "e927ed2f2a863a0848dd51c966c59f258df36c1e7a46452a71875ca1345c2aeb",
+      "source_text_sha256": "12840c066df84ed74e0d3acaa6103efb2bdf8cf8ec95d134e35ffca0af082b1b",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/prompt_concern_spreading.ogg",
+      "language": "kn",
+      "duration_seconds": 4.166,
+      "bytes": 21746,
+      "sha256": "796731c502caabbea7b50af93f39875c67aa30affb1543bf0c496d2c42ead562",
+      "source_text_sha256": "5f58983041a01525f25ee384a0a0187b52ac542642543ff0126650443ce3eb30",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/en/prompt_concern_coverage.ogg",
+      "language": "en",
+      "duration_seconds": 8.134,
+      "bytes": 37718,
+      "sha256": "cf43bae0db4aa8dd9778994f22efed1752fdc9e990641fd130a724048387cdca",
+      "source_text_sha256": "40b441a4e162c4ed06e2596310435d4fca0d17c256b2bc5329eb637e739d54e0",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/prompt_concern_coverage.ogg",
+      "language": "kn",
+      "duration_seconds": 12.955,
+      "bytes": 57385,
+      "sha256": "60bace07bc5a3a438971397fcb487aba897e0f0a827ea4cab5653d3298cc848e",
+      "source_text_sha256": "8913eca1bc1a3cd5c806eeb9ea876b79774ee78a6b35098b14e20018e5aeb5fc",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/en/prompt_concern_plants.ogg",
+      "language": "en",
+      "duration_seconds": 3.779,
+      "bytes": 19463,
+      "sha256": "34b6a62ee43ccfe489c8acaaaf3b04a932845f446fe6366a48ec1aa390175d8c",
+      "source_text_sha256": "d509d043cbe80cf6afb9991a560ae999a475ac2d436a90e8e241e5cda9b03e69",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/prompt_concern_plants.ogg",
+      "language": "kn",
+      "duration_seconds": 5.997,
+      "bytes": 30429,
+      "sha256": "15e03616a6793ac0b9f8495be17f3e3a1d4526b893ab93d9002004a990a4863f",
+      "source_text_sha256": "0b678b08fde3e4580b8987d8b92e1fb041f78de6a44b24cc651feb1f37cd2d04",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/en/prompt_concern_expert.ogg",
+      "language": "en",
+      "duration_seconds": 12.706,
+      "bytes": 58480,
+      "sha256": "12a950d0ec6da47ff1152353a64500fdc5d69cb7c51167e6b8fac72a1b90f887",
+      "source_text_sha256": "e340245499eded448b78a4f342503d350f09d00df0f879dda4cc0b2fd32cf787",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/prompt_concern_expert.ogg",
+      "language": "kn",
+      "duration_seconds": 16.541,
+      "bytes": 76268,
+      "sha256": "3583704ab998e2872d0ffb66ecad1a314a6f2e792977b48ee97cdaa8d8d5a8f5",
+      "source_text_sha256": "088ab49a5c19031c9aafdb317b57cb969a834b22d3ade1c864570f35b87c4023",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/en/prompt_concern_observe.ogg",
+      "language": "en",
+      "duration_seconds": 11.155,
+      "bytes": 52212,
+      "sha256": "ca871da8b6bca81b12699779e8147349339c0804d415ddc96fe13c1a6efb5038",
+      "source_text_sha256": "57e3a0f4833d0ab3d7ce1f99461489b4c4659e63d6f8e4cc863187e40bbab7ab",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/prompt_concern_observe.ogg",
+      "language": "kn",
+      "duration_seconds": 14.35,
+      "bytes": 67313,
+      "sha256": "dd885107671ae1b429c037abb4bc0c97d480a43f71009fd908f9d185acd40402",
+      "source_text_sha256": "c63c2be73eac3e4c277f1724fdcfee241fd5c158669c40a5f1b8d55a52e10cdb",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/en/prompt_check_expert.ogg",
+      "language": "en",
+      "duration_seconds": 9.579,
+      "bytes": 46666,
+      "sha256": "7034ab8e3ca2cffcdef170a6ae9c55c91d5b25dd739cd65146103bc3c21a74a1",
+      "source_text_sha256": "41b8c56619c1eed6d148f9031b53a584647bf939d4868e5500436ef02e8ca592",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    },
+    {
+      "path": "audio/kn/prompt_check_expert.ogg",
+      "language": "kn",
+      "duration_seconds": 13.31,
+      "bytes": 63767,
+      "sha256": "1039f3fe61b62d59624a935c74c9b49e3ff76ad9763c627e3f04c88262efd81e",
+      "source_text_sha256": "3fbd33a6de22d52ccddb0f16e52cbffbeb62d67814e04b1976bbd30a41e261b9",
+      "engine": "eSpeak NG via espeakng-loader 0.2.4",
+      "review": "technical_decode_checked;native_pronunciation_review_pending"
+    }
+  ]
+}

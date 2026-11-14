@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "labels": [
+    {
+      "index": 0,
+      "id": "maize_gray_leaf_spot",
+      "crop_id": "maize",
+      "source_label": "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot",
+      "name_en": "Gray leaf spot"
+    },
+    {
+      "index": 1,
+      "id": "maize_common_rust",
+      "crop_id": "maize",
+      "source_label": "Corn_(maize)___Common_rust_",
+      "name_en": "Common rust"
+    },
+    {
+      "index": 2,
+      "id": "maize_northern_leaf_blight",
+      "crop_id": "maize",
+      "source_label": "Corn_(maize)___Northern_Leaf_Blight",
+      "name_en": "Northern leaf blight"
+    },
+    {
+      "index": 3,
+      "id": "maize_healthy",
+      "crop_id": "maize",
+      "source_label": "Corn_(maize)___healthy",
+      "name_en": "Healthy-looking"
+    },
+    {
+      "index": 4,
+      "id": "potato_early_blight",
+      "crop_id": "potato",
+      "source_label": "Potato___Early_blight",
+      "name_en": "Early blight"
+    },
+    {
+      "index": 5,
+      "id": "potato_late_blight",
+      "crop_id": "potato",
+      "source_label": "Potato___Late_blight",
+      "name_en": "Late blight"
+    },
+    {
+      "index": 6,
+      "id": "potato_healthy",
+      "crop_id": "potato",
+      "source_label": "Potato___healthy",
+      "name_en": "Healthy-looking"
+    },
+    {
+      "index": 7,
+      "id": "tomato_bacterial_spot",
+      "crop_id": "tomato",
+      "source_label": "Tomato___Bacterial_spot",
+      "name_en": "Bacterial spot"
+    },
+    {
+      "index": 8,
+      "id": "tomato_early_blight",
+      "crop_id": "tomato",
+      "source_label": "Tomato___Early_blight",
+      "name_en": "Early blight"
+    },
+    {
+      "index": 9,
+      "id": "tomato_late_blight",
+      "crop_id": "tomato",
+      "source_label": "Tomato___Late_blight",
+      "name_en": "Late blight"
+    },
+    {
+      "index": 10,
+      "id": "tomato_leaf_mold",
+      "crop_id": "tomato",
+      "source_label": "Tomato___Leaf_Mold",
+      "name_en": "Leaf mold"
+    },
+    {
+      "index": 11,
+      "id": "tomato_septoria_leaf_spot",
+      "crop_id": "tomato",
+      "source_label": "Tomato___Septoria_leaf_spot",
+      "name_en": "Septoria leaf spot"
+    },
+    {
+      "index": 12,
+      "id": "tomato_spider_mites",
+      "crop_id": "tomato",
+      "source_label": "Tomato___Spider_mites Two-spotted_spider_mite",
+      "name_en": "Spider-mite symptoms"
+    },
+    {
+      "index": 13,
+      "id": "tomato_target_spot",
+      "crop_id": "tomato",
+      "source_label": "Tomato___Target_Spot",
+      "name_en": "Target spot"
+    },
+    {
+      "index": 14,
+      "id": "tomato_yellow_leaf_curl_virus",
+      "crop_id": "tomato",
+      "source_label": "Tomato___Tomato_Yellow_Leaf_Curl_Virus",
+      "name_en": "Yellow leaf curl virus"
+    },
+    {
+      "index": 15,
+      "id": "tomato_mosaic_virus",
+      "crop_id": "tomato",
+      "source_label": "Tomato___Tomato_mosaic_virus",
+      "name_en": "Mosaic virus"
+    },
+    {
+      "index": 16,
+      "id": "tomato_healthy",
+      "crop_id": "tomato",
+      "source_label": "Tomato___healthy",
+      "name_en": "Healthy-looking"
+    }
+  ]
+}
