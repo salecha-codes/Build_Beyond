@@ -1164,6 +1164,8 @@ html[lang="hi"] .heading-copy h1,html[lang="hi"] .question-title{letter-spacing:
 .care-library-card strong { font-size:14px; line-height:1.4; font-weight:600; }
 .care-library-card small { font-size:12px; margin-top:4px; color:#84778f; }
 .manual-care-notice { border-left:3px solid #a57929; background:#fff8e8; padding:13px; border-radius:10px; font-size:13px; line-height:1.5; }
+.sample-demo-button { width:100%; }
+.sample-photo-notice { padding:11px 13px; border-left:3px solid var(--purple); border-radius:10px; background:var(--lavender); color:var(--ink); font-size:12px; line-height:1.5; }
 /* Welcome / Onboarding Screen */
 .welcome-page {
   display: flex;

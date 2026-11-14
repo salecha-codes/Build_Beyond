@@ -12,6 +12,8 @@ AgriScan is an Android and browser prototype for checking leaf photos and readin
 
 The browser downloads its model, runtime, content, and audio the first time it is opened. Wait for **Offline ready** before disconnecting. After the assets are cached, the service worker supports offline reload and inference. Browser storage is local to that browser and device.
 
+From Home, choose **Try a sample leaf photo** to run a bundled potato late-blight example through the same photo review and on-device inference flow. The app labels it as a training-set demo and does not offer to save or share it as a farmer scan. The image provenance and license are recorded in [`content/samples/README.md`](content/samples/README.md).
+
 The native Android app bundles its model, content, and audio in the APK. It does not need a server or internet connection at runtime. Android requests camera access when needed and does not request Internet permission. To build and install it, follow [Build and install AgriScan](docs/BUILD_ANDROID.md).
 
 ## What it does
@@ -28,6 +30,7 @@ The searchable **Care library** can also be used without a photo. A manually sel
 ## Features
 
 - Local photo inference with an ONNX MobileNetV3-Large image model and leaf/object input check.
+- Optional bundled training-image demo for trying the browser flow without selecting a photo; clearly marked and excluded from scan history.
 - Tomato, potato, and maize support across 17 image labels.
 - Six farmer-reported symptom questions and a separate condition/urgency rule system.
 - Care protocols in three languages: confirmation checks, look-alikes, immediate steps, treatment options, limitations, prevention, recovery and failure signs, and follow-up checkpoints.

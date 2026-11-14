@@ -18,6 +18,7 @@ if (!treatmentSource.equals(treatmentPackaged) || createHash('sha256').update(tr
 const destination = path.join(root, 'frontend/public/assets');
 await mkdir(destination, { recursive: true });
 await cp(path.join(root, 'frontend/public/app-logo.png'), path.join(destination, 'app-logo.png'));
+await cp(path.join(root, 'content/samples'), path.join(destination, 'samples'), { recursive: true });
 for (const [source, name] of [
   ['models/assets/model', 'model'],
   ['android/app/src/main/assets/content', 'content'],

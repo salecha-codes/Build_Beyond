@@ -186,6 +186,7 @@ export default function App() {
   const [language, setLanguage] = useState<Language>(getLanguage);
   const [crop, setCrop] = useState<CropId>('maize');
   const [photo, setPhoto] = useState<File | null>(null);
+  const [demoPhoto, setDemoPhoto] = useState(false);
   const [assessment, setAssessment] = useState<AssessmentResult | null>(null);
   const [opened, setOpened] = useState<ObservationRecord | null>(null);
   const [history, setHistory] = useState<ObservationRecord[]>([]);
@@ -332,7 +333,7 @@ export default function App() {
       navigate('capture');
     }, 1050);
   }
-  function selectPhoto(file: File | null) {
+  function selectPhoto(file: File | null, isDemo = false) {
     if (!file) return;
     if (!file.type.startsWith('image/')) {
       setError(t('Choose an image file (JPG, PNG or WebP).', 'ಚಿತ್ರದ ಫೈಲ್ ಆಯ್ಕೆಮಾಡಿ.'));
@@ -349,6 +350,8 @@ export default function App() {
     }
     setError('');
     setPhoto(file);
+    setDemoPhoto(isDemo);
+    if (isDemo) setCrop('potato');
     setAssessment(null);
     setOpened(null);
     setSavedId(null);
@@ -356,6 +359,16 @@ export default function App() {
     setConcernComplete(false);
     setAnswers(Array(6).fill(null));
     setScreen('photo');
+  }
+  async function selectDemoPhoto() {
+    try {
+      const response = await fetch(assetUrl('samples/demo-potato-late-blight.jpg'));
+      if (!response.ok) throw new Error('Sample photo is unavailable.');
+      const blob = await response.blob();
+      selectPhoto(new File([blob], 'demo-potato-late-blight.jpg', { type: blob.type || 'image/jpeg' }), true);
+    } catch {
+      setError(t('The sample photo could not be loaded. Please choose your own photo.', 'ಮಾದರಿ ಚಿತ್ರ ಲೋಡ್ ಆಗಲಿಲ್ಲ. ನಿಮ್ಮ ಚಿತ್ರವನ್ನು ಆಯ್ಕೆಮಾಡಿ.'));
+    }
   }
   function onUpload(event: ChangeEvent<HTMLInputElement>) {
     selectPhoto(event.target.files?.[0] || null);
@@ -453,7 +466,7 @@ export default function App() {
   }
 
   async function saveScan() {
-    if (saving || savedId || opened || !assessment || !photo) return;
+    if (saving || savedId || opened || demoPhoto || !assessment || !photo) return;
     setSaving(true);
     try {
       const record = await saveObservation({
@@ -919,6 +932,10 @@ export default function App() {
               <ArrowRight size={21} />
             </span>
           </button>
+          <button className="secondary sample-demo-button" data-testid="try-sample-photo" onClick={() => void selectDemoPhoto()}>
+            <ImagePlus size={18} />
+            {t('Try a sample leaf photo', 'ಮಾದರಿ ಎಲೆಯ ಚಿತ್ರ ಪ್ರಯತ್ನಿಸಿ')}
+          </button>
           <button className="secondary care-library-entry" data-testid="open-care-library" onClick={openCareLibrary}><Sprout size={19} />{c('library')}</button>
           <div className="section-heading">
             <h2>{t('Choose your crop', 'ನಿಮ್ಮ ಬೆಳೆ ಆಯ್ಕೆಮಾಡಿ')}</h2>
@@ -979,6 +996,7 @@ export default function App() {
               {cropName(crop, language)} · {t('One clear leaf is best', 'ಒಂದು ಸ್ಪಷ್ಟ ಎಲೆ ಉತ್ತಮ')}
             </p>
           </div>
+          {demoPhoto && <p className="sample-photo-notice" data-testid="sample-photo-notice">{t('Demo photo from the PlantVillage training set. It is provided for trying the app, is not independent test evidence, and will not be saved as a real scan.', 'PlantVillage ತರಬೇತಿ ಸಮೂಹದ ಮಾದರಿ ಚಿತ್ರ. ಆಪ್ ಪ್ರಯತ್ನಿಸಲು ನೀಡಲಾಗಿದೆ; ಸ್ವತಂತ್ರ ಪರೀಕ್ಷಾ ಸಾಕ್ಷ್ಯವಲ್ಲ ಮತ್ತು ನೈಜ ಪರಿಶೀಲನೆಯಾಗಿ ಉಳಿಸುವುದಿಲ್ಲ.')}</p>}
           <Photo alt={t('Selected crop leaf', 'Selected crop leaf')} blob={photo} className="photo-review" />
           <div className="soft-card">
             <h3>{t('A quick photo check', 'ಚಿತ್ರವನ್ನು ಪರಿಶೀಲಿಸಿ')}</h3>
@@ -1039,6 +1057,7 @@ export default function App() {
           </span>,
         )}
         <main className="app-page with-top">
+          {demoPhoto && <p className="sample-photo-notice" data-testid="sample-photo-notice">{t('Sample demonstration · PlantVillage training image · not saved to history', 'ಮಾದರಿ ಪ್ರದರ್ಶನ · PlantVillage ತರಬೇತಿ ಚಿತ್ರ · ಇತಿಹಾಸದಲ್ಲಿ ಉಳಿಸಲಾಗುವುದಿಲ್ಲ')}</p>}
           <div className="result-heading">
             <Photo alt={t('Selected crop leaf', 'Selected crop leaf')} blob={activePhoto} />
             <div>
@@ -1164,7 +1183,7 @@ export default function App() {
             <button className="secondary" onClick={() => navigate('capture')}>
               {t('Retake photo', 'ಮತ್ತೆ ಚಿತ್ರ ತೆಗೆಯಿರಿ')}
             </button>
-            <button
+            {!demoPhoto && <button
               className="secondary"
               data-testid="save-scan"
               disabled={saving || !!savedId || !!opened || !assessment}
@@ -1182,15 +1201,15 @@ export default function App() {
                 : saving
                   ? t('Saving…', 'ಉಳಿಸಲಾಗುತ್ತಿದೆ…')
                   : t('Save scan', 'ದಾಖಲೆ ಉಳಿಸಿ')}
-            </button>
-            <button
+            </button>}
+            {!demoPhoto && <button
               className="secondary"
               data-testid="share-observation"
               onClick={() => void handleShare()}
             >
               <Share2 size={17} />
               {t('Share observation', 'ವೀಕ್ಷಣೆ ಹಂಚಿಕೊಳ್ಳಿ')}
-            </button>
+            </button>}
             {opened && (
               <button
                 className="secondary"
