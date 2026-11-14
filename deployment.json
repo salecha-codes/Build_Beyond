@@ -1,5 +1,5 @@
 {
-  "source_commit": "445a6c8",
+  "source_commit": "bb9a149",
   "languages": [
     "en",
     "kn",
@@ -10,5 +10,6 @@
   "diagnosis_validated": false,
   "app": "Offline Crop Health",
   "version": "0.3.0-trained-review2",
-  "prototype_low_confidence_predictions": true
+  "prototype_low_confidence_predictions": true,
+  "explicit_crop_mismatch_predictions": true
 }
