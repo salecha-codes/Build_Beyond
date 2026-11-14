@@ -79,7 +79,9 @@ val AppUiState.careSymptoms: ReportedSymptoms get() = manualCare?.symptoms ?: sy
 val AppUiState.careSymptomsComplete: Boolean get() = manualCare?.completed ?: symptomsComplete
 fun AppUiState.backScreen(): Screen = when (screen) {
     Screen.GUIDANCE -> if (manualCare != null) Screen.CARE_LIBRARY else Screen.RESULT
-    Screen.CONCERN -> if (manualCare != null) Screen.GUIDANCE else Screen.RESULT
+    Screen.CONCERN -> if (manualCare != null) {
+        if (careSymptomsComplete) Screen.GUIDANCE else Screen.CARE_LIBRARY
+    } else Screen.RESULT
     Screen.CARE_LIBRARY -> careLibraryReturn
     Screen.SETTINGS -> Screen.HELP
     Screen.RESULT -> if (openedObservation != null) Screen.HISTORY else Screen.HOME
@@ -87,7 +89,7 @@ fun AppUiState.backScreen(): Screen = when (screen) {
 }
 
 fun AppUiState.selectManualCare(conditionId: String): AppUiState =
-    if (Conditions.byId(conditionId) == null) this else copy(screen = Screen.GUIDANCE,
+    if (Conditions.byId(conditionId) == null) this else copy(screen = Screen.CONCERN,
         manualCare = ManualCareSession(conditionId), error = null)
 
 fun AppUiState.reportCareSymptoms(value: ReportedSymptoms, completed: Boolean): AppUiState =

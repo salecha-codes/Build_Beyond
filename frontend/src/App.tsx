@@ -364,7 +364,12 @@ export default function App() {
   const scanCarePlan = careProtocols && advisory ? buildCarePlan(careProtocols, conditionId, advisory, language) : null;
   const manualCarePlan = careProtocols && manualAdvisory ? buildCarePlan(careProtocols, manualCareId, manualAdvisory, language) : null;
   function openCareLibrary() { setLibraryOrigin(screen === 'result' || screen === 'guidance' ? screen : 'home'); setLibraryQuestioning(false); navigate('care_library'); }
-  function selectLibraryCondition(id: string) { setManualCareId(id); setManualConcern(null); setLibraryQuestioning(false); navigate('care_detail'); }
+  function selectLibraryCondition(id: string) {
+    setManualCareId(id);
+    setManualConcern(null);
+    setLibraryQuestioning(true);
+    startConcern(null);
+  }
   function retryCareProtocols() {
     setProtocolsFailed(false);
     void loadCareProtocols().then(setCareProtocols).catch(() => setProtocolsFailed(true));
@@ -456,6 +461,11 @@ export default function App() {
     }
     if (libraryQuestioning) setManualConcern(summary);
     else setConcern(summary);
+    if (libraryQuestioning) {
+      setLibraryQuestioning(false);
+      navigate('care_detail');
+      return;
+    }
     setConcernComplete(true);
   }
 
@@ -1069,7 +1079,7 @@ export default function App() {
             label={t('Listen in English', 'ಕನ್ನಡದಲ್ಲಿ ಕೇಳಿ')}
             compact
           />
-          {advisory && advisoryModel && !nonLeaf && <AdvisoryPanel result={advisory} language={language} model={advisoryModel} />}
+          {currentConcern && advisory && advisoryModel && !nonLeaf && <AdvisoryPanel result={advisory} language={language} model={advisoryModel} />}
           {advisoryFailed && <p className="hint">{a('failure')}</p>}
           <div className="button-stack">
             <button className="secondary" data-testid="result-care-library" onClick={openCareLibrary}>{c('library')}</button>
@@ -1080,9 +1090,6 @@ export default function App() {
             {!nonLeaf && <>
             <button className="primary" onClick={beginConcern}>
               {a('questions')}
-            </button>
-            <button className="secondary" onClick={() => navigate('guidance')}>
-              {t('See guidance', 'ಸಲಹೆ ನೋಡಿ')}
             </button>
             </>}
             <button className="secondary" onClick={() => navigate('capture')}>
@@ -1143,7 +1150,9 @@ export default function App() {
           <h1 data-testid="guidance-heading">{t('Care for your crop', 'ನಿಮ್ಮ ಬೆಳೆ ಆರೈಕೆ')}</h1>
           <p>{cropName(activeCrop, language)} · {conditionId ? conditionName(conditionId, language) : a('generic')}</p>
         </div>
-        {advisory && advisoryModel ? detailedCare(advisory, scanCarePlan, beginConcern) : <p>{advisoryFailed ? a('failure') : t('Loading…', 'ಲೋಡ್ ಆಗುತ್ತಿದೆ…')}</p>}
+        {currentConcern && advisory && advisoryModel
+          ? detailedCare(advisory, scanCarePlan, beginConcern)
+          : <button className="primary" onClick={beginConcern}>{a('questions')}</button>}
         <button className="secondary" onClick={openCareLibrary}>{c('library')}</button>
         {expertButton}
       </main>
@@ -1177,7 +1186,7 @@ export default function App() {
     page = (
       <>
         {topBar(
-          libraryQuestioning ? 'care_detail' : 'result',
+          libraryQuestioning ? (manualConcern ? 'care_detail' : 'care_library') : 'result',
           !concernComplete ? (
             <span className="hint">
               {language === 'hi' ? `प्रश्न ${question + 1} / 6` : language === 'kn' ? `ಪ್ರಶ್ನೆ ${question + 1} / 6` : `Question ${question + 1} of 6`}
@@ -1242,7 +1251,9 @@ export default function App() {
                 disabled={answers[question] === null}
                 onClick={nextConcern}
               >
-                {question === 5 ? t('See next steps', 'ಮುಂದಿನ ಕ್ರಮ ನೋಡಿ') : t('Next', 'ಮುಂದೆ')}
+              {question === 5
+                ? libraryQuestioning ? t('See treatment & recovery plan', 'ಚಿಕಿತ್ಸೆ ಮತ್ತು ಚೇತರಿಕೆ ಯೋಜನೆ ನೋಡಿ') : t('See next steps', 'ಮುಂದಿನ ಕ್ರಮ ನೋಡಿ')
+                : t('Next', 'ಮುಂದೆ')}
                 <ArrowRight size={17} />
               </button>
               <p className="small-center">

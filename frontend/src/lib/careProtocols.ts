@@ -74,7 +74,7 @@ export function buildCarePlan(model: CareProtocols, conditionId: string | null, 
 const COPY = {
   title: ['Treatment & recovery plan', 'ಚಿಕಿತ್ಸೆ ಮತ್ತು ಚೇತರಿಕೆ ಯೋಜನೆ', 'उपचार और सुधार की योजना'],
   library: ['Care library', 'ಆರೈಕೆ ಮಾಹಿತಿ', 'देखभाल पुस्तकालय'],
-  libraryHint: ['Browse all 17 crop conditions without a photo.', 'ಚಿತ್ರವಿಲ್ಲದೆ ಎಲ್ಲಾ 17 ಬೆಳೆ ಸ್ಥಿತಿಗಳ ಮಾಹಿತಿ ನೋಡಿ.', 'बिना तस्वीर सभी 17 फसल स्थितियों की जानकारी देखें।'],
+  libraryHint: ['Choose a condition, answer six questions, then review its treatment and recovery plan. A library choice is not a diagnosis.', 'ಸ್ಥಿತಿ ಆಯ್ಕೆಮಾಡಿ, ಆರು ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸಿ, ನಂತರ ಚಿಕಿತ್ಸೆಯ ಮತ್ತು ಚೇತರಿಕೆಯ ಯೋಜನೆ ನೋಡಿ. ಗ್ರಂಥಾಲಯದ ಆಯ್ಕೆ ರೋಗನಿರ್ಣಯವಲ್ಲ.', 'स्थिति चुनें, छह सवालों के जवाब दें, फिर उपचार और सुधार योजना देखें। पुस्तकालय में चयन रोग की पुष्टि नहीं है।'],
   selected: ['Selected by you from the care library. This is not a diagnosis.', 'ಆರೈಕೆ ಮಾಹಿತಿಯಿಂದ ನೀವು ಆಯ್ದದ್ದು. ಇದು ರೋಗನಿರ್ಣಯವಲ್ಲ.', 'देखभाल पुस्तकालय से आपने चुना है। यह रोग का निदान नहीं है।'],
   search: ['Search condition or crop', 'ರೋಗ ಅಥವಾ ಬೆಳೆ ಹುಡುಕಿ', 'रोग या फसल खोजें'],
   all: ['All crops', 'ಎಲ್ಲ ಬೆಳೆಗಳು', 'सभी फसलें'],

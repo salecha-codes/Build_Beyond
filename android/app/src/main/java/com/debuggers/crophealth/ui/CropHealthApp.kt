@@ -303,7 +303,6 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
         if(accepted || prediction) {
             if(cropMismatch) Secondary(s.predictionText("Change selected crop","ಆಯ್ಕೆ ಮಾಡಿದ ಬೆಳೆ ಬದಲಿಸಿ","चुनी हुई फसल बदलें"),{a(AppAction.Navigate(Screen.HOME))})
             Primary(s.careText("Assess severity · 6 questions","ತೀವ್ರತೆ ಪರಿಶೀಲಿಸಿ · 6 ಪ್ರಶ್ನೆಗಳು","गंभीरता जाँचें · 6 प्रश्न"),{a(AppAction.Navigate(Screen.CONCERN))})
-            Secondary(s.careText("See care plan","ಆರೈಕೆ ಯೋಜನೆ ನೋಡಿ","देखभाल योजना देखें"),{a(AppAction.Navigate(Screen.GUIDANCE))})
             if(prediction) Secondary(s.tr("Retake photo","ಮತ್ತೆ ಫೋಟೋ ತೆಗೆಯಿರಿ"),{a(AppAction.Navigate(Screen.CAPTURE))},Icons.Outlined.CameraAlt)
         } else {
             ExpertCall(s)
@@ -395,7 +394,7 @@ private fun careReason(code:String,s:AppUiState):String=when(code) {
     Page {
         LanguageToggle(s,a)
         Text(s.careText("Treatment & recovery library","ಚಿಕಿತ್ಸೆ ಮತ್ತು ಚೇತರಿಕೆ ಮಾಹಿತಿ","उपचार और सुधार पुस्तकालय"),fontSize=28.sp,fontWeight=FontWeight.Medium)
-        Text(s.careText("Choose a condition to read its care protocol. A library selection is not a diagnosis.","ಆರೈಕೆ ಕ್ರಮ ಓದಲು ಸ್ಥಿತಿ ಆಯ್ಕೆಮಾಡಿ. ಇಲ್ಲಿ ಮಾಡಿದ ಆಯ್ಕೆ ರೋಗ ನಿರ್ಣಯವಲ್ಲ.","देखभाल के चरण पढ़ने के लिए स्थिति चुनें। पुस्तकालय का चयन रोग की पुष्टि नहीं है।"),fontSize=13.sp,color=CropColors.Muted)
+        Text(s.careText("Choose a condition, answer six questions, then review its treatment and recovery plan. A library selection is not a diagnosis.","ಸ್ಥಿತಿ ಆಯ್ಕೆಮಾಡಿ, ಆರು ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸಿ, ನಂತರ ಚಿಕಿತ್ಸೆಯ ಮತ್ತು ಚೇತರಿಕೆಯ ಯೋಜನೆ ನೋಡಿ. ಗ್ರಂಥಾಲಯದ ಆಯ್ಕೆ ರೋಗನಿರ್ಣಯವಲ್ಲ.","स्थिति चुनें, छह सवालों के जवाब दें, फिर उपचार और सुधार योजना देखें। पुस्तकालय में चयन रोग की पुष्टि नहीं है।"),fontSize=13.sp,color=CropColors.Muted)
         CropChips(s,a,all=true,selected=Crop.entries.firstOrNull {it.id==crop},onSelect={crop=it?.id})
         OutlinedTextField(value=query,onValueChange={query=it},label={Text(s.careText("Search a condition","ಸ್ಥಿತಿ ಹುಡುಕಿ","स्थिति खोजें"))},singleLine=true,modifier=Modifier.fillMaxWidth().testTag("care_library_search"))
         if(entries.isEmpty()) Text(s.careText("No matching conditions. Try another crop or search.","ಹೊಂದುವ ಸ್ಥಿತಿ ಇಲ್ಲ. ಬೇರೆ ಬೆಳೆ ಅಥವಾ ಪದ ಹುಡುಕಿ.","कोई मिलती स्थिति नहीं। दूसरी फसल या खोज आजमाएँ।"))
@@ -425,25 +424,30 @@ private fun careReason(code:String,s:AppUiState):String=when(code) {
             Text(condition.displayName(s.language),fontSize=22.sp,fontWeight=FontWeight.Medium,modifier=Modifier.testTag("care_condition_name"))
             Text(condition.crop.displayName(s.language),fontSize=13.sp,color=CropColors.Muted)
         } }
-        if(s.manualCare!=null) Notice(s.careText("Selected by you — care library","ನೀವು ಆಯ್ಕೆಮಾಡಿದ್ದು — ಆರೈಕೆ ಮಾಹಿತಿ","आपके द्वारा चुना गया — देखभाल पुस्तकालय"),s.careText("This selection does not change the photo prediction or saved scan. Confirm the cause before disease-specific treatment.","ಈ ಆಯ್ಕೆ ಚಿತ್ರ ಅಂದಾಜು ಅಥವಾ ಉಳಿಸಿದ ದಾಖಲೆಯನ್ನು ಬದಲಿಸುವುದಿಲ್ಲ. ನಿರ್ದಿಷ್ಟ ಚಿಕಿತ್ಸೆಗೆ ಮೊದಲು ಕಾರಣ ದೃಢಪಡಿಸಿ.","यह चयन तस्वीर के अनुमान या सहेजे स्कैन को नहीं बदलता। रोग विशेष के उपचार से पहले कारण की पुष्टि करें।"))
-        AdvisorySummary(s)
-        Primary(s.careText(if(s.careSymptomsComplete) "Review the six answers" else "Assess damage · 6 questions",if(s.careSymptomsComplete) "ಆರು ಉತ್ತರ ಪರಿಶೀಲಿಸಿ" else "ಹಾನಿ ಪರಿಶೀಲಿಸಿ · 6 ಪ್ರಶ್ನೆಗಳು",if(s.careSymptomsComplete) "छह उत्तरों की समीक्षा करें" else "नुकसान जाँचें · 6 प्रश्न"),{a(AppAction.Navigate(Screen.CONCERN))})
-        if(profile!=null) {
-            Notice(s.careText("If this condition is confirmed","ಈ ಸ್ಥಿತಿ ದೃಢಪಟ್ಟರೆ","यदि इस स्थिति की पुष्टि हो"),profile.copy.curability)
-            AdvisoryAudio(s,"advisory_"+profile.conditionId,s.careText("Listen to general care summary","ಸಾಮಾನ್ಯ ಆರೈಕೆ ಸಾರಾಂಶ ಕೇಳಿ","सामान्य देखभाल का सार सुनें"))
-        }
-        if(!s.careCatalogAvailable) {
-            Notice(s.careText("Treatment information could not load","ಚಿಕಿತ್ಸೆ ಮಾಹಿತಿ ಲೋಡ್ ಆಗಲಿಲ್ಲ","उपचार की जानकारी लोड नहीं हुई"),s.careText("The packaged treatment library is unavailable. Try loading it again; do not assume that an empty screen means no action is needed.","ಸಂಗ್ರಹಿತ ಚಿಕಿತ್ಸೆಯ ಮಾಹಿತಿ ಲಭ್ಯವಿಲ್ಲ. ಮತ್ತೆ ಲೋಡ್ ಮಾಡಿ; ಖಾಲಿ ಪರದೆ ಕಂಡರೆ ಕ್ರಮ ಬೇಡವೆಂದು ಭಾವಿಸಬೇಡಿ.","पैक की गई उपचार पुस्तकालय उपलब्ध नहीं है। फिर से लोड करें; खाली स्क्रीन का अर्थ यह नहीं कि किसी कदम की जरूरत नहीं।"))
-            Secondary(s.careText("Retry treatment library","ಚಿಕಿತ್ಸೆ ಮಾಹಿತಿ ಮತ್ತೆ ಲೋಡ್ ಮಾಡಿ","उपचार पुस्तकालय दोबारा लोड करें"),{a(AppAction.ReloadCareProtocols)})
-        } else if(protocol!=null) {
-            CareProtocolSections(s,protocol)
+        if(!s.careSymptomsComplete) {
+            Notice(s.careText("Check damage before viewing care and urgency","ಆರೈಕೆ ಮತ್ತು ತುರ್ತು ಕ್ರಮ ನೋಡುವ ಮೊದಲು ಹಾನಿ ಪರಿಶೀಲಿಸಿ","देखभाल और तात्कालिकता देखने से पहले नुकसान जाँचें"),s.careText("Answer the six questions about what you see on the crop first.","ಬೆಳೆಯಲ್ಲಿ ನೀವು ಗಮನಿಸಿದುದರ ಕುರಿತು ಆರು ಪ್ರಶ್ನೆಗಳಿಗೆ ಮೊದಲು ಉತ್ತರಿಸಿ.","पहले फसल पर दिख रहे लक्षणों के बारे में छह सवालों के जवाब दें।"))
+            Primary(s.careText("Check damage & urgency · 6 questions","ಹಾನಿ ಮತ್ತು ತುರ್ತು ಪರಿಶೀಲನೆ · 6 ಪ್ರಶ್ನೆಗಳು","नुकसान और तात्कालिकता जाँचें · 6 प्रश्न"),{a(AppAction.Navigate(Screen.CONCERN))})
         } else {
-            Notice(s.careText("Choose a condition to explore its care","ಆರೈಕೆ ತಿಳಿಯಲು ಸ್ಥಿತಿ ಆಯ್ಕೆಮಾಡಿ","देखभाल जानने के लिए स्थिति चुनें"),s.careText("This photo result cannot support disease-specific treatment. You can browse the complete library without changing that result.","ಈ ಚಿತ್ರ ಫಲಿತಾಂಶ ನಿರ್ದಿಷ್ಟ ರೋಗ ಚಿಕಿತ್ಸೆಗೆ ಬೆಂಬಲವಿಲ್ಲ. ಫಲಿತಾಂಶ ಬದಲಿಸದೆ ಸಂಪೂರ್ಣ ಮಾಹಿತಿ ನೋಡಬಹುದು.","इस तस्वीर के परिणाम से रोग विशेष का उपचार तय नहीं हो सकता। परिणाम बदले बिना पूरी पुस्तकालय देख सकते हैं।"))
-            GuidanceCard(s.careText("Do now","ಈಗ ಮಾಡಿ","अभी करें"),listOf(s.careText("Take clear photos of the leaf, whole plant and nearby affected plants.","ಎಲೆ, ಇಡೀ ಗಿಡ ಮತ್ತು ಹತ್ತಿರದ ಪೀಡಿತ ಗಿಡಗಳ ಸ್ಪಷ್ಟ ಚಿತ್ರ ತೆಗೆಯಿರಿ.","पत्ती, पूरे पौधे और आसपास के प्रभावित पौधों की साफ तस्वीर लें।"),s.careText("Check soil moisture and avoid unnecessary sprays while the cause is uncertain.","ಮಣ್ಣಿನ ತೇವ ಪರಿಶೀಲಿಸಿ; ಕಾರಣ ಖಚಿತವಿಲ್ಲದಾಗ ಅನಗತ್ಯ ಸಿಂಪಡಣೆ ತಪ್ಪಿಸಿ.","मिट्टी की नमी जाँचें और कारण अनिश्चित होने पर अनावश्यक छिड़काव से बचें।")),CropColors.Green)
+            if(s.manualCare!=null) Notice(s.careText("Selected by you — care library","ನೀವು ಆಯ್ಕೆಮಾಡಿದ್ದು — ಆರೈಕೆ ಮಾಹಿತಿ","आपके द्वारा चुना गया — देखभाल पुस्तकालय"),s.careText("This selection does not change the photo prediction or saved scan. Confirm the cause before disease-specific treatment.","ಈ ಆಯ್ಕೆ ಚಿತ್ರ ಅಂದಾಜು ಅಥವಾ ಉಳಿಸಿದ ದಾಖಲೆಯನ್ನು ಬದಲಿಸುವುದಿಲ್ಲ. ನಿರ್ದಿಷ್ಟ ಚಿಕಿತ್ಸೆಗೆ ಮೊದಲು ಕಾರಣ ದೃಢಪಡಿಸಿ.","यह चयन तस्वीर के अनुमान या सहेजे स्कैन को नहीं बदलता। रोग विशेष के उपचार से पहले कारण की पुष्टि करें।"))
+            AdvisorySummary(s)
+            Primary(s.careText("Review the six answers","ಆರು ಉತ್ತರ ಪರಿಶೀಲಿಸಿ","छह उत्तरों की समीक्षा करें"),{a(AppAction.Navigate(Screen.CONCERN))})
+            if(profile!=null) {
+                Notice(s.careText("If this condition is confirmed","ಈ ಸ್ಥಿತಿ ದೃಢಪಟ್ಟರೆ","यदि इस स्थिति की पुष्टि हो"),profile.copy.curability)
+                AdvisoryAudio(s,"advisory_"+profile.conditionId,s.careText("Listen to general care summary","ಸಾಮಾನ್ಯ ಆರೈಕೆ ಸಾರಾಂಶ ಕೇಳಿ","सामान्य देखभाल का सार सुनें"))
+            }
+            if(!s.careCatalogAvailable) {
+                Notice(s.careText("Treatment information could not load","ಚಿಕಿತ್ಸೆ ಮಾಹಿತಿ ಲೋಡ್ ಆಗಲಿಲ್ಲ","उपचार की जानकारी लोड नहीं हुई"),s.careText("The packaged treatment library is unavailable. Try loading it again; do not assume that an empty screen means no action is needed.","ಸಂಗ್ರಹಿತ ಚಿಕಿತ್ಸೆಯ ಮಾಹಿತಿ ಲಭ್ಯವಿಲ್ಲ. ಮತ್ತೆ ಲೋಡ್ ಮಾಡಿ; ಖಾಲಿ ಪರದೆ ಕಂಡರೆ ಕ್ರಮ ಬೇಡವೆಂದು ಭಾವಿಸಬೇಡಿ.","पैक की गई उपचार पुस्तकालय उपलब्ध नहीं है। फिर से लोड करें; खाली स्क्रीन का अर्थ यह नहीं कि किसी कदम की जरूरत नहीं।"))
+                Secondary(s.careText("Retry treatment library","ಚಿಕಿತ್ಸೆ ಮಾಹಿತಿ ಮತ್ತೆ ಲೋಡ್ ಮಾಡಿ","उपचार पुस्तकालय दोबारा लोड करें"),{a(AppAction.ReloadCareProtocols)})
+            } else if(protocol!=null) {
+                CareProtocolSections(s,protocol)
+            } else {
+                Notice(s.careText("Choose a condition to explore its care","ಆರೈಕೆ ತಿಳಿಯಲು ಸ್ಥಿತಿ ಆಯ್ಕೆಮಾಡಿ","देखभाल जानने के लिए स्थिति चुनें"),s.careText("This photo result cannot support disease-specific treatment. You can browse the complete library without changing that result.","ಈ ಚಿತ್ರ ಫಲಿತಾಂಶ ನಿರ್ದಿಷ್ಟ ರೋಗ ಚಿಕಿತ್ಸೆಗೆ ಬೆಂಬಲವಿಲ್ಲ. ಫಲಿತಾಂಶ ಬದಲಿಸದೆ ಸಂಪೂರ್ಣ ಮಾಹಿತಿ ನೋಡಬಹುದು.","इस तस्वीर के परिणाम से रोग विशेष का उपचार तय नहीं हो सकता। परिणाम बदले बिना पूरी पुस्तकालय देख सकते हैं।"))
+                GuidanceCard(s.careText("Do now","ಈಗ ಮಾಡಿ","अभी करें"),listOf(s.careText("Take clear photos of the leaf, whole plant and nearby affected plants.","ಎಲೆ, ಇಡೀ ಗಿಡ ಮತ್ತು ಹತ್ತಿರದ ಪೀಡಿತ ಗಿಡಗಳ ಸ್ಪಷ್ಟ ಚಿತ್ರ ತೆಗೆಯಿರಿ.","पत्ती, पूरे पौधे और आसपास के प्रभावित पौधों की साफ तस्वीर लें।"),s.careText("Check soil moisture and avoid unnecessary sprays while the cause is uncertain.","ಮಣ್ಣಿನ ತೇವ ಪರಿಶೀಲಿಸಿ; ಕಾರಣ ಖಚಿತವಿಲ್ಲದಾಗ ಅನಗತ್ಯ ಸಿಂಪಡಣೆ ತಪ್ಪಿಸಿ.","मिट्टी की नमी जाँचें और कारण अनिश्चित होने पर अनावश्यक छिड़काव से बचें।")),CropColors.Green)
+            }
+            Secondary(s.careText("Browse all 17 conditions","ಎಲ್ಲಾ 17 ಸ್ಥಿತಿಗಳ ಮಾಹಿತಿ ನೋಡಿ","सभी 17 स्थितियाँ देखें"),{a(AppAction.OpenCareLibrary)})
+            Text(s.careText("Conditional draft guidance. Product registration, crop label, harvest restrictions and local expert confirmation still apply. Recovery means protected new growth, not disappearance of old lesions.","ಇದು ಷರತ್ತಿನ ಪ್ರಾಯೋಗಿಕ ಸಲಹೆ. ಉತ್ಪನ್ನ ನೋಂದಣಿ, ಬೆಳೆ ಲೇಬಲ್, ಕೊಯ್ಲು ನಿಯಮ ಮತ್ತು ಸ್ಥಳೀಯ ತಜ್ಞರ ದೃಢೀಕರಣ ಅನ್ವಯಿಸುತ್ತದೆ. ಚೇತರಿಕೆ ಎಂದರೆ ಹೊಸ ಬೆಳವಣಿಗೆಯ ರಕ್ಷಣೆ; ಹಳೆಯ ಚುಕ್ಕೆ ಮಾಯವಾಗುವುದಲ್ಲ.","शर्तों पर आधारित प्रारूप मार्गदर्शन। उत्पाद का पंजीकरण, फसल का लेबल, कटाई संबंधी नियम और स्थानीय विशेषज्ञ की पुष्टि जरूरी है। सुधार का अर्थ नई बढ़त की रक्षा है, पुराने घावों का गायब होना नहीं।"),fontSize=11.sp,color=CropColors.Muted)
+            ExpertCall(s)
         }
-        Secondary(s.careText("Browse all 17 conditions","ಎಲ್ಲಾ 17 ಸ್ಥಿತಿಗಳ ಮಾಹಿತಿ ನೋಡಿ","सभी 17 स्थितियाँ देखें"),{a(AppAction.OpenCareLibrary)})
-        Text(s.careText("Conditional draft guidance. Product registration, crop label, harvest restrictions and local expert confirmation still apply. Recovery means protected new growth, not disappearance of old lesions.","ಇದು ಷರತ್ತಿನ ಪ್ರಾಯೋಗಿಕ ಸಲಹೆ. ಉತ್ಪನ್ನ ನೋಂದಣಿ, ಬೆಳೆ ಲೇಬಲ್, ಕೊಯ್ಲು ನಿಯಮ ಮತ್ತು ಸ್ಥಳೀಯ ತಜ್ಞರ ದೃಢೀಕರಣ ಅನ್ವಯಿಸುತ್ತದೆ. ಚೇತರಿಕೆ ಎಂದರೆ ಹೊಸ ಬೆಳವಣಿಗೆಯ ರಕ್ಷಣೆ; ಹಳೆಯ ಚುಕ್ಕೆ ಮಾಯವಾಗುವುದಲ್ಲ.","शर्तों पर आधारित प्रारूप मार्गदर्शन। उत्पाद का पंजीकरण, फसल का लेबल, कटाई संबंधी नियम और स्थानीय विशेषज्ञ की पुष्टि जरूरी है। सुधार का अर्थ नई बढ़त की रक्षा है, पुराने धब्बों का मिटना नहीं।"),fontSize=11.sp,color=CropColors.Muted)
-        ExpertCall(s)
     }
 }
 
@@ -530,12 +534,14 @@ private fun careReason(code:String,s:AppUiState):String=when(code) {
                 }
             }
         }
-        Primary(s.careText(if(question==5) "See assessment" else "Next",if(question==5) "ಪರಿಶೀಲನೆ ನೋಡಿ" else "ಮುಂದೆ",if(question==5) "आकलन देखें" else "आगे"),{
+        Primary(s.careText(if(question==5 && s.manualCare!=null) "See treatment & recovery plan" else if(question==5) "See assessment" else "Next",if(question==5 && s.manualCare!=null) "ಚಿಕಿತ್ಸೆ ಮತ್ತು ಚೇತರಿಕೆ ಯೋಜನೆ ನೋಡಿ" else if(question==5) "ಪರಿಶೀಲನೆ ನೋಡಿ" else "ಮುಂದೆ",if(question==5 && s.manualCare!=null) "उपचार और सुधार योजना देखें" else if(question==5) "आकलन देखें" else "आगे"),{
             val updated=ArrayList(draftAnswers).also {it[question]=selected}
             draftAnswers=updated
             a(AppAction.ReportSymptoms(CareAnswerDraft.symptoms(updated),completed=question==5))
+            val opensManualPlan=question==5 && s.manualCare!=null
             question++
             selected=if(question<6) updated[question] else -1
+            if(opensManualPlan) a(AppAction.Navigate(Screen.GUIDANCE))
         },Icons.Outlined.ArrowForward,enabled=selected>=0)
         Text(s.careText("Report what you see. These answers do not confirm a disease.","ನೀವು ಗಮನಿಸಿದುದನ್ನು ತಿಳಿಸಿ. ಈ ಉತ್ತರ ರೋಗ ದೃಢಪಡಿಸುವುದಿಲ್ಲ.","जो दिख रहा है वह बताएँ। ये उत्तर किसी रोग की पुष्टि नहीं करते।"),fontSize=12.sp,color=CropColors.Muted)
     }
