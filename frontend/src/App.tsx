@@ -149,6 +149,8 @@ export default function App() {
       return 'home';
     }
   });
+  const [welcomeStarting, setWelcomeStarting] = useState(false);
+  const [cameraStarting, setCameraStarting] = useState(false);
   const [language, setLanguage] = useState<Language>(getLanguage);
   const [crop, setCrop] = useState<CropId>('tomato');
   const [photo, setPhoto] = useState<File | null>(null);
@@ -226,6 +228,27 @@ export default function App() {
     if (screen === 'processing') analysisRequest.current++;
     setError('');
     setScreen(next);
+  }
+  function startFromWelcome() {
+    if (welcomeStarting) return;
+    setWelcomeStarting(true);
+    window.setTimeout(() => {
+      try {
+        globalThis.localStorage?.setItem('crophealth.onboarded', 'true');
+      } catch {
+        /* Ignore local storage errors */
+      }
+      setScreen('home');
+      setWelcomeStarting(false);
+    }, 1120);
+  }
+  function startCameraTransition() {
+    if (cameraStarting) return;
+    setCameraStarting(true);
+    window.setTimeout(() => {
+      setCameraStarting(false);
+      navigate('capture');
+    }, 1050);
   }
   function selectPhoto(file: File | null) {
     if (!file) return;
@@ -649,7 +672,68 @@ export default function App() {
   }
 
   let page: ReactNode;
-  if (screen === 'welcome')
+  if ((screen === 'welcome' && welcomeStarting) || (screen === 'home' && cameraStarting))
+    page = (
+      <main className={`transition-page${cameraStarting ? ' scan-transition' : ''}`} aria-live="polite">
+        <div className="farmer-scene" role="img" aria-label={t('A farmer taking a photo of a crop on a phone', 'ರೈತರು ಫೋನ್‌ನಲ್ಲಿ ಬೆಳೆಯ ಚಿತ್ರ ತೆಗೆಯುತ್ತಿದ್ದಾರೆ')}>
+          <svg viewBox="0 0 360 270" aria-hidden="true">
+            <defs>
+              <linearGradient id="field-sky" x2="0" y2="1"><stop stopColor="#e4e9f4" /><stop offset="1" stopColor="#fff3dc" /></linearGradient>
+              <linearGradient id="field-ground" x2="0" y2="1"><stop stopColor="#a5b879" /><stop offset="1" stopColor="#718854" /></linearGradient>
+              <linearGradient id="farmer-shirt" x2=".8" y2="1"><stop stopColor="#f4ead7" /><stop offset="1" stopColor="#cdbd9d" /></linearGradient>
+              <linearGradient id="farmer-skin" x2="1" y2="1"><stop stopColor="#d99a69" /><stop offset="1" stopColor="#9f593e" /></linearGradient>
+              <linearGradient id="turban-cloth" x2=".9" y2="1"><stop stopColor="#f0b955" /><stop offset=".48" stopColor="#c9792f" /><stop offset="1" stopColor="#99542d" /></linearGradient>
+              <filter id="scene-shadow" x="-.3" y="-.3" width="1.6" height="1.8"><feGaussianBlur in="SourceAlpha" stdDeviation="3"/><feOffset dy="3"/><feComponentTransfer><feFuncA type="linear" slope=".2"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            </defs>
+            <rect width="360" height="270" fill="url(#field-sky)" />
+            <circle cx="291" cy="51" r="23" fill="#f3c876" opacity=".58" />
+            <path d="M0 163c44-37 79-31 115-8 32-38 71-42 111-8 37-25 84-17 134 20v103H0z" fill="#91a783" />
+            <path d="M0 194c49-25 93-16 131 5 50-30 106-27 153-3 29-12 54-11 76-2v76H0z" fill="url(#field-ground)" />
+            <path d="M0 226c71-29 130-4 180 16 53-28 113-37 180-17v45H0z" fill="#788e58" />
+            <g opacity=".42" stroke="#d8c58b" strokeWidth="2" fill="none">
+              <path d="M0 258c73-31 135-15 190 12M0 245c71-28 128-14 176 5M360 244c-61-22-104-12-149 7M360 258c-55-22-104-11-148 12" />
+            </g>
+            <g className="photo-plant" filter="url(#scene-shadow)" stroke="#567748" strokeWidth="3" strokeLinecap="round" fill="none">
+              <path d="M284 231V130m0 63c-28-9-42-26-43-49 27 7 41 23 43 49Zm0-26c24-13 35-32 31-54-24 10-34 28-31 54Z" fill="#71975a" />
+              <path d="M284 191c-18-7-28-19-29-35 18 5 28 16 29 35Zm0-15c16-9 24-22 23-39-17 7-24 21-23 39Z" fill="#9db56d" />
+              <path d="m244 145 38 46m34-51-32 48m-29-32 27 44m26-53-24 49" stroke="#d2daa0" strokeWidth="1.3" opacity=".75" />
+            </g>
+            <g className="photo-farmer" filter="url(#scene-shadow)">
+              <path d="M91 244c3-41 18-70 54-78 34 3 56 29 61 78v26H91z" fill="url(#farmer-shirt)" />
+              <path d="M131 170h27l14 100h-56z" fill="#59745c" />
+              <path d="M142 174v96m-16-82 12 9m21-9-12 9" stroke="#e9ddc7" strokeWidth="2" opacity=".8" />
+              <path d="M118 93c0-28 16-45 39-45 22 0 39 17 39 45v24c0 28-18 46-40 46-23 0-38-18-38-46z" fill="url(#farmer-skin)" />
+              <path d="M115 111c-9 5-8 20 2 23m79-23c10 3 11 17 2 22" fill="none" stroke="#a96245" strokeWidth="5" strokeLinecap="round" />
+              <path d="M143 108c4-3 9-3 13 0m18 0c4-3 9-3 13 0" fill="none" stroke="#4d342d" strokeWidth="2.5" strokeLinecap="round" />
+              <ellipse cx="151" cy="116" rx="2" ry="2.4" fill="#342822"/><ellipse cx="181" cy="116" rx="2" ry="2.4" fill="#342822" />
+              <path d="m166 114-3 16 7 2m-14 14c7 5 16 5 23-1" fill="none" stroke="#824834" strokeWidth="2.5" strokeLinecap="round" />
+              <path d="M143 146c7 5 15 7 23 6 7-1 13-4 18-9-1 18-10 29-21 29-11 0-18-10-20-26z" fill="#49372f" />
+              <path d="M113 92c-2-23 13-39 39-41 25-3 47 10 50 34-13-2-24-10-30-20-13 15-33 24-59 27z" fill="url(#turban-cloth)" />
+              <path d="M117 75c18-11 49-22 81-13m-78 22c24-12 53-19 78-12m-70 25c20-11 44-15 67-12" fill="none" stroke="#f6d18a" strokeWidth="3" opacity=".75" />
+              <path d="M149 52c1-10 9-16 19-16 9 0 17 5 20 13-12-2-24-1-39 3z" fill="#f2c778" />
+              <path d="M176 187c23-5 41-20 55-42" stroke="url(#farmer-skin)" strokeWidth="16" strokeLinecap="round" fill="none" />
+              <path d="M181 187c20-6 35-20 49-41" stroke="#efb98e" strokeWidth="4" strokeLinecap="round" fill="none" opacity=".52" />
+              <path d="M223 146c2-7 8-11 14-9 6 2 8 8 5 14l-5 7c-3 4-9 5-13 1-4-3-4-9-1-13z" fill="url(#farmer-skin)" />
+              <path d="M106 198c12 11 21 21 29 35m50-35c-8 14-13 27-14 42" fill="none" stroke="#fff9ec" strokeWidth="2" opacity=".62" />
+            </g>
+            <g className="photo-phone">
+              <rect x="220" y="93" width="38" height="66" rx="7" fill="#292a30" />
+              <rect x="223" y="97" width="32" height="57" rx="4" fill="#d9e3d3" />
+              <rect x="227" y="102" width="24" height="34" rx="2" fill="#91a783" />
+              <circle cx="239" cy="147" r="2.4" fill="#e7e1d2" />
+              <circle cx="228" cy="99" r="1.4" fill="#4b4c50" />
+              <rect className="camera-flash" x="223" y="97" width="32" height="57" rx="4" fill="#fff" />
+              <path className="scanner-reticle" d="M229 108v-3h5m10 0h5v5m0 18v5h-5m-10 0h-5v-5" fill="none" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              <path className="scanner-line" d="M229 116h20" fill="none" stroke="#d7f5bf" strokeWidth="1.5" />
+            </g>
+            <path className="camera-spark" d="m214 88 3-8m47 7 4-8m-56 82-7 3" stroke="#fff" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+        </div>
+        <p className="transition-kicker">{t('CROP HEALTH', 'ಬೆಳೆ ಆರೋಗ್ಯ')}</p>
+        <h1>{cameraStarting ? t('Let’s focus on your crop', 'ನಿಮ್ಮ ಬೆಳೆಯನ್ನು ಸ್ಪಷ್ಟವಾಗಿ ನೋಡೋಣ') : t('A closer look at your crop', 'ನಿಮ್ಮ ಬೆಳೆಯನ್ನು ಹತ್ತಿರದಿಂದ ನೋಡೋಣ')}</h1>
+      </main>
+    );
+  else if (screen === 'welcome')
     page = (
       <main className="app-page welcome-page">
         <div className="welcome-content">
@@ -667,14 +751,9 @@ export default function App() {
           <button
             className="primary welcome-button"
             data-testid="welcome-get-started"
-            onClick={() => {
-              try {
-                globalThis.localStorage?.setItem('crophealth.onboarded', 'true');
-              } catch {
-                /* Ignore local storage errors */
-              }
-              setScreen('home');
-            }}
+            onClick={startFromWelcome}
+            disabled={welcomeStarting}
+            aria-busy={welcomeStarting}
           >
             {t('Get started', 'ಪ್ರಾರಂಭಿಸಿ')}
             <ArrowRight size={18} />
@@ -705,7 +784,7 @@ export default function App() {
               )}
             </p>
           </div>
-          <button className="scan-hero" data-testid="home-scan" onClick={() => navigate('capture')}>
+          <button className="scan-hero" data-testid="home-scan" onClick={startCameraTransition} disabled={cameraStarting} aria-busy={cameraStarting}>
             <span className="hero-camera">
               <Camera size={27} />
             </span>
@@ -1361,7 +1440,7 @@ export default function App() {
       </>
     );
 
-  const primaryTab = screen === 'home' || screen === 'history' || screen === 'help';
+  const primaryTab = (screen === 'home' && !cameraStarting) || screen === 'history' || screen === 'help';
   return (
     <div className="preview-shell">
       <aside className="preview-context">
