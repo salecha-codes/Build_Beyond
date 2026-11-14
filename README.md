@@ -6,11 +6,20 @@ AgriScan is an Android and browser prototype for checking leaf photos and readin
 
 ## Try AgriScan
 
-- **Browser app:** [salecha-codes.github.io/Build_Beyond](https://salecha-codes.github.io/Build_Beyond/)
+- **Open in a browser (no install):** [Launch AgriScan](https://salecha-codes.github.io/Build_Beyond/)
+- **Download the Android APK:** [AgriScan releases on GitHub](https://github.com/salecha-codes/Build_Beyond/releases/latest). Choose the `app-arm64-v8a-debug.apk` asset for most Android phones, or `app-universal-debug.apk` if you are unsure which processor your device uses. These are debug builds; Android may ask you to allow installation from your browser or file manager. If the release page has no APK asset yet, use the build instructions below to create one.
 - **Source code:** [github.com/salecha-codes/Build_Beyond](https://github.com/salecha-codes/Build_Beyond)
 - **Project report:** [Hackathon Final Report PDF](https://salecha-codes.github.io/Build_Beyond/downloads/Hackathon_Final_Report.pdf)
 
-The browser downloads its model, runtime, content, and audio the first time it is opened. Wait for **Offline ready** before disconnecting. After the assets are cached, the service worker supports offline reload and inference. Browser storage is local to that browser and device.
+### Quick walkthrough
+
+1. Open the browser app above, or install and launch AgriScan on Android. On the first browser visit, allow time for the model, runtime, guidance, and audio to load; wait for **Offline ready** before going offline. The Android APK includes these assets.
+2. Choose tomato, potato, or maize, then take a leaf photo or choose one from your gallery. The app checks the photo and asks you to retake it if it is unsuitable.
+3. Review the model's suggested condition and score. The model output is uncertain and is not a confirmed diagnosis.
+4. Answer the questions about symptoms and affected plants. AgriScan uses your answers in a separate offline advisory step to suggest follow-up and care guidance.
+5. Read or play the guidance in English, Kannada, or Hindi. Save the observation to review it later in local history.
+
+The browser app can be opened on a computer or phone without installing anything. After its first load completes, the service worker can support offline reload and inference; browser history remains local to that browser and device. The Android app bundles the model, content, and audio and works offline after installation.
 
 The native Android app bundles its model, content, and audio in the APK. It does not need a server or internet connection at runtime. Android requests camera access when needed and does not request Internet permission. To build and install it, follow [Build and install AgriScan](docs/BUILD_ANDROID.md).
 
