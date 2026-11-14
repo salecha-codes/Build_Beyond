@@ -154,6 +154,13 @@ export default function App() {
       return 'home';
     }
   });
+  const [startupStarting, setStartupStarting] = useState(() => {
+    try {
+      return globalThis.localStorage?.getItem('crophealth.onboarded') === 'true';
+    } catch {
+      return false;
+    }
+  });
   const [welcomeStarting, setWelcomeStarting] = useState(false);
   const [cameraStarting, setCameraStarting] = useState(false);
   const [language, setLanguage] = useState<Language>(getLanguage);
@@ -206,6 +213,11 @@ export default function App() {
       setHistoryLoading(false);
     }
   }, []);
+  useEffect(() => {
+    if (!startupStarting) return;
+    const timer = window.setTimeout(() => setStartupStarting(false), 1120);
+    return () => window.clearTimeout(timer);
+  }, [startupStarting]);
   useEffect(() => {
     void loadAdvisoryModel().then(setAdvisoryModel).catch(() => setAdvisoryFailed(true));
     void loadCareProtocols().then(setCareProtocols).catch(() => setProtocolsFailed(true));
@@ -729,7 +741,7 @@ export default function App() {
   }
 
   let page: ReactNode;
-  if ((screen === 'welcome' && welcomeStarting) || (screen === 'home' && cameraStarting))
+  if (startupStarting || (screen === 'welcome' && welcomeStarting) || (screen === 'home' && cameraStarting))
     page = (
       <main className={`transition-page${cameraStarting ? ' scan-transition' : ''}`} aria-live="polite">
         <div className="farmer-scene" role="img" aria-label={t('A farmer taking a photo of a crop on a phone', 'ರೈತರು ಫೋನ್‌ನಲ್ಲಿ ಬೆಳೆಯ ಚಿತ್ರ ತೆಗೆಯುತ್ತಿದ್ದಾರೆ')}>
