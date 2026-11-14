@@ -696,7 +696,9 @@ export default function App() {
     value: CropId | 'all',
     select: (value: CropId | 'all') => void,
     includeAll = false,
+    order: readonly CropId[] = CROPS.map((item) => item.id),
   ) {
+    const orderedCrops = order.map((id) => CROPS.find((item) => item.id === id)!).filter(Boolean);
     return (
       <div className="crop-list" aria-label={t('Crop', 'Crop')}>
         {includeAll && (
@@ -707,7 +709,7 @@ export default function App() {
             {t('All', 'ಎಲ್ಲಾ')}
           </button>
         )}
-        {CROPS.map((item) => (
+        {orderedCrops.map((item) => (
           <button
             key={item.id}
             className={`crop-chip ${value === item.id ? 'active' : ''}`}
@@ -913,7 +915,7 @@ export default function App() {
           <div className="section-heading">
             <h2>{t('Choose your crop', 'ನಿಮ್ಮ ಬೆಳೆ ಆಯ್ಕೆಮಾಡಿ')}</h2>
           </div>
-          {cropChips(crop, (value) => value !== 'all' && setCrop(value))}
+          {cropChips(crop, (value) => value !== 'all' && setCrop(value), false, ['maize', 'potato', 'tomato'])}
           <div className="section-heading">
             <h2>{t('Recent scans', 'ಇತ್ತೀಚಿನ ದಾಖಲೆಗಳು')}</h2>
             <button className="text-button" onClick={() => navigate('history')}>
