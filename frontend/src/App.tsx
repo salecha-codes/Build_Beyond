@@ -47,7 +47,7 @@ import {
   saveObservation,
   setLanguage as persistLanguage,
 } from './lib/storage';
-import { CROPS, LANGUAGES, LANGUAGE_LABELS, LANGUAGE_LOCALES } from './lib/types';
+import { CONDITIONS, CROPS, LANGUAGES, LANGUAGE_LABELS, LANGUAGE_LOCALES } from './lib/types';
 import type {
   ConcernResult,
   CropId,
@@ -272,7 +272,11 @@ export default function App() {
   const provisionalPrediction = resultType === 'uncertain' && !!conditionId &&
     (assessment?.sourceEvaluated === true ||
       (opened?.modelVersion === model?.version && model?.sourceEvaluated === true));
-  const hasPrediction = accepted || provisionalPrediction;
+  const cropMismatchPrediction = resultType === 'crop_mismatch' && !!conditionId &&
+    (assessment?.sourceEvaluated === true ||
+      (opened?.modelVersion === model?.version && model?.sourceEvaluated === true));
+  const hasPrediction = accepted || provisionalPrediction || cropMismatchPrediction;
+  const predictedCrop = top?.cropId || CONDITIONS.find(item => item.id === conditionId)?.crop_id || activeCrop;
   const promptKey =
     resultType === 'retake'
       ? 'retake'
@@ -432,7 +436,7 @@ export default function App() {
   );
   function historyCard(record: ObservationRecord, deletable = false) {
     const acceptedRecord = record.resultType === 'likely' || record.resultType === 'healthy';
-    const predictedRecord = record.resultType === 'uncertain' && !!record.conditionId &&
+    const predictedRecord = (record.resultType === 'uncertain' || record.resultType === 'crop_mismatch') && !!record.conditionId &&
       record.modelVersion === model?.version && model?.sourceEvaluated === true;
     const label =
       (acceptedRecord || predictedRecord) && record.conditionId
@@ -449,7 +453,7 @@ export default function App() {
           <span className="history-copy">
             <strong>{label}</strong>
             <small>
-              {predictedRecord && `${t('Low confidence prediction', 'ಕಡಿಮೆ ವಿಶ್ವಾಸದ ಅಂದಾಜು')} · `}
+              {predictedRecord && `${record.resultType === 'crop_mismatch' ? t('Crop mismatch', 'ಬೆಳೆ ಹೊಂದಿಕೆಯಾಗಿಲ್ಲ') : t('Low confidence prediction', 'ಕಡಿಮೆ ವಿಶ್ವಾಸದ ಅಂದಾಜು')} · `}
               {cropName(record.cropId, language)} ·{' '}
               {new Date(record.createdAt).toLocaleTimeString(
                 LANGUAGE_LOCALES[language],
@@ -638,7 +642,7 @@ export default function App() {
           <div className="result-heading">
             <Photo alt={t('Selected crop leaf', 'Selected crop leaf')} blob={activePhoto} />
             <div>
-              <small>{cropName(activeCrop, language)}</small>
+              <small>{cropName(hasPrediction ? predictedCrop : activeCrop, language)}</small>
               <h2>
                 {hasPrediction && conditionId
                   ? conditionName(conditionId, language)
@@ -656,6 +660,8 @@ export default function App() {
               <h2>
                 {accepted
                   ? t('Model match', 'ಮಾದರಿಯ ಹೊಂದಾಣಿಕೆ')
+                  : cropMismatchPrediction
+                    ? t('Crop mismatch', 'ಬೆಳೆ ಹೊಂದಿಕೆಯಾಗಿಲ್ಲ')
                   : provisionalPrediction
                     ? t('Low confidence prediction', 'ಕಡಿಮೆ ವಿಶ್ವಾಸದ ಅಂದಾಜು')
                   : resultType === 'retake'
@@ -672,7 +678,11 @@ export default function App() {
                   'ಡೇಟಾಸೆಟ್‌ನಲ್ಲಿ ಪರೀಕ್ಷಿಸಿದ ಅಂದಾಜು. ಸ್ಥಳೀಯ ಕೃಷಿ ತಜ್ಞರಿಂದ ಸ್ಥಿತಿಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.',
                 )}
               </p>
-            ) : <p>{provisionalPrediction
+            ) : cropMismatchPrediction ? <p>
+              {t('Selected crop', 'ಆಯ್ಕೆ ಮಾಡಿದ ಬೆಳೆ')}: {cropName(activeCrop, language)}.<br />
+              {t('Model predicts', 'ಮಾದರಿಯ ಅಂದಾಜು')}: {cropName(predictedCrop, language)}.<br />
+              {t('Check the crop selection or retake a clear photo of one leaf.', 'ಬೆಳೆ ಆಯ್ಕೆಯನ್ನು ಪರಿಶೀಲಿಸಿ ಅಥವಾ ಒಂದು ಎಲೆಯ ಸ್ಪಷ್ಟ ಚಿತ್ರವನ್ನು ಮತ್ತೆ ತೆಗೆಯಿರಿ.')}
+            </p> : <p>{provisionalPrediction
               ? t('This is the model’s top prediction for your leaf. Retake a clearer photo to check the result.', 'ಇದು ನಿಮ್ಮ ಎಲೆಗೆ ಮಾದರಿಯ ಪ್ರಮುಖ ಅಂದಾಜು. ಫಲಿತಾಂಶ ಪರಿಶೀಲಿಸಲು ಇನ್ನಷ್ಟು ಸ್ಪಷ್ಟ ಚಿತ್ರ ತೆಗೆಯಿರಿ.')
               : resultPrompt.message}</p>}
             {!accepted && !validated && !model?.sourceEvaluated && (
@@ -687,7 +697,7 @@ export default function App() {
           {score !== null && (
             <div className="soft-card">
               <div className="score-heading">
-                <span>{accepted ? t('Model match score', 'ಮಾದರಿಯ ಹೊಂದಾಣಿಕೆ ಅಂಕ') : provisionalPrediction ? t('Prediction score', 'ಅಂದಾಜಿನ ಅಂಕ') : t('Top model score', 'ಅತ್ಯಧಿಕ ಮಾದರಿ ಅಂಕ')}</span>
+                <span>{accepted ? t('Model match score', 'ಮಾದರಿಯ ಹೊಂದಾಣಿಕೆ ಅಂಕ') : hasPrediction ? t('Prediction score', 'ಅಂದಾಜಿನ ಅಂಕ') : t('Top model score', 'ಅತ್ಯಧಿಕ ಮಾದರಿ ಅಂಕ')}</span>
                 <strong>{Math.round(score * 100)}%</strong>
               </div>
               <div className={`score-track ${validated ? 'validated' : ''}`}>
@@ -705,7 +715,7 @@ export default function App() {
               {opened && conditionId && (
                 <div className="prediction">
                   <strong>{conditionName(conditionId, language)}</strong>
-                  <span>{accepted ? t('Saved model match', 'ಉಳಿಸಿದ ಮಾದರಿಯ ಹೊಂದಾಣಿಕೆ') : provisionalPrediction ? t('Saved prediction · low confidence', 'ಉಳಿಸಿದ ಅಂದಾಜು · ಕಡಿಮೆ ವಿಶ್ವಾಸ') : t('Stored candidate · not confirmed', 'ಉಳಿಸಿದ ಸಾಧ್ಯತೆ · ಖಚಿತವಲ್ಲ')}</span>
+                  <span>{accepted ? t('Saved model match', 'ಉಳಿಸಿದ ಮಾದರಿಯ ಹೊಂದಾಣಿಕೆ') : cropMismatchPrediction ? t('Crop mismatch', 'ಬೆಳೆ ಹೊಂದಿಕೆಯಾಗಿಲ್ಲ') : provisionalPrediction ? t('Saved prediction · low confidence', 'ಉಳಿಸಿದ ಅಂದಾಜು · ಕಡಿಮೆ ವಿಶ್ವಾಸ') : t('Stored candidate · not confirmed', 'ಉಳಿಸಿದ ಸಾಧ್ಯತೆ · ಖಚಿತವಲ್ಲ')}</span>
                 </div>
               )}
               {assessment?.candidates.slice(0, 2).map((item, index) => (
@@ -713,7 +723,7 @@ export default function App() {
                   <div>
                     <strong>{conditionName(item.id, language)}</strong>
                     <p>
-                      {cropName(item.cropId, language)} · {accepted ? index === 0 ? t('Model match', 'ಮಾದರಿಯ ಹೊಂದಾಣಿಕೆ') : t('Other candidate', 'ಇನ್ನೊಂದು ಸಾಧ್ಯತೆ') : provisionalPrediction ? index === 0 ? t('Top prediction', 'ಪ್ರಮುಖ ಅಂದಾಜು') : t('Alternative prediction', 'ಪರ್ಯಾಯ ಅಂದಾಜು') : t('not confirmed', 'ಖಚಿತವಲ್ಲ')}
+                      {cropName(item.cropId, language)} · {accepted ? index === 0 ? t('Model match', 'ಮಾದರಿಯ ಹೊಂದಾಣಿಕೆ') : t('Other candidate', 'ಇನ್ನೊಂದು ಸಾಧ್ಯತೆ') : hasPrediction ? index === 0 ? t('Top prediction', 'ಪ್ರಮುಖ ಅಂದಾಜು') : t('Alternative prediction', 'ಪರ್ಯಾಯ ಅಂದಾಜು') : t('not confirmed', 'ಖಚಿತವಲ್ಲ')}
                     </p>
                   </div>
                   <span>{(item.score * 100).toFixed(1)}%</span>
@@ -749,6 +759,9 @@ export default function App() {
             </div>
           )}
           <div className="button-stack">
+            {cropMismatchPrediction && <button className="secondary" onClick={() => navigate('home')}>
+              {t('Change selected crop', 'ಆಯ್ಕೆ ಮಾಡಿದ ಬೆಳೆಯನ್ನು ಬದಲಿಸಿ')}
+            </button>}
             {!accepted && expertButton}
             <button className="primary" onClick={beginConcern}>
               {t('Check concern (3 questions)', 'ಲಕ್ಷಣ ಪರಿಶೀಲನೆ (3 ಪ್ರಶ್ನೆಗಳು)')}

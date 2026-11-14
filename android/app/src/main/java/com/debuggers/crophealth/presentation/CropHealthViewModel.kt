@@ -199,7 +199,9 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
                 else "Uncertain: ${result.reasons.joinToString()}. Model output is not a confirmed diagnosis."
             is AssessmentResult.Retake -> "Photo needs retaking: ${result.quality.issues.joinToString()}."
             is AssessmentResult.ModelUnavailable -> "Local model unavailable: ${result.reason}. No diagnosis produced."
-            is AssessmentResult.CropMismatch -> "Selected crop and model output differ. Retake or check with an expert."
+            is AssessmentResult.CropMismatch -> if (result.evidence.sourceEvaluated)
+                "Prototype prediction: ${result.evidence.top.condition.id}. Crop mismatch: selected ${snapshot.selectedCrop}, predicted ${result.evidence.top.condition.crop}. Check selection or retake."
+                else "Selected crop and model output differ. Retake or check with an expert."
             else -> if (result.evidence?.sourceEvaluated == true && result.evidence?.calibratedAndValidated != true)
                 "Dataset-tested prototype model match; field diagnosis has not been validated."
                 else "Model assessment; confirm with a crop expert when needed."

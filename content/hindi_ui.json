@@ -357,5 +357,10 @@
   "Prediction score": "अनुमान का अंक",
   "Saved prediction · low confidence": "सहेजा गया अनुमान · कम भरोसा",
   "Top prediction": "प्रमुख अनुमान",
-  "Alternative prediction": "दूसरा संभावित अनुमान"
+  "Alternative prediction": "दूसरा संभावित अनुमान",
+  "Crop mismatch": "फसल का चयन मेल नहीं खाता",
+  "Selected crop": "चुनी गई फसल",
+  "Model predicts": "मॉडल का अनुमान",
+  "Check the crop selection or retake a clear photo of one leaf.": "फसल का चयन जाँचें या एक पत्ती की साफ़ तस्वीर फिर से लें।",
+  "Change selected crop": "चुनी गई फसल बदलें"
 }
