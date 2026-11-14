@@ -107,3 +107,7 @@ Both apps check the evaluated artifact hash, receipt hash, frozen temperature/ga
 ## Leaf/object input head
 
 `crop_ml.nonleaf_data` prepares pinned object/animal negatives with class-group splits. `crop_ml.leaf_gate` fits a binary head against real leaf TRAIN features, freezes threshold on TUNE, and evaluates locked object TEST before exporting an isolated three-output graph. Requalify the new exact ONNX hash with `crop_ml.qualify`, then install the bound leaf-validation sidecar with `tools/sync_model_bundle.py`. See leaf_guard receipts for executed counts, ImageNet source limitations and positive-leaf recall. Photos remain external and are not packaged.
+
+## Additional verified field data
+
+See [KANDAHAR_DATA.md](KANDAHAR_DATA.md) for pinned acquisition, perceptual/family audits, licensing/provenance and exact Healthy-only mapping. Only448TRAINHealthymaize photos enter the current17-class head. Blight/Spot remainbroadauxiliary labels andneverbecomeexactdisease targets. VALID18 selectedthehead; lockedTEST14 wasopenedonceafterfreezing. Currentoutcomes are in reports/healthy_field_update.

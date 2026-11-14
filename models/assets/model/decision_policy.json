@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "model_version": "mnv3-large-leaf-guard-3332b5634fcb",
-  "model_sha256": "3332b5634fcb1a8bea17317a0a9db4d6e44f9c0da24e7b03718b3ced5d6b2d1e",
+  "model_sha256": "31b29158cc1fc1c07bdf3acc07cb6bb6da39eccb1050ffe6ed1d499811179fba",
+  "model_version": "mnv3-large-healthy-transfer-31b29158cc1f",
   "validated": false,
-  "temperature": 1.7641813209074506,
+  "temperature": 1.7617546849775814,
   "min_confidence": 0.75,
   "min_margin": 0.15,
   "thresholds_calibrated": false,
@@ -36,9 +36,9 @@
     "tomato_healthy"
   ],
   "temperature_fit": {
-    "temperature": 1.7641813209074506,
-    "nll_before": 0.5295707824395209,
-    "nll_after": 0.42888998564215164,
+    "temperature": 1.7617546849775814,
+    "nll_before": 0.5237457652691027,
+    "nll_after": 0.4246732787606619,
     "log_temperature_bounds": [
       -3.0,
       3.0
@@ -49,7 +49,7 @@
   "class_thresholds": {
     "maize_gray_leaf_spot": {
       "enabled": true,
-      "minimum_confidence": 0.7,
+      "minimum_confidence": 0.6,
       "minimum_margin": 0.4,
       "calibration_accepted": 33,
       "calibration_correct": 30,
@@ -60,23 +60,23 @@
       ],
       "calibration_truth_support": 40,
       "calibration_accepted_groups": 33,
-      "calibration_correct_distance_support": 35,
-      "max_embedding_distance": 1.2242784229179398,
+      "calibration_correct_distance_support": 34,
+      "max_embedding_distance": 1.2249404002653335,
       "embedding_distance_quantile": 0.995
     },
     "maize_common_rust": {
       "enabled": true,
-      "minimum_confidence": 0.5,
-      "minimum_margin": 0.15,
-      "calibration_accepted": 92,
+      "minimum_confidence": 0.75,
+      "minimum_margin": 0.5,
+      "calibration_accepted": 89,
       "calibration_correct": 86,
-      "calibration_precision": 0.9347826086956522,
+      "calibration_precision": 0.9662921348314607,
       "calibration_precision_wilson95": [
-        0.8649420387269413,
-        0.9697697966768659
+        0.9055263755943858,
+        0.9884707788482102
       ],
       "calibration_truth_support": 88,
-      "calibration_accepted_groups": 92,
+      "calibration_accepted_groups": 89,
       "calibration_correct_distance_support": 86,
       "max_embedding_distance": 1.2049741789438873,
       "embedding_distance_quantile": 0.995
@@ -100,19 +100,19 @@
     },
     "maize_healthy": {
       "enabled": true,
-      "minimum_confidence": 0.8,
-      "minimum_margin": 0.5,
-      "calibration_accepted": 67,
-      "calibration_correct": 67,
+      "minimum_confidence": 0.6,
+      "minimum_margin": 0.3,
+      "calibration_accepted": 69,
+      "calibration_correct": 69,
       "calibration_precision": 1.0,
       "calibration_precision_wilson95": [
-        0.9457738606086981,
-        0.9999999999999998
+        0.9472627418109483,
+        1.0
       ],
       "calibration_truth_support": 70,
-      "calibration_accepted_groups": 67,
-      "calibration_correct_distance_support": 67,
-      "max_embedding_distance": 1.0041483169444272,
+      "calibration_accepted_groups": 69,
+      "calibration_correct_distance_support": 69,
+      "max_embedding_distance": 1.063707125217516,
       "embedding_distance_quantile": 0.995
     },
     "potato_early_blight": {
@@ -136,12 +136,12 @@
       "enabled": true,
       "minimum_confidence": 0.85,
       "minimum_margin": 0.5,
-      "calibration_accepted": 63,
+      "calibration_accepted": 62,
       "calibration_correct": 57,
-      "calibration_precision": 0.9047619047619048,
+      "calibration_precision": 0.9193548387096774,
       "calibration_precision_wilson95": [
-        0.8073829893716311,
-        0.955616515723108
+        0.8247142865138739,
+        0.9650616530140073
       ],
       "calibration_truth_support": 70,
       "calibration_accepted_groups": 22,
@@ -152,7 +152,7 @@
     "potato_healthy": {
       "enabled": true,
       "minimum_confidence": 0.6,
-      "minimum_margin": 0.4,
+      "minimum_margin": 0.3,
       "calibration_accepted": 6,
       "calibration_correct": 6,
       "calibration_precision": 1.0,
@@ -170,15 +170,15 @@
       "enabled": true,
       "minimum_confidence": 0.5,
       "minimum_margin": 0.05,
-      "calibration_accepted": 132,
-      "calibration_correct": 121,
-      "calibration_precision": 0.9166666666666666,
+      "calibration_accepted": 134,
+      "calibration_correct": 122,
+      "calibration_precision": 0.9104477611940298,
       "calibration_precision_wilson95": [
-        0.8569354773667702,
-        0.9528320336343893
+        0.8499882232922155,
+        0.9480300285538373
       ],
       "calibration_truth_support": 143,
-      "calibration_accepted_groups": 45,
+      "calibration_accepted_groups": 46,
       "calibration_correct_distance_support": 126,
       "max_embedding_distance": 1.0343465687833029,
       "embedding_distance_quantile": 0.995
@@ -219,17 +219,17 @@
     },
     "tomato_leaf_mold": {
       "enabled": true,
-      "minimum_confidence": 0.85,
+      "minimum_confidence": 0.99,
       "minimum_margin": 0.5,
-      "calibration_accepted": 32,
-      "calibration_correct": 29,
-      "calibration_precision": 0.90625,
+      "calibration_accepted": 11,
+      "calibration_correct": 11,
+      "calibration_precision": 1.0,
       "calibration_precision_wilson95": [
-        0.7578184527161212,
-        0.9675984487016337
+        0.7411670330319684,
+        1.0
       ],
       "calibration_truth_support": 61,
-      "calibration_accepted_groups": 16,
+      "calibration_accepted_groups": 5,
       "calibration_correct_distance_support": 48,
       "max_embedding_distance": 1.0465413606268552,
       "embedding_distance_quantile": 0.995
@@ -238,17 +238,17 @@
       "enabled": true,
       "minimum_confidence": 0.6,
       "minimum_margin": 0.25,
-      "calibration_accepted": 84,
-      "calibration_correct": 76,
-      "calibration_precision": 0.9047619047619048,
+      "calibration_accepted": 85,
+      "calibration_correct": 77,
+      "calibration_precision": 0.9058823529411765,
       "calibration_precision_wilson95": [
-        0.8231736440500729,
-        0.9509482900904406
+        0.8251294803137523,
+        0.9515349387077823
       ],
       "calibration_truth_support": 118,
-      "calibration_accepted_groups": 62,
-      "calibration_correct_distance_support": 96,
-      "max_embedding_distance": 1.1157368609190281,
+      "calibration_accepted_groups": 63,
+      "calibration_correct_distance_support": 97,
+      "max_embedding_distance": 1.1155527791042315,
       "embedding_distance_quantile": 0.995
     },
     "tomato_spider_mites": {
@@ -271,24 +271,24 @@
     "tomato_target_spot": {
       "enabled": true,
       "minimum_confidence": 0.5,
-      "minimum_margin": 0.15,
-      "calibration_accepted": 66,
-      "calibration_correct": 64,
-      "calibration_precision": 0.9696969696969697,
+      "minimum_margin": 0.2,
+      "calibration_accepted": 67,
+      "calibration_correct": 65,
+      "calibration_precision": 0.9701492537313433,
       "calibration_precision_wilson95": [
-        0.8960747808829028,
-        0.9916500898013463
+        0.8975344443664799,
+        0.991775305161102
       ],
       "calibration_truth_support": 84,
-      "calibration_accepted_groups": 66,
-      "calibration_correct_distance_support": 71,
-      "max_embedding_distance": 0.7873387314684809,
+      "calibration_accepted_groups": 67,
+      "calibration_correct_distance_support": 72,
+      "max_embedding_distance": 0.7882918530360742,
       "embedding_distance_quantile": 0.995
     },
     "tomato_yellow_leaf_curl_virus": {
       "enabled": true,
       "minimum_confidence": 0.5,
-      "minimum_margin": 0.2,
+      "minimum_margin": 0.15,
       "calibration_accepted": 326,
       "calibration_correct": 325,
       "calibration_precision": 0.9969325153374233,
@@ -304,25 +304,25 @@
     },
     "tomato_mosaic_virus": {
       "enabled": true,
-      "minimum_confidence": 0.65,
-      "minimum_margin": 0.5,
-      "calibration_accepted": 25,
+      "minimum_confidence": 0.5,
+      "minimum_margin": 0.3,
+      "calibration_accepted": 26,
       "calibration_correct": 24,
-      "calibration_precision": 0.96,
+      "calibration_precision": 0.9230769230769231,
       "calibration_precision_wilson95": [
-        0.8045593626380625,
-        0.9929037664980127
+        0.7585844622837095,
+        0.9786449115277238
       ],
       "calibration_truth_support": 28,
-      "calibration_accepted_groups": 25,
-      "calibration_correct_distance_support": 24,
-      "max_embedding_distance": 0.9828163412675913,
+      "calibration_accepted_groups": 26,
+      "calibration_correct_distance_support": 25,
+      "max_embedding_distance": 1.1772465513566794,
       "embedding_distance_quantile": 0.995
     },
     "tomato_healthy": {
       "enabled": true,
       "minimum_confidence": 0.5,
-      "minimum_margin": 0.1,
+      "minimum_margin": 0.15,
       "calibration_accepted": 81,
       "calibration_correct": 81,
       "calibration_precision": 1.0,
@@ -376,10 +376,10 @@
     "limitation": "Source feature-distance heuristic only. No measured unknown-plant or field-photo rejection guarantee.",
     "correct_distance_support_by_domain": {
       "plantvillage": {
-        "maize_gray_leaf_spot": 29,
+        "maize_gray_leaf_spot": 28,
         "maize_common_rust": 72,
         "maize_northern_leaf_blight": 54,
-        "maize_healthy": 67,
+        "maize_healthy": 69,
         "potato_early_blight": 47,
         "potato_late_blight": 56,
         "potato_healthy": 8,
@@ -387,9 +387,9 @@
         "tomato_early_blight": 34,
         "tomato_late_blight": 89,
         "tomato_leaf_mold": 41,
-        "tomato_septoria_leaf_spot": 87,
+        "tomato_septoria_leaf_spot": 88,
         "tomato_spider_mites": 95,
-        "tomato_target_spot": 71,
+        "tomato_target_spot": 72,
         "tomato_yellow_leaf_curl_virus": 326,
         "tomato_mosaic_virus": 22,
         "tomato_healthy": 82
@@ -410,16 +410,16 @@
         "tomato_spider_mites": 0,
         "tomato_target_spot": 0,
         "tomato_yellow_leaf_curl_virus": 0,
-        "tomato_mosaic_virus": 2,
+        "tomato_mosaic_virus": 3,
         "tomato_healthy": 0
       }
     }
   },
   "source_acceptance_qualified": true,
   "embedding_centroids_file": "embedding_centroids.json",
-  "embedding_centroids_sha256": "89d76493ca189ea491f6416e653a5ff990b0fb86dbde4461c90826db1ff483ff",
+  "embedding_centroids_sha256": "6c867113b085dcbb9d2ed86654778b9031ba82c333b419e35e8d53e68194e246",
   "calibration_source_acceptance_enabled": true,
   "source_evaluation_file": "source_evaluation.json",
-  "source_evaluation_sha256": "b8e6adc5aee5626a26ea6d3d3488fbc727148db74440e31c0b2fa5617b869fbf",
+  "source_evaluation_sha256": "406047f01d8826684160bc8dcab35e4f2cefb9261eef937155669bf4b8f8b4a3",
   "note": "Source-tested prototype only; field diagnosis and chemical prescriptions remain unvalidated."
 }

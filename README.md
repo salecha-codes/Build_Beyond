@@ -6,7 +6,7 @@ Android application and interactive browser preview for **PS 4.1**, built for Te
 
 **Team Debuggers · Team 8 · Problem Statement 4.1**
 
-Current prototype: **v0.4.1**, with an offline MobileNetV3-Large disease model and a leaf/object check. It supports tomato, potato and maize, English/Kannada/Hindi audio, symptom questions, general precautions and local history.
+Current prototype: **v0.4.2**, with an offline MobileNetV3-Large disease model and a leaf/object check. It supports tomato, potato and maize, English/Kannada/Hindi audio, symptom questions, general precautions and local history.
 
 [Open the browser demo](https://salecha-codes.github.io/Build_Beyond/) · [Review 2 implementation and checks](docs/REVIEW2_SUBMISSION.md)
 
@@ -94,13 +94,13 @@ We used the RGB subset of the [PlantVillage dataset](https://github.com/spMohant
 | Tomato | Mosaic virus | 373 |
 | Tomato | Healthy | 1,591 |
 
-Removing 14 exact duplicates left **24,150 unique source images**, partitioned into 16,856 TRAIN, 2,228 TUNE, 1,392 calibration and 3,674 TEST images. The current V3 disease head used a capped subset of **6,324 PlantVillage TRAIN images plus 632 PlantDoc field TRAIN images**. Additional PlantDoc tuning/calibration/test photos and a separate leaf/object dataset support evaluation and input screening. See the [dataset audit](docs/DATASET_AUDIT.md), [training receipts](ml/reports/field_upgrade_v3/) and [leaf-check receipts](ml/reports/leaf_guard/) for the exact experiment scope.
+Removing 14 exact duplicates left **24,150 unique source images**, partitioned into 16,856 TRAIN, 2,228 TUNE, 1,392 calibration and 3,674 TEST images. The current V3 disease head used a capped subset of **6,324 PlantVillage TRAIN images, 632 PlantDoc field TRAIN images and 448 additional maize Healthy field TRAIN images**. Additional PlantDoc tuning/calibration/test photos and a separate leaf/object dataset support evaluation and input screening. See the [dataset audit](docs/DATASET_AUDIT.md), [training receipts](ml/reports/field_upgrade_v3/) and [leaf-check receipts](ml/reports/leaf_guard/) for the exact experiment scope.
 
 ## Leaf input check
 
 The model first checks whether the photo looks like a leaf. Rejected object photos return a retake request with **no disease name or score**. The leaf head shares the same offline backbone and adds about 15 KB.
 
-A frozen threshold rejected 125/125 held-out object/animal test photos, including computer mouse, hamster, cat, laptop and monitor. It retained 76/80 field leaf photos and all 31 correctly classified field cases, preserving 38.75% end-to-end field accuracy on the reused benchmark. Source end-to-end accuracy after leaf rejection is 91.94%. These are sample measurements, not universal guarantees; other plant leaves may still pass. See [leaf-check receipts](ml/reports/leaf_guard/) for data/protocols and limitations. Test photos are not bundled in the app.
+A frozen threshold rejected 125/125 held-out object/animal test photos, including computer mouse, hamster, cat, laptop and monitor. It retained 76/80 field leaf photos and all 31 correctly classified field cases, preserving 38.75% end-to-end field accuracy on the reused benchmark. Source end-to-end accuracy after leaf rejection is 92.11%. These are sample measurements, not universal guarantees; other plant leaves may still pass. See [leaf-check receipts](ml/reports/leaf_guard/) for data/protocols and limitations. Test photos are not bundled in the app.
 
 ## Model status
 
@@ -110,16 +110,20 @@ The following table measures the disease classifier before the separate leaf che
 
 | Same frozen comparison | Images | V4 accuracy | Current V3 accuracy |
 |---|---:|---:|---:|
-| PlantVillage source | 3,674 | 94.67% | 92.11% |
+| PlantVillage source | 3,674 | 94.67% | 92.27% |
 | PlantDoc field-like | 80 | 22.50% | 38.75% |
 
 Field recognition improves by 16.25 percentage points (18 → 31 correct out of 80). **Field accuracy is still limited.** This 80-photo set was already used for V4; it is a reused comparison benchmark, not newly blind independent data. Source accuracy must not be presented as field accuracy. External labels are mostly unreviewed.
 
-Classifier-only accepted precision on source images is 96.47% at 87.02% coverage. Field accepted precision is 50.00% at 47.50% coverage. Field validation and condition-specific advice remain false. Both apps show the actual predicted condition, with low-confidence or crop-mismatch labels when applicable; numeric gates and global 17-class score semantics remain intact.
+Classifier-only accepted precision on source images is 96.72% at 85.44% coverage. Field accepted precision is 52.63% at 47.50% coverage. Field validation and condition-specific advice remain false. Both apps show the actual predicted condition, with low-confidence or crop-mismatch labels when applicable; numeric gates and global 17-class score semantics remain intact.
 
-SHA-256: `3332b5634fcb1a8bea17317a0a9db4d6e44f9c0da24e7b03718b3ced5d6b2d1e`.
+SHA-256: `31b29158cc1fc1c07bdf3acc07cb6bb6da39eccb1050ffe6ed1d499811179fba`.
 
 See [current training/evaluation receipts](ml/reports/field_upgrade_v3/) and [model card](models/assets/model/MODEL_CARD.md). Earlier V4 reports remain historical.
+
+## Latest targeted field-data update
+
+The latest head adds 448 audited maize Healthy field photos. The existing 80-photo disease benchmark remains 31/80 (38.75%). On a separate, small 14-photo healthy-maize test, the old model made zero correct visible predictions and the updated model made one provisional correct prediction; neither produced a strict accepted Healthy result. This is a small targeted gain, not a broad accuracy breakthrough. The leaf/object check is preserved. See [exact comparison and provenance](ml/reports/healthy_field_update/) and [dataset tooling](ml/KANDAHAR_DATA.md). Broad new Blight/Spot labels were excluded from the 17-class disease training.
 
 ## Build and try it
 
@@ -142,7 +146,7 @@ The current shipped model remains the leaf-guarded V3 model. Further neural-head
 - [Current Review 2 implementation and checks](docs/REVIEW2_SUBMISSION.md)
 - [Earlier device evidence](docs/REVIEW2_VALIDATION.md)
 - [Current architecture and tools](docs/ARCHITECTURE.md)
-- [Current model receipts](ml/reports/field_upgrade_v3/)
+- [Current model receipts](ml/reports/healthy_field_update/)
 - [Offline content and audio generation](content/README.md)
 - [ML acquisition, training, and export](ml/README.md)
 - [Product scope](docs/PRODUCT_SCOPE.md)

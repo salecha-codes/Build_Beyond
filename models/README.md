@@ -2,7 +2,7 @@
 
 `assets/model/` is the canonical bundle used by both the Android app and the browser prototype. Android adds `models/assets` as an assets source directory, preserving runtime paths such as `model/crop_model.onnx`. The web build serves the same files at `<BASE_URL>assets/model/`. Do not keep a second model copy in either application source tree.
 
-The selected release uses **MobileNetV3-Large**, initialized with official torchvision ImageNet weights, with a trained 17-class linear head. TRAIN-fitted feature standardization is embedded in the graph. The model still outputs 17 disease logits, 960 pooled features and one leaf-check logit from 224×224 RGB images. It replaces the from-scratch V4 prototype because field benchmark accuracy improved 22.5% → 38.75%; source classifier accuracy is 92.11%. Read [metadata](assets/model/model_metadata.json), [the model card](assets/model/MODEL_CARD.md), and [current receipts](../ml/reports/field_upgrade_v3/). The field benchmark was reused from the V4 comparison and remains small.
+The selected release uses **MobileNetV3-Large**, initialized with official torchvision ImageNet weights, with a trained 17-class linear head. TRAIN-fitted feature standardization is embedded in the graph. The model still outputs 17 disease logits, 960 pooled features and one leaf-check logit from 224×224 RGB images. It replaces the from-scratch V4 prototype because field benchmark accuracy improved 22.5% → 38.75%; source classifier accuracy is 92.27%. Read [metadata](assets/model/model_metadata.json), [the model card](assets/model/MODEL_CARD.md), and [current receipts](../ml/reports/field_upgrade_v3/). The field benchmark was reused from the V4 comparison and remains small.
 
 `source_evaluation.json` records the exact model's frozen-calibration policy and independent source-test outcome; `embedding_centroids.json` contains normalized training-only class features. Both applications verify those sidecars' SHA, model/version binding and frozen per-class thresholds before allowing a source-tested likely condition or healthy-looking result. Low score, ambiguity, disabled classes and excessive feature distance remain uncertain. All scores are normalized globally over 17 classes before the selected crop is checked.
 
@@ -21,3 +21,5 @@ The browser uses `createImageBitmap` to apply EXIF orientation once and caps wor
 ## Leaf validation sidecar
 
 The current graph adds leaf_logit[1,1]. metadata.leaf_gate names its frozen probability threshold and hash-bound leaf_validation.json receipt. Both clients validate that receipt before enabling the gate; a negative input produces no disease candidates. Read ml/reports/leaf_guard for negative testing and source/field leaf-recall impact.
+
+The current head includes448additional Healthy maize field TRAIN photos; disease benchmark38.75% isunchanged andnewHealthyTEST14 showsoneprovisionalcorrectversuszero. Currentexactreceipts are in ml/reports/healthy_field_update.

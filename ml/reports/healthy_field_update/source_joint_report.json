@@ -1,0 +1,9 @@
+{
+  "model_sha256": "31b29158cc1fc1c07bdf3acc07cb6bb6da39eccb1050ffe6ed1d499811179fba",
+  "source_samples": 3674,
+  "source_leaf_pass": 3668,
+  "source_raw_correct": 3390,
+  "source_joint_correct": 3384,
+  "source_joint_accuracy": 0.9210669569951007,
+  "method": "frozen actual ORT embedding/logit cache with unchanged leaf-head coefficients; no retuning"
+}

@@ -225,6 +225,52 @@ def _field_rows(directory, receipt, role):
     return read_jsonl(directory/receipt['files'][role]['file'])
 
 
+def _extra_healthy_train(manifest: Path, training_receipt: dict, protocol: dict,
+                         field_protocol: dict | None, field_protocol_dir: Path | None):
+    """Bind optional Kandahar Healthy TRAIN rows, never its VALID/locked TEST."""
+    if field_protocol is None or field_protocol_dir is None:
+        raise ValueError('Extra healthy TRAIN requires the original field protocol')
+    source_receipt_path = manifest.parent/'receipt.json'
+    source_receipt_sha = sha256(source_receipt_path)
+    source_receipt = json.loads(source_receipt_path.read_text())
+    train_sha = sha256(manifest)
+    if not source_receipt.get('training_ready') or source_receipt.get('manifest_sha256', {}).get('train') != train_sha:
+        raise ValueError('Extra healthy TRAIN differs from its public-source acquisition receipt')
+    if training_receipt.get('extra_train_manifest_sha256') != train_sha or \
+            training_receipt.get('extra_train_source_receipt_sha256') != source_receipt_sha:
+        raise ValueError('Selected model is not bound to the exact extra TRAIN manifest and source receipt')
+    rows = read_jsonl(manifest)
+    if len(rows) != source_receipt['counts']['train'] or len(rows) != training_receipt.get('new_healthy_train_files'):
+        raise ValueError('Extra healthy TRAIN count differs from model provenance')
+    if source_receipt.get('label_mapping', {}).get('Healthy') != \
+            {'crop_id': 'maize', 'label_id': 'maize_healthy', 'label_index': 3}:
+        raise ValueError('Only the audited maize Healthy mapping is eligible')
+    for row in rows:
+        if row.get('label_id') != 'maize_healthy' or row.get('label_index') != 3 or \
+                row.get('crop_id') != 'maize' or row.get('partition') != 'train' or \
+                row.get('source_commit') != source_receipt['source_commit'] or \
+                sha256(Path(row['local_path'])) != row['sha256']:
+            raise ValueError('Extra healthy TRAIN image, mapping or provenance differs')
+    other_partitions = [read_jsonl(Path(protocol['source_split_manifest']))]
+    other_partitions.extend(read_jsonl(field_protocol_dir/field_protocol['files'][role]['file'])
+                            for role in ['train', 'tune', 'calibration', 'external_test_locked'])
+    for role in ['valid', 'test_locked']:
+        path = manifest.parent/f'{role}.jsonl'
+        if sha256(path) != source_receipt['manifest_sha256'][role]:
+            raise ValueError(f'Extra healthy {role} manifest changed')
+        other_partitions.append(read_jsonl(path))
+    used_hashes = {row['sha256'] for partition in other_partitions for row in partition}
+    used_groups = {row['group_id'] for partition in other_partitions for row in partition}
+    extra_hashes, extra_groups = {row['sha256'] for row in rows}, {row['group_id'] for row in rows}
+    if len(extra_hashes) != len(rows) or extra_hashes & used_hashes or extra_groups & used_groups:
+        raise ValueError('Extra healthy TRAIN overlaps another partition or contains exact copies')
+    return rows, {'manifest_sha256': train_sha, 'source_receipt_sha256': source_receipt_sha,
+                  'source_commit': source_receipt['source_commit'], 'files': len(rows),
+                  'label_id': 'maize_healthy', 'license': source_receipt['license'],
+                  'valid_manifest_sha256': source_receipt['manifest_sha256']['valid'],
+                  'locked_test_manifest_sha256': source_receipt['manifest_sha256']['test_locked']}
+
+
 def _infer_rows(bundle: Path, rows: list[dict], threads: int, role: str):
     """Only invoked by an explicit fit/finalize command, never at import time."""
     import onnxruntime as ort
@@ -264,7 +310,8 @@ def _save_predictions(path: Path, rows, logits, embeddings):
 
 
 def fit_bundle(bundle: Path, protocol_dir: Path, work_dir: Path, threads=3, *,
-               field_protocol_dir: Path | None = None, include_field_train=False) -> dict:
+               field_protocol_dir: Path | None = None, include_field_train=False,
+               extra_train_manifest: Path | None = None) -> dict:
     metadata, label_contract = _load_bundle(bundle)
     protocol, protocol_hash = _protocol(protocol_dir)
     field_protocol, field_hash = _field_protocol(field_protocol_dir)
@@ -276,6 +323,12 @@ def fit_bundle(bundle: Path, protocol_dir: Path, work_dir: Path, threads=3, *,
         raise ValueError('Field train centroid inclusion must match selected model training provenance')
     if include_field_train and training_receipt.get('field_train_manifest_sha256') != field_protocol['files']['train']['sha256']:
         raise ValueError('Selected model used a different field training manifest')
+    if bool(training_receipt.get('extra_train_manifest_sha256')) != bool(extra_train_manifest):
+        raise ValueError('Extra TRAIN inclusion must match selected-model provenance')
+    extra_rows, extra_provenance = ([], None)
+    if extra_train_manifest is not None:
+        extra_rows, extra_provenance = _extra_healthy_train(extra_train_manifest, training_receipt,
+                                                           protocol, field_protocol, field_protocol_dir)
     work_dir.mkdir(parents=True, exist_ok=True)
     if (work_dir/'fit_started.json').exists():
         raise FileExistsError('Fit already started in this directory; do not silently repeat CAL selection')
@@ -283,17 +336,27 @@ def fit_bundle(bundle: Path, protocol_dir: Path, work_dir: Path, threads=3, *,
                 'protocol_sha256': protocol_hash, 'predeclared_source_test_criteria': CRITERIA,
                 'field_protocol_sha256': field_hash, 'field_training_used': bool(include_field_train),
                 'field_train_manifest_sha256': field_protocol['files']['train']['sha256'] if include_field_train else None,
+                'extra_train_provenance': extra_provenance,
                 'distance_quantile': DISTANCE_QUANTILE, 'started_at': _utc()}
     _exclusive_json(work_dir/'fit_started.json', identity)
     train = [r for r in read_jsonl(Path(protocol['source_split_manifest'])) if r['split'] == 'train']
     calibration = read_jsonl(Path(protocol['files']['calibration']['path']))
     assert len(train) == protocol['source_counts']['train']
     source_train_count, source_cal_count = len(train), len(calibration)
+    plantdoc_train_count = 0
     if field_protocol is not None:
         field_calibration = _field_rows(field_protocol_dir, field_protocol, 'calibration')
         if include_field_train:
-            train += _field_rows(field_protocol_dir, field_protocol, 'train')
+            field_train = _field_rows(field_protocol_dir, field_protocol, 'train')
+            plantdoc_train_count = len(field_train)
+            train += field_train
         calibration += field_calibration
+    train += extra_rows
+    if extra_rows and training_receipt.get('field_training_files') != plantdoc_train_count + len(extra_rows):
+        raise ValueError('Mixed-domain training receipt does not count both field TRAIN sources')
+    train_domain_counts = {'plantvillage': source_train_count, 'plantdoc_field_like': plantdoc_train_count}
+    if extra_rows:
+        train_domain_counts['kandahar_healthy'] = len(extra_rows)
     # Exact hashes are also checked across datasets; namespaced group IDs alone
     # would not detect an identical PlantVillage image in a second source.
     assert {r['sha256'] for r in train}.isdisjoint(r['sha256'] for r in calibration)
@@ -305,8 +368,9 @@ def fit_bundle(bundle: Path, protocol_dir: Path, work_dir: Path, threads=3, *,
     centroids = fit_train_centroids(train_features, np.array([r['label_index'] for r in train]), names)
     centroids.update(model_version=metadata['model_version'], model_sha256=metadata['model_sha256'],
                      scope='source_domain_only', source_split_sha256=protocol['source_split_sha256'],
-                     train_domain_counts={'plantvillage': source_train_count, 'plantdoc_field_like': len(train)-source_train_count},
-                     field_train_manifest_sha256=identity['field_train_manifest_sha256'])
+                     train_domain_counts=train_domain_counts,
+                     field_train_manifest_sha256=identity['field_train_manifest_sha256'],
+                     extra_train_provenance=extra_provenance)
     write_json(work_dir/'embedding_centroids.json', centroids)
     del train_logits, train_features
     cal_logits, cal_features, cal_timing = _infer_rows(bundle, calibration, threads, 'calibration')
@@ -334,7 +398,7 @@ def fit_bundle(bundle: Path, protocol_dir: Path, work_dir: Path, threads=3, *,
     write_json(work_dir/'candidate_policy.json', policy)
     _save_predictions(work_dir/'calibration_predictions.npz', calibration, cal_logits, cal_features)
     receipt = {**identity, 'completed_at': _utc(), 'fit_partitions': {'train': len(train), 'calibration': len(calibration)},
-               'fit_domain_counts': {'train': {'plantvillage': source_train_count, 'plantdoc_field_like': len(train)-source_train_count},
+               'fit_domain_counts': {'train': train_domain_counts,
                                      'calibration': {'plantvillage': source_cal_count, 'plantdoc_field_like': len(calibration)-source_cal_count}},
                'combined_calibration_manifest_sha256': combined_cal_hash,
                'candidate_policy_sha256': sha256(work_dir/'candidate_policy.json'),
@@ -463,15 +527,18 @@ def main(argv=None):
                         help='Optional frozen PlantDoc partitions: append CAL and report locked external test separately')
     parser.add_argument('--include-field-train', action='store_true',
                         help='Fit phase only; append field TRAIN centroids when the selected training receipt proves mixed training')
+    parser.add_argument('--extra-train-manifest', type=Path,
+                        help='Fit phase only: audited Kandahar Healthy TRAIN images bound to selected model receipt')
     args = parser.parse_args(argv)
     if args.threads < 1:
         parser.error('--threads must be positive')
     if args.phase == 'fit':
         result = fit_bundle(args.bundle, args.protocol, args.work_dir, args.threads,
-                            field_protocol_dir=args.field_protocol, include_field_train=args.include_field_train)
+                            field_protocol_dir=args.field_protocol, include_field_train=args.include_field_train,
+                            extra_train_manifest=args.extra_train_manifest)
     else:
-        if args.include_field_train:
-            parser.error('--include-field-train applies only to fit; finalize uses frozen fit provenance')
+        if args.include_field_train or args.extra_train_manifest:
+            parser.error('TRAIN inclusion flags apply only to fit; finalize uses frozen fit provenance')
         result = finalize_bundle(args.bundle, args.protocol, args.work_dir, args.threads,
                                  field_protocol_dir=args.field_protocol)
     print(json.dumps({'phase': args.phase, 'model_sha256': result['model_sha256'],

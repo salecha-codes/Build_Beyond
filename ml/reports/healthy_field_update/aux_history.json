@@ -1,0 +1,65 @@
+{
+  "history": [
+    {
+      "epoch": 1,
+      "source": {
+        "accuracy": 0.9066427289048474,
+        "macro_f1": 0.8864292789413288
+      },
+      "field": {
+        "accuracy": 0.4927536231884058,
+        "macro_f1": 0.5131675562289373
+      },
+      "aux_valid": {
+        "accuracy": 0.7540983606557377,
+        "macro_f1": 0.7589416659184102
+      },
+      "eligible": false,
+      "mean_main_loss": 0.5556316576401392,
+      "mean_aux_loss": 0.7076334198315938,
+      "elapsed_seconds": 10.463188431000162,
+      "leaf_path_tensors_identical": true
+    },
+    {
+      "epoch": 2,
+      "source": {
+        "accuracy": 0.9115798922800719,
+        "macro_f1": 0.8964662524706685
+      },
+      "field": {
+        "accuracy": 0.47101449275362317,
+        "macro_f1": 0.48402419528605484
+      },
+      "aux_valid": {
+        "accuracy": 0.8524590163934426,
+        "macro_f1": 0.8520640116384798
+      },
+      "eligible": false,
+      "mean_main_loss": 0.47090791006882987,
+      "mean_aux_loss": 0.4171854477127393,
+      "elapsed_seconds": 21.0149704400028,
+      "leaf_path_tensors_identical": true
+    },
+    {
+      "epoch": 3,
+      "source": {
+        "accuracy": 0.9048473967684022,
+        "macro_f1": 0.8926462774221792
+      },
+      "field": {
+        "accuracy": 0.47101449275362317,
+        "macro_f1": 0.4808003824132857
+      },
+      "aux_valid": {
+        "accuracy": 0.8360655737704918,
+        "macro_f1": 0.8332245532245532
+      },
+      "eligible": false,
+      "mean_main_loss": 0.4307204733292262,
+      "mean_aux_loss": 0.28344723165035246,
+      "elapsed_seconds": 31.51794427200366,
+      "leaf_path_tensors_identical": true
+    }
+  ],
+  "best_key": null
+}

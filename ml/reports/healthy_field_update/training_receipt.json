@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "model_sha256": "31b29158cc1fc1c07bdf3acc07cb6bb6da39eccb1050ffe6ed1d499811179fba",
+  "model_version": "mnv3-large-healthy-transfer-31b29158cc1f",
+  "head_checkpoint_sha256": "4399e7310b72f7284f6aeb8e4cdcafc35522e2f2ea239f68b49b0ab10772324a",
+  "best_checkpoint_sha256": "4399e7310b72f7284f6aeb8e4cdcafc35522e2f2ea239f68b49b0ab10772324a",
+  "pretrained_weights_sha256": "5c1a416349c4cf298f2a6a5e2600ed0ee55e604713578f5e74e6bc8bcaef7997",
+  "leaf_head_sha256": "e6101b13682242c24af901f69822f3f93f2336b466d75da77a163c374616d7a6",
+  "training_mode": "frozen_V3_healthy_only_field_head_transfer",
+  "training_protocol_sha256": "e54aa077a20f15fe6591c7a996917d0a38e7e6634eb6e7bfa796ce58cd214515",
+  "source_tune_accuracy": 0.9272890484739676,
+  "source_tune_macro_f1": 0.9207263652580262,
+  "field_tune_accuracy": 0.5144927536231884,
+  "field_tune_supported_macro_f1": 0.5311653041575506,
+  "new_healthy_train_files": 448,
+  "new_healthy_valid_correct": 5,
+  "new_healthy_valid_files": 18,
+  "source_training_files": 6324,
+  "field_training_files": 1080,
+  "field_training_used": true,
+  "diagnosis_validated": false,
+  "calibration_evaluated": false,
+  "held_out_test_executed": false,
+  "backbone_and_leaf_head_unchanged": true,
+  "runtime_parity": [
+    {
+      "input": "zero",
+      "leaf_output_max_error_vs_current": 0.0,
+      "embedding_max_error_vs_current": 0.0
+    },
+    {
+      "input": "random",
+      "leaf_output_max_error_vs_current": 0.0,
+      "embedding_max_error_vs_current": 0.0
+    },
+    {
+      "input": "train_healthy_leaf",
+      "leaf_output_max_error_vs_current": 0.0,
+      "embedding_max_error_vs_current": 0.0
+    },
+    {
+      "input": "train_object",
+      "leaf_output_max_error_vs_current": 0.0,
+      "embedding_max_error_vs_current": 0.0
+    }
+  ],
+  "field_train_manifest_sha256": "f171b4018ef86f828ec7d9c1be973e1079ea430fec5c9edcd47bac0fb841712a",
+  "extra_train_manifest_sha256": "0ea1875115236ce58de6d159d95db00699491e77502f3a4611e68222ed2211db",
+  "extra_train_manifest_path": "/workspace/research/field_data_next/kandahar_healthy/train.jsonl",
+  "extra_train_receipt_sha256": "a05ddec30a32972b345f21827c291eb3005582724cf21cae8742d5e3ccdb46b9",
+  "original_plantdoc_training_files": 632,
+  "extra_healthy_training_files": 448,
+  "extra_train_source_receipt_sha256": "a05ddec30a32972b345f21827c291eb3005582724cf21cae8742d5e3ccdb46b9"
+}

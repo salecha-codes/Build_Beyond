@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "training_ready": true,
+  "usage_protocol": "Healthy-compatible main17way supervision only; sourceBlight andSpot remain auxiliary-only/unmapped",
+  "source_repository": "https://github.com/RafiullahRafi/MaizeLeafDisease-Kandahar-FieldData-DeepLearningModels",
+  "source_commit": "33d0e081240535f6d70cca99b343517dc75e92eb",
+  "source_archive_sha256": "69b4e2d7cb31d7098a61cbad699fc57403242b5ef9d0a5c1bce300ad7aa5162f",
+  "source_aux_receipt_sha256": "949d864c1facf88d70cc2d1e40fc3bcd77b79064ba1e003424ff5880deeb2331",
+  "source_aux_receipt": "/workspace/research/field_data_next/kandahar_aux/receipt.json",
+  "counts": {
+    "train": 448,
+    "valid": 18,
+    "test_locked": 14
+  },
+  "manifest_sha256": {
+    "train": "0ea1875115236ce58de6d159d95db00699491e77502f3a4611e68222ed2211db",
+    "valid": "25931d8ddbe31638ce04b42dc0b16082330b80479bf4c7fa24994fd7fa5c1220",
+    "test_locked": "6c43e91ad9f0d81f789427c16e3c348886cd9fd018ce2e5212e1ca173ea2793f"
+  },
+  "label_mapping": {
+    "Healthy": {
+      "crop_id": "maize",
+      "label_id": "maize_healthy",
+      "label_index": 3
+    }
+  },
+  "old_main_train_tune_disjointness": {
+    "rows_checked": 19854,
+    "sha256_overlap": 0,
+    "group_id_overlap": 0,
+    "new_train_valid_and_locked_test_group_overlap": 0
+  },
+  "perceptual_audit_inherited": {
+    "near_threshold_hamming": 4,
+    "hash": "Pillow grayscale Lanczos9x8 dhash64, all8dihedral transforms of candidate vs original prior",
+    "prior_rows": 5834,
+    "prior_domains": "all PlantVillage maize and all PlantDoc partitions",
+    "new_near_prior_rows": 2,
+    "new_near_pairs": 344,
+    "cross_published_split_components": 29,
+    "capture_temporal_grouping_seconds": 3,
+    "cross_split_remaining_groups": 0,
+    "prior_CAL_and_TEST_used_only_for_duplicate_exclusion": true
+  },
+  "no_new_image_pixels_decoded_for_this_filter": true,
+  "no_model_outputs_used_for_selection": true,
+  "test_status": "original publishedtest subset preserved, never inferred; no pixels accessed by this filter",
+  "license": "GPL-3.0 repository-wide as published; image-specific terms not separately documented",
+  "provenance_limits": [
+    "Healthy is dataset-provided, not independently expert-confirmed.",
+    "Maize crop is explicitly stated by the collection.",
+    "No exact disease category inferred for Blight or Spot; those rows are absent.",
+    "Temporal/perceptual grouping does not prove farm-level independence.",
+    "All new images remain external experimental data; no images distributed in app."
+  ],
+  "permitted_use": {
+    "train": "Optional Healthy-only main-head supervision",
+    "valid": "Predeclared candidate selection and compatible-label health performance, not full disease benchmark",
+    "test_locked": "Only after candidate frozen; very small14-image healthy-only assessment, not disease accuracy claim"
+  }
+}

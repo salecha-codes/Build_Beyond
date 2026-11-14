@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "source_commit": "33d0e081240535f6d70cca99b343517dc75e92eb",
+  "source_receipt_sha256": "a05ddec30a32972b345f21827c291eb3005582724cf21cae8742d5e3ccdb46b9",
+  "healthy_test_manifest_sha256": "6c43e91ad9f0d81f789427c16e3c348886cd9fd018ce2e5212e1ca173ea2793f",
+  "control": {
+    "model_sha256": "3332b5634fcb1a8bea17317a0a9db4d6e44f9c0da24e7b03718b3ced5d6b2d1e",
+    "model_version": "mnv3-large-leaf-guard-3332b5634fcb",
+    "samples": 14,
+    "top_maize_healthy": 0,
+    "leaf_pass": 13,
+    "correct_and_leaf_pass": 0,
+    "visible_correct_and_leaf_pass": 0,
+    "visible_correct_and_leaf_pass_rate": 0.0,
+    "visible_correct_wilson95": [
+      1.3877787807814457e-17,
+      0.2153108027376358
+    ],
+    "strict_healthy_accepted": 0,
+    "unfamiliar_healthy_prediction": 0,
+    "healthy_class_enabled": true,
+    "candidate_score_range": null,
+    "distance_range_for_correct_predictions": null,
+    "scope": "Visible correct means the healthy top class, leaf pass, enabled class, and familiar distance; low score or margin may still show only a provisional candidate. Photo quality/blur gates and manual user crop choice are outside this graph-level count."
+  },
+  "candidate": {
+    "model_sha256": "31b29158cc1fc1c07bdf3acc07cb6bb6da39eccb1050ffe6ed1d499811179fba",
+    "model_version": "mnv3-large-healthy-transfer-31b29158cc1f",
+    "samples": 14,
+    "top_maize_healthy": 1,
+    "leaf_pass": 13,
+    "correct_and_leaf_pass": 1,
+    "visible_correct_and_leaf_pass": 1,
+    "visible_correct_and_leaf_pass_rate": 0.07142857142857142,
+    "visible_correct_wilson95": [
+      0.012722215247890939,
+      0.31468704424151117
+    ],
+    "strict_healthy_accepted": 0,
+    "unfamiliar_healthy_prediction": 0,
+    "healthy_class_enabled": true,
+    "candidate_score_range": [
+      0.2883353975326875,
+      0.2883353975326875
+    ],
+    "distance_range_for_correct_predictions": [
+      0.8676339489319375,
+      0.8676339489319375
+    ],
+    "scope": "Visible correct means the healthy top class, leaf pass, enabled class, and familiar distance; low score or margin may still show only a provisional candidate. Photo quality/blur gates and manual user crop choice are outside this graph-level count."
+  },
+  "visible_correct_gain": 1,
+  "passes_predeclared_healthy_visibility_improvement": true,
+  "field_diagnosis_validated": false,
+  "limitations": [
+    "Fourteen Healthy-only field photos are too few for disease accuracy claims.",
+    "The dataset-provided Healthy label has not been independently expert reviewed.",
+    "The older PlantDoc external benchmark was reused for non-regression and is not a fresh blind field test."
+  ]
+}

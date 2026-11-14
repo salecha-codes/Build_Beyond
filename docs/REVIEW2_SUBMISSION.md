@@ -10,9 +10,9 @@ Native Android (Kotlin/Compose) and browser preview (React/TypeScript), using th
 
 ## Current model
 
-MobileNetV3-Large with official ImageNet-pretrained features, a trained 17-class disease head and a separate small leaf/object head. Current graph SHA: `3332b5634fcb1a8bea17317a0a9db4d6e44f9c0da24e7b03718b3ced5d6b2d1e`. The app truthfully reports V3 after switching from V4 following measured comparisons.
+MobileNetV3-Large with official ImageNet-pretrained features, a trained 17-class disease head and a separate small leaf/object head. Current graph SHA: `31b29158cc1fc1c07bdf3acc07cb6bb6da39eccb1050ffe6ed1d499811179fba`. The app truthfully reports V3 after switching from V4 following measured comparisons.
 
-Disease-classifier accuracy: 92.11% on 3,674 PlantVillage source photos and 38.75% on the reused 80-photo PlantDoc field comparison. Including leaf rejection, source accuracy is 91.94%; all 31 correct field predictions pass, so field accuracy remains 38.75%. Field recognition remains limited. It is a prototype, with no field-diagnosis or chemical-treatment validation. The symptom questionnaire measures reported concern, not image-based severity.
+Disease-classifier accuracy: 92.27% on 3,674 PlantVillage source photos and 38.75% on the reused 80-photo PlantDoc field comparison. Including leaf rejection, source accuracy is 92.11%; all 31 correct field predictions pass, so field accuracy remains 38.75%. Field recognition remains limited. It is a prototype, with no field-diagnosis or chemical-treatment validation. The symptom questionnaire measures reported concern, not image-based severity.
 
 The leaf check rejected 125/125 held-out object/animal sample photos, including mouse, cat, hamster, laptop and monitor. Both actual browser and Android tests confirmed mouse rejection with no disease result. These are sample measurements, not a guarantee for every unseen image or plant species. Source/test/group and licensing limitations are documented in the bound model receipts.
 
@@ -41,3 +41,7 @@ Android: JDK 17 and Android SDK 35; configure the SDK path, then `./gradlew :app
 - Android debug/test APK builds and TypeScript/Vite production build passed.
 
 Physical ARM-phone RAM/latency and native-speaker language review remain pending. Current model metrics, training data/protocols and failed experiments are linked from the root README. Historical planning/presentation documents describe earlier milestones and must not override current model receipts.
+
+## Healthy field-data revision
+
+The current head additionally trains on 448 Kandahar Healthy maize photos. The disease benchmark stays 31/80. On new Healthy TEST14, one correct provisional prediction is visible versus zero previously; neither model has strict accepted Healthy results. See ml/reports/healthy_field_update and ml/KANDAHAR_DATA.md. This small gain does not validate field-health diagnosis.
