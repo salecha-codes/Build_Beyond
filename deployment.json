@@ -1,5 +1,5 @@
 {
-  "source_commit": "fb8d338",
+  "source_commit": "445a6c8",
   "languages": [
     "en",
     "kn",
@@ -9,5 +9,6 @@
   "source_acceptance_qualified": true,
   "diagnosis_validated": false,
   "app": "Offline Crop Health",
-  "version": "0.3.0-trained-review2"
+  "version": "0.3.0-trained-review2",
+  "prototype_low_confidence_predictions": true
 }
