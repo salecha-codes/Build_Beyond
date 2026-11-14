@@ -7,7 +7,7 @@
     <application
         android:allowBackup="false"
         android:icon="@drawable/ic_crop_health"
-        android:label="Crop Health"
+        android:label="AgriScan"
         android:supportsRtl="true"
         android:theme="@style/Theme.CropHealth">
         <activity android:name=".MainActivity" android:exported="true">

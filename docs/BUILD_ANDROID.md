@@ -1,16 +1,16 @@
-# Build and install the Android prototype
+# Build and install AgriScan
 
 ## Standard development machine
 
-Install JDK 17 and Android SDK Platform 35, Build Tools 35.0.0, platform-tools, and command-line tools through Android Studio or the official SDK manager. The checked-in Gradle wrapper pins Gradle 8.11.1 with a distribution checksum. Android Gradle Plugin is 8.9.2, Kotlin is 2.1.20, and the app minimum is Android API 24.
+Install Node.js 22 or newer, JDK 17, and Android SDK Platform 35, Build Tools 35.0.0, platform-tools, and command-line tools through Android Studio or the official SDK manager. The checked-in Gradle wrapper pins Gradle 8.11.1 with a distribution checksum. Android Gradle Plugin is 8.9.2, Kotlin is 2.1.20, and the app minimum is Android API 24.
 
-Set `JAVA_HOME` to JDK 17 and `ANDROID_HOME` to the SDK, or put `sdk.dir=/absolute/path/to/android-sdk` in an untracked root `local.properties`. Accept the Android SDK licenses through the official SDK manager. Then, from the repository root:
+Set `JAVA_HOME` to JDK 17 and `ANDROID_HOME` to the SDK, or put `sdk.dir=/absolute/path/to/android-sdk` in an untracked root `local.properties`. Accept the Android SDK licenses through the official SDK manager. Then, from the repository root, run:
 
 ```sh
 ./gradlew :app:assembleDebug :app:assembleDebugAndroidTest :app:testDebugUnitTest
 ```
 
-The initial build downloads dependencies and requires Internet access. Running the installed app does not. The actual ONNX model and audio are checked into the app assets; no first-run model download is required.
+Gradle builds the website from the repository root and packages its output into the APK. The initial build downloads dependencies and requires Internet access. The installed app loads the bundled website locally; no app-server or first-run asset download is required.
 
 ## Prepared cloud workspace
 

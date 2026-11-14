@@ -9,6 +9,13 @@ import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -79,29 +86,44 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
                 }
             }
         }
-        val mainTabs=state.screen in listOf(Screen.HOME,Screen.HISTORY,Screen.HELP)
         BackHandler(enabled=state.screen!=Screen.HOME) { onAction(AppAction.Navigate(state.backScreen())) }
-        if(state.screen==Screen.CAPTURE) {
-            CameraScreen(state,onAction,newCameraFile)
-        } else Scaffold(
-            containerColor=Color.White,
-            topBar={if(!mainTabs && state.screen!=Screen.WELCOME) Header(state,onAction)},
-            bottomBar={if(mainTabs) BottomTabs(state,onAction)},
-        ) { padding ->
-            Box(Modifier.fillMaxSize().padding(padding)) {
-                when(state.screen) {
-                    Screen.WELCOME -> Welcome(state,onAction)
-                    Screen.HOME -> Home(state,onAction)
-                    Screen.PHOTO_REVIEW -> PhotoReview(state,onAction)
-                    Screen.PROCESSING -> Processing(state)
-                    Screen.RESULT -> Result(state,onAction,prompt)
-                    Screen.GUIDANCE -> GuidanceScreen(state,onAction,prompt)
-                    Screen.CONCERN -> ConcernScreen(state,onAction,prompt)
-                    Screen.CARE_LIBRARY -> CareLibraryScreen(state,onAction)
-                    Screen.HISTORY -> HistoryScreen(state,onAction)
-                    Screen.HELP -> HelpScreen(state,onAction,prompt)
-                    Screen.SETTINGS -> SettingsScreen(state,onAction)
-                    Screen.CAPTURE -> Unit
+        AnimatedContent(
+            targetState=state.screen,
+            modifier=Modifier.fillMaxSize(),
+            transitionSpec={
+                (fadeIn(animationSpec=tween(220)) +
+                    slideInVertically(animationSpec=tween(220),initialOffsetY={it/18})) togetherWith
+                    (fadeOut(animationSpec=tween(160)) +
+                        slideOutVertically(animationSpec=tween(160),targetOffsetY={-it/24}))
+            },
+            label="screen-transition",
+        ) { screen ->
+            if(screen==Screen.CAPTURE) {
+                CameraScreen(state,onAction,newCameraFile)
+            } else {
+                val mainTabs=screen in listOf(Screen.HOME,Screen.HISTORY,Screen.HELP)
+                val screenState=state.copy(screen=screen)
+                Scaffold(
+                    containerColor=Color.White,
+                    topBar={if(!mainTabs && screen!=Screen.WELCOME) Header(screenState,onAction)},
+                    bottomBar={if(mainTabs) BottomTabs(screenState,onAction)},
+                ) { padding ->
+                    Box(Modifier.fillMaxSize().padding(padding)) {
+                        when(screen) {
+                            Screen.WELCOME -> Welcome(state,onAction)
+                            Screen.HOME -> Home(state,onAction)
+                            Screen.PHOTO_REVIEW -> PhotoReview(state,onAction)
+                            Screen.PROCESSING -> Processing(state)
+                            Screen.RESULT -> Result(state,onAction,prompt)
+                            Screen.GUIDANCE -> GuidanceScreen(state,onAction,prompt)
+                            Screen.CONCERN -> ConcernScreen(state,onAction,prompt)
+                            Screen.CARE_LIBRARY -> CareLibraryScreen(state,onAction)
+                            Screen.HISTORY -> HistoryScreen(state,onAction)
+                            Screen.HELP -> HelpScreen(state,onAction,prompt)
+                            Screen.SETTINGS -> SettingsScreen(state,onAction)
+                            Screen.CAPTURE -> Unit
+                        }
+                    }
                 }
             }
         }
@@ -162,7 +184,7 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
 @Composable private fun Welcome(s:AppUiState,a:(AppAction)->Unit) {
     Column(Modifier.fillMaxSize().padding(28.dp),verticalArrangement=Arrangement.Center,horizontalAlignment=Alignment.CenterHorizontally) {
         Box(Modifier.size(100.dp).background(CropColors.Lavender,CircleShape),contentAlignment=Alignment.Center) {Icon(Icons.Outlined.Grass,null,tint=CropColors.Primary,modifier=Modifier.size(54.dp))}
-        Spacer(Modifier.height(28.dp));Text(s.tr("Crop Health","ಬೆಳೆ ಆರೋಗ್ಯ"),fontSize=32.sp,fontWeight=FontWeight.Medium)
+        Spacer(Modifier.height(28.dp));Text(s.tr("AgriScan","AgriScan"),fontSize=32.sp,fontWeight=FontWeight.Medium)
         Spacer(Modifier.height(12.dp));Text(s.tr("Care for your crops, wherever you grow.","ನೀವು ಎಲ್ಲಿದ್ದರೂ ಬೆಳೆಗಳ ಆರೈಕೆ ಮಾಡಿ."),textAlign=TextAlign.Center,color=CropColors.Muted)
         Spacer(Modifier.height(26.dp));LanguageToggle(s,a);Spacer(Modifier.height(36.dp))
         Primary(s.tr("Get started","ಪ್ರಾರಂಭಿಸಿ"),{a(AppAction.CompleteWelcome)},Icons.Outlined.ArrowForward)

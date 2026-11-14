@@ -31,7 +31,7 @@ class CareProtocolFlowTest {
         assertEquals(oldSymptoms, selected.symptoms)
         assertEquals(Crop.TOMATO, selected.selectedCrop)
         assertEquals(saved.id, selected.savedObservationId)
-        assertEquals(Screen.CARE_LIBRARY, selected.backScreen())
+        assertEquals(Screen.GUIDANCE, selected.backScreen())
     }
 
     @Test fun everyCategoryCanBeChosenManuallyButUnknownIdsAreRejected() {

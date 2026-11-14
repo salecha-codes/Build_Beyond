@@ -81,12 +81,32 @@ type Screen =
   | 'history'
   | 'help'
   | 'settings';
+const APP_SCREENS: readonly Screen[] = [
+  'welcome',
+  'home',
+  'capture',
+  'photo',
+  'processing',
+  'result',
+  'guidance',
+  'care_library',
+  'care_detail',
+  'concern',
+  'history',
+  'help',
+  'settings',
+];
 const EMPTY_SYMPTOMS: ReportedSymptoms = {
   spreadingQuickly: false,
   manyPlantsAffected: false,
   wiltingOrDying: false,
   leafCoverage: 'NOT_REPORTED',
   uncertainAnswers: false,
+};
+const CROP_ICONS: Record<CropId, string> = {
+  tomato: '🍅',
+  potato: '🥔',
+  maize: '🌽',
 };
 
 function usePhotoUrl(blob: Blob | null | undefined) {
@@ -200,10 +220,33 @@ export default function App() {
   const [copyFeedback, setCopyFeedback] = useState(false);
   const upload = useRef<HTMLInputElement>(null);
   const analysisRequest = useRef(0);
+  const screenHistoryInitialized = useRef(false);
+  const restoringScreenFromHistory = useRef(false);
   const offlineReady = useOfflineReady();
   const t = useCallback((en: string, kn: string) => translateUi(en, kn, language), [language]);
   const a = (key: AdvisoryTextKey) => advisoryText(key, language);
   const c = (key: CareTextKey) => careText(key, language);
+  useEffect(() => {
+    if (!screenHistoryInitialized.current) {
+      window.history.replaceState(screen, '', window.location.href);
+      screenHistoryInitialized.current = true;
+    } else if (restoringScreenFromHistory.current) {
+      restoringScreenFromHistory.current = false;
+      window.history.replaceState(screen, '', window.location.href);
+    } else {
+      window.history.pushState(screen, '', window.location.href);
+    }
+  }, [screen]);
+  useEffect(() => {
+    const restoreScreen = (event: PopStateEvent) => {
+      const previous = APP_SCREENS.find((candidate) => candidate === event.state);
+      if (!previous) return;
+      restoringScreenFromHistory.current = true;
+      setScreen(previous);
+    };
+    window.addEventListener('popstate', restoreScreen);
+    return () => window.removeEventListener('popstate', restoreScreen);
+  }, []);
   const refreshHistory = useCallback(async () => {
     try {
       setHistory(await listObservations({ limit: 100 }));
@@ -672,6 +715,7 @@ export default function App() {
             aria-pressed={value === item.id}
             onClick={() => select(item.id)}
           >
+            <span className="crop-chip-icon" aria-hidden="true">{CROP_ICONS[item.id]}</span>
             {cropName(item.id, language)}
           </button>
         ))}
@@ -807,9 +851,9 @@ export default function App() {
       <main className="app-page welcome-page">
         <div className="welcome-content">
           <div className="welcome-icon">
-            <Sprout size={48} />
+            <img src="/app-logo.png" alt="" />
           </div>
-          <h1 className="welcome-title">{t('Crop Health', 'ಬೆಳೆ ಆರೋಗ್ಯ')}</h1>
+          <h1 className="welcome-title">AgriScan</h1>
           <p className="welcome-subtitle">
             {t(
               'Care for your crops, wherever you grow.',
@@ -1542,9 +1586,9 @@ export default function App() {
       <aside className="preview-context">
         <div className="preview-brand">
           <span>
-            <Leaf size={21} />
+            <img src="/app-logo.png" alt="" />
           </span>
-          CropHealth · Debuggers
+          AgriScan · Debuggers
         </div>
         <div className="preview-kicker">BUILD BEYOND ’26 / REVIEW 2</div>
         <h1>

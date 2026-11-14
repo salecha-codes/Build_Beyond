@@ -6,6 +6,23 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
+val workspaceRoot = rootProject.projectDir
+
+val buildWebApp by tasks.registering(Exec::class) {
+    workingDir = workspaceRoot
+    if (System.getProperty("os.name").startsWith("Windows")) {
+        commandLine("cmd.exe", "/c", "npm", "run", "build")
+    } else {
+        commandLine("npm", "run", "build")
+    }
+}
+
+val syncWebAppAssets by tasks.registering(Sync::class) {
+    dependsOn(buildWebApp)
+    from(workspaceRoot.resolve("frontend/dist"))
+    into(layout.buildDirectory.dir("generated/webAppAssets/www"))
+}
+
 android {
     namespace = "com.debuggers.crophealth"
     compileSdk = 35
@@ -19,6 +36,7 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
     sourceSets.getByName("main").assets.srcDir("../../models/assets")
+    sourceSets.getByName("main").assets.srcDir(layout.buildDirectory.dir("generated/webAppAssets"))
     buildFeatures { compose = true; buildConfig = true }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -48,12 +66,17 @@ android {
     testOptions { unitTests.isReturnDefaultValues = true }
 }
 
+tasks.named("preBuild").configure {
+    dependsOn(syncWebAppAssets)
+}
+
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.compose.animation)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
@@ -71,6 +94,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.onnxruntime.android)
+    implementation(libs.androidx.webkit)
     implementation("androidx.exifinterface:exifinterface:1.4.1")
     debugImplementation(libs.androidx.compose.ui.tooling)
     testImplementation(libs.junit)
