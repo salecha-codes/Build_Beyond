@@ -1,5 +1,5 @@
 {
-  "source_commit": "313e820",
+  "source_commit": "a4e1a8a",
   "version": "0.6.0-treatment-recovery",
   "model_architecture": "MobileNetV3-Large",
   "model_sha256": "31b29158cc1fc1c07bdf3acc07cb6bb6da39eccb1050ffe6ed1d499811179fba",
@@ -14,5 +14,10 @@
   ],
   "diagnosis_validated": false,
   "treatment_field_validated": false,
-  "browser_workflow_test": "production web bundle rebuilt from current source commit 313e820; offline asset manifest refreshed"
+  "build_check": "npm run build succeeded",
+  "home_crop_button_order": [
+    "maize",
+    "potato",
+    "tomato"
+  ]
 }
