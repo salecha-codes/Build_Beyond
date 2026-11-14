@@ -1,17 +1,17 @@
 {
   "schema_version": 1,
-  "model_version": "mnv3-large-leaf-guard-3332b5634fcb",
-  "model_sha256": "3332b5634fcb1a8bea17317a0a9db4d6e44f9c0da24e7b03718b3ced5d6b2d1e",
+  "model_version": "mnv3-large-healthy-transfer-31b29158cc1f",
+  "model_sha256": "31b29158cc1fc1c07bdf3acc07cb6bb6da39eccb1050ffe6ed1d499811179fba",
   "scope": "source_domain_only",
   "source_evaluated": true,
   "source_acceptance_qualified": true,
   "classifier_metrics_exclude_leaf_gate": true,
-  "leaf_gate_receipt_sha256": "64bf1e922d98143251aa8d026e2d92fb36e797c02f7de4160c3153ef77e4a6ef",
-  "thresholds_sha256": "c76990173924bb5b9980ba9a173918199e76706acfaee79ba617a094ea9767c5",
+  "leaf_gate_receipt_sha256": "7920e52bf1ccff38a6041d4cb2410443226068f07006dc508e0aaca0d22f2c68",
+  "thresholds_sha256": "9876d29060d7166607a87fbc13363b9aeca63c9cb1e77f96b82ababac768dc17",
   "class_thresholds": {
     "maize_gray_leaf_spot": {
       "enabled": true,
-      "minimum_confidence": 0.7,
+      "minimum_confidence": 0.6,
       "minimum_margin": 0.4,
       "calibration_accepted": 33,
       "calibration_correct": 30,
@@ -22,23 +22,23 @@
       ],
       "calibration_truth_support": 40,
       "calibration_accepted_groups": 33,
-      "calibration_correct_distance_support": 35,
-      "max_embedding_distance": 1.2242784229179398,
+      "calibration_correct_distance_support": 34,
+      "max_embedding_distance": 1.2249404002653335,
       "embedding_distance_quantile": 0.995
     },
     "maize_common_rust": {
       "enabled": true,
-      "minimum_confidence": 0.5,
-      "minimum_margin": 0.15,
-      "calibration_accepted": 92,
+      "minimum_confidence": 0.75,
+      "minimum_margin": 0.5,
+      "calibration_accepted": 89,
       "calibration_correct": 86,
-      "calibration_precision": 0.9347826086956522,
+      "calibration_precision": 0.9662921348314607,
       "calibration_precision_wilson95": [
-        0.8649420387269413,
-        0.9697697966768659
+        0.9055263755943858,
+        0.9884707788482102
       ],
       "calibration_truth_support": 88,
-      "calibration_accepted_groups": 92,
+      "calibration_accepted_groups": 89,
       "calibration_correct_distance_support": 86,
       "max_embedding_distance": 1.2049741789438873,
       "embedding_distance_quantile": 0.995
@@ -62,19 +62,19 @@
     },
     "maize_healthy": {
       "enabled": true,
-      "minimum_confidence": 0.8,
-      "minimum_margin": 0.5,
-      "calibration_accepted": 67,
-      "calibration_correct": 67,
+      "minimum_confidence": 0.6,
+      "minimum_margin": 0.3,
+      "calibration_accepted": 69,
+      "calibration_correct": 69,
       "calibration_precision": 1.0,
       "calibration_precision_wilson95": [
-        0.9457738606086981,
-        0.9999999999999998
+        0.9472627418109483,
+        1.0
       ],
       "calibration_truth_support": 70,
-      "calibration_accepted_groups": 67,
-      "calibration_correct_distance_support": 67,
-      "max_embedding_distance": 1.0041483169444272,
+      "calibration_accepted_groups": 69,
+      "calibration_correct_distance_support": 69,
+      "max_embedding_distance": 1.063707125217516,
       "embedding_distance_quantile": 0.995
     },
     "potato_early_blight": {
@@ -98,12 +98,12 @@
       "enabled": true,
       "minimum_confidence": 0.85,
       "minimum_margin": 0.5,
-      "calibration_accepted": 63,
+      "calibration_accepted": 62,
       "calibration_correct": 57,
-      "calibration_precision": 0.9047619047619048,
+      "calibration_precision": 0.9193548387096774,
       "calibration_precision_wilson95": [
-        0.8073829893716311,
-        0.955616515723108
+        0.8247142865138739,
+        0.9650616530140073
       ],
       "calibration_truth_support": 70,
       "calibration_accepted_groups": 22,
@@ -114,7 +114,7 @@
     "potato_healthy": {
       "enabled": true,
       "minimum_confidence": 0.6,
-      "minimum_margin": 0.4,
+      "minimum_margin": 0.3,
       "calibration_accepted": 6,
       "calibration_correct": 6,
       "calibration_precision": 1.0,
@@ -132,15 +132,15 @@
       "enabled": true,
       "minimum_confidence": 0.5,
       "minimum_margin": 0.05,
-      "calibration_accepted": 132,
-      "calibration_correct": 121,
-      "calibration_precision": 0.9166666666666666,
+      "calibration_accepted": 134,
+      "calibration_correct": 122,
+      "calibration_precision": 0.9104477611940298,
       "calibration_precision_wilson95": [
-        0.8569354773667702,
-        0.9528320336343893
+        0.8499882232922155,
+        0.9480300285538373
       ],
       "calibration_truth_support": 143,
-      "calibration_accepted_groups": 45,
+      "calibration_accepted_groups": 46,
       "calibration_correct_distance_support": 126,
       "max_embedding_distance": 1.0343465687833029,
       "embedding_distance_quantile": 0.995
@@ -181,17 +181,17 @@
     },
     "tomato_leaf_mold": {
       "enabled": true,
-      "minimum_confidence": 0.85,
+      "minimum_confidence": 0.99,
       "minimum_margin": 0.5,
-      "calibration_accepted": 32,
-      "calibration_correct": 29,
-      "calibration_precision": 0.90625,
+      "calibration_accepted": 11,
+      "calibration_correct": 11,
+      "calibration_precision": 1.0,
       "calibration_precision_wilson95": [
-        0.7578184527161212,
-        0.9675984487016337
+        0.7411670330319684,
+        1.0
       ],
       "calibration_truth_support": 61,
-      "calibration_accepted_groups": 16,
+      "calibration_accepted_groups": 5,
       "calibration_correct_distance_support": 48,
       "max_embedding_distance": 1.0465413606268552,
       "embedding_distance_quantile": 0.995
@@ -200,17 +200,17 @@
       "enabled": true,
       "minimum_confidence": 0.6,
       "minimum_margin": 0.25,
-      "calibration_accepted": 84,
-      "calibration_correct": 76,
-      "calibration_precision": 0.9047619047619048,
+      "calibration_accepted": 85,
+      "calibration_correct": 77,
+      "calibration_precision": 0.9058823529411765,
       "calibration_precision_wilson95": [
-        0.8231736440500729,
-        0.9509482900904406
+        0.8251294803137523,
+        0.9515349387077823
       ],
       "calibration_truth_support": 118,
-      "calibration_accepted_groups": 62,
-      "calibration_correct_distance_support": 96,
-      "max_embedding_distance": 1.1157368609190281,
+      "calibration_accepted_groups": 63,
+      "calibration_correct_distance_support": 97,
+      "max_embedding_distance": 1.1155527791042315,
       "embedding_distance_quantile": 0.995
     },
     "tomato_spider_mites": {
@@ -233,24 +233,24 @@
     "tomato_target_spot": {
       "enabled": true,
       "minimum_confidence": 0.5,
-      "minimum_margin": 0.15,
-      "calibration_accepted": 66,
-      "calibration_correct": 64,
-      "calibration_precision": 0.9696969696969697,
+      "minimum_margin": 0.2,
+      "calibration_accepted": 67,
+      "calibration_correct": 65,
+      "calibration_precision": 0.9701492537313433,
       "calibration_precision_wilson95": [
-        0.8960747808829028,
-        0.9916500898013463
+        0.8975344443664799,
+        0.991775305161102
       ],
       "calibration_truth_support": 84,
-      "calibration_accepted_groups": 66,
-      "calibration_correct_distance_support": 71,
-      "max_embedding_distance": 0.7873387314684809,
+      "calibration_accepted_groups": 67,
+      "calibration_correct_distance_support": 72,
+      "max_embedding_distance": 0.7882918530360742,
       "embedding_distance_quantile": 0.995
     },
     "tomato_yellow_leaf_curl_virus": {
       "enabled": true,
       "minimum_confidence": 0.5,
-      "minimum_margin": 0.2,
+      "minimum_margin": 0.15,
       "calibration_accepted": 326,
       "calibration_correct": 325,
       "calibration_precision": 0.9969325153374233,
@@ -266,25 +266,25 @@
     },
     "tomato_mosaic_virus": {
       "enabled": true,
-      "minimum_confidence": 0.65,
-      "minimum_margin": 0.5,
-      "calibration_accepted": 25,
+      "minimum_confidence": 0.5,
+      "minimum_margin": 0.3,
+      "calibration_accepted": 26,
       "calibration_correct": 24,
-      "calibration_precision": 0.96,
+      "calibration_precision": 0.9230769230769231,
       "calibration_precision_wilson95": [
-        0.8045593626380625,
-        0.9929037664980127
+        0.7585844622837095,
+        0.9786449115277238
       ],
       "calibration_truth_support": 28,
-      "calibration_accepted_groups": 25,
-      "calibration_correct_distance_support": 24,
-      "max_embedding_distance": 0.9828163412675913,
+      "calibration_accepted_groups": 26,
+      "calibration_correct_distance_support": 25,
+      "max_embedding_distance": 1.1772465513566794,
       "embedding_distance_quantile": 0.995
     },
     "tomato_healthy": {
       "enabled": true,
       "minimum_confidence": 0.5,
-      "minimum_margin": 0.1,
+      "minimum_margin": 0.15,
       "calibration_accepted": 81,
       "calibration_correct": 81,
       "calibration_precision": 1.0,
@@ -300,11 +300,11 @@
     }
   },
   "frozen_policy": {
-    "temperature": 1.7641813209074506,
+    "temperature": 1.7617546849775814,
     "class_thresholds": {
       "maize_gray_leaf_spot": {
         "enabled": true,
-        "minimum_confidence": 0.7,
+        "minimum_confidence": 0.6,
         "minimum_margin": 0.4,
         "calibration_accepted": 33,
         "calibration_correct": 30,
@@ -315,23 +315,23 @@
         ],
         "calibration_truth_support": 40,
         "calibration_accepted_groups": 33,
-        "calibration_correct_distance_support": 35,
-        "max_embedding_distance": 1.2242784229179398,
+        "calibration_correct_distance_support": 34,
+        "max_embedding_distance": 1.2249404002653335,
         "embedding_distance_quantile": 0.995
       },
       "maize_common_rust": {
         "enabled": true,
-        "minimum_confidence": 0.5,
-        "minimum_margin": 0.15,
-        "calibration_accepted": 92,
+        "minimum_confidence": 0.75,
+        "minimum_margin": 0.5,
+        "calibration_accepted": 89,
         "calibration_correct": 86,
-        "calibration_precision": 0.9347826086956522,
+        "calibration_precision": 0.9662921348314607,
         "calibration_precision_wilson95": [
-          0.8649420387269413,
-          0.9697697966768659
+          0.9055263755943858,
+          0.9884707788482102
         ],
         "calibration_truth_support": 88,
-        "calibration_accepted_groups": 92,
+        "calibration_accepted_groups": 89,
         "calibration_correct_distance_support": 86,
         "max_embedding_distance": 1.2049741789438873,
         "embedding_distance_quantile": 0.995
@@ -355,19 +355,19 @@
       },
       "maize_healthy": {
         "enabled": true,
-        "minimum_confidence": 0.8,
-        "minimum_margin": 0.5,
-        "calibration_accepted": 67,
-        "calibration_correct": 67,
+        "minimum_confidence": 0.6,
+        "minimum_margin": 0.3,
+        "calibration_accepted": 69,
+        "calibration_correct": 69,
         "calibration_precision": 1.0,
         "calibration_precision_wilson95": [
-          0.9457738606086981,
-          0.9999999999999998
+          0.9472627418109483,
+          1.0
         ],
         "calibration_truth_support": 70,
-        "calibration_accepted_groups": 67,
-        "calibration_correct_distance_support": 67,
-        "max_embedding_distance": 1.0041483169444272,
+        "calibration_accepted_groups": 69,
+        "calibration_correct_distance_support": 69,
+        "max_embedding_distance": 1.063707125217516,
         "embedding_distance_quantile": 0.995
       },
       "potato_early_blight": {
@@ -391,12 +391,12 @@
         "enabled": true,
         "minimum_confidence": 0.85,
         "minimum_margin": 0.5,
-        "calibration_accepted": 63,
+        "calibration_accepted": 62,
         "calibration_correct": 57,
-        "calibration_precision": 0.9047619047619048,
+        "calibration_precision": 0.9193548387096774,
         "calibration_precision_wilson95": [
-          0.8073829893716311,
-          0.955616515723108
+          0.8247142865138739,
+          0.9650616530140073
         ],
         "calibration_truth_support": 70,
         "calibration_accepted_groups": 22,
@@ -407,7 +407,7 @@
       "potato_healthy": {
         "enabled": true,
         "minimum_confidence": 0.6,
-        "minimum_margin": 0.4,
+        "minimum_margin": 0.3,
         "calibration_accepted": 6,
         "calibration_correct": 6,
         "calibration_precision": 1.0,
@@ -425,15 +425,15 @@
         "enabled": true,
         "minimum_confidence": 0.5,
         "minimum_margin": 0.05,
-        "calibration_accepted": 132,
-        "calibration_correct": 121,
-        "calibration_precision": 0.9166666666666666,
+        "calibration_accepted": 134,
+        "calibration_correct": 122,
+        "calibration_precision": 0.9104477611940298,
         "calibration_precision_wilson95": [
-          0.8569354773667702,
-          0.9528320336343893
+          0.8499882232922155,
+          0.9480300285538373
         ],
         "calibration_truth_support": 143,
-        "calibration_accepted_groups": 45,
+        "calibration_accepted_groups": 46,
         "calibration_correct_distance_support": 126,
         "max_embedding_distance": 1.0343465687833029,
         "embedding_distance_quantile": 0.995
@@ -474,17 +474,17 @@
       },
       "tomato_leaf_mold": {
         "enabled": true,
-        "minimum_confidence": 0.85,
+        "minimum_confidence": 0.99,
         "minimum_margin": 0.5,
-        "calibration_accepted": 32,
-        "calibration_correct": 29,
-        "calibration_precision": 0.90625,
+        "calibration_accepted": 11,
+        "calibration_correct": 11,
+        "calibration_precision": 1.0,
         "calibration_precision_wilson95": [
-          0.7578184527161212,
-          0.9675984487016337
+          0.7411670330319684,
+          1.0
         ],
         "calibration_truth_support": 61,
-        "calibration_accepted_groups": 16,
+        "calibration_accepted_groups": 5,
         "calibration_correct_distance_support": 48,
         "max_embedding_distance": 1.0465413606268552,
         "embedding_distance_quantile": 0.995
@@ -493,17 +493,17 @@
         "enabled": true,
         "minimum_confidence": 0.6,
         "minimum_margin": 0.25,
-        "calibration_accepted": 84,
-        "calibration_correct": 76,
-        "calibration_precision": 0.9047619047619048,
+        "calibration_accepted": 85,
+        "calibration_correct": 77,
+        "calibration_precision": 0.9058823529411765,
         "calibration_precision_wilson95": [
-          0.8231736440500729,
-          0.9509482900904406
+          0.8251294803137523,
+          0.9515349387077823
         ],
         "calibration_truth_support": 118,
-        "calibration_accepted_groups": 62,
-        "calibration_correct_distance_support": 96,
-        "max_embedding_distance": 1.1157368609190281,
+        "calibration_accepted_groups": 63,
+        "calibration_correct_distance_support": 97,
+        "max_embedding_distance": 1.1155527791042315,
         "embedding_distance_quantile": 0.995
       },
       "tomato_spider_mites": {
@@ -526,24 +526,24 @@
       "tomato_target_spot": {
         "enabled": true,
         "minimum_confidence": 0.5,
-        "minimum_margin": 0.15,
-        "calibration_accepted": 66,
-        "calibration_correct": 64,
-        "calibration_precision": 0.9696969696969697,
+        "minimum_margin": 0.2,
+        "calibration_accepted": 67,
+        "calibration_correct": 65,
+        "calibration_precision": 0.9701492537313433,
         "calibration_precision_wilson95": [
-          0.8960747808829028,
-          0.9916500898013463
+          0.8975344443664799,
+          0.991775305161102
         ],
         "calibration_truth_support": 84,
-        "calibration_accepted_groups": 66,
-        "calibration_correct_distance_support": 71,
-        "max_embedding_distance": 0.7873387314684809,
+        "calibration_accepted_groups": 67,
+        "calibration_correct_distance_support": 72,
+        "max_embedding_distance": 0.7882918530360742,
         "embedding_distance_quantile": 0.995
       },
       "tomato_yellow_leaf_curl_virus": {
         "enabled": true,
         "minimum_confidence": 0.5,
-        "minimum_margin": 0.2,
+        "minimum_margin": 0.15,
         "calibration_accepted": 326,
         "calibration_correct": 325,
         "calibration_precision": 0.9969325153374233,
@@ -559,25 +559,25 @@
       },
       "tomato_mosaic_virus": {
         "enabled": true,
-        "minimum_confidence": 0.65,
-        "minimum_margin": 0.5,
-        "calibration_accepted": 25,
+        "minimum_confidence": 0.5,
+        "minimum_margin": 0.3,
+        "calibration_accepted": 26,
         "calibration_correct": 24,
-        "calibration_precision": 0.96,
+        "calibration_precision": 0.9230769230769231,
         "calibration_precision_wilson95": [
-          0.8045593626380625,
-          0.9929037664980127
+          0.7585844622837095,
+          0.9786449115277238
         ],
         "calibration_truth_support": 28,
-        "calibration_accepted_groups": 25,
-        "calibration_correct_distance_support": 24,
-        "max_embedding_distance": 0.9828163412675913,
+        "calibration_accepted_groups": 26,
+        "calibration_correct_distance_support": 25,
+        "max_embedding_distance": 1.1772465513566794,
         "embedding_distance_quantile": 0.995
       },
       "tomato_healthy": {
         "enabled": true,
         "minimum_confidence": 0.5,
-        "minimum_margin": 0.1,
+        "minimum_margin": 0.15,
         "calibration_accepted": 81,
         "calibration_correct": 81,
         "calibration_precision": 1.0,
@@ -594,21 +594,21 @@
     }
   },
   "thresholds_hash_encoding": "UTF-8 JSON, sorted object keys, compact separators, ensure_ascii=false",
-  "temperature": 1.7641813209074506,
-  "embedding_centroids_sha256": "89d76493ca189ea491f6416e653a5ff990b0fb86dbde4461c90826db1ff483ff",
+  "temperature": 1.7617546849775814,
+  "embedding_centroids_sha256": "6c867113b085dcbb9d2ed86654778b9031ba82c333b419e35e8d53e68194e246",
   "calibration_report": {
     "scope": "Source-domain image evaluation of frozen global-softmax thresholds; not field diagnosis validation",
     "samples": 1529,
-    "accuracy": 0.8920863309352518,
-    "macro_f1_all_labels": 0.8765114334356919,
-    "macro_f1_supported_labels": 0.8765114334356919,
+    "accuracy": 0.894702419882276,
+    "macro_f1_all_labels": 0.879548030547976,
+    "macro_f1_supported_labels": 0.879548030547976,
     "supported_labels": 17,
     "confusion_matrix": [
       [
-        35,
-        4,
+        34,
+        3,
+        2,
         1,
-        0,
         0,
         0,
         0,
@@ -662,10 +662,10 @@
         0
       ],
       [
-        2,
         1,
         0,
-        67,
+        0,
+        69,
         0,
         0,
         0,
@@ -739,10 +739,10 @@
       ],
       [
         0,
-        1,
         0,
         0,
-        1,
+        0,
+        2,
         0,
         0,
         126,
@@ -818,14 +818,14 @@
         0,
         0,
         0,
-        3,
+        2,
         1,
         0,
         4,
         8,
         2,
         3,
-        96,
+        97,
         0,
         0,
         0,
@@ -865,8 +865,8 @@
         0,
         4,
         3,
-        71,
-        1,
+        72,
+        0,
         0,
         0
       ],
@@ -900,12 +900,12 @@
         0,
         0,
         0,
-        3,
+        2,
         1,
         0,
         0,
         0,
-        24,
+        25,
         0
       ],
       [
@@ -928,24 +928,24 @@
         82
       ]
     ],
-    "temperature": 1.7641813209074506,
-    "nll": 0.42888998564215164,
-    "expected_calibration_error_15_bins": 0.036502584168896415,
-    "accepted_predictions": 1284,
-    "accepted_correct": 1229,
-    "accepted_errors": 55,
-    "accepted_precision": 0.9571651090342679,
+    "temperature": 1.7617546849775814,
+    "nll": 0.4246732787606619,
+    "expected_calibration_error_15_bins": 0.036538612109276024,
+    "accepted_predictions": 1269,
+    "accepted_correct": 1217,
+    "accepted_errors": 52,
+    "accepted_precision": 0.959022852639874,
     "accepted_precision_wilson95": [
-      0.9446588581187112,
-      0.9669440352025354
+      0.9466592934167632,
+      0.9686157331206262
     ],
-    "coverage": 0.8397645519947678,
-    "uncertain_predictions": 245,
+    "coverage": 0.8299542184434271,
+    "uncertain_predictions": 260,
     "per_class": {
       "maize_gray_leaf_spot": {
         "truth_support": 40,
-        "raw_predicted_support": 44,
-        "raw_correct": 35,
+        "raw_predicted_support": 42,
+        "raw_correct": 34,
         "accepted_predictions": 32,
         "accepted_correct": 29,
         "accepted_errors": 3,
@@ -955,12 +955,12 @@
           0.9675984487016337
         ],
         "correct_accepted_recall": 0.725,
-        "truth_class_coverage": 0.85,
+        "truth_class_coverage": 0.825,
         "truth_groups": 40,
         "accepted_predicted_groups": 32,
         "threshold": {
           "enabled": true,
-          "minimum_confidence": 0.7,
+          "minimum_confidence": 0.6,
           "minimum_margin": 0.4,
           "calibration_accepted": 33,
           "calibration_correct": 30,
@@ -971,40 +971,40 @@
           ],
           "calibration_truth_support": 40,
           "calibration_accepted_groups": 33,
-          "calibration_correct_distance_support": 35,
-          "max_embedding_distance": 1.2242784229179398,
+          "calibration_correct_distance_support": 34,
+          "max_embedding_distance": 1.2249404002653335,
           "embedding_distance_quantile": 0.995
         }
       },
       "maize_common_rust": {
         "truth_support": 88,
-        "raw_predicted_support": 92,
+        "raw_predicted_support": 89,
         "raw_correct": 86,
-        "accepted_predictions": 90,
+        "accepted_predictions": 88,
         "accepted_correct": 85,
-        "accepted_errors": 5,
-        "accepted_precision": 0.9444444444444444,
+        "accepted_errors": 3,
+        "accepted_precision": 0.9659090909090909,
         "accepted_precision_wilson95": [
-          0.8764626377820048,
-          0.976039028383038
+          0.9045039578072996,
+          0.9883390028004145
         ],
         "correct_accepted_recall": 0.9659090909090909,
         "truth_class_coverage": 0.9659090909090909,
         "truth_groups": 88,
-        "accepted_predicted_groups": 90,
+        "accepted_predicted_groups": 88,
         "threshold": {
           "enabled": true,
-          "minimum_confidence": 0.5,
-          "minimum_margin": 0.15,
-          "calibration_accepted": 92,
+          "minimum_confidence": 0.75,
+          "minimum_margin": 0.5,
+          "calibration_accepted": 89,
           "calibration_correct": 86,
-          "calibration_precision": 0.9347826086956522,
+          "calibration_precision": 0.9662921348314607,
           "calibration_precision_wilson95": [
-            0.8649420387269413,
-            0.9697697966768659
+            0.9055263755943858,
+            0.9884707788482102
           ],
           "calibration_truth_support": 88,
-          "calibration_accepted_groups": 92,
+          "calibration_accepted_groups": 89,
           "calibration_correct_distance_support": 86,
           "max_embedding_distance": 1.2049741789438873,
           "embedding_distance_quantile": 0.995
@@ -1012,7 +1012,7 @@
       },
       "maize_northern_leaf_blight": {
         "truth_support": 59,
-        "raw_predicted_support": 55,
+        "raw_predicted_support": 56,
         "raw_correct": 54,
         "accepted_predictions": 54,
         "accepted_correct": 53,
@@ -1046,35 +1046,35 @@
       },
       "maize_healthy": {
         "truth_support": 70,
-        "raw_predicted_support": 67,
-        "raw_correct": 67,
-        "accepted_predictions": 66,
-        "accepted_correct": 66,
+        "raw_predicted_support": 70,
+        "raw_correct": 69,
+        "accepted_predictions": 68,
+        "accepted_correct": 68,
         "accepted_errors": 0,
         "accepted_precision": 1.0,
         "accepted_precision_wilson95": [
-          0.9449974429864586,
-          0.9999999999999999
+          0.9465286634799296,
+          1.0
         ],
-        "correct_accepted_recall": 0.9428571428571428,
-        "truth_class_coverage": 0.9571428571428572,
+        "correct_accepted_recall": 0.9714285714285714,
+        "truth_class_coverage": 0.9714285714285714,
         "truth_groups": 70,
-        "accepted_predicted_groups": 66,
+        "accepted_predicted_groups": 68,
         "threshold": {
           "enabled": true,
-          "minimum_confidence": 0.8,
-          "minimum_margin": 0.5,
-          "calibration_accepted": 67,
-          "calibration_correct": 67,
+          "minimum_confidence": 0.6,
+          "minimum_margin": 0.3,
+          "calibration_accepted": 69,
+          "calibration_correct": 69,
           "calibration_precision": 1.0,
           "calibration_precision_wilson95": [
-            0.9457738606086981,
-            0.9999999999999998
+            0.9472627418109483,
+            1.0
           ],
           "calibration_truth_support": 70,
-          "calibration_accepted_groups": 67,
-          "calibration_correct_distance_support": 67,
-          "max_embedding_distance": 1.0041483169444272,
+          "calibration_accepted_groups": 69,
+          "calibration_correct_distance_support": 69,
+          "max_embedding_distance": 1.063707125217516,
           "embedding_distance_quantile": 0.995
         }
       },
@@ -1091,7 +1091,7 @@
           0.9748021693660901
         ],
         "correct_accepted_recall": 0.59375,
-        "truth_class_coverage": 0.671875,
+        "truth_class_coverage": 0.65625,
         "truth_groups": 28,
         "accepted_predicted_groups": 18,
         "threshold": {
@@ -1116,13 +1116,13 @@
         "truth_support": 70,
         "raw_predicted_support": 84,
         "raw_correct": 61,
-        "accepted_predictions": 62,
+        "accepted_predictions": 61,
         "accepted_correct": 56,
-        "accepted_errors": 6,
-        "accepted_precision": 0.9032258064516129,
+        "accepted_errors": 5,
+        "accepted_precision": 0.9180327868852459,
         "accepted_precision_wilson95": [
-          0.8045118138769257,
-          0.9548881279768061
+          0.8220533819707465,
+          0.9644804333931265
         ],
         "correct_accepted_recall": 0.8,
         "truth_class_coverage": 0.8428571428571429,
@@ -1132,12 +1132,12 @@
           "enabled": true,
           "minimum_confidence": 0.85,
           "minimum_margin": 0.5,
-          "calibration_accepted": 63,
+          "calibration_accepted": 62,
           "calibration_correct": 57,
-          "calibration_precision": 0.9047619047619048,
+          "calibration_precision": 0.9193548387096774,
           "calibration_precision_wilson95": [
-            0.8073829893716311,
-            0.955616515723108
+            0.8247142865138739,
+            0.9650616530140073
           ],
           "calibration_truth_support": 70,
           "calibration_accepted_groups": 22,
@@ -1165,7 +1165,7 @@
         "threshold": {
           "enabled": true,
           "minimum_confidence": 0.6,
-          "minimum_margin": 0.4,
+          "minimum_margin": 0.3,
           "calibration_accepted": 6,
           "calibration_correct": 6,
           "calibration_precision": 1.0,
@@ -1184,31 +1184,31 @@
         "truth_support": 143,
         "raw_predicted_support": 143,
         "raw_correct": 126,
-        "accepted_predictions": 128,
-        "accepted_correct": 120,
-        "accepted_errors": 8,
-        "accepted_precision": 0.9375,
+        "accepted_predictions": 130,
+        "accepted_correct": 121,
+        "accepted_errors": 9,
+        "accepted_precision": 0.9307692307692308,
         "accepted_precision_wilson95": [
-          0.8815120889557413,
-          0.9679930743049387
+          0.8736580818082533,
+          0.9631528808550058
         ],
-        "correct_accepted_recall": 0.8391608391608392,
+        "correct_accepted_recall": 0.8461538461538461,
         "truth_class_coverage": 0.8951048951048951,
         "truth_groups": 47,
-        "accepted_predicted_groups": 41,
+        "accepted_predicted_groups": 42,
         "threshold": {
           "enabled": true,
           "minimum_confidence": 0.5,
           "minimum_margin": 0.05,
-          "calibration_accepted": 132,
-          "calibration_correct": 121,
-          "calibration_precision": 0.9166666666666666,
+          "calibration_accepted": 134,
+          "calibration_correct": 122,
+          "calibration_precision": 0.9104477611940298,
           "calibration_precision_wilson95": [
-            0.8569354773667702,
-            0.9528320336343893
+            0.8499882232922155,
+            0.9480300285538373
           ],
           "calibration_truth_support": 143,
-          "calibration_accepted_groups": 45,
+          "calibration_accepted_groups": 46,
           "calibration_correct_distance_support": 126,
           "max_embedding_distance": 1.0343465687833029,
           "embedding_distance_quantile": 0.995
@@ -1227,7 +1227,7 @@
           0.9821237869049271
         ],
         "correct_accepted_recall": 0.16071428571428573,
-        "truth_class_coverage": 0.26785714285714285,
+        "truth_class_coverage": 0.2857142857142857,
         "truth_groups": 23,
         "accepted_predicted_groups": 7,
         "threshold": {
@@ -1261,7 +1261,7 @@
           0.9504167815185518
         ],
         "correct_accepted_recall": 0.7457627118644068,
-        "truth_class_coverage": 0.788135593220339,
+        "truth_class_coverage": 0.7796610169491526,
         "truth_groups": 88,
         "accepted_predicted_groups": 81,
         "threshold": {
@@ -1284,33 +1284,33 @@
       },
       "tomato_leaf_mold": {
         "truth_support": 61,
-        "raw_predicted_support": 60,
+        "raw_predicted_support": 59,
         "raw_correct": 48,
-        "accepted_predictions": 31,
-        "accepted_correct": 29,
-        "accepted_errors": 2,
-        "accepted_precision": 0.9354838709677419,
+        "accepted_predictions": 11,
+        "accepted_correct": 11,
+        "accepted_errors": 0,
+        "accepted_precision": 1.0,
         "accepted_precision_wilson95": [
-          0.7928136326370188,
-          0.9821252164780854
+          0.7411670330319684,
+          1.0
         ],
-        "correct_accepted_recall": 0.47540983606557374,
-        "truth_class_coverage": 0.5245901639344263,
+        "correct_accepted_recall": 0.18032786885245902,
+        "truth_class_coverage": 0.22950819672131148,
         "truth_groups": 25,
-        "accepted_predicted_groups": 15,
+        "accepted_predicted_groups": 5,
         "threshold": {
           "enabled": true,
-          "minimum_confidence": 0.85,
+          "minimum_confidence": 0.99,
           "minimum_margin": 0.5,
-          "calibration_accepted": 32,
-          "calibration_correct": 29,
-          "calibration_precision": 0.90625,
+          "calibration_accepted": 11,
+          "calibration_correct": 11,
+          "calibration_precision": 1.0,
           "calibration_precision_wilson95": [
-            0.7578184527161212,
-            0.9675984487016337
+            0.7411670330319684,
+            1.0
           ],
           "calibration_truth_support": 61,
-          "calibration_accepted_groups": 16,
+          "calibration_accepted_groups": 5,
           "calibration_correct_distance_support": 48,
           "max_embedding_distance": 1.0465413606268552,
           "embedding_distance_quantile": 0.995
@@ -1318,35 +1318,35 @@
       },
       "tomato_septoria_leaf_spot": {
         "truth_support": 118,
-        "raw_predicted_support": 112,
-        "raw_correct": 96,
-        "accepted_predictions": 83,
-        "accepted_correct": 75,
+        "raw_predicted_support": 113,
+        "raw_correct": 97,
+        "accepted_predictions": 84,
+        "accepted_correct": 76,
         "accepted_errors": 8,
-        "accepted_precision": 0.9036144578313253,
+        "accepted_precision": 0.9047619047619048,
         "accepted_precision_wilson95": [
-          0.8211736349852804,
-          0.9503472596410781
+          0.8231736440500729,
+          0.9509482900904406
         ],
-        "correct_accepted_recall": 0.635593220338983,
-        "truth_class_coverage": 0.652542372881356,
+        "correct_accepted_recall": 0.6440677966101694,
+        "truth_class_coverage": 0.6610169491525424,
         "truth_groups": 82,
-        "accepted_predicted_groups": 61,
+        "accepted_predicted_groups": 62,
         "threshold": {
           "enabled": true,
           "minimum_confidence": 0.6,
           "minimum_margin": 0.25,
-          "calibration_accepted": 84,
-          "calibration_correct": 76,
-          "calibration_precision": 0.9047619047619048,
+          "calibration_accepted": 85,
+          "calibration_correct": 77,
+          "calibration_precision": 0.9058823529411765,
           "calibration_precision_wilson95": [
-            0.8231736440500729,
-            0.9509482900904406
+            0.8251294803137523,
+            0.9515349387077823
           ],
           "calibration_truth_support": 118,
-          "calibration_accepted_groups": 62,
-          "calibration_correct_distance_support": 96,
-          "max_embedding_distance": 1.1157368609190281,
+          "calibration_accepted_groups": 63,
+          "calibration_correct_distance_support": 97,
+          "max_embedding_distance": 1.1155527791042315,
           "embedding_distance_quantile": 0.995
         }
       },
@@ -1363,7 +1363,7 @@
           0.9757671215792799
         ],
         "correct_accepted_recall": 0.84,
-        "truth_class_coverage": 0.85,
+        "truth_class_coverage": 0.86,
         "truth_groups": 25,
         "accepted_predicted_groups": 27,
         "threshold": {
@@ -1386,41 +1386,41 @@
       },
       "tomato_target_spot": {
         "truth_support": 84,
-        "raw_predicted_support": 81,
-        "raw_correct": 71,
-        "accepted_predictions": 66,
-        "accepted_correct": 64,
+        "raw_predicted_support": 82,
+        "raw_correct": 72,
+        "accepted_predictions": 67,
+        "accepted_correct": 65,
         "accepted_errors": 2,
-        "accepted_precision": 0.9696969696969697,
+        "accepted_precision": 0.9701492537313433,
         "accepted_precision_wilson95": [
-          0.8960747808829028,
-          0.9916500898013463
+          0.8975344443664799,
+          0.991775305161102
         ],
-        "correct_accepted_recall": 0.7619047619047619,
-        "truth_class_coverage": 0.7976190476190477,
+        "correct_accepted_recall": 0.7738095238095238,
+        "truth_class_coverage": 0.8095238095238095,
         "truth_groups": 84,
-        "accepted_predicted_groups": 66,
+        "accepted_predicted_groups": 67,
         "threshold": {
           "enabled": true,
           "minimum_confidence": 0.5,
-          "minimum_margin": 0.15,
-          "calibration_accepted": 66,
-          "calibration_correct": 64,
-          "calibration_precision": 0.9696969696969697,
+          "minimum_margin": 0.2,
+          "calibration_accepted": 67,
+          "calibration_correct": 65,
+          "calibration_precision": 0.9701492537313433,
           "calibration_precision_wilson95": [
-            0.8960747808829028,
-            0.9916500898013463
+            0.8975344443664799,
+            0.991775305161102
           ],
           "calibration_truth_support": 84,
-          "calibration_accepted_groups": 66,
-          "calibration_correct_distance_support": 71,
-          "max_embedding_distance": 0.7873387314684809,
+          "calibration_accepted_groups": 67,
+          "calibration_correct_distance_support": 72,
+          "max_embedding_distance": 0.7882918530360742,
           "embedding_distance_quantile": 0.995
         }
       },
       "tomato_yellow_leaf_curl_virus": {
         "truth_support": 339,
-        "raw_predicted_support": 328,
+        "raw_predicted_support": 327,
         "raw_correct": 326,
         "accepted_predictions": 325,
         "accepted_correct": 324,
@@ -1437,7 +1437,7 @@
         "threshold": {
           "enabled": true,
           "minimum_confidence": 0.5,
-          "minimum_margin": 0.2,
+          "minimum_margin": 0.15,
           "calibration_accepted": 326,
           "calibration_correct": 325,
           "calibration_precision": 0.9969325153374233,
@@ -1454,35 +1454,35 @@
       },
       "tomato_mosaic_virus": {
         "truth_support": 28,
-        "raw_predicted_support": 27,
-        "raw_correct": 24,
-        "accepted_predictions": 24,
-        "accepted_correct": 23,
-        "accepted_errors": 1,
-        "accepted_precision": 0.9583333333333334,
+        "raw_predicted_support": 28,
+        "raw_correct": 25,
+        "accepted_predictions": 26,
+        "accepted_correct": 24,
+        "accepted_errors": 2,
+        "accepted_precision": 0.9230769230769231,
         "accepted_precision_wilson95": [
-          0.7975819352134406,
-          0.9926065438344942
+          0.7585844622837095,
+          0.9786449115277238
         ],
-        "correct_accepted_recall": 0.8214285714285714,
-        "truth_class_coverage": 0.8214285714285714,
+        "correct_accepted_recall": 0.8571428571428571,
+        "truth_class_coverage": 0.8571428571428571,
         "truth_groups": 28,
-        "accepted_predicted_groups": 24,
+        "accepted_predicted_groups": 26,
         "threshold": {
           "enabled": true,
-          "minimum_confidence": 0.65,
-          "minimum_margin": 0.5,
-          "calibration_accepted": 25,
+          "minimum_confidence": 0.5,
+          "minimum_margin": 0.3,
+          "calibration_accepted": 26,
           "calibration_correct": 24,
-          "calibration_precision": 0.96,
+          "calibration_precision": 0.9230769230769231,
           "calibration_precision_wilson95": [
-            0.8045593626380625,
-            0.9929037664980127
+            0.7585844622837095,
+            0.9786449115277238
           ],
           "calibration_truth_support": 28,
-          "calibration_accepted_groups": 25,
-          "calibration_correct_distance_support": 24,
-          "max_embedding_distance": 0.9828163412675913,
+          "calibration_accepted_groups": 26,
+          "calibration_correct_distance_support": 25,
+          "max_embedding_distance": 1.1772465513566794,
           "embedding_distance_quantile": 0.995
         }
       },
@@ -1505,7 +1505,7 @@
         "threshold": {
           "enabled": true,
           "minimum_confidence": 0.5,
-          "minimum_margin": 0.1,
+          "minimum_margin": 0.15,
           "calibration_accepted": 81,
           "calibration_correct": 81,
           "calibration_precision": 1.0,
@@ -1523,21 +1523,21 @@
     },
     "groups": {
       "source_groups": 960,
-      "accepted_groups": 835,
-      "accepted_groups_with_no_accepted_error": 784,
-      "all_accepted_predictions_correct_group_fraction": 0.9389221556886228,
+      "accepted_groups": 830,
+      "accepted_groups_with_no_accepted_error": 783,
+      "all_accepted_predictions_correct_group_fraction": 0.9433734939759036,
       "all_correct_group_wilson95": [
-        0.9205823518263635,
-        0.953241887894103
+        0.9255108236952594,
+        0.9571509727581433
       ]
     },
     "interval_limitations": "Wilson intervals are descriptive. Image dependence, incomplete physical-leaf grouping, historical selection exposure and CAL threshold search are not covered by binomial intervals.",
     "diagnosis_validated": false
   },
   "temperature_fit": {
-    "temperature": 1.7641813209074506,
-    "nll_before": 0.5295707824395209,
-    "nll_after": 0.42888998564215164,
+    "temperature": 1.7617546849775814,
+    "nll_before": 0.5237457652691027,
+    "nll_after": 0.4246732787606619,
     "log_temperature_bounds": [
       -3.0,
       3.0
@@ -1549,16 +1549,16 @@
     "plantvillage": {
       "scope": "Source-domain image evaluation of frozen global-softmax thresholds; not field diagnosis validation",
       "samples": 1392,
-      "accuracy": 0.9360632183908046,
-      "macro_f1_all_labels": 0.9252122806892614,
-      "macro_f1_supported_labels": 0.9252122806892614,
+      "accuracy": 0.9382183908045977,
+      "macro_f1_all_labels": 0.927120113689342,
+      "macro_f1_supported_labels": 0.927120113689342,
       "supported_labels": 17,
       "confusion_matrix": [
         [
-          29,
-          1,
-          1,
+          28,
           0,
+          2,
+          1,
           0,
           0,
           0,
@@ -1612,10 +1612,10 @@
           0
         ],
         [
-          2,
           1,
           0,
-          67,
+          0,
+          69,
           0,
           0,
           0,
@@ -1768,14 +1768,14 @@
           0,
           0,
           0,
-          2,
+          1,
           0,
           0,
           2,
           3,
           1,
           1,
-          87,
+          88,
           0,
           0,
           0,
@@ -1815,8 +1815,8 @@
           0,
           4,
           3,
-          71,
-          1,
+          72,
+          0,
           0,
           0
         ],
@@ -1878,24 +1878,24 @@
           82
         ]
       ],
-      "temperature": 1.7641813209074506,
-      "nll": 0.25206840462584457,
-      "expected_calibration_error_15_bins": 0.06422755348432078,
-      "accepted_predictions": 1220,
-      "accepted_correct": 1190,
+      "temperature": 1.7617546849775814,
+      "nll": 0.247738320522575,
+      "expected_calibration_error_15_bins": 0.06484166409364121,
+      "accepted_predictions": 1209,
+      "accepted_correct": 1179,
       "accepted_errors": 30,
-      "accepted_precision": 0.9754098360655737,
+      "accepted_precision": 0.9751861042183623,
       "accepted_precision_wilson95": [
-        0.9651134070699581,
-        0.9827217815808558
+        0.964797985803842,
+        0.9825640883103044
       ],
-      "coverage": 0.8764367816091954,
-      "uncertain_predictions": 172,
+      "coverage": 0.8685344827586207,
+      "uncertain_predictions": 183,
       "per_class": {
         "maize_gray_leaf_spot": {
           "truth_support": 31,
-          "raw_predicted_support": 36,
-          "raw_correct": 29,
+          "raw_predicted_support": 34,
+          "raw_correct": 28,
           "accepted_predictions": 28,
           "accepted_correct": 25,
           "accepted_errors": 3,
@@ -1905,12 +1905,12 @@
             0.9628816331707
           ],
           "correct_accepted_recall": 0.8064516129032258,
-          "truth_class_coverage": 0.8709677419354839,
+          "truth_class_coverage": 0.8387096774193549,
           "truth_groups": 31,
           "accepted_predicted_groups": 28,
           "threshold": {
             "enabled": true,
-            "minimum_confidence": 0.7,
+            "minimum_confidence": 0.6,
             "minimum_margin": 0.4,
             "calibration_accepted": 33,
             "calibration_correct": 30,
@@ -1921,40 +1921,40 @@
             ],
             "calibration_truth_support": 40,
             "calibration_accepted_groups": 33,
-            "calibration_correct_distance_support": 35,
-            "max_embedding_distance": 1.2242784229179398,
+            "calibration_correct_distance_support": 34,
+            "max_embedding_distance": 1.2249404002653335,
             "embedding_distance_quantile": 0.995
           }
         },
         "maize_common_rust": {
           "truth_support": 72,
-          "raw_predicted_support": 74,
+          "raw_predicted_support": 72,
           "raw_correct": 72,
-          "accepted_predictions": 74,
+          "accepted_predictions": 72,
           "accepted_correct": 72,
-          "accepted_errors": 2,
-          "accepted_precision": 0.972972972972973,
+          "accepted_errors": 0,
+          "accepted_precision": 1.0,
           "accepted_precision_wilson95": [
-            0.9067070748308751,
-            0.9925566473617328
+            0.9493488274035422,
+            1.0
           ],
           "correct_accepted_recall": 1.0,
           "truth_class_coverage": 1.0,
           "truth_groups": 72,
-          "accepted_predicted_groups": 74,
+          "accepted_predicted_groups": 72,
           "threshold": {
             "enabled": true,
-            "minimum_confidence": 0.5,
-            "minimum_margin": 0.15,
-            "calibration_accepted": 92,
+            "minimum_confidence": 0.75,
+            "minimum_margin": 0.5,
+            "calibration_accepted": 89,
             "calibration_correct": 86,
-            "calibration_precision": 0.9347826086956522,
+            "calibration_precision": 0.9662921348314607,
             "calibration_precision_wilson95": [
-              0.8649420387269413,
-              0.9697697966768659
+              0.9055263755943858,
+              0.9884707788482102
             ],
             "calibration_truth_support": 88,
-            "calibration_accepted_groups": 92,
+            "calibration_accepted_groups": 89,
             "calibration_correct_distance_support": 86,
             "max_embedding_distance": 1.2049741789438873,
             "embedding_distance_quantile": 0.995
@@ -1962,7 +1962,7 @@
         },
         "maize_northern_leaf_blight": {
           "truth_support": 59,
-          "raw_predicted_support": 55,
+          "raw_predicted_support": 56,
           "raw_correct": 54,
           "accepted_predictions": 54,
           "accepted_correct": 53,
@@ -1996,41 +1996,41 @@
         },
         "maize_healthy": {
           "truth_support": 70,
-          "raw_predicted_support": 67,
-          "raw_correct": 67,
-          "accepted_predictions": 66,
-          "accepted_correct": 66,
+          "raw_predicted_support": 70,
+          "raw_correct": 69,
+          "accepted_predictions": 68,
+          "accepted_correct": 68,
           "accepted_errors": 0,
           "accepted_precision": 1.0,
           "accepted_precision_wilson95": [
-            0.9449974429864586,
-            0.9999999999999999
+            0.9465286634799296,
+            1.0
           ],
-          "correct_accepted_recall": 0.9428571428571428,
-          "truth_class_coverage": 0.9571428571428572,
+          "correct_accepted_recall": 0.9714285714285714,
+          "truth_class_coverage": 0.9714285714285714,
           "truth_groups": 70,
-          "accepted_predicted_groups": 66,
+          "accepted_predicted_groups": 68,
           "threshold": {
             "enabled": true,
-            "minimum_confidence": 0.8,
-            "minimum_margin": 0.5,
-            "calibration_accepted": 67,
-            "calibration_correct": 67,
+            "minimum_confidence": 0.6,
+            "minimum_margin": 0.3,
+            "calibration_accepted": 69,
+            "calibration_correct": 69,
             "calibration_precision": 1.0,
             "calibration_precision_wilson95": [
-              0.9457738606086981,
-              0.9999999999999998
+              0.9472627418109483,
+              1.0
             ],
             "calibration_truth_support": 70,
-            "calibration_accepted_groups": 67,
-            "calibration_correct_distance_support": 67,
-            "max_embedding_distance": 1.0041483169444272,
+            "calibration_accepted_groups": 69,
+            "calibration_correct_distance_support": 69,
+            "max_embedding_distance": 1.063707125217516,
             "embedding_distance_quantile": 0.995
           }
         },
         "potato_early_blight": {
           "truth_support": 48,
-          "raw_predicted_support": 52,
+          "raw_predicted_support": 51,
           "raw_correct": 47,
           "accepted_predictions": 35,
           "accepted_correct": 35,
@@ -2082,12 +2082,12 @@
             "enabled": true,
             "minimum_confidence": 0.85,
             "minimum_margin": 0.5,
-            "calibration_accepted": 63,
+            "calibration_accepted": 62,
             "calibration_correct": 57,
-            "calibration_precision": 0.9047619047619048,
+            "calibration_precision": 0.9193548387096774,
             "calibration_precision_wilson95": [
-              0.8073829893716311,
-              0.955616515723108
+              0.8247142865138739,
+              0.9650616530140073
             ],
             "calibration_truth_support": 70,
             "calibration_accepted_groups": 22,
@@ -2115,7 +2115,7 @@
           "threshold": {
             "enabled": true,
             "minimum_confidence": 0.6,
-            "minimum_margin": 0.4,
+            "minimum_margin": 0.3,
             "calibration_accepted": 6,
             "calibration_correct": 6,
             "calibration_precision": 1.0,
@@ -2134,31 +2134,31 @@
           "truth_support": 128,
           "raw_predicted_support": 134,
           "raw_correct": 123,
-          "accepted_predictions": 125,
-          "accepted_correct": 119,
-          "accepted_errors": 6,
-          "accepted_precision": 0.952,
+          "accepted_predictions": 127,
+          "accepted_correct": 120,
+          "accepted_errors": 7,
+          "accepted_precision": 0.9448818897637795,
           "accepted_precision_wilson95": [
-            0.8992288896829618,
-            0.9778179944047111
+            0.8905934052246904,
+            0.9730472253407012
           ],
-          "correct_accepted_recall": 0.9296875,
-          "truth_class_coverage": 0.9296875,
+          "correct_accepted_recall": 0.9375,
+          "truth_class_coverage": 0.9375,
           "truth_groups": 32,
-          "accepted_predicted_groups": 38,
+          "accepted_predicted_groups": 39,
           "threshold": {
             "enabled": true,
             "minimum_confidence": 0.5,
             "minimum_margin": 0.05,
-            "calibration_accepted": 132,
-            "calibration_correct": 121,
-            "calibration_precision": 0.9166666666666666,
+            "calibration_accepted": 134,
+            "calibration_correct": 122,
+            "calibration_precision": 0.9104477611940298,
             "calibration_precision_wilson95": [
-              0.8569354773667702,
-              0.9528320336343893
+              0.8499882232922155,
+              0.9480300285538373
             ],
             "calibration_truth_support": 143,
-            "calibration_accepted_groups": 45,
+            "calibration_accepted_groups": 46,
             "calibration_correct_distance_support": 126,
             "max_embedding_distance": 1.0343465687833029,
             "embedding_distance_quantile": 0.995
@@ -2177,7 +2177,7 @@
             1.0
           ],
           "correct_accepted_recall": 0.20454545454545456,
-          "truth_class_coverage": 0.29545454545454547,
+          "truth_class_coverage": 0.3181818181818182,
           "truth_groups": 11,
           "accepted_predicted_groups": 6,
           "threshold": {
@@ -2236,31 +2236,31 @@
           "truth_support": 48,
           "raw_predicted_support": 44,
           "raw_correct": 41,
-          "accepted_predictions": 27,
-          "accepted_correct": 27,
+          "accepted_predictions": 11,
+          "accepted_correct": 11,
           "accepted_errors": 0,
           "accepted_precision": 1.0,
           "accepted_precision_wilson95": [
-            0.8754449702581328,
-            0.9999999999999998
+            0.7411670330319684,
+            1.0
           ],
-          "correct_accepted_recall": 0.5625,
-          "truth_class_coverage": 0.6041666666666666,
+          "correct_accepted_recall": 0.22916666666666666,
+          "truth_class_coverage": 0.2708333333333333,
           "truth_groups": 12,
-          "accepted_predicted_groups": 11,
+          "accepted_predicted_groups": 5,
           "threshold": {
             "enabled": true,
-            "minimum_confidence": 0.85,
+            "minimum_confidence": 0.99,
             "minimum_margin": 0.5,
-            "calibration_accepted": 32,
-            "calibration_correct": 29,
-            "calibration_precision": 0.90625,
+            "calibration_accepted": 11,
+            "calibration_correct": 11,
+            "calibration_precision": 1.0,
             "calibration_precision_wilson95": [
-              0.7578184527161212,
-              0.9675984487016337
+              0.7411670330319684,
+              1.0
             ],
             "calibration_truth_support": 61,
-            "calibration_accepted_groups": 16,
+            "calibration_accepted_groups": 5,
             "calibration_correct_distance_support": 48,
             "max_embedding_distance": 1.0465413606268552,
             "embedding_distance_quantile": 0.995
@@ -2268,35 +2268,35 @@
         },
         "tomato_septoria_leaf_spot": {
           "truth_support": 97,
-          "raw_predicted_support": 95,
-          "raw_correct": 87,
-          "accepted_predictions": 71,
-          "accepted_correct": 68,
+          "raw_predicted_support": 96,
+          "raw_correct": 88,
+          "accepted_predictions": 72,
+          "accepted_correct": 69,
           "accepted_errors": 3,
-          "accepted_precision": 0.9577464788732394,
+          "accepted_precision": 0.9583333333333334,
           "accepted_precision_wilson95": [
-            0.882975839595153,
-            0.9855267393795246
+            0.8845072325868389,
+            0.9857291925330748
           ],
-          "correct_accepted_recall": 0.7010309278350515,
-          "truth_class_coverage": 0.711340206185567,
+          "correct_accepted_recall": 0.711340206185567,
+          "truth_class_coverage": 0.7216494845360825,
           "truth_groups": 61,
-          "accepted_predicted_groups": 49,
+          "accepted_predicted_groups": 50,
           "threshold": {
             "enabled": true,
             "minimum_confidence": 0.6,
             "minimum_margin": 0.25,
-            "calibration_accepted": 84,
-            "calibration_correct": 76,
-            "calibration_precision": 0.9047619047619048,
+            "calibration_accepted": 85,
+            "calibration_correct": 77,
+            "calibration_precision": 0.9058823529411765,
             "calibration_precision_wilson95": [
-              0.8231736440500729,
-              0.9509482900904406
+              0.8251294803137523,
+              0.9515349387077823
             ],
             "calibration_truth_support": 118,
-            "calibration_accepted_groups": 62,
-            "calibration_correct_distance_support": 96,
-            "max_embedding_distance": 1.1157368609190281,
+            "calibration_accepted_groups": 63,
+            "calibration_correct_distance_support": 97,
+            "max_embedding_distance": 1.1155527791042315,
             "embedding_distance_quantile": 0.995
           }
         },
@@ -2313,7 +2313,7 @@
             0.9757671215792799
           ],
           "correct_accepted_recall": 0.84,
-          "truth_class_coverage": 0.85,
+          "truth_class_coverage": 0.86,
           "truth_groups": 25,
           "accepted_predicted_groups": 27,
           "threshold": {
@@ -2336,41 +2336,41 @@
         },
         "tomato_target_spot": {
           "truth_support": 84,
-          "raw_predicted_support": 81,
-          "raw_correct": 71,
-          "accepted_predictions": 66,
-          "accepted_correct": 64,
+          "raw_predicted_support": 82,
+          "raw_correct": 72,
+          "accepted_predictions": 67,
+          "accepted_correct": 65,
           "accepted_errors": 2,
-          "accepted_precision": 0.9696969696969697,
+          "accepted_precision": 0.9701492537313433,
           "accepted_precision_wilson95": [
-            0.8960747808829028,
-            0.9916500898013463
+            0.8975344443664799,
+            0.991775305161102
           ],
-          "correct_accepted_recall": 0.7619047619047619,
-          "truth_class_coverage": 0.7976190476190477,
+          "correct_accepted_recall": 0.7738095238095238,
+          "truth_class_coverage": 0.8095238095238095,
           "truth_groups": 84,
-          "accepted_predicted_groups": 66,
+          "accepted_predicted_groups": 67,
           "threshold": {
             "enabled": true,
             "minimum_confidence": 0.5,
-            "minimum_margin": 0.15,
-            "calibration_accepted": 66,
-            "calibration_correct": 64,
-            "calibration_precision": 0.9696969696969697,
+            "minimum_margin": 0.2,
+            "calibration_accepted": 67,
+            "calibration_correct": 65,
+            "calibration_precision": 0.9701492537313433,
             "calibration_precision_wilson95": [
-              0.8960747808829028,
-              0.9916500898013463
+              0.8975344443664799,
+              0.991775305161102
             ],
             "calibration_truth_support": 84,
-            "calibration_accepted_groups": 66,
-            "calibration_correct_distance_support": 71,
-            "max_embedding_distance": 0.7873387314684809,
+            "calibration_accepted_groups": 67,
+            "calibration_correct_distance_support": 72,
+            "max_embedding_distance": 0.7882918530360742,
             "embedding_distance_quantile": 0.995
           }
         },
         "tomato_yellow_leaf_curl_virus": {
           "truth_support": 339,
-          "raw_predicted_support": 328,
+          "raw_predicted_support": 327,
           "raw_correct": 326,
           "accepted_predictions": 325,
           "accepted_correct": 324,
@@ -2387,7 +2387,7 @@
           "threshold": {
             "enabled": true,
             "minimum_confidence": 0.5,
-            "minimum_margin": 0.2,
+            "minimum_margin": 0.15,
             "calibration_accepted": 326,
             "calibration_correct": 325,
             "calibration_precision": 0.9969325153374233,
@@ -2406,33 +2406,33 @@
           "truth_support": 22,
           "raw_predicted_support": 25,
           "raw_correct": 22,
-          "accepted_predictions": 23,
+          "accepted_predictions": 24,
           "accepted_correct": 22,
-          "accepted_errors": 1,
-          "accepted_precision": 0.9565217391304348,
+          "accepted_errors": 2,
+          "accepted_precision": 0.9166666666666666,
           "accepted_precision_wilson95": [
-            0.7900884492974114,
-            0.9922833338565469
+            0.741511978067893,
+            0.9768411847029567
           ],
           "correct_accepted_recall": 1.0,
           "truth_class_coverage": 1.0,
           "truth_groups": 22,
-          "accepted_predicted_groups": 23,
+          "accepted_predicted_groups": 24,
           "threshold": {
             "enabled": true,
-            "minimum_confidence": 0.65,
-            "minimum_margin": 0.5,
-            "calibration_accepted": 25,
+            "minimum_confidence": 0.5,
+            "minimum_margin": 0.3,
+            "calibration_accepted": 26,
             "calibration_correct": 24,
-            "calibration_precision": 0.96,
+            "calibration_precision": 0.9230769230769231,
             "calibration_precision_wilson95": [
-              0.8045593626380625,
-              0.9929037664980127
+              0.7585844622837095,
+              0.9786449115277238
             ],
             "calibration_truth_support": 28,
-            "calibration_accepted_groups": 25,
-            "calibration_correct_distance_support": 24,
-            "max_embedding_distance": 0.9828163412675913,
+            "calibration_accepted_groups": 26,
+            "calibration_correct_distance_support": 25,
+            "max_embedding_distance": 1.1772465513566794,
             "embedding_distance_quantile": 0.995
           }
         },
@@ -2455,7 +2455,7 @@
           "threshold": {
             "enabled": true,
             "minimum_confidence": 0.5,
-            "minimum_margin": 0.1,
+            "minimum_margin": 0.15,
             "calibration_accepted": 81,
             "calibration_correct": 81,
             "calibration_precision": 1.0,
@@ -2473,12 +2473,12 @@
       },
       "groups": {
         "source_groups": 828,
-        "accepted_groups": 773,
-        "accepted_groups_with_no_accepted_error": 746,
-        "all_accepted_predictions_correct_group_fraction": 0.9650711513583441,
+        "accepted_groups": 771,
+        "accepted_groups_with_no_accepted_error": 745,
+        "all_accepted_predictions_correct_group_fraction": 0.9662775616083009,
         "all_correct_group_wilson95": [
-          0.9496573462826924,
-          0.975885429319807
+          0.9510471797713951,
+          0.9768845820296777
         ]
       },
       "interval_limitations": "Wilson intervals are descriptive. Image dependence, incomplete physical-leaf grouping, historical selection exposure and CAL threshold search are not covered by binomial intervals.",
@@ -2487,9 +2487,9 @@
     "plantdoc_field_like": {
       "scope": "Source-domain image evaluation of frozen global-softmax thresholds; not field diagnosis validation",
       "samples": 137,
-      "accuracy": 0.44525547445255476,
-      "macro_f1_all_labels": 0.26584062097135214,
-      "macro_f1_supported_labels": 0.45192905565129865,
+      "accuracy": 0.45255474452554745,
+      "macro_f1_all_labels": 0.277566484099196,
+      "macro_f1_supported_labels": 0.47186302296863314,
       "supported_labels": 10,
       "confusion_matrix": [
         [
@@ -2627,10 +2627,10 @@
         ],
         [
           0,
-          1,
           0,
           0,
-          1,
+          0,
+          2,
           0,
           0,
           3,
@@ -2788,12 +2788,12 @@
           0,
           0,
           0,
-          3,
+          2,
           1,
           0,
           0,
           0,
-          2,
+          3,
           0
         ],
         [
@@ -2816,19 +2816,19 @@
           0
         ]
       ],
-      "temperature": 1.7641813209074506,
-      "nll": 2.225500502245798,
-      "expected_calibration_error_15_bins": 0.33324485730969916,
-      "accepted_predictions": 64,
-      "accepted_correct": 39,
-      "accepted_errors": 25,
-      "accepted_precision": 0.609375,
+      "temperature": 1.7617546849775814,
+      "nll": 2.222435774143268,
+      "expected_calibration_error_15_bins": 0.3240079200252466,
+      "accepted_predictions": 60,
+      "accepted_correct": 38,
+      "accepted_errors": 22,
+      "accepted_precision": 0.6333333333333333,
       "accepted_precision_wilson95": [
-        0.4869191788027247,
-        0.7194443081175993
+        0.5068300063010303,
+        0.7437908331277456
       ],
-      "coverage": 0.46715328467153283,
-      "uncertain_predictions": 73,
+      "coverage": 0.43795620437956206,
+      "uncertain_predictions": 77,
       "per_class": {
         "maize_gray_leaf_spot": {
           "truth_support": 9,
@@ -2848,7 +2848,7 @@
           "accepted_predicted_groups": 4,
           "threshold": {
             "enabled": true,
-            "minimum_confidence": 0.7,
+            "minimum_confidence": 0.6,
             "minimum_margin": 0.4,
             "calibration_accepted": 33,
             "calibration_correct": 30,
@@ -2859,14 +2859,14 @@
             ],
             "calibration_truth_support": 40,
             "calibration_accepted_groups": 33,
-            "calibration_correct_distance_support": 35,
-            "max_embedding_distance": 1.2242784229179398,
+            "calibration_correct_distance_support": 34,
+            "max_embedding_distance": 1.2249404002653335,
             "embedding_distance_quantile": 0.995
           }
         },
         "maize_common_rust": {
           "truth_support": 16,
-          "raw_predicted_support": 18,
+          "raw_predicted_support": 17,
           "raw_correct": 14,
           "accepted_predictions": 16,
           "accepted_correct": 13,
@@ -2882,17 +2882,17 @@
           "accepted_predicted_groups": 16,
           "threshold": {
             "enabled": true,
-            "minimum_confidence": 0.5,
-            "minimum_margin": 0.15,
-            "calibration_accepted": 92,
+            "minimum_confidence": 0.75,
+            "minimum_margin": 0.5,
+            "calibration_accepted": 89,
             "calibration_correct": 86,
-            "calibration_precision": 0.9347826086956522,
+            "calibration_precision": 0.9662921348314607,
             "calibration_precision_wilson95": [
-              0.8649420387269413,
-              0.9697697966768659
+              0.9055263755943858,
+              0.9884707788482102
             ],
             "calibration_truth_support": 88,
-            "calibration_accepted_groups": 92,
+            "calibration_accepted_groups": 89,
             "calibration_correct_distance_support": 86,
             "max_embedding_distance": 1.2049741789438873,
             "embedding_distance_quantile": 0.995
@@ -2944,25 +2944,25 @@
           "accepted_predicted_groups": 0,
           "threshold": {
             "enabled": true,
-            "minimum_confidence": 0.8,
-            "minimum_margin": 0.5,
-            "calibration_accepted": 67,
-            "calibration_correct": 67,
+            "minimum_confidence": 0.6,
+            "minimum_margin": 0.3,
+            "calibration_accepted": 69,
+            "calibration_correct": 69,
             "calibration_precision": 1.0,
             "calibration_precision_wilson95": [
-              0.9457738606086981,
-              0.9999999999999998
+              0.9472627418109483,
+              1.0
             ],
             "calibration_truth_support": 70,
-            "calibration_accepted_groups": 67,
-            "calibration_correct_distance_support": 67,
-            "max_embedding_distance": 1.0041483169444272,
+            "calibration_accepted_groups": 69,
+            "calibration_correct_distance_support": 69,
+            "max_embedding_distance": 1.063707125217516,
             "embedding_distance_quantile": 0.995
           }
         },
         "potato_early_blight": {
           "truth_support": 16,
-          "raw_predicted_support": 19,
+          "raw_predicted_support": 20,
           "raw_correct": 6,
           "accepted_predictions": 6,
           "accepted_correct": 3,
@@ -2973,7 +2973,7 @@
             0.8123836935173494
           ],
           "correct_accepted_recall": 0.1875,
-          "truth_class_coverage": 0.5,
+          "truth_class_coverage": 0.4375,
           "truth_groups": 16,
           "accepted_predicted_groups": 6,
           "threshold": {
@@ -2998,13 +2998,13 @@
           "truth_support": 14,
           "raw_predicted_support": 18,
           "raw_correct": 5,
-          "accepted_predictions": 7,
+          "accepted_predictions": 6,
           "accepted_correct": 3,
-          "accepted_errors": 4,
-          "accepted_precision": 0.42857142857142855,
+          "accepted_errors": 3,
+          "accepted_precision": 0.5,
           "accepted_precision_wilson95": [
-            0.15821985525146975,
-            0.7495416354723428
+            0.1876163064826506,
+            0.8123836935173494
           ],
           "correct_accepted_recall": 0.21428571428571427,
           "truth_class_coverage": 0.42857142857142855,
@@ -3014,12 +3014,12 @@
             "enabled": true,
             "minimum_confidence": 0.85,
             "minimum_margin": 0.5,
-            "calibration_accepted": 63,
+            "calibration_accepted": 62,
             "calibration_correct": 57,
-            "calibration_precision": 0.9047619047619048,
+            "calibration_precision": 0.9193548387096774,
             "calibration_precision_wilson95": [
-              0.8073829893716311,
-              0.955616515723108
+              0.8247142865138739,
+              0.9650616530140073
             ],
             "calibration_truth_support": 70,
             "calibration_accepted_groups": 22,
@@ -3044,7 +3044,7 @@
           "threshold": {
             "enabled": true,
             "minimum_confidence": 0.6,
-            "minimum_margin": 0.4,
+            "minimum_margin": 0.3,
             "calibration_accepted": 6,
             "calibration_correct": 6,
             "calibration_precision": 1.0,
@@ -3072,22 +3072,22 @@
             0.7923403991979522
           ],
           "correct_accepted_recall": 0.06666666666666667,
-          "truth_class_coverage": 0.6,
+          "truth_class_coverage": 0.5333333333333333,
           "truth_groups": 15,
           "accepted_predicted_groups": 3,
           "threshold": {
             "enabled": true,
             "minimum_confidence": 0.5,
             "minimum_margin": 0.05,
-            "calibration_accepted": 132,
-            "calibration_correct": 121,
-            "calibration_precision": 0.9166666666666666,
+            "calibration_accepted": 134,
+            "calibration_correct": 122,
+            "calibration_precision": 0.9104477611940298,
             "calibration_precision_wilson95": [
-              0.8569354773667702,
-              0.9528320336343893
+              0.8499882232922155,
+              0.9480300285538373
             ],
             "calibration_truth_support": 143,
-            "calibration_accepted_groups": 45,
+            "calibration_accepted_groups": 46,
             "calibration_correct_distance_support": 126,
             "max_embedding_distance": 1.0343465687833029,
             "embedding_distance_quantile": 0.995
@@ -3140,7 +3140,7 @@
             0.7634069094874361
           ],
           "correct_accepted_recall": 0.3333333333333333,
-          "truth_class_coverage": 0.4666666666666667,
+          "truth_class_coverage": 0.4,
           "truth_groups": 15,
           "accepted_predicted_groups": 10,
           "threshold": {
@@ -3163,33 +3163,30 @@
         },
         "tomato_leaf_mold": {
           "truth_support": 13,
-          "raw_predicted_support": 16,
+          "raw_predicted_support": 15,
           "raw_correct": 7,
-          "accepted_predictions": 4,
-          "accepted_correct": 2,
-          "accepted_errors": 2,
-          "accepted_precision": 0.5,
-          "accepted_precision_wilson95": [
-            0.15003898915214947,
-            0.8499610108478506
-          ],
-          "correct_accepted_recall": 0.15384615384615385,
-          "truth_class_coverage": 0.23076923076923078,
+          "accepted_predictions": 0,
+          "accepted_correct": 0,
+          "accepted_errors": 0,
+          "accepted_precision": null,
+          "accepted_precision_wilson95": null,
+          "correct_accepted_recall": 0.0,
+          "truth_class_coverage": 0.07692307692307693,
           "truth_groups": 13,
-          "accepted_predicted_groups": 4,
+          "accepted_predicted_groups": 0,
           "threshold": {
             "enabled": true,
-            "minimum_confidence": 0.85,
+            "minimum_confidence": 0.99,
             "minimum_margin": 0.5,
-            "calibration_accepted": 32,
-            "calibration_correct": 29,
-            "calibration_precision": 0.90625,
+            "calibration_accepted": 11,
+            "calibration_correct": 11,
+            "calibration_precision": 1.0,
             "calibration_precision_wilson95": [
-              0.7578184527161212,
-              0.9675984487016337
+              0.7411670330319684,
+              1.0
             ],
             "calibration_truth_support": 61,
-            "calibration_accepted_groups": 16,
+            "calibration_accepted_groups": 5,
             "calibration_correct_distance_support": 48,
             "max_embedding_distance": 1.0465413606268552,
             "embedding_distance_quantile": 0.995
@@ -3215,17 +3212,17 @@
             "enabled": true,
             "minimum_confidence": 0.6,
             "minimum_margin": 0.25,
-            "calibration_accepted": 84,
-            "calibration_correct": 76,
-            "calibration_precision": 0.9047619047619048,
+            "calibration_accepted": 85,
+            "calibration_correct": 77,
+            "calibration_precision": 0.9058823529411765,
             "calibration_precision_wilson95": [
-              0.8231736440500729,
-              0.9509482900904406
+              0.8251294803137523,
+              0.9515349387077823
             ],
             "calibration_truth_support": 118,
-            "calibration_accepted_groups": 62,
-            "calibration_correct_distance_support": 96,
-            "max_embedding_distance": 1.1157368609190281,
+            "calibration_accepted_groups": 63,
+            "calibration_correct_distance_support": 97,
+            "max_embedding_distance": 1.1155527791042315,
             "embedding_distance_quantile": 0.995
           }
         },
@@ -3276,18 +3273,18 @@
           "threshold": {
             "enabled": true,
             "minimum_confidence": 0.5,
-            "minimum_margin": 0.15,
-            "calibration_accepted": 66,
-            "calibration_correct": 64,
-            "calibration_precision": 0.9696969696969697,
+            "minimum_margin": 0.2,
+            "calibration_accepted": 67,
+            "calibration_correct": 65,
+            "calibration_precision": 0.9701492537313433,
             "calibration_precision_wilson95": [
-              0.8960747808829028,
-              0.9916500898013463
+              0.8975344443664799,
+              0.991775305161102
             ],
             "calibration_truth_support": 84,
-            "calibration_accepted_groups": 66,
-            "calibration_correct_distance_support": 71,
-            "max_embedding_distance": 0.7873387314684809,
+            "calibration_accepted_groups": 67,
+            "calibration_correct_distance_support": 72,
+            "max_embedding_distance": 0.7882918530360742,
             "embedding_distance_quantile": 0.995
           }
         },
@@ -3307,7 +3304,7 @@
           "threshold": {
             "enabled": true,
             "minimum_confidence": 0.5,
-            "minimum_margin": 0.2,
+            "minimum_margin": 0.15,
             "calibration_accepted": 326,
             "calibration_correct": 325,
             "calibration_precision": 0.9969325153374233,
@@ -3324,35 +3321,35 @@
         },
         "tomato_mosaic_virus": {
           "truth_support": 6,
-          "raw_predicted_support": 2,
-          "raw_correct": 2,
-          "accepted_predictions": 1,
-          "accepted_correct": 1,
+          "raw_predicted_support": 3,
+          "raw_correct": 3,
+          "accepted_predictions": 2,
+          "accepted_correct": 2,
           "accepted_errors": 0,
           "accepted_precision": 1.0,
           "accepted_precision_wilson95": [
-            0.20654931437723745,
+            0.34238022750665303,
             1.0
           ],
-          "correct_accepted_recall": 0.16666666666666666,
-          "truth_class_coverage": 0.16666666666666666,
+          "correct_accepted_recall": 0.3333333333333333,
+          "truth_class_coverage": 0.3333333333333333,
           "truth_groups": 6,
-          "accepted_predicted_groups": 1,
+          "accepted_predicted_groups": 2,
           "threshold": {
             "enabled": true,
-            "minimum_confidence": 0.65,
-            "minimum_margin": 0.5,
-            "calibration_accepted": 25,
+            "minimum_confidence": 0.5,
+            "minimum_margin": 0.3,
+            "calibration_accepted": 26,
             "calibration_correct": 24,
-            "calibration_precision": 0.96,
+            "calibration_precision": 0.9230769230769231,
             "calibration_precision_wilson95": [
-              0.8045593626380625,
-              0.9929037664980127
+              0.7585844622837095,
+              0.9786449115277238
             ],
             "calibration_truth_support": 28,
-            "calibration_accepted_groups": 25,
-            "calibration_correct_distance_support": 24,
-            "max_embedding_distance": 0.9828163412675913,
+            "calibration_accepted_groups": 26,
+            "calibration_correct_distance_support": 25,
+            "max_embedding_distance": 1.1772465513566794,
             "embedding_distance_quantile": 0.995
           }
         },
@@ -3372,7 +3369,7 @@
           "threshold": {
             "enabled": true,
             "minimum_confidence": 0.5,
-            "minimum_margin": 0.1,
+            "minimum_margin": 0.15,
             "calibration_accepted": 81,
             "calibration_correct": 81,
             "calibration_precision": 1.0,
@@ -3390,12 +3387,12 @@
       },
       "groups": {
         "source_groups": 132,
-        "accepted_groups": 62,
+        "accepted_groups": 59,
         "accepted_groups_with_no_accepted_error": 38,
-        "all_accepted_predictions_correct_group_fraction": 0.6129032258064516,
+        "all_accepted_predictions_correct_group_fraction": 0.6440677966101694,
         "all_correct_group_wilson95": [
-          0.48847843539018354,
-          0.7241535483288614
+          0.5165549598185499,
+          0.7539670859618668
         ]
       },
       "interval_limitations": "Wilson intervals are descriptive. Image dependence, incomplete physical-leaf grouping, historical selection exposure and CAL threshold search are not covered by binomial intervals.",
@@ -3409,9 +3406,9 @@
   "source_test": {
     "scope": "Source-domain image evaluation of frozen global-softmax thresholds; not field diagnosis validation",
     "samples": 3674,
-    "accuracy": 0.9210669569951007,
-    "macro_f1_all_labels": 0.9086586650454493,
-    "macro_f1_supported_labels": 0.9086586650454493,
+    "accuracy": 0.9227000544365814,
+    "macro_f1_all_labels": 0.9105838708711553,
+    "macro_f1_supported_labels": 0.9105838708711553,
     "supported_labels": 17,
     "confusion_matrix": [
       [
@@ -3435,8 +3432,8 @@
       ],
       [
         0,
-        179,
-        0,
+        178,
+        1,
         0,
         0,
         0,
@@ -3472,10 +3469,10 @@
         0
       ],
       [
-        1,
-        1,
         0,
-        172,
+        0,
+        0,
+        174,
         0,
         0,
         0,
@@ -3555,9 +3552,9 @@
         0,
         0,
         0,
-        287,
-        22,
-        3,
+        288,
+        20,
+        4,
         1,
         7,
         0,
@@ -3572,10 +3569,10 @@
         0,
         0,
         0,
-        4,
+        3,
         0,
-        4,
-        113,
+        3,
+        115,
         8,
         2,
         8,
@@ -3594,8 +3591,8 @@
         7,
         0,
         3,
-        23,
-        257,
+        21,
+        259,
         8,
         1,
         0,
@@ -3632,10 +3629,10 @@
         0,
         0,
         13,
-        5,
+        6,
         2,
         4,
-        251,
+        250,
         1,
         3,
         2,
@@ -3653,9 +3650,9 @@
         0,
         1,
         1,
-        2,
+        3,
         0,
-        226,
+        225,
         15,
         0,
         2,
@@ -3670,12 +3667,12 @@
         0,
         0,
         1,
-        3,
+        2,
         0,
         0,
         3,
-        7,
-        194,
+        6,
+        196,
         0,
         1,
         2
@@ -3738,23 +3735,23 @@
         224
       ]
     ],
-    "temperature": 1.7641813209074506,
-    "nll": 0.27304525355998077,
-    "expected_calibration_error_15_bins": 0.04846627297696924,
-    "accepted_predictions": 3197,
-    "accepted_correct": 3084,
-    "accepted_errors": 113,
-    "accepted_precision": 0.9646543634657492,
+    "temperature": 1.7617546849775814,
+    "nll": 0.2698257617962453,
+    "expected_calibration_error_15_bins": 0.04824340543812405,
+    "accepted_predictions": 3139,
+    "accepted_correct": 3036,
+    "accepted_errors": 103,
+    "accepted_precision": 0.9671870022300095,
     "accepted_precision_wilson95": [
-      0.9576755492323176,
-      0.970517876847156
+      0.9603616062634667,
+      0.9728703236413164
     ],
-    "coverage": 0.8701687534022864,
-    "uncertain_predictions": 477,
+    "coverage": 0.8543821448013065,
+    "uncertain_predictions": 535,
     "per_class": {
       "maize_gray_leaf_spot": {
         "truth_support": 77,
-        "raw_predicted_support": 79,
+        "raw_predicted_support": 78,
         "raw_correct": 69,
         "accepted_predictions": 69,
         "accepted_correct": 63,
@@ -3770,7 +3767,7 @@
         "accepted_predicted_groups": 69,
         "threshold": {
           "enabled": true,
-          "minimum_confidence": 0.7,
+          "minimum_confidence": 0.6,
           "minimum_margin": 0.4,
           "calibration_accepted": 33,
           "calibration_correct": 30,
@@ -3781,40 +3778,40 @@
           ],
           "calibration_truth_support": 40,
           "calibration_accepted_groups": 33,
-          "calibration_correct_distance_support": 35,
-          "max_embedding_distance": 1.2242784229179398,
+          "calibration_correct_distance_support": 34,
+          "max_embedding_distance": 1.2249404002653335,
           "embedding_distance_quantile": 0.995
         }
       },
       "maize_common_rust": {
         "truth_support": 179,
-        "raw_predicted_support": 182,
-        "raw_correct": 179,
-        "accepted_predictions": 180,
+        "raw_predicted_support": 180,
+        "raw_correct": 178,
+        "accepted_predictions": 178,
         "accepted_correct": 178,
-        "accepted_errors": 2,
-        "accepted_precision": 0.9888888888888889,
+        "accepted_errors": 0,
+        "accepted_precision": 1.0,
         "accepted_precision_wilson95": [
-          0.9603989991004155,
-          0.9969476251540074
+          0.978874681023748,
+          0.9999999999999999
         ],
         "correct_accepted_recall": 0.994413407821229,
         "truth_class_coverage": 0.994413407821229,
         "truth_groups": 179,
-        "accepted_predicted_groups": 180,
+        "accepted_predicted_groups": 178,
         "threshold": {
           "enabled": true,
-          "minimum_confidence": 0.5,
-          "minimum_margin": 0.15,
-          "calibration_accepted": 92,
+          "minimum_confidence": 0.75,
+          "minimum_margin": 0.5,
+          "calibration_accepted": 89,
           "calibration_correct": 86,
-          "calibration_precision": 0.9347826086956522,
+          "calibration_precision": 0.9662921348314607,
           "calibration_precision_wilson95": [
-            0.8649420387269413,
-            0.9697697966768659
+            0.9055263755943858,
+            0.9884707788482102
           ],
           "calibration_truth_support": 88,
-          "calibration_accepted_groups": 92,
+          "calibration_accepted_groups": 89,
           "calibration_correct_distance_support": 86,
           "max_embedding_distance": 1.2049741789438873,
           "embedding_distance_quantile": 0.995
@@ -3822,7 +3819,7 @@
       },
       "maize_northern_leaf_blight": {
         "truth_support": 148,
-        "raw_predicted_support": 145,
+        "raw_predicted_support": 146,
         "raw_correct": 137,
         "accepted_predictions": 139,
         "accepted_correct": 132,
@@ -3856,35 +3853,35 @@
       },
       "maize_healthy": {
         "truth_support": 174,
-        "raw_predicted_support": 173,
-        "raw_correct": 172,
-        "accepted_predictions": 167,
-        "accepted_correct": 166,
+        "raw_predicted_support": 175,
+        "raw_correct": 174,
+        "accepted_predictions": 173,
+        "accepted_correct": 172,
         "accepted_errors": 1,
-        "accepted_precision": 0.9940119760479041,
+        "accepted_precision": 0.9942196531791907,
         "accepted_precision_wilson95": [
-          0.9668655375013075,
-          0.9989421835225158
+          0.9679889233853399,
+          0.9989788970587502
         ],
-        "correct_accepted_recall": 0.9540229885057471,
-        "truth_class_coverage": 0.9655172413793104,
+        "correct_accepted_recall": 0.9885057471264368,
+        "truth_class_coverage": 0.9885057471264368,
         "truth_groups": 174,
-        "accepted_predicted_groups": 167,
+        "accepted_predicted_groups": 173,
         "threshold": {
           "enabled": true,
-          "minimum_confidence": 0.8,
-          "minimum_margin": 0.5,
-          "calibration_accepted": 67,
-          "calibration_correct": 67,
+          "minimum_confidence": 0.6,
+          "minimum_margin": 0.3,
+          "calibration_accepted": 69,
+          "calibration_correct": 69,
           "calibration_precision": 1.0,
           "calibration_precision_wilson95": [
-            0.9457738606086981,
-            0.9999999999999998
+            0.9472627418109483,
+            1.0
           ],
           "calibration_truth_support": 70,
-          "calibration_accepted_groups": 67,
-          "calibration_correct_distance_support": 67,
-          "max_embedding_distance": 1.0041483169444272,
+          "calibration_accepted_groups": 69,
+          "calibration_correct_distance_support": 69,
+          "max_embedding_distance": 1.063707125217516,
           "embedding_distance_quantile": 0.995
         }
       },
@@ -3892,18 +3889,18 @@
         "truth_support": 152,
         "raw_predicted_support": 154,
         "raw_correct": 148,
-        "accepted_predictions": 125,
-        "accepted_correct": 125,
+        "accepted_predictions": 124,
+        "accepted_correct": 124,
         "accepted_errors": 0,
         "accepted_precision": 1.0,
         "accepted_precision_wilson95": [
-          0.9701846062916737,
-          1.0
+          0.9699513846593223,
+          0.9999999999999999
         ],
-        "correct_accepted_recall": 0.8223684210526315,
-        "truth_class_coverage": 0.8223684210526315,
+        "correct_accepted_recall": 0.8157894736842105,
+        "truth_class_coverage": 0.8157894736842105,
         "truth_groups": 38,
-        "accepted_predicted_groups": 36,
+        "accepted_predicted_groups": 35,
         "threshold": {
           "enabled": true,
           "minimum_confidence": 0.9,
@@ -3924,7 +3921,7 @@
       },
       "potato_late_blight": {
         "truth_support": 152,
-        "raw_predicted_support": 159,
+        "raw_predicted_support": 158,
         "raw_correct": 140,
         "accepted_predictions": 120,
         "accepted_correct": 118,
@@ -3942,12 +3939,12 @@
           "enabled": true,
           "minimum_confidence": 0.85,
           "minimum_margin": 0.5,
-          "calibration_accepted": 63,
+          "calibration_accepted": 62,
           "calibration_correct": 57,
-          "calibration_precision": 0.9047619047619048,
+          "calibration_precision": 0.9193548387096774,
           "calibration_precision_wilson95": [
-            0.8073829893716311,
-            0.955616515723108
+            0.8247142865138739,
+            0.9650616530140073
           ],
           "calibration_truth_support": 70,
           "calibration_accepted_groups": 22,
@@ -3960,22 +3957,22 @@
         "truth_support": 24,
         "raw_predicted_support": 23,
         "raw_correct": 20,
-        "accepted_predictions": 18,
-        "accepted_correct": 17,
+        "accepted_predictions": 19,
+        "accepted_correct": 18,
         "accepted_errors": 1,
-        "accepted_precision": 0.9444444444444444,
+        "accepted_precision": 0.9473684210526315,
         "accepted_precision_wilson95": [
-          0.7424269921812741,
-          0.990124809021697
+          0.753612688331012,
+          0.9906480059376995
         ],
-        "correct_accepted_recall": 0.7083333333333334,
-        "truth_class_coverage": 0.75,
+        "correct_accepted_recall": 0.75,
+        "truth_class_coverage": 0.7916666666666666,
         "truth_groups": 6,
         "accepted_predicted_groups": 7,
         "threshold": {
           "enabled": true,
           "minimum_confidence": 0.6,
-          "minimum_margin": 0.4,
+          "minimum_margin": 0.3,
           "calibration_accepted": 6,
           "calibration_correct": 6,
           "calibration_precision": 1.0,
@@ -3993,32 +3990,32 @@
       "tomato_bacterial_spot": {
         "truth_support": 320,
         "raw_predicted_support": 328,
-        "raw_correct": 287,
-        "accepted_predictions": 311,
-        "accepted_correct": 277,
-        "accepted_errors": 34,
-        "accepted_precision": 0.8906752411575563,
+        "raw_correct": 288,
+        "accepted_predictions": 310,
+        "accepted_correct": 278,
+        "accepted_errors": 32,
+        "accepted_precision": 0.896774193548387,
         "accepted_precision_wilson95": [
-          0.8511120779465656,
-          0.9207049531083925
+          0.857907958840283,
+          0.9259272964646773
         ],
-        "correct_accepted_recall": 0.865625,
-        "truth_class_coverage": 0.878125,
+        "correct_accepted_recall": 0.86875,
+        "truth_class_coverage": 0.88125,
         "truth_groups": 80,
-        "accepted_predicted_groups": 108,
+        "accepted_predicted_groups": 106,
         "threshold": {
           "enabled": true,
           "minimum_confidence": 0.5,
           "minimum_margin": 0.05,
-          "calibration_accepted": 132,
-          "calibration_correct": 121,
-          "calibration_precision": 0.9166666666666666,
+          "calibration_accepted": 134,
+          "calibration_correct": 122,
+          "calibration_precision": 0.9104477611940298,
           "calibration_precision_wilson95": [
-            0.8569354773667702,
-            0.9528320336343893
+            0.8499882232922155,
+            0.9480300285538373
           ],
           "calibration_truth_support": 143,
-          "calibration_accepted_groups": 45,
+          "calibration_accepted_groups": 46,
           "calibration_correct_distance_support": 126,
           "max_embedding_distance": 1.0343465687833029,
           "embedding_distance_quantile": 0.995
@@ -4026,18 +4023,18 @@
       },
       "tomato_early_blight": {
         "truth_support": 149,
-        "raw_predicted_support": 179,
-        "raw_correct": 113,
-        "accepted_predictions": 34,
-        "accepted_correct": 34,
+        "raw_predicted_support": 177,
+        "raw_correct": 115,
+        "accepted_predictions": 35,
+        "accepted_correct": 35,
         "accepted_errors": 0,
         "accepted_precision": 1.0,
         "accepted_precision_wilson95": [
-          0.8984854458466761,
+          0.9010990076755959,
           0.9999999999999999
         ],
-        "correct_accepted_recall": 0.22818791946308725,
-        "truth_class_coverage": 0.3422818791946309,
+        "correct_accepted_recall": 0.2348993288590604,
+        "truth_class_coverage": 0.348993288590604,
         "truth_groups": 38,
         "accepted_predicted_groups": 18,
         "threshold": {
@@ -4060,18 +4057,18 @@
       },
       "tomato_late_blight": {
         "truth_support": 302,
-        "raw_predicted_support": 274,
-        "raw_correct": 257,
-        "accepted_predictions": 255,
-        "accepted_correct": 243,
+        "raw_predicted_support": 277,
+        "raw_correct": 259,
+        "accepted_predictions": 256,
+        "accepted_correct": 244,
         "accepted_errors": 12,
-        "accepted_precision": 0.9529411764705882,
+        "accepted_precision": 0.953125,
         "accepted_precision_wilson95": [
-          0.9195597697036109,
-          0.9728784086796263
+          0.9198669811156821,
+          0.9729851489983719
         ],
-        "correct_accepted_recall": 0.804635761589404,
-        "truth_class_coverage": 0.8344370860927153,
+        "correct_accepted_recall": 0.8079470198675497,
+        "truth_class_coverage": 0.8278145695364238,
         "truth_groups": 182,
         "accepted_predicted_groups": 179,
         "threshold": {
@@ -4094,33 +4091,33 @@
       },
       "tomato_leaf_mold": {
         "truth_support": 144,
-        "raw_predicted_support": 152,
+        "raw_predicted_support": 153,
         "raw_correct": 133,
-        "accepted_predictions": 96,
-        "accepted_correct": 93,
-        "accepted_errors": 3,
-        "accepted_precision": 0.96875,
+        "accepted_predictions": 34,
+        "accepted_correct": 34,
+        "accepted_errors": 0,
+        "accepted_precision": 1.0,
         "accepted_precision_wilson95": [
-          0.9121132067546303,
-          0.989315929628799
+          0.8984854458466761,
+          0.9999999999999999
         ],
-        "correct_accepted_recall": 0.6458333333333334,
-        "truth_class_coverage": 0.6527777777777778,
+        "correct_accepted_recall": 0.2361111111111111,
+        "truth_class_coverage": 0.24305555555555555,
         "truth_groups": 36,
-        "accepted_predicted_groups": 36,
+        "accepted_predicted_groups": 20,
         "threshold": {
           "enabled": true,
-          "minimum_confidence": 0.85,
+          "minimum_confidence": 0.99,
           "minimum_margin": 0.5,
-          "calibration_accepted": 32,
-          "calibration_correct": 29,
-          "calibration_precision": 0.90625,
+          "calibration_accepted": 11,
+          "calibration_correct": 11,
+          "calibration_precision": 1.0,
           "calibration_precision_wilson95": [
-            0.7578184527161212,
-            0.9675984487016337
+            0.7411670330319684,
+            1.0
           ],
           "calibration_truth_support": 61,
-          "calibration_accepted_groups": 16,
+          "calibration_accepted_groups": 5,
           "calibration_correct_distance_support": 48,
           "max_embedding_distance": 1.0465413606268552,
           "embedding_distance_quantile": 0.995
@@ -4128,8 +4125,8 @@
       },
       "tomato_septoria_leaf_spot": {
         "truth_support": 285,
-        "raw_predicted_support": 277,
-        "raw_correct": 251,
+        "raw_predicted_support": 276,
+        "raw_correct": 250,
         "accepted_predictions": 235,
         "accepted_correct": 225,
         "accepted_errors": 10,
@@ -4146,36 +4143,36 @@
           "enabled": true,
           "minimum_confidence": 0.6,
           "minimum_margin": 0.25,
-          "calibration_accepted": 84,
-          "calibration_correct": 76,
-          "calibration_precision": 0.9047619047619048,
+          "calibration_accepted": 85,
+          "calibration_correct": 77,
+          "calibration_precision": 0.9058823529411765,
           "calibration_precision_wilson95": [
-            0.8231736440500729,
-            0.9509482900904406
+            0.8251294803137523,
+            0.9515349387077823
           ],
           "calibration_truth_support": 118,
-          "calibration_accepted_groups": 62,
-          "calibration_correct_distance_support": 96,
-          "max_embedding_distance": 1.1157368609190281,
+          "calibration_accepted_groups": 63,
+          "calibration_correct_distance_support": 97,
+          "max_embedding_distance": 1.1155527791042315,
           "embedding_distance_quantile": 0.995
         }
       },
       "tomato_spider_mites": {
         "truth_support": 252,
-        "raw_predicted_support": 246,
-        "raw_correct": 226,
+        "raw_predicted_support": 244,
+        "raw_correct": 225,
         "accepted_predictions": 219,
-        "accepted_correct": 205,
-        "accepted_errors": 14,
-        "accepted_precision": 0.9360730593607306,
+        "accepted_correct": 206,
+        "accepted_errors": 13,
+        "accepted_precision": 0.9406392694063926,
         "accepted_precision_wilson95": [
-          0.8955699310514517,
-          0.9615416720173703
+          0.9011019897096475,
+          0.9649846039672247
         ],
-        "correct_accepted_recall": 0.8134920634920635,
+        "correct_accepted_recall": 0.8174603174603174,
         "truth_class_coverage": 0.8611111111111112,
         "truth_groups": 63,
-        "accepted_predicted_groups": 71,
+        "accepted_predicted_groups": 70,
         "threshold": {
           "enabled": true,
           "minimum_confidence": 0.5,
@@ -4196,35 +4193,35 @@
       },
       "tomato_target_spot": {
         "truth_support": 211,
-        "raw_predicted_support": 226,
-        "raw_correct": 194,
-        "accepted_predictions": 195,
-        "accepted_correct": 178,
-        "accepted_errors": 17,
-        "accepted_precision": 0.9128205128205128,
+        "raw_predicted_support": 228,
+        "raw_correct": 196,
+        "accepted_predictions": 191,
+        "accepted_correct": 176,
+        "accepted_errors": 15,
+        "accepted_precision": 0.9214659685863874,
         "accepted_precision_wilson95": [
-          0.8648324791126469,
-          0.9448578186495629
+          0.8744806919647072,
+          0.9518321522034467
         ],
-        "correct_accepted_recall": 0.8436018957345972,
-        "truth_class_coverage": 0.8767772511848341,
+        "correct_accepted_recall": 0.8341232227488151,
+        "truth_class_coverage": 0.8625592417061612,
         "truth_groups": 211,
-        "accepted_predicted_groups": 190,
+        "accepted_predicted_groups": 187,
         "threshold": {
           "enabled": true,
           "minimum_confidence": 0.5,
-          "minimum_margin": 0.15,
-          "calibration_accepted": 66,
-          "calibration_correct": 64,
-          "calibration_precision": 0.9696969696969697,
+          "minimum_margin": 0.2,
+          "calibration_accepted": 67,
+          "calibration_correct": 65,
+          "calibration_precision": 0.9701492537313433,
           "calibration_precision_wilson95": [
-            0.8960747808829028,
-            0.9916500898013463
+            0.8975344443664799,
+            0.991775305161102
           ],
           "calibration_truth_support": 84,
-          "calibration_accepted_groups": 66,
-          "calibration_correct_distance_support": 71,
-          "max_embedding_distance": 0.7873387314684809,
+          "calibration_accepted_groups": 67,
+          "calibration_correct_distance_support": 72,
+          "max_embedding_distance": 0.7882918530360742,
           "embedding_distance_quantile": 0.995
         }
       },
@@ -4232,22 +4229,22 @@
         "truth_support": 816,
         "raw_predicted_support": 781,
         "raw_correct": 778,
-        "accepted_predictions": 763,
-        "accepted_correct": 762,
+        "accepted_predictions": 765,
+        "accepted_correct": 764,
         "accepted_errors": 1,
-        "accepted_precision": 0.9986893840104849,
+        "accepted_precision": 0.9986928104575163,
         "accepted_precision_wilson95": [
-          0.9926138359914661,
-          0.9997686066197123
+          0.9926330466216954,
+          0.9997692116674787
         ],
-        "correct_accepted_recall": 0.9338235294117647,
+        "correct_accepted_recall": 0.9362745098039216,
         "truth_class_coverage": 0.9656862745098039,
         "truth_groups": 496,
-        "accepted_predicted_groups": 467,
+        "accepted_predicted_groups": 469,
         "threshold": {
           "enabled": true,
           "minimum_confidence": 0.5,
-          "minimum_margin": 0.2,
+          "minimum_margin": 0.15,
           "calibration_accepted": 326,
           "calibration_correct": 325,
           "calibration_precision": 0.9969325153374233,
@@ -4266,33 +4263,33 @@
         "truth_support": 56,
         "raw_predicted_support": 64,
         "raw_correct": 56,
-        "accepted_predictions": 54,
-        "accepted_correct": 53,
+        "accepted_predictions": 55,
+        "accepted_correct": 54,
         "accepted_errors": 1,
-        "accepted_precision": 0.9814814814814815,
+        "accepted_precision": 0.9818181818181818,
         "accepted_precision_wilson95": [
-          0.9022856251121808,
-          0.9967235122817709
+          0.903942239378376,
+          0.9967832195451589
         ],
-        "correct_accepted_recall": 0.9464285714285714,
-        "truth_class_coverage": 0.9464285714285714,
+        "correct_accepted_recall": 0.9642857142857143,
+        "truth_class_coverage": 0.9642857142857143,
         "truth_groups": 56,
-        "accepted_predicted_groups": 54,
+        "accepted_predicted_groups": 55,
         "threshold": {
           "enabled": true,
-          "minimum_confidence": 0.65,
-          "minimum_margin": 0.5,
-          "calibration_accepted": 25,
+          "minimum_confidence": 0.5,
+          "minimum_margin": 0.3,
+          "calibration_accepted": 26,
           "calibration_correct": 24,
-          "calibration_precision": 0.96,
+          "calibration_precision": 0.9230769230769231,
           "calibration_precision_wilson95": [
-            0.8045593626380625,
-            0.9929037664980127
+            0.7585844622837095,
+            0.9786449115277238
           ],
           "calibration_truth_support": 28,
-          "calibration_accepted_groups": 25,
-          "calibration_correct_distance_support": 24,
-          "max_embedding_distance": 0.9828163412675913,
+          "calibration_accepted_groups": 26,
+          "calibration_correct_distance_support": 25,
+          "max_embedding_distance": 1.1772465513566794,
           "embedding_distance_quantile": 0.995
         }
       },
@@ -4309,13 +4306,13 @@
           0.9974688290745861
         ],
         "correct_accepted_recall": 0.9227467811158798,
-        "truth_class_coverage": 0.9399141630901288,
+        "truth_class_coverage": 0.9356223175965666,
         "truth_groups": 125,
         "accepted_predicted_groups": 125,
         "threshold": {
           "enabled": true,
           "minimum_confidence": 0.5,
-          "minimum_margin": 0.1,
+          "minimum_margin": 0.15,
           "calibration_accepted": 81,
           "calibration_correct": 81,
           "calibration_precision": 1.0,
@@ -4333,12 +4330,12 @@
     },
     "groups": {
       "source_groups": 2100,
-      "accepted_groups": 1990,
-      "accepted_groups_with_no_accepted_error": 1898,
-      "all_accepted_predictions_correct_group_fraction": 0.9537688442211055,
+      "accepted_groups": 1979,
+      "accepted_groups_with_no_accepted_error": 1896,
+      "all_accepted_predictions_correct_group_fraction": 0.9580596260737746,
       "all_correct_group_wilson95": [
-        0.9436361697228558,
-        0.9621530002286017
+        0.9483046829117597,
+        0.966039725177373
       ]
     },
     "interval_limitations": "Wilson intervals are descriptive. Image dependence, incomplete physical-leaf grouping, historical selection exposure and CAL threshold search are not covered by binomial intervals.",
@@ -4347,10 +4344,10 @@
     "full_original_source_test": true,
     "execution": {
       "samples": 3674,
-      "elapsed_seconds": 11.878130147000775,
+      "elapsed_seconds": 13.137224038000568,
       "desktop_inference_only_latency_ms": {
-        "p50": 1.7468009991716826,
-        "p95": 2.5870123490676633
+        "p50": 1.870705502369674,
+        "p95": 2.8426060500351014
       },
       "phone_benchmark_executed": false
     },
@@ -4722,16 +4719,16 @@
         0
       ]
     ],
-    "temperature": 1.7641813209074506,
-    "nll": 2.38057326209544,
-    "expected_calibration_error_15_bins": 0.3781632838200368,
+    "temperature": 1.7617546849775814,
+    "nll": 2.3898732886230993,
+    "expected_calibration_error_15_bins": 0.3810259876696309,
     "accepted_predictions": 38,
-    "accepted_correct": 19,
-    "accepted_errors": 19,
-    "accepted_precision": 0.5,
+    "accepted_correct": 20,
+    "accepted_errors": 18,
+    "accepted_precision": 0.5263157894736842,
     "accepted_precision_wilson95": [
-      0.34849928364395105,
-      0.6515007163560489
+      0.3725897138449667,
+      0.6752097667747392
     ],
     "coverage": 0.475,
     "uncertain_predictions": 42,
@@ -4754,7 +4751,7 @@
         "accepted_predicted_groups": 2,
         "threshold": {
           "enabled": true,
-          "minimum_confidence": 0.7,
+          "minimum_confidence": 0.6,
           "minimum_margin": 0.4,
           "calibration_accepted": 33,
           "calibration_correct": 30,
@@ -4765,8 +4762,8 @@
           ],
           "calibration_truth_support": 40,
           "calibration_accepted_groups": 33,
-          "calibration_correct_distance_support": 35,
-          "max_embedding_distance": 1.2242784229179398,
+          "calibration_correct_distance_support": 34,
+          "max_embedding_distance": 1.2249404002653335,
           "embedding_distance_quantile": 0.995
         }
       },
@@ -4788,17 +4785,17 @@
         "accepted_predicted_groups": 10,
         "threshold": {
           "enabled": true,
-          "minimum_confidence": 0.5,
-          "minimum_margin": 0.15,
-          "calibration_accepted": 92,
+          "minimum_confidence": 0.75,
+          "minimum_margin": 0.5,
+          "calibration_accepted": 89,
           "calibration_correct": 86,
-          "calibration_precision": 0.9347826086956522,
+          "calibration_precision": 0.9662921348314607,
           "calibration_precision_wilson95": [
-            0.8649420387269413,
-            0.9697697966768659
+            0.9055263755943858,
+            0.9884707788482102
           ],
           "calibration_truth_support": 88,
-          "calibration_accepted_groups": 92,
+          "calibration_accepted_groups": 89,
           "calibration_correct_distance_support": 86,
           "max_embedding_distance": 1.2049741789438873,
           "embedding_distance_quantile": 0.995
@@ -4850,19 +4847,19 @@
         "accepted_predicted_groups": 0,
         "threshold": {
           "enabled": true,
-          "minimum_confidence": 0.8,
-          "minimum_margin": 0.5,
-          "calibration_accepted": 67,
-          "calibration_correct": 67,
+          "minimum_confidence": 0.6,
+          "minimum_margin": 0.3,
+          "calibration_accepted": 69,
+          "calibration_correct": 69,
           "calibration_precision": 1.0,
           "calibration_precision_wilson95": [
-            0.9457738606086981,
-            0.9999999999999998
+            0.9472627418109483,
+            1.0
           ],
           "calibration_truth_support": 70,
-          "calibration_accepted_groups": 67,
-          "calibration_correct_distance_support": 67,
-          "max_embedding_distance": 1.0041483169444272,
+          "calibration_accepted_groups": 69,
+          "calibration_correct_distance_support": 69,
+          "max_embedding_distance": 1.063707125217516,
           "embedding_distance_quantile": 0.995
         }
       },
@@ -4920,12 +4917,12 @@
           "enabled": true,
           "minimum_confidence": 0.85,
           "minimum_margin": 0.5,
-          "calibration_accepted": 63,
+          "calibration_accepted": 62,
           "calibration_correct": 57,
-          "calibration_precision": 0.9047619047619048,
+          "calibration_precision": 0.9193548387096774,
           "calibration_precision_wilson95": [
-            0.8073829893716311,
-            0.955616515723108
+            0.8247142865138739,
+            0.9650616530140073
           ],
           "calibration_truth_support": 70,
           "calibration_accepted_groups": 22,
@@ -4950,7 +4947,7 @@
         "threshold": {
           "enabled": true,
           "minimum_confidence": 0.6,
-          "minimum_margin": 0.4,
+          "minimum_margin": 0.3,
           "calibration_accepted": 6,
           "calibration_correct": 6,
           "calibration_precision": 1.0,
@@ -4985,15 +4982,15 @@
           "enabled": true,
           "minimum_confidence": 0.5,
           "minimum_margin": 0.05,
-          "calibration_accepted": 132,
-          "calibration_correct": 121,
-          "calibration_precision": 0.9166666666666666,
+          "calibration_accepted": 134,
+          "calibration_correct": 122,
+          "calibration_precision": 0.9104477611940298,
           "calibration_precision_wilson95": [
-            0.8569354773667702,
-            0.9528320336343893
+            0.8499882232922155,
+            0.9480300285538373
           ],
           "calibration_truth_support": 143,
-          "calibration_accepted_groups": 45,
+          "calibration_accepted_groups": 46,
           "calibration_correct_distance_support": 126,
           "max_embedding_distance": 1.0343465687833029,
           "embedding_distance_quantile": 0.995
@@ -5071,31 +5068,28 @@
         "truth_support": 6,
         "raw_predicted_support": 7,
         "raw_correct": 1,
-        "accepted_predictions": 1,
+        "accepted_predictions": 0,
         "accepted_correct": 0,
-        "accepted_errors": 1,
-        "accepted_precision": 0.0,
-        "accepted_precision_wilson95": [
-          0.0,
-          0.7934506856227626
-        ],
+        "accepted_errors": 0,
+        "accepted_precision": null,
+        "accepted_precision_wilson95": null,
         "correct_accepted_recall": 0.0,
         "truth_class_coverage": 0.3333333333333333,
         "truth_groups": 6,
-        "accepted_predicted_groups": 1,
+        "accepted_predicted_groups": 0,
         "threshold": {
           "enabled": true,
-          "minimum_confidence": 0.85,
+          "minimum_confidence": 0.99,
           "minimum_margin": 0.5,
-          "calibration_accepted": 32,
-          "calibration_correct": 29,
-          "calibration_precision": 0.90625,
+          "calibration_accepted": 11,
+          "calibration_correct": 11,
+          "calibration_precision": 1.0,
           "calibration_precision_wilson95": [
-            0.7578184527161212,
-            0.9675984487016337
+            0.7411670330319684,
+            1.0
           ],
           "calibration_truth_support": 61,
-          "calibration_accepted_groups": 16,
+          "calibration_accepted_groups": 5,
           "calibration_correct_distance_support": 48,
           "max_embedding_distance": 1.0465413606268552,
           "embedding_distance_quantile": 0.995
@@ -5121,17 +5115,17 @@
           "enabled": true,
           "minimum_confidence": 0.6,
           "minimum_margin": 0.25,
-          "calibration_accepted": 84,
-          "calibration_correct": 76,
-          "calibration_precision": 0.9047619047619048,
+          "calibration_accepted": 85,
+          "calibration_correct": 77,
+          "calibration_precision": 0.9058823529411765,
           "calibration_precision_wilson95": [
-            0.8231736440500729,
-            0.9509482900904406
+            0.8251294803137523,
+            0.9515349387077823
           ],
           "calibration_truth_support": 118,
-          "calibration_accepted_groups": 62,
-          "calibration_correct_distance_support": 96,
-          "max_embedding_distance": 1.1157368609190281,
+          "calibration_accepted_groups": 63,
+          "calibration_correct_distance_support": 97,
+          "max_embedding_distance": 1.1155527791042315,
           "embedding_distance_quantile": 0.995
         }
       },
@@ -5182,18 +5176,18 @@
         "threshold": {
           "enabled": true,
           "minimum_confidence": 0.5,
-          "minimum_margin": 0.15,
-          "calibration_accepted": 66,
-          "calibration_correct": 64,
-          "calibration_precision": 0.9696969696969697,
+          "minimum_margin": 0.2,
+          "calibration_accepted": 67,
+          "calibration_correct": 65,
+          "calibration_precision": 0.9701492537313433,
           "calibration_precision_wilson95": [
-            0.8960747808829028,
-            0.9916500898013463
+            0.8975344443664799,
+            0.991775305161102
           ],
           "calibration_truth_support": 84,
-          "calibration_accepted_groups": 66,
-          "calibration_correct_distance_support": 71,
-          "max_embedding_distance": 0.7873387314684809,
+          "calibration_accepted_groups": 67,
+          "calibration_correct_distance_support": 72,
+          "max_embedding_distance": 0.7882918530360742,
           "embedding_distance_quantile": 0.995
         }
       },
@@ -5213,7 +5207,7 @@
         "threshold": {
           "enabled": true,
           "minimum_confidence": 0.5,
-          "minimum_margin": 0.2,
+          "minimum_margin": 0.15,
           "calibration_accepted": 326,
           "calibration_correct": 325,
           "calibration_precision": 0.9969325153374233,
@@ -5232,30 +5226,33 @@
         "truth_support": 10,
         "raw_predicted_support": 2,
         "raw_correct": 1,
-        "accepted_predictions": 0,
-        "accepted_correct": 0,
+        "accepted_predictions": 1,
+        "accepted_correct": 1,
         "accepted_errors": 0,
-        "accepted_precision": null,
-        "accepted_precision_wilson95": null,
-        "correct_accepted_recall": 0.0,
+        "accepted_precision": 1.0,
+        "accepted_precision_wilson95": [
+          0.20654931437723745,
+          1.0
+        ],
+        "correct_accepted_recall": 0.1,
         "truth_class_coverage": 0.4,
         "truth_groups": 10,
-        "accepted_predicted_groups": 0,
+        "accepted_predicted_groups": 1,
         "threshold": {
           "enabled": true,
-          "minimum_confidence": 0.65,
-          "minimum_margin": 0.5,
-          "calibration_accepted": 25,
+          "minimum_confidence": 0.5,
+          "minimum_margin": 0.3,
+          "calibration_accepted": 26,
           "calibration_correct": 24,
-          "calibration_precision": 0.96,
+          "calibration_precision": 0.9230769230769231,
           "calibration_precision_wilson95": [
-            0.8045593626380625,
-            0.9929037664980127
+            0.7585844622837095,
+            0.9786449115277238
           ],
           "calibration_truth_support": 28,
-          "calibration_accepted_groups": 25,
-          "calibration_correct_distance_support": 24,
-          "max_embedding_distance": 0.9828163412675913,
+          "calibration_accepted_groups": 26,
+          "calibration_correct_distance_support": 25,
+          "max_embedding_distance": 1.1772465513566794,
           "embedding_distance_quantile": 0.995
         }
       },
@@ -5275,7 +5272,7 @@
         "threshold": {
           "enabled": true,
           "minimum_confidence": 0.5,
-          "minimum_margin": 0.1,
+          "minimum_margin": 0.15,
           "calibration_accepted": 81,
           "calibration_correct": 81,
           "calibration_precision": 1.0,
@@ -5294,11 +5291,11 @@
     "groups": {
       "source_groups": 80,
       "accepted_groups": 38,
-      "accepted_groups_with_no_accepted_error": 19,
-      "all_accepted_predictions_correct_group_fraction": 0.5,
+      "accepted_groups_with_no_accepted_error": 20,
+      "all_accepted_predictions_correct_group_fraction": 0.5263157894736842,
       "all_correct_group_wilson95": [
-        0.34849928364395105,
-        0.6515007163560489
+        0.3725897138449667,
+        0.6752097667747392
       ]
     },
     "interval_limitations": "Wilson intervals are descriptive. Image dependence, incomplete physical-leaf grouping, historical selection exposure and CAL threshold search are not covered by binomial intervals.",
@@ -5307,10 +5304,10 @@
     "domain": "plantdoc_internet_field_like",
     "execution": {
       "samples": 80,
-      "elapsed_seconds": 1.6639031490012712,
+      "elapsed_seconds": 1.7623319569975138,
       "desktop_inference_only_latency_ms": {
-        "p50": 2.089620500555611,
-        "p95": 3.9368844005366546
+        "p50": 2.422879999357974,
+        "p95": 3.019304251938592
       },
       "phone_benchmark_executed": false
     },
@@ -5454,7 +5451,7 @@
     "release_policy": "Freeze this receipt before optional domain adaptation. Train only on train.jsonl; select checkpoint on tune.jsonl; reserve calibration.jsonl for the final fixed model/policy. external_test_locked.jsonl is final external evaluation only. Do not combine with PlantVillage tests as one field-accuracy claim."
   },
   "field_protocol_sha256": "bd62adb096737f931b93d3db150574c00f1f3dabd339cd2baba439ca543883ce",
-  "fit_receipt_sha256": "8da3669eaa08ccf8b42670caffb4d9de9c90968481f8b39f3e626ae4aa6056a2",
+  "fit_receipt_sha256": "c11a1faa9bd1c7de724e84c49604b4c1e7afe405a562389c4e7d4ef1c179efce",
   "protocol_sha256": "d49b3b5c34fe62545945beaa136c384671056881efdc55970d5148a0c1f9f320",
   "source_protocol": {
     "schema_version": 1,
@@ -5798,7 +5795,7 @@
     ],
     "diagnosis_validated": false
   },
-  "completed_at": "2026-11-14T12:50:44.526232+00:00",
+  "completed_at": "2026-11-14T13:50:20.027541+00:00",
   "unknown_detection_validated": false,
   "field_trial_executed": false,
   "diagnosis_validated": false,

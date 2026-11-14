@@ -1,14 +1,15 @@
-# Leaf-guarded MobileNetV3 release
+# MobileNetV3 healthy-field data update
 
-New binary leaf input head precedes the unchanged crop classifier. See leaf_validation.json for frozen TRAIN/TUNE protocol and held-out negative results. Exact-graph source qualification passed after frozen calibration and testing. Classifier-only accuracy is92.11% on source3674 and38.75% on the reused80-photo field comparison; these classifier figures exclude leaf rejection.
+Model SHA:`31b29158cc1fc1c07bdf3acc07cb6bb6da39eccb1050ffe6ed1d499811179fba`. Current disease head adds448audited Kandahar maize Healthy TRAIN photos to the previous6324PlantVillage+632PlantDoc TRAIN rows. Only maize Healthy is mapped to the existing taxonomy; new Blight/Spot labels are not used as exact disease labels. Backbone features and leaf-check output are unchanged, with exact runtime parity probes.
 
+## Frozen results
 
-Model SHA-256: `3332b5634fcb1a8bea17317a0a9db4d6e44f9c0da24e7b03718b3ced5d6b2d1e`. Graph size:11,965,503bytes. Outputs17disease logits,960features and1leaf logit.
+Source3674 classifier accuracy92.27%, macro F1.91058. Reused PlantDoc field80:31/80=38.75% both before and after the leaf check, matching the prior model. Source acceptance criteria pass; selected-crop+score+leaf field predictions have20correct/34 delivered (58.82%), versus19/34before. This comparison set is reused, not newly blind data.
 
-## Input leaf check
+New locked maize Healthy fieldTEST14 (separate collection): control0/14 and candidate1/14 correct visible provisional prediction after the leaf check. Both have0/14 strict accepted Healthy result. Leaf check retains13/14. This is a small provisional gain, not a reliable field-health diagnosis. New VALID18 was used to select the head, so its1→5correct result is tuning evidence only. New test labels are source-provided and not independently verified by an agricultural expert.
 
-This graph adds a trained binary leaf-versus-object head sharing the same V3 features. It checks the image before presenting disease candidates; a rejected input returns a retake with no disease name or score. Threshold0.7736096007959162 was frozen on TUNE before opening the125-image negative test.
+## Input and product scope
 
-It rejected125/125 non-leaf test photos, including the held-out computer mouse, hamster, cat, laptop and monitor. This is a measured sample result, not a universal guarantee. The negatives are objects/mammals/electronics from a pinned ImageNet sample repository; ambiguous nature/plant classes were excluded. Test objects were excluded from leaf-head training; broader ImageNet pretraining is disclosed. Images are external research inputs and are not shipped in the app.
+The frozen leaf check retains the original object-rejection pathway, output and threshold. Bound leaf_validation.json contains original125-negative-test evidence marked reused with unchanged branch; export runtime probes confirm matching embeddings and leaf logits. Other crop leaves/objects can remain outside measured scope. No chemical treatment, image severity or field-diagnosis validation is claimed.
 
-Source positive leaf recall3668/3674 (99.84%); source correct disease predictions retained3378/3674=91.94% end-to-end. Field leaf recall76/80 (95%); all31 previously correct field disease cases pass the leaf check, preserving31/80=38.75% end-to-end on the reused field set. See leaf_validation.json and the separate positive_pipeline_evaluation receipt. The leaf check does not certify the crop species or every unseen object/plant.
+Graph outputs17disease scores,960features andleaf_logit[1,1]. The new source evaluation binds exact-model hashes and frozen CAL gates. Centroids use16,856PV+632PlantDoc+448Kandahar Healthy TRAIN images, with separate manifest/audit receipt identities. See ml/reports/healthy_field_update for provenance and separate test reports. Raw images/caches remain outside the repository and app.
