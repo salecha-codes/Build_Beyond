@@ -851,7 +851,7 @@ export default function App() {
       <main className="app-page welcome-page">
         <div className="welcome-content">
           <div className="welcome-icon">
-            <img src="/app-logo.png" alt="" />
+            <img src={`${import.meta.env.BASE_URL}app-logo.png`} alt="" />
           </div>
           <h1 className="welcome-title">AgriScan</h1>
           <p className="welcome-subtitle">
@@ -1586,7 +1586,7 @@ export default function App() {
       <aside className="preview-context">
         <div className="preview-brand">
           <span>
-            <img src="/app-logo.png" alt="" />
+            <img src={`${import.meta.env.BASE_URL}app-logo.png`} alt="" />
           </span>
           AgriScan · Debuggers
         </div>
