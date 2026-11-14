@@ -1,7 +1,8 @@
 {
-  "version": "ff0ef4aa17818eca",
+  "version": "a9d7eff8aac37e9a",
   "files": [
     "app-logo.png",
+    "assets/app-logo.png",
     "assets/audio/en/advisory_maize_common_rust.ogg",
     "assets/audio/en/advisory_maize_gray_leaf_spot.ogg",
     "assets/audio/en/advisory_maize_healthy.ogg",
@@ -240,7 +241,7 @@
     "assets/content/hindi_ui.json",
     "assets/content/treatment_audio_manifest.json",
     "assets/index-B2XSkLrd.css",
-    "assets/index-Ca3z318N.js",
+    "assets/index-BxwKochu.js",
     "assets/model/MODEL_CARD.md",
     "assets/model/crop_model.onnx",
     "assets/model/decision_policy.json",

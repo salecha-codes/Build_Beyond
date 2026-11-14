@@ -1,5 +1,5 @@
 {
-  "source_commit": "e2d341c",
+  "source_commit": "ffde17f",
   "version": "0.6.0-treatment-recovery",
   "model_architecture": "MobileNetV3-Large",
   "model_sha256": "31b29158cc1fc1c07bdf3acc07cb6bb6da39eccb1050ffe6ed1d499811179fba",
@@ -21,5 +21,5 @@
     "tomato"
   ],
   "default_crop": "maize",
-  "browser_workflow_test": "production web bundle rebuilt from current source; centered phone preview and GitHub Pages logo path verified at desktop and mobile viewports"
+  "browser_workflow_test": "production build: centered phone at desktop/mobile, welcome then intro animation on first visit, intro replay on reload, packaged logo loaded successfully"
 }
