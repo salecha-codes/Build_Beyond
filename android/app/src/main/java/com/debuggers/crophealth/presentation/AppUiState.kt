@@ -4,10 +4,15 @@ import android.net.Uri
 import com.debuggers.crophealth.content.Guidance
 import com.debuggers.crophealth.content.Prompt
 import com.debuggers.crophealth.content.AdvisoryProfile
+import com.debuggers.crophealth.content.CareProtocol
 import com.debuggers.crophealth.domain.*
 import java.io.File
 
-enum class Screen { WELCOME, HOME, CAPTURE, PHOTO_REVIEW, PROCESSING, RESULT, GUIDANCE, CONCERN, HISTORY, HELP, SETTINGS }
+enum class Screen { WELCOME, HOME, CAPTURE, PHOTO_REVIEW, PROCESSING, RESULT, GUIDANCE, CONCERN, CARE_LIBRARY, HISTORY, HELP, SETTINGS }
+
+/** Library exploration never changes the classifier result or a saved scan. */
+data class ManualCareSession(val conditionId: String, val symptoms: ReportedSymptoms = ReportedSymptoms(),
+    val completed: Boolean = false)
 
 data class ModelStatus(
     val ready: Boolean = false,
@@ -63,8 +68,31 @@ data class AppUiState(
     val symptomsComplete: Boolean = false,
     val advisoryProfile: AdvisoryProfile? = null,
     val advisory: AdvisoryAssessment = AdvisoryDecisionModel.assess(null, null, null),
+    val careProtocol: CareProtocol? = null,
+    val manualCare: ManualCareSession? = null,
+    val careLibraryReturn: Screen = Screen.HOME,
+    val careCatalogAvailable: Boolean = false,
     val openedObservation: Observation? = null,
 )
+
+val AppUiState.careSymptoms: ReportedSymptoms get() = manualCare?.symptoms ?: symptoms
+val AppUiState.careSymptomsComplete: Boolean get() = manualCare?.completed ?: symptomsComplete
+fun AppUiState.backScreen(): Screen = when (screen) {
+    Screen.GUIDANCE -> if (manualCare != null) Screen.CARE_LIBRARY else Screen.RESULT
+    Screen.CONCERN -> if (manualCare != null) Screen.GUIDANCE else Screen.RESULT
+    Screen.CARE_LIBRARY -> careLibraryReturn
+    Screen.SETTINGS -> Screen.HELP
+    Screen.RESULT -> if (openedObservation != null) Screen.HISTORY else Screen.HOME
+    else -> Screen.HOME
+}
+
+fun AppUiState.selectManualCare(conditionId: String): AppUiState =
+    if (Conditions.byId(conditionId) == null) this else copy(screen = Screen.GUIDANCE,
+        manualCare = ManualCareSession(conditionId), error = null)
+
+fun AppUiState.reportCareSymptoms(value: ReportedSymptoms, completed: Boolean): AppUiState =
+    if (manualCare != null) copy(manualCare = manualCare.copy(symptoms = value, completed = completed))
+    else copy(symptoms = value, concern = ConcernGuidance.summarize(value), symptomsComplete = completed)
 
 sealed interface AppAction {
     data class Navigate(val screen: Screen) : AppAction
@@ -75,6 +103,9 @@ sealed interface AppAction {
     data class OpenObservation(val id: String) : AppAction
     data class DeleteObservation(val id: String) : AppAction
     data class ReportSymptoms(val symptoms: ReportedSymptoms, val completed: Boolean = false) : AppAction
+    data class SelectCareCondition(val conditionId: String) : AppAction
+    data object OpenCareLibrary : AppAction
+    data object ReloadCareProtocols : AppAction
     data class SetAutoAudio(val enabled: Boolean) : AppAction
     data object Analyze : AppAction
     data object DismissError : AppAction

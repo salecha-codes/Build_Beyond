@@ -10,6 +10,11 @@ const advisoryPackaged = await readFile(path.join(root, 'android/app/src/main/as
 const advisoryReceipt = JSON.parse(await readFile(path.join(root, 'android/app/src/main/assets/content/advisory_receipt.json'), 'utf8'));
 if (!advisorySource.equals(advisoryPackaged) || createHash('sha256').update(advisorySource).digest('hex') !== advisoryReceipt.profile_sha256)
   throw new Error('Care model assets are stale. Run python3 tools/build_advisory_bundle.py.');
+const treatmentSource = await readFile(path.join(root, 'content/care_protocols.json'));
+const treatmentPackaged = await readFile(path.join(root, 'android/app/src/main/assets/content/care_protocols.json'));
+const treatmentReceipt = JSON.parse(await readFile(path.join(root, 'android/app/src/main/assets/content/care_protocols_receipt.json'), 'utf8'));
+if (!treatmentSource.equals(treatmentPackaged) || createHash('sha256').update(treatmentSource).digest('hex') !== treatmentReceipt.protocol_sha256)
+  throw new Error('Treatment protocols are stale. Run python3 tools/build_care_protocols.py.');
 const destination = path.join(root, 'frontend/public/assets');
 await mkdir(destination, { recursive: true });
 for (const [source, name] of [

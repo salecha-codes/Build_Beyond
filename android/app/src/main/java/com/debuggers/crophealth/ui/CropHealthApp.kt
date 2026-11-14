@@ -80,7 +80,7 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
             }
         }
         val mainTabs=state.screen in listOf(Screen.HOME,Screen.HISTORY,Screen.HELP)
-        BackHandler(enabled=state.screen!=Screen.HOME) { onAction(AppAction.Navigate(when(state.screen) { Screen.GUIDANCE,Screen.CONCERN -> Screen.RESULT; Screen.SETTINGS -> Screen.HELP; Screen.RESULT -> if(state.openedObservation!=null) Screen.HISTORY else Screen.HOME; else -> Screen.HOME })) }
+        BackHandler(enabled=state.screen!=Screen.HOME) { onAction(AppAction.Navigate(state.backScreen())) }
         if(state.screen==Screen.CAPTURE) {
             CameraScreen(state,onAction,newCameraFile)
         } else Scaffold(
@@ -97,6 +97,7 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
                     Screen.RESULT -> Result(state,onAction,prompt)
                     Screen.GUIDANCE -> GuidanceScreen(state,onAction,prompt)
                     Screen.CONCERN -> ConcernScreen(state,onAction,prompt)
+                    Screen.CARE_LIBRARY -> CareLibraryScreen(state,onAction)
                     Screen.HISTORY -> HistoryScreen(state,onAction)
                     Screen.HELP -> HelpScreen(state,onAction,prompt)
                     Screen.SETTINGS -> SettingsScreen(state,onAction)
@@ -114,7 +115,7 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
 }
 
 @Composable private fun Header(s:AppUiState,a:(AppAction)->Unit) {
-    TopAppBar(title={},navigationIcon={IconButton(onClick={a(AppAction.Navigate(when(s.screen) { Screen.GUIDANCE,Screen.CONCERN -> Screen.RESULT; Screen.SETTINGS -> Screen.HELP; Screen.RESULT -> if(s.openedObservation!=null) Screen.HISTORY else Screen.HOME; else -> Screen.HOME }))}) {Icon(Icons.Outlined.ArrowBack,s.tr("Back","ಹಿಂದೆ"))}},
+    TopAppBar(title={},navigationIcon={IconButton(onClick={a(AppAction.Navigate(s.backScreen()))}) {Icon(Icons.Outlined.ArrowBack,s.tr("Back","ಹಿಂದೆ"))}},
         actions={OfflineBadge(if(s.assessment?.evidence!=null || s.openedObservation!=null) s.tr("Analysed offline","ಆಫ್‌ಲೈನ್ ಪರಿಶೀಲನೆ") else s.tr("On this phone","ಈ ಫೋನ್‌ನಲ್ಲಿ"));Spacer(Modifier.width(20.dp))},
         colors=TopAppBarDefaults.topAppBarColors(containerColor=Color.White))
 }
@@ -190,6 +191,7 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
             }
         }
         Column(verticalArrangement=Arrangement.spacedBy(10.dp)) {Section(s.tr("Choose your crop","ಬೆಳೆ ಆಯ್ಕೆಮಾಡಿ"));CropChips(s,a)}
+        Secondary(s.careText("Treatment & recovery library","ಚಿಕಿತ್ಸೆ ಮತ್ತು ಚೇತರಿಕೆ ಮಾಹಿತಿ","उपचार और सुधार पुस्तकालय"),{a(AppAction.OpenCareLibrary)})
         Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween,verticalAlignment=Alignment.CenterVertically) {Section(s.tr("Recent scans","ಇತ್ತೀಚಿನ ಪರಿಶೀಲನೆಗಳು"));TextButton(onClick={a(AppAction.Navigate(Screen.HISTORY))}) {Text(s.tr("View all","ಎಲ್ಲವನ್ನೂ ನೋಡಿ"),fontSize=12.sp)}}
         if(s.observations.isEmpty()) {
             SoftCard {Icon(Icons.Outlined.History,null,tint=CropColors.Primary);Text(s.tr("Your first scan starts here","ನಿಮ್ಮ ಮೊದಲ ಪರಿಶೀಲನೆ ಇಲ್ಲಿಂದ ಪ್ರಾರಂಭವಾಗುತ್ತದೆ"),fontSize=16.sp);Text(s.tr("Saved leaf observations will appear here, only on this phone.","ಉಳಿಸಿದ ಎಲೆ ಪರಿಶೀಲನೆಗಳು ಈ ಫೋನ್‌ನಲ್ಲಿ ಮಾತ್ರ ಕಾಣಿಸುತ್ತವೆ."),fontSize=12.sp,color=CropColors.Muted)}
@@ -309,6 +311,7 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
             Secondary(s.careText("Assess symptoms · 6 questions","ಲಕ್ಷಣ ಪರಿಶೀಲಿಸಿ · 6 ಪ್ರಶ್ನೆಗಳು","लक्षण जाँचें · 6 प्रश्न"),{a(AppAction.Navigate(Screen.CONCERN))})
         }
         if(stored==null) Secondary(if(s.savedObservationId==null) s.tr("Save scan","ಪರಿಶೀಲನೆ ಉಳಿಸಿ") else s.tr("Saved on this phone","ಈ ಫೋನ್‌ನಲ್ಲಿ ಉಳಿಸಲಾಗಿದೆ"),{a(AppAction.SaveObservation)},Icons.Outlined.BookmarkBorder,enabled=s.savedObservationId==null && result!=null)
+        Secondary(s.careText("Browse treatment & recovery library","ಚಿಕಿತ್ಸೆ ಮತ್ತು ಚೇತರಿಕೆ ಮಾಹಿತಿ ನೋಡಿ","उपचार और सुधार पुस्तकालय देखें"),{a(AppAction.OpenCareLibrary)})
         Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.Center) {TextButton(onClick={a(AppAction.ShareCurrent)}) {Icon(Icons.Outlined.Share,null,Modifier.size(16.dp));Spacer(Modifier.width(6.dp));Text(s.tr("Share observation","ವೀಕ್ಷಣೆ ಹಂಚಿಕೊಳ್ಳಿ"))}}
         if(!accepted && !prediction) Text(s.tr("Prototype model: scores are not validated diagnostic probabilities.","ಪ್ರಾಯೋಗಿಕ ಮಾದರಿ: ಅಂಕಗಳು ದೃಢೀಕರಿಸಿದ ರೋಗನಿರ್ಣಯದ ಸಂಭವನೀಯತೆಗಳಲ್ಲ."),fontSize=11.sp,color=CropColors.Muted)
     }
@@ -384,31 +387,103 @@ private fun careReason(code:String,s:AppUiState):String=when(code) {
     else ->s.careText("Confirm the cause with a local agriculture expert.","ಸ್ಥಳೀಯ ಕೃಷಿ ತಜ್ಞರಿಂದ ಕಾರಣ ದೃಢಪಡಿಸಿ.","स्थानीय कृषि विशेषज्ञ से कारण की पुष्टि कराएँ।")
 }
 
+@Composable private fun CareLibraryScreen(s:AppUiState,a:(AppAction)->Unit) {
+    var crop by rememberSaveable {mutableStateOf<String?>(null)}
+    var query by rememberSaveable {mutableStateOf("")}
+    val entries=Conditions.all.filter { (crop==null || it.crop.id==crop) &&
+        (query.isBlank() || it.displayName(s.language).contains(query,ignoreCase=true) || it.nameEn.contains(query,ignoreCase=true)) }
+    Page {
+        LanguageToggle(s,a)
+        Text(s.careText("Treatment & recovery library","ಚಿಕಿತ್ಸೆ ಮತ್ತು ಚೇತರಿಕೆ ಮಾಹಿತಿ","उपचार और सुधार पुस्तकालय"),fontSize=28.sp,fontWeight=FontWeight.Medium)
+        Text(s.careText("Choose a condition to read its care protocol. A library selection is not a diagnosis.","ಆರೈಕೆ ಕ್ರಮ ಓದಲು ಸ್ಥಿತಿ ಆಯ್ಕೆಮಾಡಿ. ಇಲ್ಲಿ ಮಾಡಿದ ಆಯ್ಕೆ ರೋಗ ನಿರ್ಣಯವಲ್ಲ.","देखभाल के चरण पढ़ने के लिए स्थिति चुनें। पुस्तकालय का चयन रोग की पुष्टि नहीं है।"),fontSize=13.sp,color=CropColors.Muted)
+        CropChips(s,a,all=true,selected=Crop.entries.firstOrNull {it.id==crop},onSelect={crop=it?.id})
+        OutlinedTextField(value=query,onValueChange={query=it},label={Text(s.careText("Search a condition","ಸ್ಥಿತಿ ಹುಡುಕಿ","स्थिति खोजें"))},singleLine=true,modifier=Modifier.fillMaxWidth().testTag("care_library_search"))
+        if(entries.isEmpty()) Text(s.careText("No matching conditions. Try another crop or search.","ಹೊಂದುವ ಸ್ಥಿತಿ ಇಲ್ಲ. ಬೇರೆ ಬೆಳೆ ಅಥವಾ ಪದ ಹುಡುಕಿ.","कोई मिलती स्थिति नहीं। दूसरी फसल या खोज आजमाएँ।"))
+        entries.forEach {condition ->
+            Surface(onClick={a(AppAction.SelectCareCondition(condition.id))},shape=RoundedCornerShape(18.dp),
+                color=CropColors.Lavender,modifier=Modifier.fillMaxWidth().testTag("care_library_"+condition.id)) {
+                Row(Modifier.padding(16.dp),verticalAlignment=Alignment.CenterVertically) {
+                    Column(Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(4.dp)) {
+                        Text(condition.displayName(s.language),fontSize=17.sp,fontWeight=FontWeight.Medium)
+                        Text(condition.crop.displayName(s.language),fontSize=12.sp,color=CropColors.Muted)
+                    }
+                    Icon(Icons.Outlined.ChevronRight,null,tint=CropColors.Primary)
+                }
+            }
+        }
+    }
+}
+
 @Composable private fun GuidanceScreen(s:AppUiState,a:(AppAction)->Unit,prompt:(String)->Prompt) {
     val profile=s.advisoryProfile
+    val protocol=s.careProtocol
+    val conditionId=protocol?.conditionId ?: s.manualCare?.conditionId ?: profile?.conditionId
     Page {
         Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.End) {LanguageToggle(s,a)}
-        Text(s.careText("Crop care plan","ಬೆಳೆ ಆರೈಕೆ ಯೋಜನೆ","फसल देखभाल योजना"),fontSize=28.sp,fontWeight=FontWeight.Medium)
+        Text(s.careText("Treatment & recovery plan","ಚಿಕಿತ್ಸೆ ಮತ್ತು ಚೇತರಿಕೆ ಯೋಜನೆ","उपचार और सुधार योजना"),fontSize=28.sp,fontWeight=FontWeight.Medium)
+        conditionId?.let {id -> Conditions.byId(id)?.let {condition ->
+            Text(condition.displayName(s.language),fontSize=22.sp,fontWeight=FontWeight.Medium,modifier=Modifier.testTag("care_condition_name"))
+            Text(condition.crop.displayName(s.language),fontSize=13.sp,color=CropColors.Muted)
+        } }
+        if(s.manualCare!=null) Notice(s.careText("Selected by you — care library","ನೀವು ಆಯ್ಕೆಮಾಡಿದ್ದು — ಆರೈಕೆ ಮಾಹಿತಿ","आपके द्वारा चुना गया — देखभाल पुस्तकालय"),s.careText("This selection does not change the photo prediction or saved scan. Confirm the cause before disease-specific treatment.","ಈ ಆಯ್ಕೆ ಚಿತ್ರ ಅಂದಾಜು ಅಥವಾ ಉಳಿಸಿದ ದಾಖಲೆಯನ್ನು ಬದಲಿಸುವುದಿಲ್ಲ. ನಿರ್ದಿಷ್ಟ ಚಿಕಿತ್ಸೆಗೆ ಮೊದಲು ಕಾರಣ ದೃಢಪಡಿಸಿ.","यह चयन तस्वीर के अनुमान या सहेजे स्कैन को नहीं बदलता। रोग विशेष के उपचार से पहले कारण की पुष्टि करें।"))
         AdvisorySummary(s)
-        if(!s.symptomsComplete) Primary(s.careText("Assess severity · 6 questions","ತೀವ್ರತೆ ಪರಿಶೀಲಿಸಿ · 6 ಪ್ರಶ್ನೆಗಳು","गंभीरता जाँचें · 6 प्रश्न"),{a(AppAction.Navigate(Screen.CONCERN))})
+        Primary(s.careText(if(s.careSymptomsComplete) "Review the six answers" else "Assess damage · 6 questions",if(s.careSymptomsComplete) "ಆರು ಉತ್ತರ ಪರಿಶೀಲಿಸಿ" else "ಹಾನಿ ಪರಿಶೀಲಿಸಿ · 6 ಪ್ರಶ್ನೆಗಳು",if(s.careSymptomsComplete) "छह उत्तरों की समीक्षा करें" else "नुकसान जाँचें · 6 प्रश्न"),{a(AppAction.Navigate(Screen.CONCERN))})
         if(profile!=null) {
-            Notice(s.careText("If this condition is confirmed","ಈ ಸ್ಥಿತಿ ದೃಢಪಟ್ಟರೆ","यदि इस स्थिति की पुष्टि हो"),Conditions.byId(profile.conditionId)?.displayName(s.language).orEmpty())
-            Text(profile.copy.overview,fontSize=14.sp,color=CropColors.Muted)
-            GuidanceCard(s.careText("Can it be cured?","ಇದನ್ನು ಗುಣಪಡಿಸಬಹುದೇ?","क्या यह ठीक हो सकता है?"),listOf(profile.copy.curability),CropColors.Primary)
-            AdvisoryAudio(s,"advisory_"+profile.conditionId,s.careText("Listen to care summary","ಆರೈಕೆ ಸಾರಾಂಶ ಕೇಳಿ","देखभाल का सार सुनें"))
-            GuidanceCard(s.careText("Do now","ಈಗ ಮಾಡಿ","अभी करें"),profile.copy.doNow,CropColors.Green)
-            GuidanceCard(s.careText("Management options","ನಿರ್ವಹಣೆ ಆಯ್ಕೆಗಳು","प्रबंधन के उपाय"),profile.copy.management,CropColors.Gold)
-            GuidanceCard(s.careText("Prevent recurrence","ಮರುಕಳಿಸದಂತೆ ತಡೆಯಿರಿ","दोबारा होने से बचाएँ"),profile.copy.prevention,CropColors.Primary)
-            GuidanceCard(s.careText("When to call an expert","ತಜ್ಞರನ್ನು ಯಾವಾಗ ಕೇಳಬೇಕು","विशेषज्ञ को कब बुलाएँ"),profile.copy.escalation,CropColors.Rose)
-            if(profile.sources.isNotEmpty()) Text(s.careText("Reference topics: ","ಉಲ್ಲೇಖ ವಿಷಯಗಳು: ","संदर्भ विषय: ")+profile.sources.joinToString {it.title},fontSize=11.sp,color=CropColors.Muted)
+            Notice(s.careText("If this condition is confirmed","ಈ ಸ್ಥಿತಿ ದೃಢಪಟ್ಟರೆ","यदि इस स्थिति की पुष्टि हो"),profile.copy.curability)
+            AdvisoryAudio(s,"advisory_"+profile.conditionId,s.careText("Listen to general care summary","ಸಾಮಾನ್ಯ ಆರೈಕೆ ಸಾರಾಂಶ ಕೇಳಿ","सामान्य देखभाल का सार सुनें"))
+        }
+        if(!s.careCatalogAvailable) {
+            Notice(s.careText("Treatment information could not load","ಚಿಕಿತ್ಸೆ ಮಾಹಿತಿ ಲೋಡ್ ಆಗಲಿಲ್ಲ","उपचार की जानकारी लोड नहीं हुई"),s.careText("The packaged treatment library is unavailable. Try loading it again; do not assume that an empty screen means no action is needed.","ಸಂಗ್ರಹಿತ ಚಿಕಿತ್ಸೆಯ ಮಾಹಿತಿ ಲಭ್ಯವಿಲ್ಲ. ಮತ್ತೆ ಲೋಡ್ ಮಾಡಿ; ಖಾಲಿ ಪರದೆ ಕಂಡರೆ ಕ್ರಮ ಬೇಡವೆಂದು ಭಾವಿಸಬೇಡಿ.","पैक की गई उपचार पुस्तकालय उपलब्ध नहीं है। फिर से लोड करें; खाली स्क्रीन का अर्थ यह नहीं कि किसी कदम की जरूरत नहीं।"))
+            Secondary(s.careText("Retry treatment library","ಚಿಕಿತ್ಸೆ ಮಾಹಿತಿ ಮತ್ತೆ ಲೋಡ್ ಮಾಡಿ","उपचार पुस्तकालय दोबारा लोड करें"),{a(AppAction.ReloadCareProtocols)})
+        } else if(protocol!=null) {
+            CareProtocolSections(s,protocol)
         } else {
-            Notice(s.careText("Confirm the cause first","ಮೊದಲು ಕಾರಣ ದೃಢಪಡಿಸಿ","पहले कारण की पुष्टि कराएँ"),s.careText("A disease-specific care plan is unavailable for this result. Record the signs and ask a local agriculture expert.","ಈ ಫಲಿತಾಂಶಕ್ಕೆ ನಿರ್ದಿಷ್ಟ ರೋಗ ಆರೈಕೆ ಯೋಜನೆ ಲಭ್ಯವಿಲ್ಲ. ಲಕ್ಷಣ ದಾಖಲಿಸಿ ಸ್ಥಳೀಯ ಕೃಷಿ ತಜ್ಞರನ್ನು ಕೇಳಿ.","इस परिणाम के लिए रोग विशेष की देखभाल उपलब्ध नहीं है। लक्षण लिखें और स्थानीय कृषि विशेषज्ञ से पूछें।"))
+            Notice(s.careText("Choose a condition to explore its care","ಆರೈಕೆ ತಿಳಿಯಲು ಸ್ಥಿತಿ ಆಯ್ಕೆಮಾಡಿ","देखभाल जानने के लिए स्थिति चुनें"),s.careText("This photo result cannot support disease-specific treatment. You can browse the complete library without changing that result.","ಈ ಚಿತ್ರ ಫಲಿತಾಂಶ ನಿರ್ದಿಷ್ಟ ರೋಗ ಚಿಕಿತ್ಸೆಗೆ ಬೆಂಬಲವಿಲ್ಲ. ಫಲಿತಾಂಶ ಬದಲಿಸದೆ ಸಂಪೂರ್ಣ ಮಾಹಿತಿ ನೋಡಬಹುದು.","इस तस्वीर के परिणाम से रोग विशेष का उपचार तय नहीं हो सकता। परिणाम बदले बिना पूरी पुस्तकालय देख सकते हैं।"))
             GuidanceCard(s.careText("Do now","ಈಗ ಮಾಡಿ","अभी करें"),listOf(s.careText("Take clear photos of the leaf, whole plant and nearby affected plants.","ಎಲೆ, ಇಡೀ ಗಿಡ ಮತ್ತು ಹತ್ತಿರದ ಪೀಡಿತ ಗಿಡಗಳ ಸ್ಪಷ್ಟ ಚಿತ್ರ ತೆಗೆಯಿರಿ.","पत्ती, पूरे पौधे और आसपास के प्रभावित पौधों की साफ तस्वीर लें।"),s.careText("Check soil moisture and avoid unnecessary sprays while the cause is uncertain.","ಮಣ್ಣಿನ ತೇವ ಪರಿಶೀಲಿಸಿ; ಕಾರಣ ಖಚಿತವಿಲ್ಲದಾಗ ಅನಗತ್ಯ ಸಿಂಪಡಣೆ ತಪ್ಪಿಸಿ.","मिट्टी की नमी जाँचें और कारण अनिश्चित होने पर अनावश्यक छिड़काव से बचें।")),CropColors.Green)
         }
-        Text(s.careText("Draft offline decision guidance; not a trained severity model or an agronomist-reviewed prescription. Damaged tissue does not become healthy again.","ಪ್ರಾಯೋಗಿಕ ಆಫ್‌ಲೈನ್ ನಿರ್ಧಾರ ಸಲಹೆ; ತರಬೇತಿಪಡೆದ ತೀವ್ರತೆ ಮಾದರಿ ಅಥವಾ ಕೃಷಿ ತಜ್ಞರು ಪರಿಶೀಲಿಸಿದ ಔಷಧ ಸೂಚನೆಯಲ್ಲ. ಹಾನಿಯಾದ ಅಂಗಾಂಶ ಮತ್ತೆ ಆರೋಗ್ಯಕರವಾಗುವುದಿಲ್ಲ.","प्रारूप ऑफलाइन निर्णय मार्गदर्शन; यह प्रशिक्षित गंभीरता मॉडल या कृषि विशेषज्ञ द्वारा जाँचा नुस्खा नहीं है। खराब ऊतक फिर स्वस्थ नहीं होता।"),fontSize=11.sp,color=CropColors.Muted)
-        Text(s.advisory.modelVersion,fontSize=11.sp,color=CropColors.Muted)
+        Secondary(s.careText("Browse all 17 conditions","ಎಲ್ಲಾ 17 ಸ್ಥಿತಿಗಳ ಮಾಹಿತಿ ನೋಡಿ","सभी 17 स्थितियाँ देखें"),{a(AppAction.OpenCareLibrary)})
+        Text(s.careText("Conditional draft guidance. Product registration, crop label, harvest restrictions and local expert confirmation still apply. Recovery means protected new growth, not disappearance of old lesions.","ಇದು ಷರತ್ತಿನ ಪ್ರಾಯೋಗಿಕ ಸಲಹೆ. ಉತ್ಪನ್ನ ನೋಂದಣಿ, ಬೆಳೆ ಲೇಬಲ್, ಕೊಯ್ಲು ನಿಯಮ ಮತ್ತು ಸ್ಥಳೀಯ ತಜ್ಞರ ದೃಢೀಕರಣ ಅನ್ವಯಿಸುತ್ತದೆ. ಚೇತರಿಕೆ ಎಂದರೆ ಹೊಸ ಬೆಳವಣಿಗೆಯ ರಕ್ಷಣೆ; ಹಳೆಯ ಚುಕ್ಕೆ ಮಾಯವಾಗುವುದಲ್ಲ.","शर्तों पर आधारित प्रारूप मार्गदर्शन। उत्पाद का पंजीकरण, फसल का लेबल, कटाई संबंधी नियम और स्थानीय विशेषज्ञ की पुष्टि जरूरी है। सुधार का अर्थ नई बढ़त की रक्षा है, पुराने धब्बों का मिटना नहीं।"),fontSize=11.sp,color=CropColors.Muted)
         ExpertCall(s)
     }
+}
+
+@Composable private fun CareProtocolSections(s:AppUiState,protocol:com.debuggers.crophealth.content.CareProtocol) {
+    val copy=protocol.copy
+    Text(copy.goal,fontSize=15.sp,color=CropColors.Muted)
+    if(s.advisory.healthyConflict) Notice(s.careText("Symptoms need a fresh check","ಲಕ್ಷಣಗಳನ್ನು ಮತ್ತೆ ಪರಿಶೀಲಿಸಬೇಕು","लक्षणों की फिर से जाँच जरूरी है"),s.careText("Do not rely on a healthy-looking photo when plants show damage, wilting or spread.","ಗಿಡದಲ್ಲಿ ಹಾನಿ, ಬಾಡುವಿಕೆ ಅಥವಾ ಹರಡುವಿಕೆ ಇದ್ದಾಗ ಆರೋಗ್ಯಕರ ಚಿತ್ರ ಅಂದಾಜು ನಂಬಬೇಡಿ.","जब पौधों में नुकसान, मुरझाना या फैलाव हो, तो स्वस्थ दिखने वाली तस्वीर पर निर्भर न रहें।"))
+    val stage=CarePlanSelection.stage(copy.stagePlans,s.advisory.severity)
+    if(stage!=null) {
+        GuidanceCard(stage.title,stage.actions,if(s.advisory.severity==ReportedSeverity.SEVERE) CropColors.Rose else CropColors.Primary)
+        AdvisoryAudio(s,"treatment_stage_"+s.advisory.severity.name.lowercase(Locale.ROOT),s.careText("Listen to action priorities","ಕ್ರಮದ ಆದ್ಯತೆಗಳನ್ನು ಕೇಳಿ","कदमों की प्राथमिकता सुनें"))
+    } else if(s.advisory.severity==ReportedSeverity.UNKNOWN) {
+        Text(s.careText("Damage level is unknown. The treatment information below is general; answer the questions to tailor action priorities.","ಹಾನಿಯ ಮಟ್ಟ ತಿಳಿದಿಲ್ಲ. ಕೆಳಗಿನ ಚಿಕಿತ್ಸೆ ಮಾಹಿತಿ ಸಾಮಾನ್ಯ; ಆದ್ಯತೆ ತಿಳಿಯಲು ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸಿ.","नुकसान का स्तर अज्ञात है। नीचे उपचार की सामान्य जानकारी है; प्राथमिकता तय करने के लिए प्रश्नों के उत्तर दें।"),fontSize=13.sp,color=CropColors.Muted)
+        AdvisoryAudio(s,"treatment_stage_unknown",s.careText("Listen to next step","ಮುಂದಿನ ಕ್ರಮ ಕೇಳಿ","अगला कदम सुनें"))
+    }
+    AdvisoryAudio(s,"treatment_"+protocol.conditionId,s.careText("Listen to treatment & recovery summary","ಚಿಕಿತ್ಸೆ ಮತ್ತು ಚೇತರಿಕೆ ಸಾರಾಂಶ ಕೇಳಿ","उपचार और सुधार का सार सुनें"))
+    GuidanceCard(s.careText("Check before treating","ಚಿಕಿತ್ಸೆಗೆ ಮೊದಲು ಪರಿಶೀಲಿಸಿ","उपचार से पहले जाँचें"),copy.confirmChecks,CropColors.Primary)
+    GuidanceCard(s.careText("Similar-looking problems","ಹೋಲುವ ಲಕ್ಷಣಗಳ ಬೇರೆ ಕಾರಣಗಳು","ऐसे दिखने वाले दूसरे कारण"),copy.lookAlikes,CropColors.Gold)
+    Text(s.careText("Treatment options","ಚಿಕಿತ್ಸೆಯ ಆಯ್ಕೆಗಳು","उपचार के विकल्प"),fontSize=23.sp,fontWeight=FontWeight.Medium)
+    copy.treatmentOptions.forEach {option ->
+        Surface(shape=RoundedCornerShape(18.dp),color=CropColors.Lavender,modifier=Modifier.fillMaxWidth().testTag("treatment_option_"+option.id)) {
+            Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(10.dp)) {
+                Text(option.title,fontSize=18.sp,fontWeight=FontWeight.Medium)
+                Text(option.whenToUse,fontSize=13.sp,color=CropColors.Primary)
+                option.steps.forEachIndexed {index,line -> Text("${index+1}. $line",fontSize=14.sp,color=CropColors.Ink) }
+                Text(option.limits,fontSize=12.sp,color=CropColors.Muted)
+            }
+        }
+    }
+    GuidanceCard(s.careText("Avoid these mistakes","ಈ ತಪ್ಪುಗಳನ್ನು ತಪ್ಪಿಸಿ","इन गलतियों से बचें"),copy.avoid,CropColors.Rose)
+    GuidanceCard(s.careText("Signs management is helping","ನಿರ್ವಹಣೆ ಸಹಾಯವಾಗುತ್ತಿರುವ ಲಕ್ಷಣಗಳು","प्रबंधन से लाभ के संकेत"),copy.recoverySigns,CropColors.Green)
+    GuidanceCard(s.careText("Signs to escalate","ಹೆಚ್ಚಿನ ನೆರವು ಬೇಕಾದ ಲಕ್ಷಣಗಳು","विशेषज्ञ की मदद लेने के संकेत"),copy.failureSigns,CropColors.Rose)
+    Text(s.careText("Follow-up plan","ಮುಂದಿನ ಪರಿಶೀಲನೆ ಯೋಜನೆ","आगे की जाँच की योजना"),fontSize=23.sp,fontWeight=FontWeight.Medium)
+    copy.followUp.forEach {checkpoint -> GuidanceCard(checkpoint.whenToCheck,listOf(checkpoint.check,checkpoint.action),CropColors.Primary) }
+    GuidanceCard(s.careText("Ask your crop adviser","ಕೃಷಿ ಸಲಹೆಗಾರರನ್ನು ಕೇಳಿ","कृषि सलाहकार से पूछें"),copy.expertQuestions,CropColors.Gold)
+    if(protocol.sources.isNotEmpty()) {
+        Text(s.careText("References and review status","ಉಲ್ಲೇಖಗಳು ಮತ್ತು ಪರಿಶೀಲನೆ ಸ್ಥಿತಿ","संदर्भ और समीक्षा की स्थिति"),fontSize=15.sp,fontWeight=FontWeight.Medium)
+        protocol.sources.forEach { Text(it.title+" · "+it.verificationStatus.replace('_',' '),fontSize=11.sp,color=CropColors.Muted) }
+    }
+    Text(protocol.version,fontSize=11.sp,color=CropColors.Muted)
 }
 @Composable private fun GuidanceCard(title:String,items:List<String>,accent:Color) {
     Surface(shape=RoundedCornerShape(18.dp),color=CropColors.Lavender,modifier=Modifier.fillMaxWidth()) {Row {
@@ -417,7 +492,8 @@ private fun careReason(code:String,s:AppUiState):String=when(code) {
 
 @Composable private fun ConcernScreen(s:AppUiState,a:(AppAction)->Unit,prompt:(String)->Prompt) {
     var question by rememberSaveable {mutableIntStateOf(0)}
-    var selected by rememberSaveable {mutableIntStateOf(-1)}
+    var draftAnswers by rememberSaveable {mutableStateOf(ArrayList(CareAnswerDraft.seed(s.careSymptoms,s.careSymptomsComplete)))}
+    var selected by rememberSaveable {mutableIntStateOf(draftAnswers[0])}
     val questions=listOf(
         s.careText("Are the symptoms spreading quickly?","ಲಕ್ಷಣಗಳು ಬೇಗ ಹರಡುತ್ತಿವೆಯೇ?","क्या लक्षण तेजी से फैल रहे हैं?"),
         s.careText("How much of this leaf looks affected?","ಈ ಎಲೆಯ ಎಷ್ಟು ಭಾಗ ಪೀಡಿತವಾಗಿದೆ?","इस पत्ते का कितना हिस्सा प्रभावित है?"),
@@ -431,7 +507,7 @@ private fun careReason(code:String,s:AppUiState):String=when(code) {
         AdvisorySummary(s)
         ExpertCall(s)
         Primary(s.careText("See the care plan","ಆರೈಕೆ ಯೋಜನೆ ನೋಡಿ","देखभाल योजना देखें"),{a(AppAction.Navigate(Screen.GUIDANCE))})
-        Secondary(s.careText("Return to result","ಫಲಿತಾಂಶಕ್ಕೆ ಹಿಂತಿರುಗಿ","परिणाम पर लौटें"),{a(AppAction.Navigate(Screen.RESULT))})
+        Secondary(s.careText(if(s.manualCare!=null) "Back to care library" else "Return to result",if(s.manualCare!=null) "ಆರೈಕೆ ಮಾಹಿತಿಗೆ ಹಿಂತಿರುಗಿ" else "ಫಲಿತಾಂಶಕ್ಕೆ ಹಿಂತಿರುಗಿ",if(s.manualCare!=null) "देखभाल पुस्तकालय पर लौटें" else "परिणाम पर लौटें"),{a(AppAction.Navigate(if(s.manualCare!=null) Screen.CARE_LIBRARY else Screen.RESULT))})
     } else Page {
         Text(s.careText("Question ${question+1} of 6","ಪ್ರಶ್ನೆ ${question+1} / 6","प्रश्न ${question+1} / 6"),fontSize=12.sp,color=CropColors.Muted)
         LinearProgressIndicator(progress={(question+1)/6f},modifier=Modifier.fillMaxWidth().height(5.dp).clip(CircleShape),color=CropColors.Primary,trackColor=CropColors.Border)
@@ -455,17 +531,11 @@ private fun careReason(code:String,s:AppUiState):String=when(code) {
             }
         }
         Primary(s.careText(if(question==5) "See assessment" else "Next",if(question==5) "ಪರಿಶೀಲನೆ ನೋಡಿ" else "ಮುಂದೆ",if(question==5) "आकलन देखें" else "आगे"),{
-            val uncertain=selected==options.lastIndex
-            val answered=s.symptoms.copy(uncertainAnswers=s.symptoms.uncertainAnswers || uncertain)
-            val next=when(question) {
-                0 ->answered.copy(spreadingQuickly=selected==0)
-                1 ->answered.copy(leafCoverage=when(selected) {0->LeafCoverage.NO_VISIBLE_DAMAGE;1->LeafCoverage.FEW_SPOTS;2->LeafCoverage.SOME_SPOTS;3->LeafCoverage.MANY_SPOTS;else->LeafCoverage.NOT_REPORTED})
-                2 ->answered.copy(manyPlantsAffected=selected==0)
-                3 ->answered.copy(wiltingOrDying=selected==0)
-                4 ->answered.copy(fruitOrStemAffected=selected==0)
-                else ->answered.copy(wetWeather=selected==0)
-            }
-            a(AppAction.ReportSymptoms(next,completed=question==5));question++;selected=-1
+            val updated=ArrayList(draftAnswers).also {it[question]=selected}
+            draftAnswers=updated
+            a(AppAction.ReportSymptoms(CareAnswerDraft.symptoms(updated),completed=question==5))
+            question++
+            selected=if(question<6) updated[question] else -1
         },Icons.Outlined.ArrowForward,enabled=selected>=0)
         Text(s.careText("Report what you see. These answers do not confirm a disease.","ನೀವು ಗಮನಿಸಿದುದನ್ನು ತಿಳಿಸಿ. ಈ ಉತ್ತರ ರೋಗ ದೃಢಪಡಿಸುವುದಿಲ್ಲ.","जो दिख रहा है वह बताएँ। ये उत्तर किसी रोग की पुष्टि नहीं करते।"),fontSize=12.sp,color=CropColors.Muted)
     }

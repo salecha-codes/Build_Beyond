@@ -15,6 +15,7 @@
     "test:backend": "node --test backend/test/*.test.mjs",
     "test:policy": "node --test frontend/tests/source-acceptance.test.cjs",
     "test:advisory": "node --test frontend/tests/advisory.test.cjs",
+    "test:care": "node --test frontend/tests/care-protocols.test.cjs",
     "test:web": "node frontend/tests/browser-qa.cjs"
   },
   "engines": {

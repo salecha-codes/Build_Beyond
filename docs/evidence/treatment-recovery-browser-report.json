@@ -1,0 +1,110 @@
+{
+  "audioChecksSkipped": false,
+  "startedAt": "2026-11-14T16:56:10.725Z",
+  "baseURL": "http://127.0.0.1:3000/",
+  "scope": "Software behavior and artifact coverage, not agronomic validation",
+  "checks": [
+    {
+      "name": "actual protocol model covers17×3 and selects different mild/severe actions",
+      "status": "passed",
+      "modelVersion": "care-protocols-v2",
+      "profileTranslations": 51,
+      "differingPlans": 42,
+      "automaticBlockedStates": 3
+    },
+    {
+      "name": "all17 complete care protocols accessible without photo, diagnosis or saved scan",
+      "status": "passed"
+    },
+    {
+      "name": "six manual answers change actual action steps and trilingual treatment/stage narration plays",
+      "status": "passed",
+      "audio": [
+        {
+          "language": "en",
+          "treatment": {
+            "url": "http://127.0.0.1:3000/assets/audio/en/treatment_tomato_early_blight.ogg",
+            "duration": 63.020625
+          },
+          "stage": {
+            "url": "http://127.0.0.1:3000/assets/audio/en/treatment_stage_severe.ogg",
+            "duration": 39.46775
+          }
+        },
+        {
+          "language": "kn",
+          "treatment": {
+            "url": "http://127.0.0.1:3000/assets/audio/kn/treatment_tomato_early_blight.ogg",
+            "duration": 82.595875
+          },
+          "stage": {
+            "url": "http://127.0.0.1:3000/assets/audio/kn/treatment_stage_severe.ogg",
+            "duration": 57.182
+          }
+        },
+        {
+          "language": "hi",
+          "treatment": {
+            "url": "http://127.0.0.1:3000/assets/audio/hi/treatment_tomato_early_blight.ogg",
+            "duration": 68.948875
+          },
+          "stage": {
+            "url": "http://127.0.0.1:3000/assets/audio/hi/treatment_stage_severe.ogg",
+            "duration": 42.95575
+          }
+        }
+      ],
+      "pronunciationValidated": false
+    },
+    {
+      "name": "offline reload retains the complete manual library and treatment narration",
+      "status": "passed",
+      "offlineAudio": {
+        "url": "http://127.0.0.1:3000/assets/audio/hi/treatment_tomato_early_blight.ogg",
+        "duration": 68.948875
+      }
+    },
+    {
+      "name": "real saved leaf diagnosis/photo remain unchanged after manual selection and severe questionnaire",
+      "status": "passed",
+      "resultType": "uncertain",
+      "originalHeading": "Common rust",
+      "savedId": "e05d71d9-af14-4c05-aab4-abe710f8e1fa"
+    },
+    {
+      "name": "real mouse still returns retake without automatic disease treatment",
+      "status": "passed"
+    },
+    {
+      "name": "missing detailed care asset shows an explicit error and retry recovers the real plan",
+      "status": "passed"
+    }
+  ],
+  "pageErrors": [],
+  "artifacts": {
+    "script": "http://127.0.0.1:3000/assets/index-BDiROGV3.js",
+    "offlineCacheVersion": "4c5917c71429657e",
+    "careReceipt": {
+      "schema_version": 1,
+      "version": "care-protocols-v2",
+      "protocol_sha256": "a78b8b8bedb6836b1aa033c32089e846de3be20d583791075de515fc2d0e477a",
+      "protocol_count": 17,
+      "languages": [
+        "en",
+        "kn",
+        "hi"
+      ],
+      "agronomist_reviewed": false,
+      "field_validated": false,
+      "trained": false,
+      "model_type": "conditional_treatment_knowledge_and_stage_selection",
+      "implementation_sha256": {
+        "frontend/src/lib/careProtocols.ts": "2e4ce38defa6b1aa19c8035fe5f4527984e1213e108d33948b046ca62d943cc7",
+        "android/app/src/main/java/com/debuggers/crophealth/domain/CarePlanSelection.kt": "41bf23b3acabaae2f33bbfbd4f31e4d8c01b9a3facc9df338dfeee48809f3390"
+      },
+      "scope": "Engineering coverage/provenance, not treatment efficacy, crop registration or measured image severity."
+    }
+  },
+  "status": "passed",
+  "finishedAt": "2026-11-14T16:56:19.819Z"
+}

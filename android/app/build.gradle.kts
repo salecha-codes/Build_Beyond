@@ -13,8 +13,8 @@ android {
         applicationId = "com.debuggers.crophealth"
         minSdk = 24
         targetSdk = 35
-        versionCode = 7
-        versionName = "0.5.0-offline-advisory"
+        versionCode = 8
+        versionName = "0.6.0-treatment-recovery"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }

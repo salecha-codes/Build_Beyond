@@ -29,8 +29,11 @@ import {
 } from 'lucide-react';
 import { AudioPlayer } from './components/AudioPlayer';
 import { AdvisoryPanel } from './components/AdvisoryPanel';
+import { TreatmentPlan } from './components/TreatmentPlan';
+import { buildCarePlan, careText, loadCareProtocols } from './lib/careProtocols';
+import type { CareProtocols, CareTextKey } from './lib/careProtocols';
 import { advisoryText, evaluateAdvisory, loadAdvisoryModel } from './lib/advisory';
-import type { AdvisoryModel, AdvisoryTextKey } from './lib/advisory';
+import type { AdvisoryModel, AdvisoryResult, AdvisoryTextKey } from './lib/advisory';
 import { analyzeLeaf, getModelStatus } from './lib/inference';
 import type { AssessmentResult, ModelStatus } from './lib/inference';
 import {
@@ -69,6 +72,8 @@ type Screen =
   | 'processing'
   | 'result'
   | 'guidance'
+  | 'care_library'
+  | 'care_detail'
   | 'concern'
   | 'history'
   | 'help'
@@ -159,6 +164,15 @@ export default function App() {
   const [concern, setConcern] = useState<ConcernResult | null>(null);
   const [concernComplete, setConcernComplete] = useState(false);
   const [careSaved, setCareSaved] = useState(false);
+  const [careProtocols, setCareProtocols] = useState<CareProtocols | null>(null);
+  const [protocolsFailed, setProtocolsFailed] = useState(false);
+  const [treatmentAudioPaths, setTreatmentAudioPaths] = useState<Set<string>>(new Set());
+  const [libraryOrigin, setLibraryOrigin] = useState<'home' | 'result' | 'guidance'>('home');
+  const [libraryCrop, setLibraryCrop] = useState<CropId | 'all'>('all');
+  const [librarySearch, setLibrarySearch] = useState('');
+  const [manualCareId, setManualCareId] = useState<string | null>(null);
+  const [manualConcern, setManualConcern] = useState<ConcernResult | null>(null);
+  const [libraryQuestioning, setLibraryQuestioning] = useState(false);
   const [expertOpen, setExpertOpen] = useState(false);
   const [expertNumber, setExpertNumber] = useState('');
   const [deleteTarget, setDeleteTarget] = useState<ObservationRecord | null>(null);
@@ -167,6 +181,7 @@ export default function App() {
   const offlineReady = useOfflineReady();
   const t = useCallback((en: string, kn: string) => translateUi(en, kn, language), [language]);
   const a = (key: AdvisoryTextKey) => advisoryText(key, language);
+  const c = (key: CareTextKey) => careText(key, language);
   const refreshHistory = useCallback(async () => {
     try {
       setHistory(await listObservations({ limit: 100 }));
@@ -178,6 +193,10 @@ export default function App() {
   }, []);
   useEffect(() => {
     void loadAdvisoryModel().then(setAdvisoryModel).catch(() => setAdvisoryFailed(true));
+    void loadCareProtocols().then(setCareProtocols).catch(() => setProtocolsFailed(true));
+    void fetch(assetUrl('content/treatment_audio_manifest.json')).then(r => r.ok ? r.json() : null).then(manifest => {
+      if (Array.isArray(manifest?.clips)) setTreatmentAudioPaths(new Set(manifest.clips.map((clip: { path: string }) => clip.path)));
+    }).catch(() => undefined);
     void loadCatalog()
       .then(() => setCatalogReady(true))
       .catch(() => setCatalogFailed(true));
@@ -304,7 +323,30 @@ export default function App() {
   const resultPrompt = getPrompt(promptKey, language);
   const currentConcern = concern || opened?.concern || null;
   const advisory = advisoryModel ? evaluateAdvisory(advisoryModel, conditionId, currentConcern?.reportedSymptoms, resultType) : null;
+  const manualAdvisory = advisoryModel && manualCareId ? evaluateAdvisory(advisoryModel, manualCareId, manualConcern?.reportedSymptoms, 'uncertain') : null;
+  const questionAdvisory = libraryQuestioning ? manualAdvisory : advisory;
+  const scanCarePlan = careProtocols && advisory ? buildCarePlan(careProtocols, conditionId, advisory, language) : null;
+  const manualCarePlan = careProtocols && manualAdvisory ? buildCarePlan(careProtocols, manualCareId, manualAdvisory, language) : null;
+  function openCareLibrary() { setLibraryOrigin(screen === 'result' || screen === 'guidance' ? screen : 'home'); setLibraryQuestioning(false); navigate('care_library'); }
+  function selectLibraryCondition(id: string) { setManualCareId(id); setManualConcern(null); setLibraryQuestioning(false); navigate('care_detail'); }
+  function retryCareProtocols() {
+    setProtocolsFailed(false);
+    void loadCareProtocols().then(setCareProtocols).catch(() => setProtocolsFailed(true));
+  }
+  function treatmentPanel(plan: ReturnType<typeof buildCarePlan>) {
+    return plan && careProtocols ? <TreatmentPlan plan={plan} model={careProtocols} language={language} audioPaths={treatmentAudioPaths} /> : protocolsFailed ? <div role="status" data-testid="treatment-load-error"><p className="hint">{c('failure')}</p><button className="secondary" data-testid="care-protocols-retry" onClick={retryCareProtocols}>{c('retry')}</button></div> : !careProtocols ? <p className="hint" role="status" data-testid="treatment-loading">{c('loading')}</p> : null;
+  }
 
+
+  function detailedCare(result: AdvisoryResult, plan: ReturnType<typeof buildCarePlan>, onQuestions?: () => void) {
+    if (!advisoryModel) return null;
+    // Priority remains above the full protocol. Older generic care is a fallback,
+    // rather than a second long plan below the condition-specific instructions.
+    return plan ? <>
+      <AdvisoryPanel result={result} model={advisoryModel} language={language} onQuestions={onQuestions} showPriorityAudio />
+      {treatmentPanel(plan)}
+    </> : <AdvisoryPanel result={result} model={advisoryModel} language={language} onQuestions={onQuestions} detailed treatmentContent={treatmentPanel(null)} />;
+  }
 
   async function saveScan() {
     if (saving || savedId || opened || !assessment || !photo) return;
@@ -343,10 +385,14 @@ export default function App() {
     setAnswers(Array(6).fill(null));
     setScreen('result');
   }
-  function beginConcern() {
+  function beginConcern() { setLibraryQuestioning(false); startConcern(currentConcern); }
+  function beginLibraryConcern() { setLibraryQuestioning(true); startConcern(manualConcern); }
+  function startConcern(previous: ConcernResult | null) {
     setCareSaved(false);
     setQuestion(0);
-    setAnswers(Array(6).fill(null));
+    const x = previous?.reportedSymptoms;
+    const yesNo = (answer: boolean | undefined) => !x || x.uncertainAnswers || typeof answer !== 'boolean' ? null : answer ? 0 : 1;
+    setAnswers(x ? [yesNo(x.spreadingQuickly), ['NO_VISIBLE_DAMAGE','FEW_SPOTS','SOME_SPOTS','MANY_SPOTS','NOT_REPORTED'].indexOf(x.leafCoverage), yesNo(x.manyPlantsAffected), yesNo(x.wiltingOrDying), yesNo(x.fruitOrStemAffected), yesNo(x.wetWeather)] : Array(6).fill(null));
     setConcernComplete(false);
     setScreen('concern');
   }
@@ -369,10 +415,11 @@ export default function App() {
     };
     const summary = summarizeConcern(reported);
     if (advisoryModel) {
-      const next = evaluateAdvisory(advisoryModel, conditionId, reported, resultType);
+      const next = evaluateAdvisory(advisoryModel, libraryQuestioning ? manualCareId : conditionId, reported, libraryQuestioning ? 'uncertain' : resultType);
       summary.level = next.urgency === 'MONITOR' ? 'OBSERVE_AND_RECHECK' : 'SEEK_LOCAL_EXPERT';
     }
-    setConcern(summary);
+    if (libraryQuestioning) setManualConcern(summary);
+    else setConcern(summary);
     setConcernComplete(true);
   }
 
@@ -543,6 +590,7 @@ export default function App() {
               <ArrowRight size={21} />
             </span>
           </button>
+          <button className="secondary care-library-entry" data-testid="open-care-library" onClick={openCareLibrary}><Sprout size={19} />{c('library')}</button>
           <div className="section-heading">
             <h2>{t('Choose your crop', 'ನಿಮ್ಮ ಬೆಳೆ ಆಯ್ಕೆಮಾಡಿ')}</h2>
           </div>
@@ -771,6 +819,7 @@ export default function App() {
           {advisory && advisoryModel && !nonLeaf && <AdvisoryPanel result={advisory} language={language} model={advisoryModel} />}
           {advisoryFailed && <p className="hint">{a('failure')}</p>}
           <div className="button-stack">
+            <button className="secondary" data-testid="result-care-library" onClick={openCareLibrary}>{c('library')}</button>
             {cropMismatchPrediction && <button className="secondary" onClick={() => navigate('home')}>
               {t('Change selected crop', 'ಆಯ್ಕೆ ಮಾಡಿದ ಬೆಳೆಯನ್ನು ಬದಲಿಸಿ')}
             </button>}
@@ -821,12 +870,33 @@ export default function App() {
       <main className="app-page with-top">
         <div className="heading-copy">
           <h1 data-testid="guidance-heading">{t('Care for your crop', 'ನಿಮ್ಮ ಬೆಳೆ ಆರೈಕೆ')}</h1>
-          <p>{cropName(activeCrop, language)} · {conditionId && advisory?.profile ? conditionName(conditionId, language) : a('generic')}</p>
+          <p>{cropName(activeCrop, language)} · {conditionId ? conditionName(conditionId, language) : a('generic')}</p>
         </div>
-        {advisory && advisoryModel ? <AdvisoryPanel result={advisory} language={language} model={advisoryModel} onQuestions={beginConcern} detailed /> : <p>{advisoryFailed ? a('failure') : t('Loading…', 'ಲೋಡ್ ಆಗುತ್ತಿದೆ…')}</p>}
+        {advisory && advisoryModel ? detailedCare(advisory, scanCarePlan, beginConcern) : <p>{advisoryFailed ? a('failure') : t('Loading…', 'ಲೋಡ್ ಆಗುತ್ತಿದೆ…')}</p>}
+        <button className="secondary" onClick={openCareLibrary}>{c('library')}</button>
         {expertButton}
       </main>
     </>;
+  } else if (screen === 'care_library') {
+    const query = librarySearch.trim().toLocaleLowerCase();
+    const matches = CONDITIONS.filter(item => (libraryCrop === 'all' || item.crop_id === libraryCrop) &&
+      (!query || [conditionName(item.id, language), item.name_en, cropName(item.crop_id, language), item.id].some(text => text.toLocaleLowerCase().includes(query))));
+    page = <>{topBar(libraryOrigin, languageToggle)}<main className="app-page with-top">
+      <div className="heading-copy"><h1>{c('library')}</h1><p>{c('libraryHint')}</p></div>
+      <input className="care-search" type="search" aria-label={c('search')} placeholder={c('search')} value={librarySearch} onChange={event => setLibrarySearch(event.target.value)} data-testid="care-library-search" />
+      {cropChips(libraryCrop, setLibraryCrop, true)}
+      <div className="care-library-list" data-testid="care-library-list">{matches.map(item => <button className="care-library-card" key={item.id} onClick={() => selectLibraryCondition(item.id)} data-testid={`care-condition-${item.id}`}><span className="scan-thumb empty"><Leaf size={23} /></span><span><strong>{conditionName(item.id, language)}</strong><small>{cropName(item.crop_id, language)}</small></span><ChevronRight size={20} /></button>)}</div>
+      {!matches.length && <p>{c('empty')}</p>}
+      <button className="secondary" data-testid="care-library-back" onClick={() => navigate(libraryOrigin)}>{libraryOrigin === 'home' ? t('Home', 'ಮುಖಪುಟ') : t('Back to result', 'ಫಲಿತಾಂಶಕ್ಕೆ ಹಿಂತಿರುಗಿ')}</button>
+    </main></>;
+  } else if (screen === 'care_detail') {
+    const selectedLabel = CONDITIONS.find(item => item.id === manualCareId);
+    page = <>{topBar('care_library', languageToggle)}<main className="app-page with-top">
+      <div className="heading-copy"><h1 data-testid="manual-care-heading">{manualCareId ? conditionName(manualCareId, language) : c('library')}</h1><p>{selectedLabel && cropName(selectedLabel.crop_id, language)}</p></div>
+      <p className="manual-care-notice" data-testid="manual-care-notice">{c('selected')}</p>
+      {manualAdvisory && advisoryModel ? detailedCare(manualAdvisory, manualCarePlan, beginLibraryConcern) : <p>{advisoryFailed ? a('failure') : t('Loading…', 'ಲೋಡ್ ಆಗುತ್ತಿದೆ…')}</p>}
+      {expertButton}
+    </main></>;
   } else if (screen === 'concern') {
     const keys = ['concern_spreading', 'concern_coverage', 'concern_plants'];
     const questions = Array.from({ length: 6 }, (_, index) => a(`question${index}` as AdvisoryTextKey));
@@ -836,7 +906,7 @@ export default function App() {
     page = (
       <>
         {topBar(
-          'result',
+          libraryQuestioning ? 'care_detail' : 'result',
           !concernComplete ? (
             <span className="hint">
               {language === 'hi' ? `प्रश्न ${question + 1} / 6` : language === 'kn' ? `ಪ್ರಶ್ನೆ ${question + 1} / 6` : `Question ${question + 1} of 6`}
@@ -846,17 +916,17 @@ export default function App() {
         <main className="app-page with-top">
           {concernComplete ? (
             <>
-              <div className="heading-copy" data-testid="concern-summary"><h1>{a('title')}</h1></div>
-              {advisory && advisoryModel && <AdvisoryPanel result={advisory} language={language} model={advisoryModel} detailed />}
+              <div className="heading-copy" data-testid="concern-summary"><h1>{a('title')}</h1><p>{(libraryQuestioning ? manualCareId : conditionId) ? conditionName((libraryQuestioning ? manualCareId : conditionId)!, language) : a('generic')}</p></div>
+              {questionAdvisory && advisoryModel && detailedCare(questionAdvisory, libraryQuestioning ? manualCarePlan : scanCarePlan)}
               {advisoryFailed && <p>{a('failure')}</p>}
-              {advisory?.urgency !== 'MONITOR' && expertButton}
-              <button className="primary" onClick={() => navigate('guidance')}>
+              {questionAdvisory?.urgency !== 'MONITOR' && expertButton}
+              <button className="primary" onClick={() => navigate(libraryQuestioning ? 'care_detail' : 'guidance')}>
                 {t('See guidance', 'ಸಲಹೆ ನೋಡಿ')}
               </button>
-              <button className="secondary" onClick={() => navigate('result')}>
-                {t('Back to result', 'ಫಲಿತಾಂಶಕ್ಕೆ ಹಿಂತಿರುಗಿ')}
+              <button className="secondary" onClick={() => navigate(libraryQuestioning ? 'care_detail' : 'result')}>
+                {libraryQuestioning ? c('library') : t('Back to result', 'ಫಲಿತಾಂಶಕ್ಕೆ ಹಿಂತಿರುಗಿ')}
               </button>
-              {(opened || savedId) && <button className="secondary" onClick={saveCarePlan} disabled={saving || careSaved} data-testid="save-care-plan">
+              {!libraryQuestioning && (opened || savedId) && <button className="secondary" onClick={saveCarePlan} disabled={saving || careSaved} data-testid="save-care-plan">
                 {careSaved ? (language === 'hi' ? 'देखभाल के उत्तर सहेजे गए' : language === 'kn' ? 'ಆರೈಕೆ ಉತ್ತರ ಉಳಿಸಲಾಗಿದೆ' : 'Care answers saved') : (language === 'hi' ? 'देखभाल के उत्तर सहेजें' : language === 'kn' ? 'ಆರೈಕೆ ಉತ್ತರ ಉಳಿಸಿ' : 'Save care answers')}
               </button>}
             </>
@@ -866,7 +936,7 @@ export default function App() {
                 <i style={{ width: `${((question + 1) / 6) * 100}%` }} />
               </div>
               <p>
-                {cropName(activeCrop, language)} · {t('Your observations', 'ನಿಮ್ಮ ಗಮನಿಸುವಿಕೆ')}
+                {cropName(libraryQuestioning ? CONDITIONS.find(x => x.id === manualCareId)?.crop_id || activeCrop : activeCrop, language)} · {t('Your observations', 'ನಿಮ್ಮ ಗಮನಿಸುವಿಕೆ')}
               </p>
               <h1 className="question-title">{questions[question]}</h1>
               <AudioPlayer

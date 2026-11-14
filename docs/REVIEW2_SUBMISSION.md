@@ -37,6 +37,28 @@ Saved scans retain completed answers. Android migrates history from Room v1 to
 v2 without deleting observations; browser care updates preserve the original
 photo and classifier output.
 
+## Treatment and recovery model, version 2
+
+Version 0.6.0 addresses missing treatment detail with 17 trilingual protocols:
+identification checks, look-alikes, numbered treatment steps and use cases,
+limits, mistakes to avoid, improvement/failure signs, four follow-up checkpoints
+and questions for an adviser. Mild, moderate and severe reports now select
+different actions; an unknown report selects no mild pathway. Urgency stays
+above the longer protocol so fast-risk conditions are not obscured by details.
+
+Home and results include an offline Care library. Its manual condition and
+questionnaire are isolated from the actual scan and cannot relabel its disease,
+photo or saved model result. Known completed answers are prefilled when edited.
+Loading errors have an explicit retry rather than an empty plan. Healthy-output
+conflicts retain a substantive evaluation and recovery protocol.
+
+The source artifact is `content/care_protocols.json`; package with
+`python3 tools/build_care_protocols.py`. Separate treatment/stage narration has
+its own script and hash manifest; the original 165 clips retain their provenance.
+See [treatment model](../models/advisory/TREATMENT_MODEL.md),
+[baseline audit](CARE_V2_AUDIT.md) and [source research](CARE_V2_RESEARCH.md).
+No treatment-outcome training or efficacy validation is claimed.
+
 The leaf check rejected 125/125 held-out object/animal sample photos, including mouse, cat, hamster, laptop and monitor. Both actual browser and Android tests confirmed mouse rejection with no disease result. These are sample measurements, not a guarantee for every unseen image or plant species. Source/test/group and licensing limitations are documented in the bound model receipts.
 
 ## Run
@@ -54,16 +76,19 @@ Android: JDK 17 and Android SDK 35; configure the SDK path, then `./gradlew :app
 5. Save and reopen the observation from History; demonstrate that care answers remain available.
 6. Show that a mouse/object photo requests a leaf photo and produces no disease-specific care plan.
 7. Demonstrate offline operation after required browser assets are cached, or with the installed native APK.
+8. Open Care library without a photo, inspect a condition's treatment/recovery plan and compare mild versus severe action steps. Return to a saved scan and show its diagnosis/photo are unchanged.
 
 ## Executed verification
 
 - Python ML unit tests: 27 passed in the preceding diagnosis-flow revision; classifier unchanged here.
 - Web policy/leaf-gate fixtures: 33 passed; fixture outputs are explicitly synthetic and are not accuracy evidence.
 - New advisory behavior tests: 26 passed, including 20 shared hand-authored cross-platform scenarios and legacy-answer handling. These verify behavior, not agronomic accuracy.
-- Android domain/leaf-gate/advisory unit tests: 49 passed.
-- Content and artifact integrity: 13 passed, including 17×3 profiles and all 75 new narration hashes.
+- Android domain/leaf-gate/advisory/care-library unit tests: 54 passed.
+- New treatment-protocol unit tests: 8 passed, covering actual stage differences, unknown handling, healthy conflicts and missing translations/references.
+- Content and artifact integrity: 21 passed, including all 17×3 protocols and exact normalized treatment narration scripts, file hashes and package receipts.
 - New Android instrumented checks: 2 passed; real Room migration and 17×3 packaged profile loading.
 - New actual-browser flow passed: six questions, care/urgency, three-language playback, exclusive narration, saved-answer updates, offline restoration and real mouse rejection, with zero page errors.
+- Version 0.6 actual-browser flow passed: all 17 library entries, actual stage-specific treatment actions, priority-first layout, safe answer prefill, scan/photograph preservation, new trilingual treatment/stage audio, offline library and retry recovery. Evidence: `docs/evidence/treatment-recovery-browser-report.json`.
 - Actual native mouse/leaf integration: 2 passed; actual ONNX output and gate behavior verified.
 - Actual browser mouse/laptop rejection and healthy/field-leaf inference passed with no page errors.
 - Android debug/test APK builds and TypeScript/Vite production build passed.
