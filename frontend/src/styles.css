@@ -1265,14 +1265,7 @@ html[lang="hi"] .heading-copy h1,html[lang="hi"] .question-title{letter-spacing:
   margin-bottom: 24px;
 }
 .welcome-language {
-  margin-bottom: 32px;
-}
-.welcome-button {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
+  margin-bottom: 0;
 }
 
 @keyframes welcome-enter {

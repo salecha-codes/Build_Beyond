@@ -8,7 +8,7 @@ import com.debuggers.crophealth.content.CareProtocol
 import com.debuggers.crophealth.domain.*
 import java.io.File
 
-enum class Screen { WELCOME, HOME, CAPTURE, PHOTO_REVIEW, PROCESSING, RESULT, GUIDANCE, CONCERN, CARE_LIBRARY, HISTORY, HELP, SETTINGS }
+enum class Screen { WELCOME, WELCOME_TRANSITION, HOME, CAPTURE, PHOTO_REVIEW, PROCESSING, RESULT, GUIDANCE, CONCERN, CARE_LIBRARY, HISTORY, HELP, SETTINGS }
 
 /** Library exploration never changes the classifier result or a saved scan. */
 data class ManualCareSession(val conditionId: String, val symptoms: ReportedSymptoms = ReportedSymptoms(),
@@ -49,7 +49,7 @@ fun Observation.hidesUnsupportedCandidate(): Boolean =
     ("UNFAMILIAR_IMAGE" in note || "CONDITION_DISABLED" in note) && !isLeafCheckedCandidate()
 
 data class AppUiState(
-    val screen: Screen = Screen.HOME,
+    val screen: Screen = Screen.WELCOME,
     val language: AppLanguage = AppLanguage.ENGLISH,
     val selectedCrop: Crop = Crop.MAIZE,
     val photoPath: String? = null,

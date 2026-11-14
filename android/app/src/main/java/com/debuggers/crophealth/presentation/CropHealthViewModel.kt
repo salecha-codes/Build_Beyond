@@ -27,7 +27,7 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
     private val history = ObservationStore(application)
     private val photos = PhotoStore(application)
     private val engine = LocalModelEngine(application)
-    private val mutableState = MutableStateFlow(AppUiState(careCatalogAvailable = careCatalog != null))
+    private val mutableState = MutableStateFlow(AppUiState(screen = Screen.WELCOME, careCatalogAvailable = careCatalog != null))
     val state: StateFlow<AppUiState> = mutableState.asStateFlow()
     private var analysisJob: Job? = null
 
@@ -36,8 +36,7 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
         viewModelScope.launch {
             preferences.state.collect { preference ->
                 mutableState.update { current ->
-                    val screen = if (!preference.welcomed && current.screen == Screen.HOME) Screen.WELCOME else current.screen
-                    current.copy(language = preference.language, autoAudio = preference.autoAudio, screen = screen)
+                    current.copy(language = preference.language, autoAudio = preference.autoAudio)
                 }
                 refreshCopy()
             }
@@ -128,7 +127,13 @@ class CropHealthViewModel(application: Application) : AndroidViewModel(applicati
                 refreshCopy()
             }
             AppAction.CompleteWelcome -> viewModelScope.launch {
-                preferences.welcomed(); mutableState.update { it.copy(screen = Screen.HOME) }
+                if (state.value.screen != Screen.WELCOME) return@launch
+                mutableState.update { it.copy(screen = Screen.WELCOME_TRANSITION) }
+                delay(1120)
+                preferences.welcomed()
+                mutableState.update { current ->
+                    if (current.screen == Screen.WELCOME_TRANSITION) current.copy(screen = Screen.HOME) else current
+                }
             }
             AppAction.DismissError -> mutableState.update { it.copy(error = null) }
             AppAction.ShareCurrent -> shareCurrent()

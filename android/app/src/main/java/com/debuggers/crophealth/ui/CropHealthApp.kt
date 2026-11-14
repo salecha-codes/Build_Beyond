@@ -1,6 +1,7 @@
 @file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 package com.debuggers.crophealth.ui
 
+import com.debuggers.crophealth.R
 import android.app.Activity
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -10,6 +11,11 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -32,9 +38,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -86,7 +94,7 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
                 }
             }
         }
-        BackHandler(enabled=state.screen!=Screen.HOME) { onAction(AppAction.Navigate(state.backScreen())) }
+        BackHandler(enabled=state.screen !in setOf(Screen.HOME,Screen.WELCOME,Screen.WELCOME_TRANSITION)) { onAction(AppAction.Navigate(state.backScreen())) }
         AnimatedContent(
             targetState=state.screen,
             modifier=Modifier.fillMaxSize(),
@@ -105,12 +113,13 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
                 val screenState=state.copy(screen=screen)
                 Scaffold(
                     containerColor=Color.White,
-                    topBar={if(!mainTabs && screen!=Screen.WELCOME) Header(screenState,onAction)},
+                    topBar={if(!mainTabs && screen!=Screen.WELCOME && screen!=Screen.WELCOME_TRANSITION) Header(screenState,onAction)},
                     bottomBar={if(mainTabs) BottomTabs(screenState,onAction)},
                 ) { padding ->
                     Box(Modifier.fillMaxSize().padding(padding)) {
                         when(screen) {
                             Screen.WELCOME -> Welcome(state,onAction)
+                            Screen.WELCOME_TRANSITION -> WelcomeTransition(state)
                             Screen.HOME -> Home(state,onAction)
                             Screen.PHOTO_REVIEW -> PhotoReview(state,onAction)
                             Screen.PROCESSING -> Processing(state)
@@ -182,12 +191,35 @@ fun CropHealthScreen(state: AppUiState,onAction:(AppAction)->Unit,text:(String)-
 }
 
 @Composable private fun Welcome(s:AppUiState,a:(AppAction)->Unit) {
-    Column(Modifier.fillMaxSize().padding(28.dp),verticalArrangement=Arrangement.Center,horizontalAlignment=Alignment.CenterHorizontally) {
-        Box(Modifier.size(100.dp).background(CropColors.Lavender,CircleShape),contentAlignment=Alignment.Center) {Icon(Icons.Outlined.Grass,null,tint=CropColors.Primary,modifier=Modifier.size(54.dp))}
-        Spacer(Modifier.height(28.dp));Text(s.tr("AgriScan","AgriScan"),fontSize=32.sp,fontWeight=FontWeight.Medium)
-        Spacer(Modifier.height(12.dp));Text(s.tr("Care for your crops, wherever you grow.","ನೀವು ಎಲ್ಲಿದ್ದರೂ ಬೆಳೆಗಳ ಆರೈಕೆ ಮಾಡಿ."),textAlign=TextAlign.Center,color=CropColors.Muted)
-        Spacer(Modifier.height(26.dp));LanguageToggle(s,a);Spacer(Modifier.height(36.dp))
-        Primary(s.tr("Get started","ಪ್ರಾರಂಭಿಸಿ"),{a(AppAction.CompleteWelcome)},Icons.Outlined.ArrowForward)
+    LaunchedEffect(Unit) {
+        kotlinx.coroutines.delay(1250)
+        a(AppAction.CompleteWelcome)
+    }
+    Box(Modifier.fillMaxSize().background(Color.White)) {
+        Column(Modifier.align(Alignment.Center).fillMaxWidth().padding(horizontal=38.dp),horizontalAlignment=Alignment.CenterHorizontally) {
+            Image(painterResource(R.drawable.ic_welcome_mark),contentDescription=null,modifier=Modifier.size(120.dp))
+            Spacer(Modifier.height(32.dp))
+            Text(s.tr("AgriScan","AgriScan"),fontSize=32.sp,fontWeight=FontWeight.Bold,color=CropColors.Ink)
+            Spacer(Modifier.height(12.dp))
+            Text(s.tr("Care for your crops, wherever you grow.","ನೀವು ಎಲ್ಲಿದ್ದರೂ ಬೆಳೆಗಳ ಆರೈಕೆ ಮಾಡಿ."),textAlign=TextAlign.Center,color=CropColors.Muted,fontSize=16.sp)
+            Spacer(Modifier.height(30.dp));LanguageToggle(s,a)
+        }
+        Text(s.tr("Offline-first prototype · All photos and processing stay on this device.","ಆಫ್‌ಲೈನ್ ಮಾದರಿ · ಎಲ್ಲಾ ಚಿತ್ರಗಳು ಮತ್ತು ಪ್ರಕ್ರಿಯೆಗಳು ಈ ಸಾಧನದಲ್ಲೇ ನಡೆಯುತ್ತವೆ."),
+            modifier=Modifier.align(Alignment.BottomCenter).padding(horizontal=24.dp,vertical=24.dp),fontSize=10.sp,color=CropColors.Muted,textAlign=TextAlign.Center)
+    }
+}
+
+@Composable private fun WelcomeTransition(s:AppUiState) {
+    val animation= rememberInfiniteTransition(label="welcome-intro")
+    val scale by animation.animateFloat(initialValue=.92f,targetValue=1.06f,
+        animationSpec=infiniteRepeatable(animation=tween(520,easing=FastOutSlowInEasing),repeatMode=RepeatMode.Reverse),label="welcome-logo-scale")
+    Box(Modifier.fillMaxSize().background(Color.White),contentAlignment=Alignment.Center) {
+        Column(horizontalAlignment=Alignment.CenterHorizontally) {
+            Image(painterResource(R.drawable.ic_welcome_mark),contentDescription=null,
+                modifier=Modifier.size(132.dp).graphicsLayer { scaleX=scale;scaleY=scale })
+            Spacer(Modifier.height(28.dp))
+            Text(s.tr("A closer look at your crop","ನಿಮ್ಮ ಬೆಳೆಯನ್ನು ಹತ್ತಿರದಿಂದ ನೋಡೋಣ"),fontSize=24.sp,fontWeight=FontWeight.SemiBold,color=CropColors.Ink)
+        }
     }
 }
 
@@ -582,7 +614,7 @@ private fun careReason(code:String,s:AppUiState):String=when(code) {
         Spacer(Modifier.height(10.dp))
         Text(s.tr("History","ಇತಿಹಾಸ"),fontSize=30.sp,fontWeight=FontWeight.Medium)
         Text(s.tr("Saved on this phone. Available offline.","ಈ ಫೋನ್‌ನಲ್ಲಿ ಉಳಿಸಲಾಗಿದೆ. ಆಫ್‌ಲೈನ್‌ನಲ್ಲಿ ಲಭ್ಯ."),fontSize=12.sp,color=CropColors.Green)
-        CropChips(s,a,true,crop) {crop=it}
+        CropChips(s,a,true,crop,onSelect={crop=it})
         if(records.isEmpty()) SoftCard {
             Icon(Icons.Outlined.History,null,tint=CropColors.Primary)
             Text(s.tr("No scans here yet","ಇನ್ನೂ ಪರಿಶೀಲನೆಗಳಿಲ್ಲ"),fontSize=19.sp)

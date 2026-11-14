@@ -7,6 +7,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
+import android.webkit.ConsoleMessage
 import android.webkit.PermissionRequest
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
@@ -86,7 +88,15 @@ class MainActivity : ComponentActivity() {
             override fun shouldInterceptRequest(
                 view: WebView,
                 request: WebResourceRequest,
-            ): WebResourceResponse? = assetLoader.shouldInterceptRequest(request.url)
+            ): WebResourceResponse? {
+                val response = assetLoader.shouldInterceptRequest(request.url)
+                if (BuildConfig.DEBUG) Log.d("AgriScanWeb", "${request.url} -> ${response?.mimeType ?: "not an app asset"}")
+                return response
+            }
+
+            override fun onPageFinished(view: WebView, url: String) {
+                if (BuildConfig.DEBUG) Log.d("AgriScanWeb", "Finished loading $url")
+            }
 
             override fun shouldOverrideUrlLoading(
                 view: WebView,
@@ -111,6 +121,11 @@ class MainActivity : ComponentActivity() {
         }
 
         webChromeClient = object : WebChromeClient() {
+            override fun onConsoleMessage(message: ConsoleMessage): Boolean {
+                if (BuildConfig.DEBUG) Log.d("AgriScanWeb", "${message.sourceId()}:${message.lineNumber()} ${message.message()}")
+                return false
+            }
+
             override fun onShowFileChooser(
                 webView: WebView,
                 callback: ValueCallback<Array<Uri>>,

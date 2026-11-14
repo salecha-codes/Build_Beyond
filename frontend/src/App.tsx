@@ -167,18 +167,11 @@ async function historyPhoto(file: Blob): Promise<Blob> {
 export default function App() {
   const [screen, setScreen] = useState<Screen>(() => {
     try {
-      return globalThis.localStorage?.getItem('crophealth.onboarded') === 'true'
+      return globalThis.sessionStorage?.getItem('crophealth.session-started') === 'true'
         ? 'home'
         : 'welcome';
     } catch {
-      return 'home';
-    }
-  });
-  const [startupStarting, setStartupStarting] = useState(() => {
-    try {
-      return globalThis.localStorage?.getItem('crophealth.onboarded') === 'true';
-    } catch {
-      return false;
+      return 'welcome';
     }
   });
   const [welcomeStarting, setWelcomeStarting] = useState(false);
@@ -259,16 +252,6 @@ export default function App() {
     }
   }, []);
   useEffect(() => {
-    if (!startupStarting) return;
-    const timer = window.setTimeout(() => setStartupStarting(false), 1120);
-    return () => window.clearTimeout(timer);
-  }, [startupStarting]);
-  useEffect(() => {
-    if (screen !== 'welcome') return;
-    const timer = window.setTimeout(() => startFromWelcome(), 1100);
-    return () => window.clearTimeout(timer);
-  }, []);
-  useEffect(() => {
     void loadAdvisoryModel().then(setAdvisoryModel).catch(() => setAdvisoryFailed(true));
     void loadCareProtocols().then(setCareProtocols).catch(() => setProtocolsFailed(true));
     void fetch(assetUrl('content/treatment_audio_manifest.json')).then(r => r.ok ? r.json() : null).then(manifest => {
@@ -320,11 +303,21 @@ export default function App() {
       } catch {
         /* Ignore local storage errors */
       }
+      try {
+        globalThis.sessionStorage?.setItem('crophealth.session-started', 'true');
+      } catch {
+        /* Keep the in-memory flow usable when session storage is blocked. */
+      }
       setScreen('home');
       setWelcomeStarting(false);
       welcomeTransitionStarted.current = false;
     }, 1120);
   }
+  useEffect(() => {
+    if (screen !== 'welcome') return;
+    const timer = window.setTimeout(startFromWelcome, 1250);
+    return () => window.clearTimeout(timer);
+  }, [screen]);
   function startCameraTransition() {
     if (cameraStarting) return;
     setCameraStarting(true);
@@ -808,7 +801,7 @@ export default function App() {
   }
 
   let page: ReactNode;
-  if (startupStarting || (screen === 'welcome' && welcomeStarting) || (screen === 'home' && cameraStarting))
+  if ((screen === 'welcome' && welcomeStarting) || (screen === 'home' && cameraStarting))
     page = (
       <main className={`transition-page${cameraStarting ? ' scan-transition' : ''}`} aria-live="polite">
         <div className="farmer-scene" role="img" aria-label={t('A farmer taking a photo of a crop on a phone', 'ರೈತರು ಫೋನ್‌ನಲ್ಲಿ ಬೆಳೆಯ ಚಿತ್ರ ತೆಗೆಯುತ್ತಿದ್ದಾರೆ')}>
@@ -884,16 +877,6 @@ export default function App() {
             )}
           </p>
           <div className="welcome-language">{languageToggle}</div>
-          <button
-            className="primary welcome-button"
-            data-testid="welcome-get-started"
-            onClick={startFromWelcome}
-            disabled={welcomeStarting}
-            aria-busy={welcomeStarting}
-          >
-            {t('Get started', 'ಪ್ರಾರಂಭಿಸಿ')}
-            <ArrowRight size={18} />
-          </button>
         </div>
         <p className="privacy-note">
           {t(

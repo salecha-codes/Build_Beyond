@@ -30,13 +30,14 @@ android {
         applicationId = "com.debuggers.crophealth"
         minSdk = 24
         targetSdk = 35
-        versionCode = 8
-        versionName = "0.6.0-treatment-recovery"
+        versionCode = 9
+        versionName = "0.7.0-welcome-flow"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
-    sourceSets.getByName("main").assets.srcDir("../../models/assets")
-    sourceSets.getByName("main").assets.srcDir(layout.buildDirectory.dir("generated/webAppAssets"))
+    // MainActivity runs the bundled web app; its model and audio already live in www/assets.
+    // Avoid packaging a second copy of the same offline assets at the APK root.
+    sourceSets.getByName("main").assets.setSrcDirs(listOf(layout.buildDirectory.dir("generated/webAppAssets")))
     buildFeatures { compose = true; buildConfig = true }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
