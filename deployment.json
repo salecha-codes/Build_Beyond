@@ -1,16 +1,20 @@
 {
-  "source_commit": "67e39dc",
-  "version": "0.4.3-diagnosis-flow-fix",
+  "source_commit": "eebfb48",
+  "version": "0.5.0-offline-advisory",
   "architecture": "MobileNetV3-Large",
   "model_sha256": "31b29158cc1fc1c07bdf3acc07cb6bb6da39eccb1050ffe6ed1d499811179fba",
-  "leaf_check_enabled": true,
-  "leaf_probability_threshold": 0.4514392108851361,
-  "source_acceptance_qualified": true,
+  "advisory_model_version": "offline-advisory-v1",
+  "advisory_model_type": "expert_decision_model",
+  "advisory_model_sha256": "efc2270f58827db3ae611861919857956210d649aa6c28ce0e8a88cec2e8d290",
+  "advisory_trained": false,
   "diagnosis_validated": false,
+  "advisory_field_validated": false,
+  "profiles": 17,
+  "audio_clips": 165,
   "languages": [
     "en",
     "kn",
     "hi"
   ],
-  "browser_upgrade_test": "old open page automatically navigated to new bundle; no HTTP/page errors"
+  "browser_flow_test": "passed locally with real ONNX inference, offline care/history/audio and mouse rejection"
 }

@@ -1,0 +1,1254 @@
+{
+  "schema_version": 1,
+  "model_version": "offline-advisory-v1",
+  "model_type": "expert_decision_model",
+  "trained": false,
+  "agronomist_reviewed": false,
+  "field_validated": false,
+  "languages": [
+    "en",
+    "kn",
+    "hi"
+  ],
+  "translation_status": "draft_not_native_reviewed",
+  "scope": "Disease-conditional care reference and farmer-reported urgency. Not a trained severity predictor, diagnosis confirmation or guaranteed cure. Existing PlantVillage images have disease classes, not severity labels.",
+  "source_notice": "Management text is an unreviewed draft. Source leads could not be retrieved through the environment proxy; listed URLs are not verified endorsements. PlantVillage was retrieved for taxonomy only.",
+  "notices": {
+    "en": "Use this care reference only if the suspected cause is confirmed. Severity comes from your answers, not a photo measurement. Advice and translations still need local expert review.",
+    "kn": "ಅನುಮಾನಿತ ಕಾರಣ ಖಚಿತವಾದರೆ ಮಾತ್ರ ಈ ಆರೈಕೆ ಉಲ್ಲೇಖ ಬಳಸಿ. ತೀವ್ರತೆ ನಿಮ್ಮ ಉತ್ತರಗಳಿಂದ ಬರುತ್ತದೆ; ಚಿತ್ರದ ಅಳತೆ ಅಲ್ಲ. ಸಲಹೆ ಮತ್ತು ಅನುವಾದಕ್ಕೆ ಸ್ಥಳೀಯ ತಜ್ಞರ ಪರಿಶೀಲನೆ ಇನ್ನೂ ಬೇಕು.",
+    "hi": "संदिग्ध कारण की पुष्टि होने पर ही इस देखभाल संदर्भ का उपयोग करें। गंभीरता आपके उत्तरों से आती है, फोटो के माप से नहीं। सलाह और अनुवाद की स्थानीय विशेषज्ञ समीक्षा अभी बाकी है।"
+  },
+  "sources": [
+    {
+      "id": "plantvillage_taxonomy",
+      "title": "PlantVillage dataset category taxonomy; not management evidence",
+      "url": "https://github.com/spMohanty/PlantVillage-Dataset",
+      "verification_status": "retrieved_taxonomy_only"
+    },
+    {
+      "id": "umn_corn_gray",
+      "title": "University of Minnesota Extension: Gray leaf spot on corn (source lead)",
+      "url": "https://extension.umn.edu/corn-pest-management/gray-leaf-spot-corn",
+      "verification_status": "not_retrieved_not_expert_reviewed"
+    },
+    {
+      "id": "umn_corn_rust",
+      "title": "University of Minnesota Extension: Common rust on corn (source lead)",
+      "url": "https://extension.umn.edu/corn-pest-management/common-rust-corn",
+      "verification_status": "not_retrieved_not_expert_reviewed"
+    },
+    {
+      "id": "umn_corn_nlb",
+      "title": "University of Minnesota Extension: Northern corn leaf blight (source lead)",
+      "url": "https://extension.umn.edu/corn-pest-management/northern-corn-leaf-blight",
+      "verification_status": "not_retrieved_not_expert_reviewed"
+    },
+    {
+      "id": "umn_early_blight",
+      "title": "University of Minnesota Extension: Early blight in tomato and potato (source lead)",
+      "url": "https://extension.umn.edu/disease-management/early-blight-tomato-and-potato",
+      "verification_status": "not_retrieved_not_expert_reviewed"
+    },
+    {
+      "id": "umn_late_blight",
+      "title": "University of Minnesota Extension: Late blight (source lead)",
+      "url": "https://extension.umn.edu/disease-management/late-blight",
+      "verification_status": "not_retrieved_not_expert_reviewed"
+    },
+    {
+      "id": "umn_bacterial_spot",
+      "title": "UC IPM: Tomato bacterial spot (source lead)",
+      "url": "https://ipm.ucanr.edu/agriculture/tomato/bacterial-spot/",
+      "verification_status": "not_retrieved_not_expert_reviewed"
+    },
+    {
+      "id": "umn_leaf_mold",
+      "title": "University of Minnesota Extension: Tomato leaf mold (source lead)",
+      "url": "https://extension.umn.edu/plant-diseases/tomato-leaf-mold",
+      "verification_status": "not_retrieved_not_expert_reviewed"
+    },
+    {
+      "id": "umn_septoria",
+      "title": "University of Minnesota Extension: Septoria leaf spot in tomatoes (source lead)",
+      "url": "https://extension.umn.edu/plant-diseases/septoria-leaf-spot-tomatoes",
+      "verification_status": "not_retrieved_not_expert_reviewed"
+    },
+    {
+      "id": "ucipm_mites",
+      "title": "UC IPM: Tomato spider mites (source lead)",
+      "url": "https://ipm.ucanr.edu/agriculture/tomato/spider-mites/",
+      "verification_status": "not_retrieved_not_expert_reviewed"
+    },
+    {
+      "id": "tnau_tomato",
+      "title": "TNAU Agritech: Tomato crop protection diseases (source lead)",
+      "url": "https://agritech.tnau.ac.in/crop_protection/tomato_diseases.html",
+      "verification_status": "not_retrieved_not_expert_reviewed"
+    },
+    {
+      "id": "ucipm_tylcv",
+      "title": "UC IPM: Tomato yellow leaf curl (source lead)",
+      "url": "https://ipm.ucanr.edu/agriculture/tomato/tomato-yellow-leaf-curl/",
+      "verification_status": "not_retrieved_not_expert_reviewed"
+    },
+    {
+      "id": "umn_tomato_virus",
+      "title": "University of Minnesota Extension: Tomato virus diseases (source lead)",
+      "url": "https://extension.umn.edu/plant-diseases/tomato-virus-diseases",
+      "verification_status": "not_retrieved_not_expert_reviewed"
+    }
+  ],
+  "profiles": {
+    "maize_gray_leaf_spot": {
+      "crop_id": "maize",
+      "kind": "fungal",
+      "risk": "foliar",
+      "source_ids": [
+        "umn_corn_gray"
+      ],
+      "translations": {
+        "en": {
+          "overview": "Long rectangular gray-brown lesions bounded by leaf veins can fit gray leaf spot.",
+          "curability": "Management can limit further damage; dead or spotted tissue will not turn healthy again. A photo does not confirm the cause.",
+          "do_now": [
+            "Look at several plants, including leaves at and above the ear; record affected plants and new lesions.",
+            "Keep the same marked plants for comparison tomorrow."
+          ],
+          "management": [
+            "Protect healthy leaf area; do not strip maize leaves to remove every lesion.",
+            "If disease is increasing around tasseling or silking, ask an adviser whether a locally registered fungicide is justified. Follow its label and resistance-management guidance."
+          ],
+          "prevention": [
+            "Choose locally recommended resistant hybrids next season.",
+            "Rotate crops where practical and manage infected maize residue with local soil-conservation advice."
+          ],
+          "escalation": [
+            "Arrange a prompt field check if lesions reach ear leaves, new plants develop symptoms, or leaf area is being lost rapidly."
+          ]
+        },
+        "kn": {
+          "overview": "ಎಲೆಯ ನರಗಳ ನಡುವೆ ಉದ್ದವಾದ ಆಯತಾಕಾರದ ಬೂದು-ಕಂದು ಕಲೆಗಳು ಈ ರೋಗದ ಸೂಚನೆ ಆಗಬಹುದು.",
+          "curability": "ಆರೈಕೆಯಿಂದ ಮುಂದಿನ ಹಾನಿಯನ್ನು ಕಡಿಮೆ ಮಾಡಬಹುದು; ಒಣಗಿದ ಅಥವಾ ಕಲೆಬಿದ್ದ ಭಾಗ ಮತ್ತೆ ಆರೋಗ್ಯಕರವಾಗುವುದಿಲ್ಲ. ಚಿತ್ರದಿಂದ ಮಾತ್ರ ಕಾರಣ ಖಚಿತವಾಗುವುದಿಲ್ಲ.",
+          "do_now": [
+            "ಹಲವು ಗಿಡಗಳಲ್ಲಿ ತೆನೆಯ ಎತ್ತರದ ಮತ್ತು ಮೇಲಿನ ಎಲೆಗಳನ್ನು ನೋಡಿ; ಬಾಧಿತ ಗಿಡಗಳು ಮತ್ತು ಹೊಸ ಕಲೆಗಳನ್ನು ದಾಖಲಿಸಿ.",
+            "ಗುರುತು ಮಾಡಿದ ಅದೇ ಗಿಡಗಳನ್ನು ನಾಳೆ ಮತ್ತೆ ಹೋಲಿಸಿ."
+          ],
+          "management": [
+            "ಆರೋಗ್ಯಕರ ಎಲೆಗಳನ್ನು ಉಳಿಸಿ; ಪ್ರತಿ ಕಲೆ ತೆಗೆಯಲು ಮೆಕ್ಕೆಜೋಳದ ಎಲೆಗಳನ್ನು ಕೀಳಬೇಡಿ.",
+            "ಹೂ ಬಿಡುವ ಅಥವಾ ರೇಷ್ಮೆ ಬರುವ ಸಮಯದಲ್ಲಿ ರೋಗ ಹೆಚ್ಚುತ್ತಿದ್ದರೆ, ಸ್ಥಳೀಯವಾಗಿ ನೋಂದಾಯಿತ ಶಿಲೀಂಧ್ರನಾಶಕ ಅಗತ್ಯವೇ ಎಂದು ಸಲಹೆಗಾರರನ್ನು ಕೇಳಿ. ಲೇಬಲ್ ಮತ್ತು ಪ್ರತಿರೋಧ ನಿರ್ವಹಣೆಯ ಸೂಚನೆ ಪಾಲಿಸಿ."
+          ],
+          "prevention": [
+            "ಮುಂದಿನ ಋತುವಿಗೆ ಸ್ಥಳೀಯವಾಗಿ ಶಿಫಾರಸು ಮಾಡಿದ ರೋಗನಿರೋಧಕ ತಳಿ ಆಯ್ಕೆ ಮಾಡಿ.",
+            "ಸಾಧ್ಯವಾದಲ್ಲಿ ಬೆಳೆ ಪರಿವರ್ತನೆ ಮಾಡಿ; ಮಣ್ಣಿನ ಸಂರಕ್ಷಣೆ ಸಲಹೆಯಂತೆ ಬಾಧಿತ ಬೆಳೆ ಅವಶೇಷ ನಿರ್ವಹಿಸಿ."
+          ],
+          "escalation": [
+            "ತೆನೆಯ ಹತ್ತಿರದ ಎಲೆಗಳಿಗೆ ಕಲೆ ಹರಡಿದರೆ, ಹೊಸ ಗಿಡಗಳಿಗೆ ಬಂದರೆ ಅಥವಾ ಎಲೆಗಳು ವೇಗವಾಗಿ ಹಾಳಾದರೆ ಶೀಘ್ರ ಕ್ಷೇತ್ರ ಪರಿಶೀಲನೆ ಮಾಡಿಸಿ."
+          ]
+        },
+        "hi": {
+          "overview": "नसों से घिरे लंबे आयताकार भूरे-धूसर धब्बे ग्रे लीफ स्पॉट के संकेत हो सकते हैं।",
+          "curability": "देखभाल से आगे की क्षति सीमित हो सकती है; सूखा या धब्बेदार ऊतक दोबारा स्वस्थ नहीं होता। केवल तस्वीर से कारण की पुष्टि नहीं होती।",
+          "do_now": [
+            "कई पौधों की भुट्टे के स्तर और ऊपर की पत्तियाँ देखें; प्रभावित पौधे और नए धब्बे लिखें।",
+            "निशान लगाए उन्हीं पौधों को कल फिर देखें।"
+          ],
+          "management": [
+            "स्वस्थ पत्ती क्षेत्र बचाएँ; हर धब्बा हटाने के लिए मक्का की पत्तियाँ न तोड़ें।",
+            "पुष्पन या रेशे निकलने के समय रोग बढ़े तो सलाहकार से पूछें कि स्थानीय पंजीकृत फफूंदनाशक की जरूरत है या नहीं। लेबल और प्रतिरोध प्रबंधन के निर्देश मानें।"
+          ],
+          "prevention": [
+            "अगली फसल में स्थानीय अनुशंसित प्रतिरोधी संकर चुनें।",
+            "जहाँ संभव हो फसल चक्र अपनाएँ और स्थानीय मृदा-संरक्षण सलाह के अनुसार संक्रमित अवशेष संभालें।"
+          ],
+          "escalation": [
+            "भुट्टे के पास की पत्तियों तक धब्बे पहुँचें, नए पौधे प्रभावित हों या पत्ती क्षेत्र तेजी से घटे तो जल्द खेत जाँच कराएँ।"
+          ]
+        }
+      }
+    },
+    "maize_common_rust": {
+      "crop_id": "maize",
+      "kind": "fungal",
+      "risk": "foliar",
+      "source_ids": [
+        "umn_corn_rust"
+      ],
+      "translations": {
+        "en": {
+          "overview": "Small raised cinnamon-brown pustules on both leaf surfaces can fit common rust; southern rust can look similar.",
+          "curability": "Management can limit further damage; dead or spotted tissue will not turn healthy again. A photo does not confirm the cause.",
+          "do_now": [
+            "Check both leaf surfaces on several plants; note whether pustules and affected plants increase.",
+            "Ask for identification if pustules are mostly on the upper surface or symptoms spread quickly."
+          ],
+          "management": [
+            "Many resistant field-maize hybrids need no treatment for light common rust; sweet corn and susceptible crops may need closer attention.",
+            "Discuss treatment with a local adviser if rust is increasing on susceptible plants before or during flowering; use only crop-registered products according to the label."
+          ],
+          "prevention": [
+            "Use resistant locally suitable hybrids and scout from early crop growth.",
+            "Avoid unnecessary sprays based on a single rusty leaf."
+          ],
+          "escalation": [
+            "Seek a prompt check for rapid spread, extensive upper-leaf damage, or uncertainty between common and southern rust."
+          ]
+        },
+        "kn": {
+          "overview": "ಎಲೆಯ ಎರಡೂ ಬದಿಯ ಸಣ್ಣ ಕಂದು ಉಬ್ಬಿದ ಗುಳ್ಳೆಗಳು ಸಾಮಾನ್ಯ ತುಕ್ಕಿನ ಸೂಚನೆ ಆಗಬಹುದು; ದಕ್ಷಿಣ ತುಕ್ಕು ರೋಗವೂ ಹೋಲಬಹುದು.",
+          "curability": "ಆರೈಕೆಯಿಂದ ಮುಂದಿನ ಹಾನಿಯನ್ನು ಕಡಿಮೆ ಮಾಡಬಹುದು; ಒಣಗಿದ ಅಥವಾ ಕಲೆಬಿದ್ದ ಭಾಗ ಮತ್ತೆ ಆರೋಗ್ಯಕರವಾಗುವುದಿಲ್ಲ. ಚಿತ್ರದಿಂದ ಮಾತ್ರ ಕಾರಣ ಖಚಿತವಾಗುವುದಿಲ್ಲ.",
+          "do_now": [
+            "ಹಲವು ಗಿಡಗಳ ಎಲೆಗಳ ಎರಡೂ ಬದಿಗಳನ್ನು ನೋಡಿ; ಗುಳ್ಳೆಗಳು ಮತ್ತು ಬಾಧಿತ ಗಿಡಗಳ ಸಂಖ್ಯೆ ಹೆಚ್ಚುತ್ತಿದೆಯೇ ದಾಖಲಿಸಿ.",
+            "ಗುಳ್ಳೆಗಳು ಮುಖ್ಯವಾಗಿ ಮೇಲ್ಭಾಗದಲ್ಲಿ ಇದ್ದರೆ ಅಥವಾ ವೇಗವಾಗಿ ಹರಡಿದರೆ ಗುರುತಿಸಲು ತಜ್ಞರನ್ನು ಕೇಳಿ."
+          ],
+          "management": [
+            "ರೋಗನಿರೋಧಕ ಹೊಲದ ಮೆಕ್ಕೆಜೋಳದಲ್ಲಿ ಸಣ್ಣ ಪ್ರಮಾಣದ ಸಾಮಾನ್ಯ ತುಕ್ಕಿಗೆ ಔಷಧಿ ಅಗತ್ಯವಿರದೇ ಇರಬಹುದು; ಸಿಹಿ ಮೆಕ್ಕೆಜೋಳ ಮತ್ತು ಸೂಕ್ಷ್ಮ ತಳಿಗಳನ್ನು ಹೆಚ್ಚು ಗಮನಿಸಿ.",
+            "ಹೂ ಬಿಡುವ ಮೊದಲು ಅಥವಾ ಸಮಯದಲ್ಲಿ ಸೂಕ್ಷ್ಮ ತಳಿಯಲ್ಲಿ ತುಕ್ಕು ಹೆಚ್ಚಾದರೆ ಸ್ಥಳೀಯ ಸಲಹೆ ಪಡೆಯಿರಿ; ಬೆಳೆಗಾಗಿ ನೋಂದಾಯಿತ ಉತ್ಪನ್ನವನ್ನು ಲೇಬಲ್ ಪ್ರಕಾರ ಮಾತ್ರ ಬಳಸಿ."
+          ],
+          "prevention": [
+            "ಸ್ಥಳೀಯ ಪರಿಸ್ಥಿತಿಗೆ ಸೂಕ್ತ ರೋಗನಿರೋಧಕ ತಳಿ ಬಳಸಿ; ಆರಂಭದಿಂದಲೇ ಪರಿಶೀಲಿಸಿ.",
+            "ಒಂದು ತುಕ್ಕು ಹಿಡಿದ ಎಲೆ ನೋಡಿ ಅನಗತ್ಯ ಸಿಂಪಡಣೆ ಮಾಡಬೇಡಿ."
+          ],
+          "escalation": [
+            "ವೇಗವಾಗಿ ಹರಡಿದರೆ, ಮೇಲಿನ ಎಲೆಗಳು ಹೆಚ್ಚು ಹಾಳಾದರೆ ಅಥವಾ ತುಕ್ಕಿನ ಪ್ರಕಾರ ಸ್ಪಷ್ಟವಿಲ್ಲದಿದ್ದರೆ ಶೀಘ್ರ ಪರಿಶೀಲನೆ ಮಾಡಿಸಿ."
+          ]
+        },
+        "hi": {
+          "overview": "दोनों सतहों पर छोटे उभरे दालचीनी-भूरे फफोले सामान्य रतुआ के संकेत हो सकते हैं; सदर्न रस्ट मिलता-जुलता दिख सकता है।",
+          "curability": "देखभाल से आगे की क्षति सीमित हो सकती है; सूखा या धब्बेदार ऊतक दोबारा स्वस्थ नहीं होता। केवल तस्वीर से कारण की पुष्टि नहीं होती।",
+          "do_now": [
+            "कई पौधों की पत्तियों की दोनों सतह देखें; फफोले और प्रभावित पौधों की बढ़ोतरी लिखें।",
+            "फफोले मुख्यतः ऊपरी सतह पर हों या तेजी से बढ़ें तो सही पहचान कराएँ।"
+          ],
+          "management": [
+            "प्रतिरोधी खेत-मक्का संकर में हल्के सामान्य रतुआ पर अक्सर उपचार नहीं चाहिए; स्वीट कॉर्न और संवेदनशील फसल को अधिक निगरानी चाहिए।",
+            "फूल आने से पहले या दौरान संवेदनशील पौधों में रतुआ बढ़े तो स्थानीय सलाह लें; केवल फसल के लिए पंजीकृत उत्पाद लेबल के अनुसार इस्तेमाल करें।"
+          ],
+          "prevention": [
+            "स्थानीय उपयुक्त प्रतिरोधी संकर चुनें और शुरुआती वृद्धि से निगरानी रखें।",
+            "एक रतुआ लगी पत्ती देखकर अनावश्यक छिड़काव न करें।"
+          ],
+          "escalation": [
+            "तेजी से फैलाव, ऊपरी पत्तियों पर भारी क्षति या रतुआ के प्रकार में संदेह हो तो जल्द जाँच कराएँ।"
+          ]
+        }
+      }
+    },
+    "maize_northern_leaf_blight": {
+      "crop_id": "maize",
+      "kind": "fungal",
+      "risk": "foliar",
+      "source_ids": [
+        "umn_corn_nlb"
+      ],
+      "translations": {
+        "en": {
+          "overview": "Long cigar-shaped tan or gray-green lesions can fit northern leaf blight.",
+          "curability": "Management can limit further damage; dead or spotted tissue will not turn healthy again. A photo does not confirm the cause.",
+          "do_now": [
+            "Examine lower, ear-level and upper leaves on several plants; record fresh lesions.",
+            "Note crop stage and whether lesions are merging or leaves are drying."
+          ],
+          "management": [
+            "Retain healthy leaves; removing many maize leaves can reduce yield further.",
+            "If disease reaches ear leaves around flowering or spreads rapidly, ask an adviser whether a registered fungicide is appropriate; follow the local label."
+          ],
+          "prevention": [
+            "Select resistant hybrids appropriate to the area.",
+            "Use rotation and locally suitable residue management to reduce carry-over."
+          ],
+          "escalation": [
+            "Arrange prompt advice for ear-leaf involvement near flowering, extensive drying, or rapid spread across plants."
+          ]
+        },
+        "kn": {
+          "overview": "ಉದ್ದವಾದ ಸಿಗಾರ್ ಆಕಾರದ ತಿಳಿ ಕಂದು ಅಥವಾ ಬೂದು-ಹಸಿರು ಕಲೆಗಳು ಉತ್ತರ ಎಲೆ ಅಂಗಮಾರಿಯ ಸೂಚನೆ ಆಗಬಹುದು.",
+          "curability": "ಆರೈಕೆಯಿಂದ ಮುಂದಿನ ಹಾನಿಯನ್ನು ಕಡಿಮೆ ಮಾಡಬಹುದು; ಒಣಗಿದ ಅಥವಾ ಕಲೆಬಿದ್ದ ಭಾಗ ಮತ್ತೆ ಆರೋಗ್ಯಕರವಾಗುವುದಿಲ್ಲ. ಚಿತ್ರದಿಂದ ಮಾತ್ರ ಕಾರಣ ಖಚಿತವಾಗುವುದಿಲ್ಲ.",
+          "do_now": [
+            "ಹಲವು ಗಿಡಗಳ ಕೆಳಗಿನ, ತೆನೆಯ ಮಟ್ಟದ ಮತ್ತು ಮೇಲಿನ ಎಲೆಗಳಲ್ಲಿ ಹೊಸ ಕಲೆಗಳನ್ನು ದಾಖಲಿಸಿ.",
+            "ಬೆಳೆಯ ಹಂತ, ಕಲೆಗಳು ಒಂದಾಗುತ್ತಿವೆಯೇ ಮತ್ತು ಎಲೆಗಳು ಒಣಗುತ್ತಿವೆಯೇ ಗಮನಿಸಿ."
+          ],
+          "management": [
+            "ಆರೋಗ್ಯಕರ ಎಲೆಗಳನ್ನು ಉಳಿಸಿ; ಹೆಚ್ಚಿನ ಎಲೆಗಳನ್ನು ತೆಗೆದರೆ ಇಳುವರಿ ಮತ್ತಷ್ಟು ಕಡಿಮೆಯಾಗಬಹುದು.",
+            "ಹೂ ಬಿಡುವ ಸಮಯದಲ್ಲಿ ತೆನೆಯ ಹತ್ತಿರದ ಎಲೆಗಳಿಗೆ ರೋಗ ಬಂದರೆ ಅಥವಾ ವೇಗವಾಗಿ ಹರಡಿದರೆ ನೋಂದಾಯಿತ ಶಿಲೀಂಧ್ರನಾಶಕ ಸೂಕ್ತವೇ ಎಂದು ಸಲಹೆ ಕೇಳಿ; ಸ್ಥಳೀಯ ಲೇಬಲ್ ಪಾಲಿಸಿ."
+          ],
+          "prevention": [
+            "ಪ್ರದೇಶಕ್ಕೆ ಸೂಕ್ತವಾದ ರೋಗನಿರೋಧಕ ತಳಿ ಆಯ್ಕೆ ಮಾಡಿ.",
+            "ರೋಗ ಮುಂದಿನ ಬೆಳೆಗೆ ಉಳಿಯದಂತೆ ಬೆಳೆ ಪರಿವರ್ತನೆ ಮತ್ತು ಸೂಕ್ತ ಅವಶೇಷ ನಿರ್ವಹಣೆ ಮಾಡಿ."
+          ],
+          "escalation": [
+            "ಹೂ ಬಿಡುವಾಗ ತೆನೆಯ ಎಲೆಗಳು ಬಾಧಿತವಾದರೆ, ಹೆಚ್ಚು ಒಣಗಿದರೆ ಅಥವಾ ಅನೇಕ ಗಿಡಗಳಿಗೆ ವೇಗವಾಗಿ ಹರಡಿದರೆ ಶೀಘ್ರ ಸಲಹೆ ಪಡೆಯಿರಿ."
+          ]
+        },
+        "hi": {
+          "overview": "लंबे सिगार जैसे हल्के भूरे या धूसर-हरे धब्बे नॉर्दर्न लीफ ब्लाइट के संकेत हो सकते हैं।",
+          "curability": "देखभाल से आगे की क्षति सीमित हो सकती है; सूखा या धब्बेदार ऊतक दोबारा स्वस्थ नहीं होता। केवल तस्वीर से कारण की पुष्टि नहीं होती।",
+          "do_now": [
+            "कई पौधों की नीचे, भुट्टे के स्तर और ऊपर की पत्तियों पर नए धब्बे लिखें।",
+            "फसल की अवस्था, मिलते धब्बे और सूखती पत्तियाँ नोट करें।"
+          ],
+          "management": [
+            "स्वस्थ पत्तियाँ बचाएँ; बहुत-सी पत्तियाँ हटाने से उपज और घट सकती है।",
+            "फूल आने के समय भुट्टे की पत्तियाँ प्रभावित हों या रोग तेजी से फैले तो पंजीकृत फफूंदनाशक की उपयुक्तता पूछें; स्थानीय लेबल मानें।"
+          ],
+          "prevention": [
+            "क्षेत्र के लिए उपयुक्त प्रतिरोधी संकर चुनें।",
+            "फसल चक्र और उपयुक्त अवशेष प्रबंधन से अगली फसल का संक्रमण घटाएँ।"
+          ],
+          "escalation": [
+            "पुष्पन के पास भुट्टे की पत्तियाँ प्रभावित हों, बहुत सूखें या कई पौधों में तेजी से फैले तो जल्द सलाह लें।"
+          ]
+        }
+      }
+    },
+    "maize_healthy": {
+      "crop_id": "maize",
+      "kind": "healthy",
+      "risk": "routine",
+      "source_ids": [
+        "plantvillage_taxonomy"
+      ],
+      "translations": {
+        "en": {
+          "overview": "The photographed leaf looks closest to a healthy training example. One photo cannot rule out pests, root problems, nutrient stress or hidden infection.",
+          "curability": "No disease treatment is indicated by a healthy-looking photo alone. If the plant has symptoms, assess those symptoms rather than trusting the healthy label.",
+          "do_now": [
+            "Check new and old leaves, stems and nearby plants; record any real symptoms.",
+            "Continue normal irrigation and crop-specific nutrition without preventive pesticide spraying based on this result."
+          ],
+          "management": [
+            "If symptoms are present, retake a clear photo of the affected part and ask for diagnosis.",
+            "Keep a dated observation and compare the same plants over the next two days."
+          ],
+          "prevention": [
+            "Use healthy planting material, clean tools and balanced irrigation and nutrition.",
+            "Scout routinely and increase checks during weather that favors local diseases."
+          ],
+          "escalation": [
+            "Get advice if plants wilt, new damage spreads quickly, or fruit or stems are affected despite a healthy-looking result."
+          ]
+        },
+        "kn": {
+          "overview": "ಚಿತ್ರದ ಎಲೆ ಆರೋಗ್ಯಕರ ತರಬೇತಿ ಉದಾಹರಣೆಗೆ ಹೆಚ್ಚು ಹೋಲುತ್ತದೆ. ಒಂದು ಚಿತ್ರದಿಂದ ಕೀಟ, ಬೇರು ಸಮಸ್ಯೆ, ಪೋಷಕಾಂಶ ಒತ್ತಡ ಅಥವಾ ಗುಪ್ತ ಸೋಂಕು ಇಲ್ಲವೆಂದು ಹೇಳಲಾಗುವುದಿಲ್ಲ.",
+          "curability": "ಆರೋಗ್ಯಕರವಾಗಿ ಕಾಣುವ ಚಿತ್ರದ ಆಧಾರದಿಂದ ಮಾತ್ರ ರೋಗದ ಚಿಕಿತ್ಸೆ ಅಗತ್ಯವಿಲ್ಲ. ನಿಜವಾದ ಲಕ್ಷಣ ಇದ್ದರೆ ಆರೋಗ್ಯಕರ ಎಂಬ ಫಲಿತಾಂಶಕ್ಕಿಂತ ಆ ಲಕ್ಷಣ ಪರಿಶೀಲಿಸಿ.",
+          "do_now": [
+            "ಹೊಸ ಮತ್ತು ಹಳೆಯ ಎಲೆ, ಕಾಂಡ ಮತ್ತು ಪಕ್ಕದ ಗಿಡ ನೋಡಿ; ನಿಜವಾದ ಲಕ್ಷಣ ದಾಖಲಿಸಿ.",
+            "ಈ ಫಲಿತಾಂಶದ ಕಾರಣಕ್ಕೆ ಮುಂಜಾಗ್ರತಾ ಕೀಟನಾಶಕ ಸಿಂಪಡಿಸದೆ ಸಾಮಾನ್ಯ ನೀರಾವರಿ ಮತ್ತು ಬೆಳೆಗೆ ಸೂಕ್ತ ಪೋಷಣೆ ಮುಂದುವರಿಸಿ."
+          ],
+          "management": [
+            "ಲಕ್ಷಣ ಇದ್ದರೆ ಬಾಧಿತ ಭಾಗದ ಸ್ಪಷ್ಟ ಚಿತ್ರ ಮತ್ತೆ ತೆಗೆದು ರೋಗ ಗುರುತಿಸುವ ಸಲಹೆ ಪಡೆಯಿರಿ.",
+            "ದಿನಾಂಕದೊಂದಿಗೆ ದಾಖಲಿಸಿ ಮುಂದಿನ ಎರಡು ದಿನ ಅದೇ ಗಿಡಗಳನ್ನು ಹೋಲಿಸಿ."
+          ],
+          "prevention": [
+            "ಆರೋಗ್ಯಕರ ನಾಟಿ ಸಾಮಗ್ರಿ, ಸ್ವಚ್ಛ ಉಪಕರಣ ಮತ್ತು ಸಮತೋಲನ ನೀರು-ಪೋಷಕಾಂಶ ಬಳಸಿ.",
+            "ನಿಯಮಿತವಾಗಿ ಪರಿಶೀಲಿಸಿ; ಸ್ಥಳೀಯ ರೋಗಕ್ಕೆ ಅನುಕೂಲ ವಾತಾವರಣದಲ್ಲಿ ಪರಿಶೀಲನೆ ಹೆಚ್ಚಿಸಿ."
+          ],
+          "escalation": [
+            "ಆರೋಗ್ಯಕರ ಫಲಿತಾಂಶ ಬಂದರೂ ಗಿಡ ಬಾಡಿದರೆ, ಹೊಸ ಹಾನಿ ವೇಗವಾಗಿ ಹರಡಿದರೆ ಅಥವಾ ಹಣ್ಣು/ಕಾಂಡ ಬಾಧಿತವಾದರೆ ಸಲಹೆ ಪಡೆಯಿರಿ."
+          ]
+        },
+        "hi": {
+          "overview": "फोटो की पत्ती स्वस्थ प्रशिक्षण उदाहरण से अधिक मिलती है। एक फोटो से कीट, जड़ की समस्या, पोषक तनाव या छिपा संक्रमण खारिज नहीं होता।",
+          "curability": "केवल स्वस्थ दिखती फोटो से रोग-उपचार की जरूरत नहीं बनती। पौधे में लक्षण हों तो स्वस्थ लेबल पर भरोसा करने के बजाय उन लक्षणों को जाँचें।",
+          "do_now": [
+            "नई और पुरानी पत्तियाँ, तने और पास के पौधे देखें; वास्तविक लक्षण लिखें।",
+            "इस नतीजे के आधार पर रोकथाम वाला कीटनाशक छिड़काव किए बिना सामान्य सिंचाई और फसल के अनुसार पोषण जारी रखें।"
+          ],
+          "management": [
+            "लक्षण हों तो प्रभावित भाग की साफ फोटो दोबारा लें और सही पहचान कराएँ।",
+            "तारीख सहित रिकॉर्ड रखें और अगले दो दिन उन्हीं पौधों की तुलना करें।"
+          ],
+          "prevention": [
+            "स्वस्थ रोपण सामग्री, स्वच्छ औजार और संतुलित सिंचाई व पोषण अपनाएँ।",
+            "नियमित निगरानी करें; स्थानीय रोग के अनुकूल मौसम में जाँच बढ़ाएँ।"
+          ],
+          "escalation": [
+            "स्वस्थ नतीजे के बावजूद पौधे मुरझाएँ, नई क्षति तेजी से फैले या फल/तने प्रभावित हों तो सलाह लें।"
+          ]
+        }
+      }
+    },
+    "potato_early_blight": {
+      "crop_id": "potato",
+      "kind": "fungal",
+      "risk": "foliar",
+      "source_ids": [
+        "umn_early_blight"
+      ],
+      "translations": {
+        "en": {
+          "overview": "Brown target-like rings, usually first on older lower leaves, can fit early blight.",
+          "curability": "Management can limit further damage; dead or spotted tissue will not turn healthy again. A photo does not confirm the cause.",
+          "do_now": [
+            "Check lower leaves and tubers and stems; record new spots and yellowing.",
+            "Water the soil rather than foliage and avoid handling wet plants."
+          ],
+          "management": [
+            "When foliage is dry, remove a few heavily affected lower leaves only if enough healthy foliage remains; keep waste away from the crop.",
+            "Ask a local adviser about crop nutrition and whether a registered fungicide is needed if disease keeps progressing. Existing lesions will not disappear."
+          ],
+          "prevention": [
+            "Use clean planting material, crop rotation and balanced nutrition.",
+            "Reduce soil splash with suitable mulch and maintain airflow without severe pruning."
+          ],
+          "escalation": [
+            "Seek prompt advice if symptoms move into the upper canopy, tubers and stems are affected, or plants wilt."
+          ]
+        },
+        "kn": {
+          "overview": "ಮೊದಲು ಹಳೆಯ ಕೆಳ ಎಲೆಗಳಲ್ಲಿ ಕಾಣುವ ವೃತ್ತಾಕಾರದ ಕಂದು ಕಲೆಗಳು ಆರಂಭಿಕ ಅಂಗಮಾರಿಯ ಸೂಚನೆ ಆಗಬಹುದು.",
+          "curability": "ಆರೈಕೆಯಿಂದ ಮುಂದಿನ ಹಾನಿಯನ್ನು ಕಡಿಮೆ ಮಾಡಬಹುದು; ಒಣಗಿದ ಅಥವಾ ಕಲೆಬಿದ್ದ ಭಾಗ ಮತ್ತೆ ಆರೋಗ್ಯಕರವಾಗುವುದಿಲ್ಲ. ಚಿತ್ರದಿಂದ ಮಾತ್ರ ಕಾರಣ ಖಚಿತವಾಗುವುದಿಲ್ಲ.",
+          "do_now": [
+            "ಕೆಳಗಿನ ಎಲೆಗಳು ಮತ್ತು ಗೆಡ್ಡೆ ಮತ್ತು ಕಾಂಡವನ್ನು ನೋಡಿ; ಹೊಸ ಕಲೆ ಮತ್ತು ಹಳದಿಯಾಗುವುದನ್ನು ದಾಖಲಿಸಿ.",
+            "ಎಲೆಗಳ ಬದಲು ಮಣ್ಣಿಗೆ ನೀರು ಹಾಕಿ; ಒದ್ದೆಯಾದ ಗಿಡಗಳನ್ನು ಮುಟ್ಟುವುದನ್ನು ತಪ್ಪಿಸಿ."
+          ],
+          "management": [
+            "ಎಲೆಗಳು ಒಣಗಿರುವಾಗ ಸಾಕಷ್ಟು ಆರೋಗ್ಯಕರ ಎಲೆ ಉಳಿಯುವಂತೆ ಹೆಚ್ಚು ಬಾಧಿತ ಕೆಲವು ಕೆಳ ಎಲೆಗಳನ್ನು ಮಾತ್ರ ತೆಗೆದು ಬೆಳೆಗಿಂತ ದೂರ ಇಡಿ.",
+            "ರೋಗ ಹೆಚ್ಚುತ್ತಿದ್ದರೆ ಪೋಷಕಾಂಶ ನಿರ್ವಹಣೆ ಮತ್ತು ನೋಂದಾಯಿತ ಶಿಲೀಂಧ್ರನಾಶಕ ಅಗತ್ಯವೇ ಎಂದು ಸ್ಥಳೀಯ ಸಲಹೆ ಪಡೆಯಿರಿ. ಹಳೆಯ ಕಲೆಗಳು ಮಾಯವಾಗುವುದಿಲ್ಲ."
+          ],
+          "prevention": [
+            "ಶುದ್ಧ ನಾಟಿ ಸಾಮಗ್ರಿ, ಬೆಳೆ ಪರಿವರ್ತನೆ ಮತ್ತು ಸಮತೋಲನ ಪೋಷಕಾಂಶ ಬಳಸಿ.",
+            "ಸೂಕ್ತ ಹೊದಿಕೆಯಿಂದ ಮಣ್ಣಿನ ಸಿಡಿತ ಕಡಿಮೆ ಮಾಡಿ; ಹೆಚ್ಚು ಕತ್ತರಿಸದೆ ಗಾಳಿಯಾಡಲು ಬಿಡಿ."
+          ],
+          "escalation": [
+            "ಮೇಲಿನ ಎಲೆಗಳಿಗೆ ರೋಗ ಬಂದರೆ, ಗೆಡ್ಡೆ ಮತ್ತು ಕಾಂಡ ಬಾಧಿತವಾದರೆ ಅಥವಾ ಗಿಡ ಬಾಡಿದರೆ ಶೀಘ್ರ ಸಲಹೆ ಪಡೆಯಿರಿ."
+          ]
+        },
+        "hi": {
+          "overview": "पुरानी निचली पत्तियों पर पहले दिखाई देने वाले गोल छल्लेदार भूरे धब्बे अर्ली ब्लाइट के संकेत हो सकते हैं।",
+          "curability": "देखभाल से आगे की क्षति सीमित हो सकती है; सूखा या धब्बेदार ऊतक दोबारा स्वस्थ नहीं होता। केवल तस्वीर से कारण की पुष्टि नहीं होती।",
+          "do_now": [
+            "निचली पत्तियाँ तथा कंद और तने देखें; नए धब्बे और पीलापन लिखें।",
+            "पत्तियों की जगह मिट्टी में पानी दें और गीले पौधों को न छुएँ।"
+          ],
+          "management": [
+            "पत्तियाँ सूखी हों तो पर्याप्त स्वस्थ पत्तियाँ बचाते हुए बहुत प्रभावित कुछ निचली पत्तियाँ ही हटाएँ; कचरा फसल से दूर रखें।",
+            "रोग बढ़ता रहे तो पोषण और पंजीकृत फफूंदनाशक की जरूरत पर स्थानीय सलाह लें। पुराने धब्बे नहीं मिटेंगे।"
+          ],
+          "prevention": [
+            "स्वच्छ रोपण सामग्री, फसल चक्र और संतुलित पोषण अपनाएँ।",
+            "उपयुक्त मल्च से मिट्टी की छींटें घटाएँ और बहुत छँटाई किए बिना हवा का आवागमन रखें।"
+          ],
+          "escalation": [
+            "ऊपरी पत्तियों में रोग बढ़े, कंद और तने प्रभावित हों या पौधे मुरझाएँ तो जल्द सलाह लें।"
+          ]
+        }
+      }
+    },
+    "potato_late_blight": {
+      "crop_id": "potato",
+      "kind": "oomycete",
+      "risk": "rapid_blight",
+      "source_ids": [
+        "umn_late_blight"
+      ],
+      "translations": {
+        "en": {
+          "overview": "Water-soaked dark patches, rapid collapse and sometimes white growth under leaves in humid weather can fit late blight. It can spread quickly.",
+          "curability": "Late blight is an oomycete disease. Damaged tissue cannot be restored; prompt confirmed management aims to protect healthy growth and nearby crops.",
+          "do_now": [
+            "Contact a local crop adviser today if late blight is suspected; do not wait for a large damaged area.",
+            "Check stems, leaf undersides and tubers; photograph fresh symptoms and note recent wet weather.",
+            "Avoid overhead watering and moving through wet foliage."
+          ],
+          "management": [
+            "Keep suspect plants and harvested material separate while arranging confirmation; do not destroy the crop based only on the app.",
+            "After confirmation, ask about locally registered late-blight products and safe disposal of infected material. Generic fungicide choice may not control this pathogen.",
+            "Do not use infected material for planting or leave suspect waste beside crops."
+          ],
+          "prevention": [
+            "Use healthy planting material and inspect during cool wet or humid weather.",
+            "Reduce prolonged leaf wetness and manage volunteer plants and waste with local advice."
+          ],
+          "escalation": [
+            "Seek help today even with a small affected area; rapid spread, stem damage or wilting needs immediate contact."
+          ]
+        },
+        "kn": {
+          "overview": "ಒದ್ದೆಯಂತಿರುವ ಕಪ್ಪು ಕಲೆಗಳು, ವೇಗವಾಗಿ ಕುಸಿಯುವ ಎಲೆಗಳು ಮತ್ತು ತೇವದಲ್ಲಿ ಎಲೆಯ ಕೆಳಗೆ ಬಿಳಿ ಬೆಳವಣಿಗೆ ತಡವಾದ ಅಂಗಮಾರಿಯ ಸೂಚನೆ ಆಗಬಹುದು. ಇದು ವೇಗವಾಗಿ ಹರಡಬಹುದು.",
+          "curability": "ಇದು ಊಮೈಸೀಟ್ ರೋಗ. ಹಾಳಾದ ಭಾಗ ಮತ್ತೆ ಸರಿಯಾಗುವುದಿಲ್ಲ; ತಕ್ಷಣದ ಖಚಿತ ನಿರ್ವಹಣೆ ಆರೋಗ್ಯಕರ ಬೆಳವಣಿಗೆ ಮತ್ತು ಪಕ್ಕದ ಬೆಳೆಗಳನ್ನು ರಕ್ಷಿಸುವ ಗುರಿ ಹೊಂದಿದೆ.",
+          "do_now": [
+            "ಈ ರೋಗದ ಅನುಮಾನ ಇದ್ದರೆ ಇಂದು ಕೃಷಿ ಸಲಹೆಗಾರರನ್ನು ಸಂಪರ್ಕಿಸಿ; ಹಾನಿ ಹೆಚ್ಚುವವರೆಗೆ ಕಾಯಬೇಡಿ.",
+            "ಕಾಂಡ, ಎಲೆಯ ಕೆಳಭಾಗ ಮತ್ತು ಗೆಡ್ಡೆ ಪರಿಶೀಲಿಸಿ; ಹೊಸ ಲಕ್ಷಣಗಳ ಚಿತ್ರ ಮತ್ತು ಇತ್ತೀಚಿನ ಮಳೆ ದಾಖಲಿಸಿ.",
+            "ಎಲೆಗಳ ಮೇಲೆ ನೀರು ಹಾಕಬೇಡಿ; ಒದ್ದೆಯಾದ ಬೆಳೆಯೊಳಗೆ ಓಡಾಡುವುದನ್ನು ತಪ್ಪಿಸಿ."
+          ],
+          "management": [
+            "ಖಚಿತಪಡಿಸುವವರೆಗೆ ಅನುಮಾನಿತ ಗಿಡ ಮತ್ತು ಕೊಯ್ದ ಭಾಗಗಳನ್ನು ಪ್ರತ್ಯೇಕವಾಗಿಡಿ; ಆಪ್ ಫಲಿತಾಂಶದಿಂದ ಮಾತ್ರ ಬೆಳೆ ನಾಶ ಮಾಡಬೇಡಿ.",
+            "ಖಚಿತವಾದ ನಂತರ ಸ್ಥಳೀಯವಾಗಿ ನೋಂದಾಯಿತ ತಡವಾದ ಅಂಗಮಾರಿ ಉತ್ಪನ್ನ ಮತ್ತು ಬಾಧಿತ ಭಾಗದ ಸುರಕ್ಷಿತ ವಿಲೇವಾರಿ ಕುರಿತು ಕೇಳಿ. ಸಾಮಾನ್ಯ ಶಿಲೀಂಧ್ರನಾಶಕ ಪರಿಣಾಮಕಾರಿ ಇರದಿರಬಹುದು.",
+            "ಬಾಧಿತ ಸಾಮಗ್ರಿಯನ್ನು ನಾಟಿಗೆ ಬಳಸಬೇಡಿ; ಅನುಮಾನಿತ ತ್ಯಾಜ್ಯವನ್ನು ಬೆಳೆ ಪಕ್ಕ ಬಿಡಬೇಡಿ."
+          ],
+          "prevention": [
+            "ಆರೋಗ್ಯಕರ ನಾಟಿ ಸಾಮಗ್ರಿ ಬಳಸಿ; ತಂಪಾದ ತೇವ ಅಥವಾ ಮಳೆ ಸಮಯದಲ್ಲಿ ಪರಿಶೀಲಿಸಿ.",
+            "ಎಲೆ ಹೆಚ್ಚು ಹೊತ್ತು ಒದ್ದೆಯಾಗದಂತೆ ಮಾಡಿ; ತಾನಾಗಿ ಬೆಳೆದ ಗಿಡ ಮತ್ತು ತ್ಯಾಜ್ಯವನ್ನು ಸ್ಥಳೀಯ ಸಲಹೆಯಂತೆ ನಿರ್ವಹಿಸಿ."
+          ],
+          "escalation": [
+            "ಹಾನಿ ಸಣ್ಣದಿದ್ದರೂ ಇಂದು ಸಹಾಯ ಪಡೆಯಿರಿ; ವೇಗವಾಗಿ ಹರಡುವಿಕೆ, ಕಾಂಡದ ಹಾನಿ ಅಥವಾ ಬಾಡುವಿಕೆ ಇದ್ದರೆ ತಕ್ಷಣ ಸಂಪರ್ಕಿಸಿ."
+          ]
+        },
+        "hi": {
+          "overview": "पानी जैसे गहरे धब्बे, तेजी से पत्तियों का ढहना और नम मौसम में नीचे सफेद वृद्धि लेट ब्लाइट के संकेत हो सकते हैं। यह तेजी से फैल सकता है।",
+          "curability": "यह ऊमाइसीट रोग है। क्षतिग्रस्त ऊतक ठीक नहीं होता; तुरंत पुष्टि के बाद प्रबंधन स्वस्थ वृद्धि और पास की फसलों को बचाने के लिए होता है।",
+          "do_now": [
+            "लेट ब्लाइट का संदेह हो तो आज ही स्थानीय कृषि सलाहकार से संपर्क करें; बड़ा नुकसान होने तक न रुकें।",
+            "तने, पत्तियों के नीचे और कंद देखें; नए लक्षणों की फोटो और हाल की बारिश लिखें।",
+            "ऊपर से सिंचाई और गीली फसल में आने-जाने से बचें।"
+          ],
+          "management": [
+            "पुष्टि कराने तक संदिग्ध पौधे और कटे भाग अलग रखें; केवल ऐप के अनुमान पर फसल नष्ट न करें।",
+            "पुष्टि के बाद स्थानीय पंजीकृत लेट ब्लाइट उत्पाद और संक्रमित सामग्री के सुरक्षित निपटान पर सलाह लें। हर सामान्य फफूंदनाशक इस रोग पर काम नहीं करता।",
+            "संक्रमित सामग्री से रोपण न करें और संदिग्ध कचरा फसल के पास न छोड़ें।"
+          ],
+          "prevention": [
+            "स्वस्थ रोपण सामग्री लें और ठंडे, गीले या नम मौसम में निरीक्षण बढ़ाएँ।",
+            "पत्तियों को देर तक गीला न रहने दें; स्वयं उगे पौधे और कचरा स्थानीय सलाह से संभालें।"
+          ],
+          "escalation": [
+            "क्षति थोड़ी हो तब भी आज मदद लें; तेज फैलाव, तने की क्षति या मुरझाना हो तो तुरंत संपर्क करें।"
+          ]
+        }
+      }
+    },
+    "potato_healthy": {
+      "crop_id": "potato",
+      "kind": "healthy",
+      "risk": "routine",
+      "source_ids": [
+        "plantvillage_taxonomy"
+      ],
+      "translations": {
+        "en": {
+          "overview": "The photographed leaf looks closest to a healthy training example. One photo cannot rule out pests, root problems, nutrient stress or hidden infection.",
+          "curability": "No disease treatment is indicated by a healthy-looking photo alone. If the plant has symptoms, assess those symptoms rather than trusting the healthy label.",
+          "do_now": [
+            "Check new and old leaves, stems and nearby plants; record any real symptoms.",
+            "Continue normal irrigation and crop-specific nutrition without preventive pesticide spraying based on this result."
+          ],
+          "management": [
+            "If symptoms are present, retake a clear photo of the affected part and ask for diagnosis.",
+            "Keep a dated observation and compare the same plants over the next two days."
+          ],
+          "prevention": [
+            "Use healthy planting material, clean tools and balanced irrigation and nutrition.",
+            "Scout routinely and increase checks during weather that favors local diseases."
+          ],
+          "escalation": [
+            "Get advice if plants wilt, new damage spreads quickly, or fruit or stems are affected despite a healthy-looking result."
+          ]
+        },
+        "kn": {
+          "overview": "ಚಿತ್ರದ ಎಲೆ ಆರೋಗ್ಯಕರ ತರಬೇತಿ ಉದಾಹರಣೆಗೆ ಹೆಚ್ಚು ಹೋಲುತ್ತದೆ. ಒಂದು ಚಿತ್ರದಿಂದ ಕೀಟ, ಬೇರು ಸಮಸ್ಯೆ, ಪೋಷಕಾಂಶ ಒತ್ತಡ ಅಥವಾ ಗುಪ್ತ ಸೋಂಕು ಇಲ್ಲವೆಂದು ಹೇಳಲಾಗುವುದಿಲ್ಲ.",
+          "curability": "ಆರೋಗ್ಯಕರವಾಗಿ ಕಾಣುವ ಚಿತ್ರದ ಆಧಾರದಿಂದ ಮಾತ್ರ ರೋಗದ ಚಿಕಿತ್ಸೆ ಅಗತ್ಯವಿಲ್ಲ. ನಿಜವಾದ ಲಕ್ಷಣ ಇದ್ದರೆ ಆರೋಗ್ಯಕರ ಎಂಬ ಫಲಿತಾಂಶಕ್ಕಿಂತ ಆ ಲಕ್ಷಣ ಪರಿಶೀಲಿಸಿ.",
+          "do_now": [
+            "ಹೊಸ ಮತ್ತು ಹಳೆಯ ಎಲೆ, ಕಾಂಡ ಮತ್ತು ಪಕ್ಕದ ಗಿಡ ನೋಡಿ; ನಿಜವಾದ ಲಕ್ಷಣ ದಾಖಲಿಸಿ.",
+            "ಈ ಫಲಿತಾಂಶದ ಕಾರಣಕ್ಕೆ ಮುಂಜಾಗ್ರತಾ ಕೀಟನಾಶಕ ಸಿಂಪಡಿಸದೆ ಸಾಮಾನ್ಯ ನೀರಾವರಿ ಮತ್ತು ಬೆಳೆಗೆ ಸೂಕ್ತ ಪೋಷಣೆ ಮುಂದುವರಿಸಿ."
+          ],
+          "management": [
+            "ಲಕ್ಷಣ ಇದ್ದರೆ ಬಾಧಿತ ಭಾಗದ ಸ್ಪಷ್ಟ ಚಿತ್ರ ಮತ್ತೆ ತೆಗೆದು ರೋಗ ಗುರುತಿಸುವ ಸಲಹೆ ಪಡೆಯಿರಿ.",
+            "ದಿನಾಂಕದೊಂದಿಗೆ ದಾಖಲಿಸಿ ಮುಂದಿನ ಎರಡು ದಿನ ಅದೇ ಗಿಡಗಳನ್ನು ಹೋಲಿಸಿ."
+          ],
+          "prevention": [
+            "ಆರೋಗ್ಯಕರ ನಾಟಿ ಸಾಮಗ್ರಿ, ಸ್ವಚ್ಛ ಉಪಕರಣ ಮತ್ತು ಸಮತೋಲನ ನೀರು-ಪೋಷಕಾಂಶ ಬಳಸಿ.",
+            "ನಿಯಮಿತವಾಗಿ ಪರಿಶೀಲಿಸಿ; ಸ್ಥಳೀಯ ರೋಗಕ್ಕೆ ಅನುಕೂಲ ವಾತಾವರಣದಲ್ಲಿ ಪರಿಶೀಲನೆ ಹೆಚ್ಚಿಸಿ."
+          ],
+          "escalation": [
+            "ಆರೋಗ್ಯಕರ ಫಲಿತಾಂಶ ಬಂದರೂ ಗಿಡ ಬಾಡಿದರೆ, ಹೊಸ ಹಾನಿ ವೇಗವಾಗಿ ಹರಡಿದರೆ ಅಥವಾ ಹಣ್ಣು/ಕಾಂಡ ಬಾಧಿತವಾದರೆ ಸಲಹೆ ಪಡೆಯಿರಿ."
+          ]
+        },
+        "hi": {
+          "overview": "फोटो की पत्ती स्वस्थ प्रशिक्षण उदाहरण से अधिक मिलती है। एक फोटो से कीट, जड़ की समस्या, पोषक तनाव या छिपा संक्रमण खारिज नहीं होता।",
+          "curability": "केवल स्वस्थ दिखती फोटो से रोग-उपचार की जरूरत नहीं बनती। पौधे में लक्षण हों तो स्वस्थ लेबल पर भरोसा करने के बजाय उन लक्षणों को जाँचें।",
+          "do_now": [
+            "नई और पुरानी पत्तियाँ, तने और पास के पौधे देखें; वास्तविक लक्षण लिखें।",
+            "इस नतीजे के आधार पर रोकथाम वाला कीटनाशक छिड़काव किए बिना सामान्य सिंचाई और फसल के अनुसार पोषण जारी रखें।"
+          ],
+          "management": [
+            "लक्षण हों तो प्रभावित भाग की साफ फोटो दोबारा लें और सही पहचान कराएँ।",
+            "तारीख सहित रिकॉर्ड रखें और अगले दो दिन उन्हीं पौधों की तुलना करें।"
+          ],
+          "prevention": [
+            "स्वस्थ रोपण सामग्री, स्वच्छ औजार और संतुलित सिंचाई व पोषण अपनाएँ।",
+            "नियमित निगरानी करें; स्थानीय रोग के अनुकूल मौसम में जाँच बढ़ाएँ।"
+          ],
+          "escalation": [
+            "स्वस्थ नतीजे के बावजूद पौधे मुरझाएँ, नई क्षति तेजी से फैले या फल/तने प्रभावित हों तो सलाह लें।"
+          ]
+        }
+      }
+    },
+    "tomato_bacterial_spot": {
+      "crop_id": "tomato",
+      "kind": "bacterial",
+      "risk": "foliar",
+      "source_ids": [
+        "umn_bacterial_spot"
+      ],
+      "translations": {
+        "en": {
+          "overview": "Small dark leaf spots with yellowing and rough raised fruit spots can fit bacterial spot.",
+          "curability": "Bacterial spot has no reliable curative spray for already infected tissue. Management limits spread; fungicides do not cure a bacterial infection.",
+          "do_now": [
+            "Inspect leaves and fruit; photograph both and note rain or overhead watering.",
+            "Work in healthy areas first and avoid handling or pruning wet plants."
+          ],
+          "management": [
+            "Water at soil level, improve airflow and clean tools between plants.",
+            "Ask a local adviser to confirm bacterial spot before selecting a registered bactericidal product; resistance can limit effectiveness. No dose is inferred by this app."
+          ],
+          "prevention": [
+            "Start with disease-free seed/transplants; rotate away from susceptible crops where feasible.",
+            "Remove crop debris after the season and avoid saving seed from affected plants."
+          ],
+          "escalation": [
+            "Seek prompt advice if new plants or fruit are affected, spots merge, or plants lose leaves rapidly."
+          ]
+        },
+        "kn": {
+          "overview": "ಹಳದಿಯಾಗುವ ಎಲೆಗಳಲ್ಲಿ ಸಣ್ಣ ಕಪ್ಪು ಕಲೆಗಳು ಮತ್ತು ಹಣ್ಣಿನ ಮೇಲೆ ಒರಟಾದ ಉಬ್ಬಿದ ಕಲೆಗಳು ಬ್ಯಾಕ್ಟೀರಿಯಾ ಚುಕ್ಕೆ ರೋಗದ ಸೂಚನೆ ಆಗಬಹುದು.",
+          "curability": "ಈಗಾಗಲೇ ಬಾಧಿತ ಭಾಗವನ್ನು ಸರಿಪಡಿಸುವ ವಿಶ್ವಾಸಾರ್ಹ ಸಿಂಪಡಣೆ ಇಲ್ಲ. ನಿರ್ವಹಣೆ ಹರಡುವಿಕೆ ಕಡಿಮೆ ಮಾಡುತ್ತದೆ; ಶಿಲೀಂಧ್ರನಾಶಕ ಬ್ಯಾಕ್ಟೀರಿಯಾ ರೋಗವನ್ನು ಗುಣಪಡಿಸುವುದಿಲ್ಲ.",
+          "do_now": [
+            "ಎಲೆ ಮತ್ತು ಹಣ್ಣು ಎರಡನ್ನೂ ಪರಿಶೀಲಿಸಿ ಚಿತ್ರ ತೆಗೆದುಕೊಳ್ಳಿ; ಮಳೆ ಅಥವಾ ಮೇಲಿನಿಂದ ನೀರು ಹಾಕಿರುವುದನ್ನು ದಾಖಲಿಸಿ.",
+            "ಮೊದಲು ಆರೋಗ್ಯಕರ ಭಾಗದಲ್ಲಿ ಕೆಲಸ ಮಾಡಿ; ಒದ್ದೆಯಾದ ಗಿಡ ಮುಟ್ಟುವುದು ಅಥವಾ ಕತ್ತರಿಸುವುದು ತಪ್ಪಿಸಿ."
+          ],
+          "management": [
+            "ಮಣ್ಣಿನ ಮಟ್ಟದಲ್ಲಿ ನೀರು ಹಾಕಿ, ಗಾಳಿಯಾಡಲು ಬಿಡಿ ಮತ್ತು ಗಿಡಗಳ ನಡುವೆ ಉಪಕರಣ ಸ್ವಚ್ಛಗೊಳಿಸಿ.",
+            "ನೋಂದಾಯಿತ ಬ್ಯಾಕ್ಟೀರಿಯಾನಾಶಕ ಆಯ್ಕೆ ಮಾಡುವ ಮೊದಲು ರೋಗ ಖಚಿತಪಡಿಸಿ; ಪ್ರತಿರೋಧದಿಂದ ಪರಿಣಾಮ ಕಡಿಮೆಯಾಗಬಹುದು. ಆಪ್ ಔಷಧ ಪ್ರಮಾಣ ನೀಡುವುದಿಲ್ಲ."
+          ],
+          "prevention": [
+            "ರೋಗರಹಿತ ಬೀಜ ಅಥವಾ ಸಸಿ ಬಳಸಿ; ಸಾಧ್ಯವಾದಲ್ಲಿ ಸೂಕ್ಷ್ಮ ಬೆಳೆಗಳಿಂದ ಪರಿವರ್ತನೆ ಮಾಡಿ.",
+            "ಋತುವಿನ ನಂತರ ಬೆಳೆ ಅವಶೇಷ ನಿರ್ವಹಿಸಿ; ಬಾಧಿತ ಗಿಡಗಳಿಂದ ಬೀಜ ಉಳಿಸಬೇಡಿ."
+          ],
+          "escalation": [
+            "ಹೊಸ ಗಿಡ ಅಥವಾ ಹಣ್ಣಿಗೆ ಬಂದರೆ, ಕಲೆಗಳು ಒಂದಾದರೆ ಅಥವಾ ಎಲೆಗಳು ವೇಗವಾಗಿ ಉದುರಿದರೆ ಶೀಘ್ರ ಸಲಹೆ ಪಡೆಯಿರಿ."
+          ]
+        },
+        "hi": {
+          "overview": "पत्तियों पर छोटे गहरे धब्बे, पीलापन और फल पर खुरदरे उभरे धब्बे बैक्टीरियल स्पॉट के संकेत हो सकते हैं।",
+          "curability": "पहले से संक्रमित ऊतक के लिए भरोसेमंद उपचारात्मक छिड़काव नहीं है। प्रबंधन फैलाव घटाता है; फफूंदनाशक जीवाणु संक्रमण का इलाज नहीं करते।",
+          "do_now": [
+            "पत्तियाँ और फल दोनों देखें और फोटो लें; बारिश या ऊपर से सिंचाई लिखें।",
+            "स्वस्थ हिस्से में पहले काम करें और गीले पौधों को छूने या छाँटने से बचें।"
+          ],
+          "management": [
+            "मिट्टी के स्तर पर पानी दें, हवा का आवागमन रखें और पौधों के बीच औजार साफ करें।",
+            "पंजीकृत जीवाणुनाशक चुनने से पहले स्थानीय सलाहकार से पुष्टि कराएँ; प्रतिरोध से असर घट सकता है। ऐप दवा की मात्रा नहीं बताता।"
+          ],
+          "prevention": [
+            "रोगमुक्त बीज/पौध लें और जहाँ संभव हो संवेदनशील फसलों से अलग फसल चक्र करें।",
+            "मौसम के बाद अवशेष संभालें और प्रभावित पौधे से बीज न बचाएँ।"
+          ],
+          "escalation": [
+            "नए पौधे या फल प्रभावित हों, धब्बे मिलें या पत्तियाँ तेजी से झड़ें तो जल्द सलाह लें।"
+          ]
+        }
+      }
+    },
+    "tomato_early_blight": {
+      "crop_id": "tomato",
+      "kind": "fungal",
+      "risk": "foliar",
+      "source_ids": [
+        "umn_early_blight"
+      ],
+      "translations": {
+        "en": {
+          "overview": "Brown target-like rings, usually first on older lower leaves, can fit early blight.",
+          "curability": "Management can limit further damage; dead or spotted tissue will not turn healthy again. A photo does not confirm the cause.",
+          "do_now": [
+            "Check lower leaves and fruit and stems; record new spots and yellowing.",
+            "Water the soil rather than foliage and avoid handling wet plants."
+          ],
+          "management": [
+            "When foliage is dry, remove a few heavily affected lower leaves only if enough healthy foliage remains; keep waste away from the crop.",
+            "Ask a local adviser about crop nutrition and whether a registered fungicide is needed if disease keeps progressing. Existing lesions will not disappear."
+          ],
+          "prevention": [
+            "Use clean planting material, crop rotation and balanced nutrition.",
+            "Reduce soil splash with suitable mulch and maintain airflow without severe pruning."
+          ],
+          "escalation": [
+            "Seek prompt advice if symptoms move into the upper canopy, fruit and stems are affected, or plants wilt."
+          ]
+        },
+        "kn": {
+          "overview": "ಮೊದಲು ಹಳೆಯ ಕೆಳ ಎಲೆಗಳಲ್ಲಿ ಕಾಣುವ ವೃತ್ತಾಕಾರದ ಕಂದು ಕಲೆಗಳು ಆರಂಭಿಕ ಅಂಗಮಾರಿಯ ಸೂಚನೆ ಆಗಬಹುದು.",
+          "curability": "ಆರೈಕೆಯಿಂದ ಮುಂದಿನ ಹಾನಿಯನ್ನು ಕಡಿಮೆ ಮಾಡಬಹುದು; ಒಣಗಿದ ಅಥವಾ ಕಲೆಬಿದ್ದ ಭಾಗ ಮತ್ತೆ ಆರೋಗ್ಯಕರವಾಗುವುದಿಲ್ಲ. ಚಿತ್ರದಿಂದ ಮಾತ್ರ ಕಾರಣ ಖಚಿತವಾಗುವುದಿಲ್ಲ.",
+          "do_now": [
+            "ಕೆಳಗಿನ ಎಲೆಗಳು ಮತ್ತು ಹಣ್ಣು ಮತ್ತು ಕಾಂಡವನ್ನು ನೋಡಿ; ಹೊಸ ಕಲೆ ಮತ್ತು ಹಳದಿಯಾಗುವುದನ್ನು ದಾಖಲಿಸಿ.",
+            "ಎಲೆಗಳ ಬದಲು ಮಣ್ಣಿಗೆ ನೀರು ಹಾಕಿ; ಒದ್ದೆಯಾದ ಗಿಡಗಳನ್ನು ಮುಟ್ಟುವುದನ್ನು ತಪ್ಪಿಸಿ."
+          ],
+          "management": [
+            "ಎಲೆಗಳು ಒಣಗಿರುವಾಗ ಸಾಕಷ್ಟು ಆರೋಗ್ಯಕರ ಎಲೆ ಉಳಿಯುವಂತೆ ಹೆಚ್ಚು ಬಾಧಿತ ಕೆಲವು ಕೆಳ ಎಲೆಗಳನ್ನು ಮಾತ್ರ ತೆಗೆದು ಬೆಳೆಗಿಂತ ದೂರ ಇಡಿ.",
+            "ರೋಗ ಹೆಚ್ಚುತ್ತಿದ್ದರೆ ಪೋಷಕಾಂಶ ನಿರ್ವಹಣೆ ಮತ್ತು ನೋಂದಾಯಿತ ಶಿಲೀಂಧ್ರನಾಶಕ ಅಗತ್ಯವೇ ಎಂದು ಸ್ಥಳೀಯ ಸಲಹೆ ಪಡೆಯಿರಿ. ಹಳೆಯ ಕಲೆಗಳು ಮಾಯವಾಗುವುದಿಲ್ಲ."
+          ],
+          "prevention": [
+            "ಶುದ್ಧ ನಾಟಿ ಸಾಮಗ್ರಿ, ಬೆಳೆ ಪರಿವರ್ತನೆ ಮತ್ತು ಸಮತೋಲನ ಪೋಷಕಾಂಶ ಬಳಸಿ.",
+            "ಸೂಕ್ತ ಹೊದಿಕೆಯಿಂದ ಮಣ್ಣಿನ ಸಿಡಿತ ಕಡಿಮೆ ಮಾಡಿ; ಹೆಚ್ಚು ಕತ್ತರಿಸದೆ ಗಾಳಿಯಾಡಲು ಬಿಡಿ."
+          ],
+          "escalation": [
+            "ಮೇಲಿನ ಎಲೆಗಳಿಗೆ ರೋಗ ಬಂದರೆ, ಹಣ್ಣು ಮತ್ತು ಕಾಂಡ ಬಾಧಿತವಾದರೆ ಅಥವಾ ಗಿಡ ಬಾಡಿದರೆ ಶೀಘ್ರ ಸಲಹೆ ಪಡೆಯಿರಿ."
+          ]
+        },
+        "hi": {
+          "overview": "पुरानी निचली पत्तियों पर पहले दिखाई देने वाले गोल छल्लेदार भूरे धब्बे अर्ली ब्लाइट के संकेत हो सकते हैं।",
+          "curability": "देखभाल से आगे की क्षति सीमित हो सकती है; सूखा या धब्बेदार ऊतक दोबारा स्वस्थ नहीं होता। केवल तस्वीर से कारण की पुष्टि नहीं होती।",
+          "do_now": [
+            "निचली पत्तियाँ तथा फल और तने देखें; नए धब्बे और पीलापन लिखें।",
+            "पत्तियों की जगह मिट्टी में पानी दें और गीले पौधों को न छुएँ।"
+          ],
+          "management": [
+            "पत्तियाँ सूखी हों तो पर्याप्त स्वस्थ पत्तियाँ बचाते हुए बहुत प्रभावित कुछ निचली पत्तियाँ ही हटाएँ; कचरा फसल से दूर रखें।",
+            "रोग बढ़ता रहे तो पोषण और पंजीकृत फफूंदनाशक की जरूरत पर स्थानीय सलाह लें। पुराने धब्बे नहीं मिटेंगे।"
+          ],
+          "prevention": [
+            "स्वच्छ रोपण सामग्री, फसल चक्र और संतुलित पोषण अपनाएँ।",
+            "उपयुक्त मल्च से मिट्टी की छींटें घटाएँ और बहुत छँटाई किए बिना हवा का आवागमन रखें।"
+          ],
+          "escalation": [
+            "ऊपरी पत्तियों में रोग बढ़े, फल और तने प्रभावित हों या पौधे मुरझाएँ तो जल्द सलाह लें।"
+          ]
+        }
+      }
+    },
+    "tomato_late_blight": {
+      "crop_id": "tomato",
+      "kind": "oomycete",
+      "risk": "rapid_blight",
+      "source_ids": [
+        "umn_late_blight"
+      ],
+      "translations": {
+        "en": {
+          "overview": "Water-soaked dark patches, rapid collapse and sometimes white growth under leaves in humid weather can fit late blight. It can spread quickly.",
+          "curability": "Late blight is an oomycete disease. Damaged tissue cannot be restored; prompt confirmed management aims to protect healthy growth and nearby crops.",
+          "do_now": [
+            "Contact a local crop adviser today if late blight is suspected; do not wait for a large damaged area.",
+            "Check stems, leaf undersides and fruit; photograph fresh symptoms and note recent wet weather.",
+            "Avoid overhead watering and moving through wet foliage."
+          ],
+          "management": [
+            "Keep suspect plants and harvested material separate while arranging confirmation; do not destroy the crop based only on the app.",
+            "After confirmation, ask about locally registered late-blight products and safe disposal of infected material. Generic fungicide choice may not control this pathogen.",
+            "Do not use infected material for planting or leave suspect waste beside crops."
+          ],
+          "prevention": [
+            "Use healthy planting material and inspect during cool wet or humid weather.",
+            "Reduce prolonged leaf wetness and manage volunteer plants and waste with local advice."
+          ],
+          "escalation": [
+            "Seek help today even with a small affected area; rapid spread, stem damage or wilting needs immediate contact."
+          ]
+        },
+        "kn": {
+          "overview": "ಒದ್ದೆಯಂತಿರುವ ಕಪ್ಪು ಕಲೆಗಳು, ವೇಗವಾಗಿ ಕುಸಿಯುವ ಎಲೆಗಳು ಮತ್ತು ತೇವದಲ್ಲಿ ಎಲೆಯ ಕೆಳಗೆ ಬಿಳಿ ಬೆಳವಣಿಗೆ ತಡವಾದ ಅಂಗಮಾರಿಯ ಸೂಚನೆ ಆಗಬಹುದು. ಇದು ವೇಗವಾಗಿ ಹರಡಬಹುದು.",
+          "curability": "ಇದು ಊಮೈಸೀಟ್ ರೋಗ. ಹಾಳಾದ ಭಾಗ ಮತ್ತೆ ಸರಿಯಾಗುವುದಿಲ್ಲ; ತಕ್ಷಣದ ಖಚಿತ ನಿರ್ವಹಣೆ ಆರೋಗ್ಯಕರ ಬೆಳವಣಿಗೆ ಮತ್ತು ಪಕ್ಕದ ಬೆಳೆಗಳನ್ನು ರಕ್ಷಿಸುವ ಗುರಿ ಹೊಂದಿದೆ.",
+          "do_now": [
+            "ಈ ರೋಗದ ಅನುಮಾನ ಇದ್ದರೆ ಇಂದು ಕೃಷಿ ಸಲಹೆಗಾರರನ್ನು ಸಂಪರ್ಕಿಸಿ; ಹಾನಿ ಹೆಚ್ಚುವವರೆಗೆ ಕಾಯಬೇಡಿ.",
+            "ಕಾಂಡ, ಎಲೆಯ ಕೆಳಭಾಗ ಮತ್ತು ಹಣ್ಣು ಪರಿಶೀಲಿಸಿ; ಹೊಸ ಲಕ್ಷಣಗಳ ಚಿತ್ರ ಮತ್ತು ಇತ್ತೀಚಿನ ಮಳೆ ದಾಖಲಿಸಿ.",
+            "ಎಲೆಗಳ ಮೇಲೆ ನೀರು ಹಾಕಬೇಡಿ; ಒದ್ದೆಯಾದ ಬೆಳೆಯೊಳಗೆ ಓಡಾಡುವುದನ್ನು ತಪ್ಪಿಸಿ."
+          ],
+          "management": [
+            "ಖಚಿತಪಡಿಸುವವರೆಗೆ ಅನುಮಾನಿತ ಗಿಡ ಮತ್ತು ಕೊಯ್ದ ಭಾಗಗಳನ್ನು ಪ್ರತ್ಯೇಕವಾಗಿಡಿ; ಆಪ್ ಫಲಿತಾಂಶದಿಂದ ಮಾತ್ರ ಬೆಳೆ ನಾಶ ಮಾಡಬೇಡಿ.",
+            "ಖಚಿತವಾದ ನಂತರ ಸ್ಥಳೀಯವಾಗಿ ನೋಂದಾಯಿತ ತಡವಾದ ಅಂಗಮಾರಿ ಉತ್ಪನ್ನ ಮತ್ತು ಬಾಧಿತ ಭಾಗದ ಸುರಕ್ಷಿತ ವಿಲೇವಾರಿ ಕುರಿತು ಕೇಳಿ. ಸಾಮಾನ್ಯ ಶಿಲೀಂಧ್ರನಾಶಕ ಪರಿಣಾಮಕಾರಿ ಇರದಿರಬಹುದು.",
+            "ಬಾಧಿತ ಸಾಮಗ್ರಿಯನ್ನು ನಾಟಿಗೆ ಬಳಸಬೇಡಿ; ಅನುಮಾನಿತ ತ್ಯಾಜ್ಯವನ್ನು ಬೆಳೆ ಪಕ್ಕ ಬಿಡಬೇಡಿ."
+          ],
+          "prevention": [
+            "ಆರೋಗ್ಯಕರ ನಾಟಿ ಸಾಮಗ್ರಿ ಬಳಸಿ; ತಂಪಾದ ತೇವ ಅಥವಾ ಮಳೆ ಸಮಯದಲ್ಲಿ ಪರಿಶೀಲಿಸಿ.",
+            "ಎಲೆ ಹೆಚ್ಚು ಹೊತ್ತು ಒದ್ದೆಯಾಗದಂತೆ ಮಾಡಿ; ತಾನಾಗಿ ಬೆಳೆದ ಗಿಡ ಮತ್ತು ತ್ಯಾಜ್ಯವನ್ನು ಸ್ಥಳೀಯ ಸಲಹೆಯಂತೆ ನಿರ್ವಹಿಸಿ."
+          ],
+          "escalation": [
+            "ಹಾನಿ ಸಣ್ಣದಿದ್ದರೂ ಇಂದು ಸಹಾಯ ಪಡೆಯಿರಿ; ವೇಗವಾಗಿ ಹರಡುವಿಕೆ, ಕಾಂಡದ ಹಾನಿ ಅಥವಾ ಬಾಡುವಿಕೆ ಇದ್ದರೆ ತಕ್ಷಣ ಸಂಪರ್ಕಿಸಿ."
+          ]
+        },
+        "hi": {
+          "overview": "पानी जैसे गहरे धब्बे, तेजी से पत्तियों का ढहना और नम मौसम में नीचे सफेद वृद्धि लेट ब्लाइट के संकेत हो सकते हैं। यह तेजी से फैल सकता है।",
+          "curability": "यह ऊमाइसीट रोग है। क्षतिग्रस्त ऊतक ठीक नहीं होता; तुरंत पुष्टि के बाद प्रबंधन स्वस्थ वृद्धि और पास की फसलों को बचाने के लिए होता है।",
+          "do_now": [
+            "लेट ब्लाइट का संदेह हो तो आज ही स्थानीय कृषि सलाहकार से संपर्क करें; बड़ा नुकसान होने तक न रुकें।",
+            "तने, पत्तियों के नीचे और फल देखें; नए लक्षणों की फोटो और हाल की बारिश लिखें।",
+            "ऊपर से सिंचाई और गीली फसल में आने-जाने से बचें।"
+          ],
+          "management": [
+            "पुष्टि कराने तक संदिग्ध पौधे और कटे भाग अलग रखें; केवल ऐप के अनुमान पर फसल नष्ट न करें।",
+            "पुष्टि के बाद स्थानीय पंजीकृत लेट ब्लाइट उत्पाद और संक्रमित सामग्री के सुरक्षित निपटान पर सलाह लें। हर सामान्य फफूंदनाशक इस रोग पर काम नहीं करता।",
+            "संक्रमित सामग्री से रोपण न करें और संदिग्ध कचरा फसल के पास न छोड़ें।"
+          ],
+          "prevention": [
+            "स्वस्थ रोपण सामग्री लें और ठंडे, गीले या नम मौसम में निरीक्षण बढ़ाएँ।",
+            "पत्तियों को देर तक गीला न रहने दें; स्वयं उगे पौधे और कचरा स्थानीय सलाह से संभालें।"
+          ],
+          "escalation": [
+            "क्षति थोड़ी हो तब भी आज मदद लें; तेज फैलाव, तने की क्षति या मुरझाना हो तो तुरंत संपर्क करें।"
+          ]
+        }
+      }
+    },
+    "tomato_leaf_mold": {
+      "crop_id": "tomato",
+      "kind": "fungal",
+      "risk": "foliar",
+      "source_ids": [
+        "umn_leaf_mold"
+      ],
+      "translations": {
+        "en": {
+          "overview": "Yellow upper-leaf patches and olive-brown fuzzy growth underneath, especially in humid protected crops, can fit leaf mold.",
+          "curability": "Management can limit further damage; dead or spotted tissue will not turn healthy again. A photo does not confirm the cause.",
+          "do_now": [
+            "Turn over affected leaves and inspect lower leaves inside the canopy.",
+            "Ventilate protected growing areas and water soil early enough for foliage to dry."
+          ],
+          "management": [
+            "Reduce humidity and prolonged leaf wetness without stressing plants.",
+            "Remove a few badly affected leaves when dry if healthy canopy remains; discuss registered fungicide options only if the disease is confirmed and continues spreading."
+          ],
+          "prevention": [
+            "Use resistant locally suitable varieties where available.",
+            "Give plants suitable spacing and avoid overhead irrigation in humid conditions."
+          ],
+          "escalation": [
+            "Seek advice for spreading leaf loss, high humidity that cannot be controlled, or extensive canopy damage."
+          ]
+        },
+        "kn": {
+          "overview": "ವಿಶೇಷವಾಗಿ ತೇವದ ರಕ್ಷಿತ ಬೆಳೆಗಳಲ್ಲಿ ಎಲೆಯ ಮೇಲೆ ಹಳದಿ ಕಲೆ ಮತ್ತು ಕೆಳಗೆ ಆಲಿವ್-ಕಂದು ಮೃದುವಾದ ಬೆಳವಣಿಗೆ ಎಲೆ ಅಚ್ಚಿನ ಸೂಚನೆ ಆಗಬಹುದು.",
+          "curability": "ಆರೈಕೆಯಿಂದ ಮುಂದಿನ ಹಾನಿಯನ್ನು ಕಡಿಮೆ ಮಾಡಬಹುದು; ಒಣಗಿದ ಅಥವಾ ಕಲೆಬಿದ್ದ ಭಾಗ ಮತ್ತೆ ಆರೋಗ್ಯಕರವಾಗುವುದಿಲ್ಲ. ಚಿತ್ರದಿಂದ ಮಾತ್ರ ಕಾರಣ ಖಚಿತವಾಗುವುದಿಲ್ಲ.",
+          "do_now": [
+            "ಬಾಧಿತ ಎಲೆ ತಿರುಗಿಸಿ ನೋಡಿ; ಗಿಡದ ಒಳಭಾಗದ ಕೆಳಗಿನ ಎಲೆಗಳನ್ನು ಪರಿಶೀಲಿಸಿ.",
+            "ರಕ್ಷಿತ ಬೆಳೆ ಪ್ರದೇಶದಲ್ಲಿ ಗಾಳಿಯಾಡಲು ಬಿಡಿ; ಎಲೆ ಒಣಗಲು ಸಮಯ ಇರುವಂತೆ ಮಣ್ಣಿಗೆ ನೀರು ಹಾಕಿ."
+          ],
+          "management": [
+            "ಗಿಡಕ್ಕೆ ಒತ್ತಡ ಕೊಡದೆ ತೇವಾಂಶ ಮತ್ತು ಎಲೆ ಒದ್ದೆಯಾಗಿರುವ ಸಮಯ ಕಡಿಮೆ ಮಾಡಿ.",
+            "ಗಿಡಕ್ಕೆ ಸಾಕಷ್ಟು ಆರೋಗ್ಯಕರ ಎಲೆ ಉಳಿಯುವಂತೆ ಒಣ ಸಮಯದಲ್ಲಿ ಹೆಚ್ಚು ಬಾಧಿತ ಕೆಲವು ಎಲೆ ತೆಗೆಯಿರಿ; ರೋಗ ಖಚಿತವಾಗಿ ಹರಡುತ್ತಿದ್ದರೆ ನೋಂದಾಯಿತ ಉತ್ಪನ್ನದ ಬಗ್ಗೆ ಸಲಹೆ ಪಡೆಯಿರಿ."
+          ],
+          "prevention": [
+            "ಲಭ್ಯವಿದ್ದರೆ ಸ್ಥಳೀಯ ಪರಿಸ್ಥಿತಿಗೆ ಸೂಕ್ತ ರೋಗನಿರೋಧಕ ತಳಿ ಬಳಸಿ.",
+            "ಸೂಕ್ತ ಅಂತರ ಬಿಡಿ; ತೇವದಲ್ಲಿ ಮೇಲಿನಿಂದ ನೀರು ಹಾಕಬೇಡಿ."
+          ],
+          "escalation": [
+            "ಎಲೆ ಉದುರುವಿಕೆ ಹೆಚ್ಚಾದರೆ, ತೇವ ನಿಯಂತ್ರಣ ಸಾಧ್ಯವಿಲ್ಲದಿದ್ದರೆ ಅಥವಾ ಹೆಚ್ಚಿನ ಎಲೆಗಳು ಹಾಳಾದರೆ ಸಲಹೆ ಪಡೆಯಿರಿ."
+          ]
+        },
+        "hi": {
+          "overview": "नम संरक्षित खेती में पत्तियों के ऊपर पीले धब्बे और नीचे जैतूनी-भूरी रोएँदार वृद्धि लीफ मोल्ड के संकेत हो सकते हैं।",
+          "curability": "देखभाल से आगे की क्षति सीमित हो सकती है; सूखा या धब्बेदार ऊतक दोबारा स्वस्थ नहीं होता। केवल तस्वीर से कारण की पुष्टि नहीं होती।",
+          "do_now": [
+            "प्रभावित पत्तियाँ पलटें और अंदर की निचली पत्तियाँ देखें।",
+            "संरक्षित खेती में हवा का आवागमन बढ़ाएँ और मिट्टी में ऐसे समय पानी दें कि पत्तियाँ सूख सकें।"
+          ],
+          "management": [
+            "पौधों को तनाव दिए बिना नमी और पत्तियों के गीले रहने का समय घटाएँ।",
+            "पर्याप्त स्वस्थ पत्तियाँ बचाते हुए सूखे समय में बहुत प्रभावित कुछ पत्तियाँ हटाएँ; पुष्टि के बाद फैलाव जारी हो तो पंजीकृत उत्पाद पर सलाह लें।"
+          ],
+          "prevention": [
+            "उपलब्ध हो तो स्थानीय उपयुक्त प्रतिरोधी किस्में लें।",
+            "उचित दूरी रखें और नम परिस्थितियों में ऊपर से सिंचाई न करें।"
+          ],
+          "escalation": [
+            "पत्तियाँ ज्यादा झड़ें, नमी नियंत्रित न हो सके या बहुत पत्ती क्षेत्र प्रभावित हो तो सलाह लें।"
+          ]
+        }
+      }
+    },
+    "tomato_septoria_leaf_spot": {
+      "crop_id": "tomato",
+      "kind": "fungal",
+      "risk": "foliar",
+      "source_ids": [
+        "umn_septoria"
+      ],
+      "translations": {
+        "en": {
+          "overview": "Many small circular spots with pale centers and dark borders, often on older lower leaves, can fit Septoria leaf spot.",
+          "curability": "Management can limit further damage; dead or spotted tissue will not turn healthy again. A photo does not confirm the cause.",
+          "do_now": [
+            "Check lower leaves for tiny dark dots in pale spots and compare several plants.",
+            "Keep leaves dry and prevent soil splash; mark plants for rechecking."
+          ],
+          "management": [
+            "Remove a few heavily spotted lower leaves when dry while retaining enough healthy foliage.",
+            "If leaf loss keeps moving upward, ask about a locally registered fungicide after confirming the cause."
+          ],
+          "prevention": [
+            "Use clean transplants, mulch and crop rotation.",
+            "Clean stakes and tools; manage volunteer tomatoes and crop debris after harvest."
+          ],
+          "escalation": [
+            "Seek prompt advice if upper leaves become affected, many plants develop symptoms or leaf loss accelerates."
+          ]
+        },
+        "kn": {
+          "overview": "ಮುಖ್ಯವಾಗಿ ಹಳೆಯ ಕೆಳ ಎಲೆಗಳ ಮೇಲೆ ತಿಳಿ ಮಧ್ಯಭಾಗ ಮತ್ತು ಕಪ್ಪು ಅಂಚಿನ ಸಣ್ಣ ವೃತ್ತಾಕಾರದ ಅನೇಕ ಕಲೆಗಳು ಸೆಪ್ಟೋರಿಯಾ ಚುಕ್ಕೆ ರೋಗದ ಸೂಚನೆ ಆಗಬಹುದು.",
+          "curability": "ಆರೈಕೆಯಿಂದ ಮುಂದಿನ ಹಾನಿಯನ್ನು ಕಡಿಮೆ ಮಾಡಬಹುದು; ಒಣಗಿದ ಅಥವಾ ಕಲೆಬಿದ್ದ ಭಾಗ ಮತ್ತೆ ಆರೋಗ್ಯಕರವಾಗುವುದಿಲ್ಲ. ಚಿತ್ರದಿಂದ ಮಾತ್ರ ಕಾರಣ ಖಚಿತವಾಗುವುದಿಲ್ಲ.",
+          "do_now": [
+            "ಕೆಳಗಿನ ಎಲೆಗಳ ತಿಳಿ ಕಲೆಗಳಲ್ಲಿ ಸಣ್ಣ ಕಪ್ಪು ಚುಕ್ಕೆ ಇದೆಯೇ ನೋಡಿ; ಹಲವು ಗಿಡಗಳನ್ನು ಹೋಲಿಸಿ.",
+            "ಎಲೆ ಒಣವಾಗಿಡಿ, ಮಣ್ಣಿನ ಸಿಡಿತ ತಪ್ಪಿಸಿ ಮತ್ತು ಮತ್ತೆ ನೋಡಲು ಗಿಡ ಗುರುತು ಮಾಡಿ."
+          ],
+          "management": [
+            "ಸಾಕಷ್ಟು ಆರೋಗ್ಯಕರ ಎಲೆ ಉಳಿಯುವಂತೆ ಒಣ ಸಮಯದಲ್ಲಿ ಹೆಚ್ಚು ಬಾಧಿತ ಕೆಲವು ಕೆಳ ಎಲೆಗಳನ್ನು ತೆಗೆಯಿರಿ.",
+            "ರೋಗ ಮೇಲಕ್ಕೆ ಚಲಿಸಿ ಎಲೆ ಉದುರುವಿಕೆ ಹೆಚ್ಚಿದರೆ ಕಾರಣ ಖಚಿತಪಡಿಸಿ ನೋಂದಾಯಿತ ಶಿಲೀಂಧ್ರನಾಶಕ ಬಗ್ಗೆ ಸಲಹೆ ಪಡೆಯಿರಿ."
+          ],
+          "prevention": [
+            "ಶುದ್ಧ ಸಸಿ, ಮಣ್ಣಿನ ಹೊದಿಕೆ ಮತ್ತು ಬೆಳೆ ಪರಿವರ್ತನೆ ಬಳಸಿ.",
+            "ಆಧಾರ ಕಂಬ ಮತ್ತು ಉಪಕರಣ ಸ್ವಚ್ಛಗೊಳಿಸಿ; ಕೊಯ್ಲಿನ ಬಳಿಕ ತಾನಾಗಿ ಬೆಳೆದ ಗಿಡ ಮತ್ತು ಅವಶೇಷ ನಿರ್ವಹಿಸಿ."
+          ],
+          "escalation": [
+            "ಮೇಲಿನ ಎಲೆ ಬಾಧಿತವಾದರೆ, ಅನೇಕ ಗಿಡಗಳಿಗೆ ಬಂದರೆ ಅಥವಾ ಎಲೆ ಉದುರುವಿಕೆ ವೇಗವಾದರೆ ಶೀಘ್ರ ಸಲಹೆ ಪಡೆಯಿರಿ."
+          ]
+        },
+        "hi": {
+          "overview": "पुरानी निचली पत्तियों पर हल्के केंद्र और गहरे किनारे वाले अनेक छोटे गोल धब्बे सेप्टोरिया लीफ स्पॉट के संकेत हो सकते हैं।",
+          "curability": "देखभाल से आगे की क्षति सीमित हो सकती है; सूखा या धब्बेदार ऊतक दोबारा स्वस्थ नहीं होता। केवल तस्वीर से कारण की पुष्टि नहीं होती।",
+          "do_now": [
+            "निचली पत्तियों के हल्के धब्बों में छोटे काले बिंदु देखें और कई पौधों की तुलना करें।",
+            "पत्तियाँ सूखी रखें, मिट्टी की छींटें रोकें और दोबारा देखने के लिए पौधे चिन्हित करें।"
+          ],
+          "management": [
+            "पर्याप्त स्वस्थ पत्तियाँ बचाते हुए सूखे समय में बहुत धब्बेदार कुछ निचली पत्तियाँ हटाएँ।",
+            "पत्तियों का नुकसान ऊपर बढ़ता रहे तो कारण की पुष्टि के बाद स्थानीय पंजीकृत फफूंदनाशक पर सलाह लें।"
+          ],
+          "prevention": [
+            "स्वच्छ पौध, मल्च और फसल चक्र अपनाएँ।",
+            "खूँटे और औजार साफ करें; कटाई के बाद स्वयं उगे टमाटर और अवशेष संभालें।"
+          ],
+          "escalation": [
+            "ऊपरी पत्तियाँ प्रभावित हों, कई पौधे बीमार हों या पत्तियाँ तेजी से झड़ें तो जल्द सलाह लें।"
+          ]
+        }
+      }
+    },
+    "tomato_spider_mites": {
+      "crop_id": "tomato",
+      "kind": "pest",
+      "risk": "foliar",
+      "source_ids": [
+        "ucipm_mites"
+      ],
+      "translations": {
+        "en": {
+          "overview": "Fine pale speckling, bronze leaves and delicate webbing can indicate spider mites; confirm tiny mites under leaves with a hand lens.",
+          "curability": "Spider mites are pests, not a fungal disease. Management reduces mite populations; damaged leaves do not immediately recover and a fungicide is not a mite treatment.",
+          "do_now": [
+            "Inspect leaf undersides on several plants with a hand lens; look for live mites, eggs and webbing.",
+            "Check soil moisture and reduce dusty conditions; keep the plant adequately watered without waterlogging."
+          ],
+          "management": [
+            "Preserve beneficial predators; avoid unnecessary broad-spectrum insecticide sprays that can worsen mite outbreaks.",
+            "If live mites and damage are increasing, ask a local adviser about a tomato-registered mite treatment. Follow label coverage, harvest restrictions and resistance-management instructions."
+          ],
+          "prevention": [
+            "Scout more frequently during hot, dry weather.",
+            "Keep planting material clean and avoid drought stress; manage nearby weed hosts appropriately."
+          ],
+          "escalation": [
+            "Seek prompt advice for widespread webbing, rapid bronzing, leaf drop or drought-stressed plants with increasing mite numbers."
+          ]
+        },
+        "kn": {
+          "overview": "ಸೂಕ್ಷ್ಮ ತಿಳಿ ಚುಕ್ಕೆಗಳು, ಕಂಚು ಬಣ್ಣದ ಎಲೆ ಮತ್ತು ತೆಳುವಾದ ಬಲೆ ಜೇಡನುಸಿಯ ಸೂಚನೆ ಆಗಬಹುದು; ಭೂತಗನ್ನಡಿಯಿಂದ ಎಲೆಯ ಕೆಳಗಿನ ಸಣ್ಣ ನುಸಿ ಖಚಿತಪಡಿಸಿ.",
+          "curability": "ಜೇಡನುಸಿ ಕೀಟ; ಇದು ಶಿಲೀಂಧ್ರ ರೋಗವಲ್ಲ. ನಿರ್ವಹಣೆ ನುಸಿಗಳ ಸಂಖ್ಯೆ ಕಡಿಮೆ ಮಾಡುತ್ತದೆ; ಹಾಳಾದ ಎಲೆ ತಕ್ಷಣ ಸರಿಯಾಗುವುದಿಲ್ಲ ಮತ್ತು ಶಿಲೀಂಧ್ರನಾಶಕ ನುಸಿಯ ಔಷಧಿಯಲ್ಲ.",
+          "do_now": [
+            "ಹಲವು ಗಿಡಗಳ ಎಲೆಯ ಕೆಳಗೆ ಭೂತಗನ್ನಡಿಯಿಂದ ಜೀವಂತ ನುಸಿ, ಮೊಟ್ಟೆ ಮತ್ತು ಬಲೆ ನೋಡಿ.",
+            "ಮಣ್ಣಿನ ತೇವ ಪರಿಶೀಲಿಸಿ, ಧೂಳು ಕಡಿಮೆ ಮಾಡಿ ಮತ್ತು ನೀರು ನಿಲ್ಲದಂತೆ ಅಗತ್ಯ ನೀರು ಕೊಡಿ."
+          ],
+          "management": [
+            "ಪ್ರಯೋಜನಕಾರಿ ಪರಭಕ್ಷಕಗಳನ್ನು ಉಳಿಸಿ; ನುಸಿ ಸಮಸ್ಯೆ ಹೆಚ್ಚಿಸಬಹುದಾದ ಅನಗತ್ಯ ವ್ಯಾಪಕ ಕೀಟನಾಶಕ ಸಿಂಪಡಣೆ ತಪ್ಪಿಸಿ.",
+            "ಜೀವಂತ ನುಸಿ ಮತ್ತು ಹಾನಿ ಹೆಚ್ಚುತ್ತಿದ್ದರೆ ಟೊಮ್ಯಾಟೊಗಾಗಿ ನೋಂದಾಯಿತ ನುಸಿನಾಶಕ ಕುರಿತು ಸ್ಥಳೀಯ ಸಲಹೆ ಪಡೆಯಿರಿ; ಲೇಬಲ್, ಕೊಯ್ಲಿನ ಅಂತರ ಮತ್ತು ಪ್ರತಿರೋಧ ನಿರ್ವಹಣೆ ಪಾಲಿಸಿ."
+          ],
+          "prevention": [
+            "ಬಿಸಿ ಮತ್ತು ಒಣ ವಾತಾವರಣದಲ್ಲಿ ಹೆಚ್ಚು ಬಾರಿ ಪರಿಶೀಲಿಸಿ.",
+            "ಶುದ್ಧ ನಾಟಿ ಸಾಮಗ್ರಿ ಬಳಸಿ, ನೀರಿನ ಕೊರತೆ ತಪ್ಪಿಸಿ ಮತ್ತು ಪಕ್ಕದ ಆಶ್ರಯ ಕಳೆಗಳನ್ನು ಸೂಕ್ತವಾಗಿ ನಿರ್ವಹಿಸಿ."
+          ],
+          "escalation": [
+            "ವ್ಯಾಪಕ ಬಲೆ, ವೇಗವಾದ ಕಂಚು ಬಣ್ಣ, ಎಲೆ ಉದುರುವಿಕೆ ಅಥವಾ ನೀರಿನ ಕೊರತೆಯ ಗಿಡಗಳಲ್ಲಿ ನುಸಿ ಹೆಚ್ಚಿದರೆ ಶೀಘ್ರ ಸಲಹೆ ಪಡೆಯಿರಿ."
+          ]
+        },
+        "hi": {
+          "overview": "बारीक हल्के बिंदु, कांस्य जैसी पत्तियाँ और महीन जाला स्पाइडर माइट के संकेत हो सकते हैं; पत्तियों के नीचे छोटे माइट आवर्धक काँच से जाँचें।",
+          "curability": "स्पाइडर माइट कीट हैं, फफूंद रोग नहीं। प्रबंधन माइट घटाता है; क्षतिग्रस्त पत्तियाँ तुरंत ठीक नहीं होतीं और फफूंदनाशक माइट का उपचार नहीं है।",
+          "do_now": [
+            "कई पौधों की पत्तियों के नीचे आवर्धक काँच से जीवित माइट, अंडे और जाले देखें।",
+            "मिट्टी की नमी जाँचें, धूल घटाएँ और जलभराव किए बिना जरूरत का पानी दें।"
+          ],
+          "management": [
+            "लाभकारी शिकारी बचाएँ; अनावश्यक व्यापक कीटनाशक छिड़काव से बचें जो माइट की समस्या बढ़ा सकता है।",
+            "जीवित माइट और क्षति बढ़ें तो टमाटर के लिए पंजीकृत माइट-उपचार पर स्थानीय सलाह लें; लेबल, कटाई अंतराल और प्रतिरोध प्रबंधन मानें।"
+          ],
+          "prevention": [
+            "गर्म सूखे मौसम में अधिक बार निगरानी करें।",
+            "स्वच्छ रोपण सामग्री लें, पानी का तनाव घटाएँ और पास की मेजबान खरपतवार उचित ढंग से संभालें।"
+          ],
+          "escalation": [
+            "व्यापक जाले, तेजी से कांस्य रंग, पत्तियाँ झड़ना या सूखे से तनाव वाले पौधों पर बढ़ते माइट हों तो जल्द सलाह लें।"
+          ]
+        }
+      }
+    },
+    "tomato_target_spot": {
+      "crop_id": "tomato",
+      "kind": "fungal",
+      "risk": "foliar",
+      "source_ids": [
+        "tnau_tomato"
+      ],
+      "translations": {
+        "en": {
+          "overview": "Expanding brown target-like lesions on leaves or fruit can fit target spot, but early blight and other problems can look similar.",
+          "curability": "Management can limit further damage; dead or spotted tissue will not turn healthy again. A photo does not confirm the cause.",
+          "do_now": [
+            "Photograph both leaf surfaces and affected fruit; note whether lesions are expanding.",
+            "Reduce prolonged leaf wetness and keep good airflow around plants."
+          ],
+          "management": [
+            "Keep healthy foliage; remove only a few badly affected leaves when dry if the canopy can tolerate it.",
+            "Get identification before selecting a locally registered fungicide; target spot and early blight can require different management decisions."
+          ],
+          "prevention": [
+            "Use clean transplants, adequate plant spacing and soil-level irrigation.",
+            "Manage infected crop debris and volunteer hosts after harvest using local advice."
+          ],
+          "escalation": [
+            "Seek prompt advice if fruit develops lesions, defoliation accelerates or spots increase despite better moisture management."
+          ]
+        },
+        "kn": {
+          "overview": "ಎಲೆ ಅಥವಾ ಹಣ್ಣಿನ ಮೇಲೆ ದೊಡ್ಡದಾಗುವ ಗುರಿ ಆಕಾರದ ಕಂದು ಕಲೆಗಳು ಟಾರ್ಗೆಟ್ ಸ್ಪಾಟ್ ಸೂಚನೆ ಆಗಬಹುದು; ಆರಂಭಿಕ ಅಂಗಮಾರಿ ಮತ್ತು ಇತರ ಸಮಸ್ಯೆಗಳು ಹೋಲಬಹುದು.",
+          "curability": "ಆರೈಕೆಯಿಂದ ಮುಂದಿನ ಹಾನಿಯನ್ನು ಕಡಿಮೆ ಮಾಡಬಹುದು; ಒಣಗಿದ ಅಥವಾ ಕಲೆಬಿದ್ದ ಭಾಗ ಮತ್ತೆ ಆರೋಗ್ಯಕರವಾಗುವುದಿಲ್ಲ. ಚಿತ್ರದಿಂದ ಮಾತ್ರ ಕಾರಣ ಖಚಿತವಾಗುವುದಿಲ್ಲ.",
+          "do_now": [
+            "ಎಲೆಯ ಎರಡೂ ಬದಿ ಮತ್ತು ಬಾಧಿತ ಹಣ್ಣಿನ ಚಿತ್ರ ತೆಗೆದು ಕಲೆ ದೊಡ್ಡದಾಗುತ್ತಿದೆಯೇ ದಾಖಲಿಸಿ.",
+            "ಎಲೆ ಹೆಚ್ಚು ಹೊತ್ತು ಒದ್ದೆಯಾಗದಂತೆ ಮಾಡಿ; ಗಿಡಗಳ ನಡುವೆ ಗಾಳಿಯಾಡಲು ಬಿಡಿ."
+          ],
+          "management": [
+            "ಆರೋಗ್ಯಕರ ಎಲೆ ಉಳಿಸಿ; ಗಿಡ ಸಹಿಸಬಹುದಾದರೆ ಒಣ ಸಮಯದಲ್ಲಿ ಹೆಚ್ಚು ಬಾಧಿತ ಕೆಲವು ಎಲೆಗಳನ್ನು ಮಾತ್ರ ತೆಗೆದುಹಾಕಿ.",
+            "ಸ್ಥಳೀಯವಾಗಿ ನೋಂದಾಯಿತ ಶಿಲೀಂಧ್ರನಾಶಕ ಆಯ್ಕೆಗೂ ಮೊದಲು ರೋಗ ಗುರುತಿಸಿ; ಈ ರೋಗ ಮತ್ತು ಆರಂಭಿಕ ಅಂಗಮಾರಿಯ ನಿರ್ವಹಣೆ ವಿಭಿನ್ನವಾಗಬಹುದು."
+          ],
+          "prevention": [
+            "ಶುದ್ಧ ಸಸಿ, ಸೂಕ್ತ ಅಂತರ ಮತ್ತು ಮಣ್ಣಿನ ಮಟ್ಟದ ನೀರಾವರಿ ಬಳಸಿ.",
+            "ಕೊಯ್ಲಿನ ಬಳಿಕ ಸ್ಥಳೀಯ ಸಲಹೆಯಂತೆ ಬಾಧಿತ ಅವಶೇಷ ಮತ್ತು ತಾನಾಗಿ ಬೆಳೆದ ಆಶ್ರಯ ಗಿಡ ನಿರ್ವಹಿಸಿ."
+          ],
+          "escalation": [
+            "ಹಣ್ಣಿಗೆ ಕಲೆ ಬಂದರೆ, ಎಲೆ ಉದುರುವಿಕೆ ವೇಗವಾದರೆ ಅಥವಾ ತೇವ ನಿರ್ವಹಣೆ ಸುಧಾರಿಸಿದರೂ ಕಲೆ ಹೆಚ್ಚಿದರೆ ಶೀಘ್ರ ಸಲಹೆ ಪಡೆಯಿರಿ."
+          ]
+        },
+        "hi": {
+          "overview": "पत्तियों या फल पर बढ़ते छल्लेदार भूरे धब्बे टार्गेट स्पॉट के संकेत हो सकते हैं; अर्ली ब्लाइट और दूसरी समस्याएँ भी मिलती-जुलती दिखती हैं।",
+          "curability": "देखभाल से आगे की क्षति सीमित हो सकती है; सूखा या धब्बेदार ऊतक दोबारा स्वस्थ नहीं होता। केवल तस्वीर से कारण की पुष्टि नहीं होती।",
+          "do_now": [
+            "पत्तियों की दोनों सतह और प्रभावित फल की फोटो लें; धब्बे बढ़ रहे हैं या नहीं लिखें।",
+            "पत्तियों के देर तक गीले रहने को घटाएँ और पौधों के आसपास हवा का आवागमन रखें।"
+          ],
+          "management": [
+            "स्वस्थ पत्तियाँ बचाएँ; पौधा सह सके तो सूखे समय में बहुत प्रभावित कुछ पत्तियाँ ही हटाएँ।",
+            "स्थानीय पंजीकृत फफूंदनाशक चुनने से पहले पहचान कराएँ; टार्गेट स्पॉट और अर्ली ब्लाइट के प्रबंधन निर्णय अलग हो सकते हैं।"
+          ],
+          "prevention": [
+            "स्वच्छ पौध, उचित दूरी और मिट्टी के स्तर की सिंचाई अपनाएँ।",
+            "कटाई के बाद स्थानीय सलाह से संक्रमित अवशेष और स्वयं उगे मेजबान पौधे संभालें।"
+          ],
+          "escalation": [
+            "फल पर धब्बे हों, पत्तियाँ तेजी से झड़ें या नमी सुधारने पर भी धब्बे बढ़ें तो जल्द सलाह लें।"
+          ]
+        }
+      }
+    },
+    "tomato_yellow_leaf_curl_virus": {
+      "crop_id": "tomato",
+      "kind": "viral",
+      "risk": "virus",
+      "source_ids": [
+        "ucipm_tylcv"
+      ],
+      "translations": {
+        "en": {
+          "overview": "Upward-curled yellow leaves, small new leaves and stunted growth can fit yellow leaf curl virus; other stresses can mimic it.",
+          "curability": "There is no curative treatment that removes this virus from an infected plant. Fungicides do not cure it; management protects uninfected plants and reduces whitefly spread.",
+          "do_now": [
+            "Check young leaves and plant growth; inspect leaf undersides for whiteflies.",
+            "Ask an adviser to confirm the cause before removing plants or choosing a pesticide."
+          ],
+          "management": [
+            "Use a locally appropriate whitefly IPM plan; preserve beneficial insects and avoid moving infested seedlings.",
+            "Once infection is confirmed, ask whether affected plants should be removed and how to contain whiteflies first; removal alone may not stop spread."
+          ],
+          "prevention": [
+            "Use healthy transplants and locally recommended resistant or tolerant varieties.",
+            "Where suitable, protect nursery seedlings with insect-proof netting and manage weed or volunteer hosts."
+          ],
+          "escalation": [
+            "Seek advice promptly, especially for young crops; new stunted plants or whitefly-driven spread need faster attention."
+          ]
+        },
+        "kn": {
+          "overview": "ಮೇಲಕ್ಕೆ ಮಡಿದ ಹಳದಿ ಎಲೆ, ಸಣ್ಣ ಹೊಸ ಎಲೆ ಮತ್ತು ಕುಂಠಿತ ಬೆಳವಣಿಗೆ ಹಳದಿ ಎಲೆ ಸುರುಳಿ ವೈರಸ್ ಸೂಚನೆ ಆಗಬಹುದು; ಇತರ ಒತ್ತಡಗಳೂ ಹೋಲಬಹುದು.",
+          "curability": "ಬಾಧಿತ ಗಿಡದಿಂದ ಈ ವೈರಸ್ ತೆಗೆದುಹಾಕುವ ಚಿಕಿತ್ಸೆ ಇಲ್ಲ. ಶಿಲೀಂಧ್ರನಾಶಕ ಇದನ್ನು ಗುಣಪಡಿಸುವುದಿಲ್ಲ; ನಿರ್ವಹಣೆ ಆರೋಗ್ಯಕರ ಗಿಡ ಮತ್ತು ಬಿಳಿನೊಣ ಹರಡುವಿಕೆ ತಡೆಯಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ.",
+          "do_now": [
+            "ಹೊಸ ಎಲೆ ಮತ್ತು ಬೆಳವಣಿಗೆ ನೋಡಿ; ಎಲೆಯ ಕೆಳಗೆ ಬಿಳಿನೊಣ ಇದೆಯೇ ಪರಿಶೀಲಿಸಿ.",
+            "ಗಿಡ ತೆಗೆದುಹಾಕುವ ಅಥವಾ ಕೀಟನಾಶಕ ಆಯ್ಕೆಗೂ ಮೊದಲು ಕಾರಣ ಖಚಿತಪಡಿಸಲು ಸಲಹೆ ಪಡೆಯಿರಿ."
+          ],
+          "management": [
+            "ಸ್ಥಳೀಯ ಪರಿಸ್ಥಿತಿಗೆ ಸೂಕ್ತ ಬಿಳಿನೊಣ ಸಮಗ್ರ ನಿರ್ವಹಣೆ ಅನುಸರಿಸಿ; ಪ್ರಯೋಜನಕಾರಿ ಕೀಟ ಉಳಿಸಿ ಮತ್ತು ಬಾಧಿತ ಸಸಿ ಸಾಗಿಸಬೇಡಿ.",
+            "ಸೋಂಕು ಖಚಿತವಾದ ಬಳಿಕ ಬಿಳಿನೊಣ ನಿಯಂತ್ರಿಸಿ ಗಿಡ ತೆಗೆಯಬೇಕೇ ಎಂದು ಕೇಳಿ; ಗಿಡ ತೆಗೆಯುವುದರಿಂದ ಮಾತ್ರ ಹರಡುವಿಕೆ ನಿಲ್ಲದಿರಬಹುದು."
+          ],
+          "prevention": [
+            "ಆರೋಗ್ಯಕರ ಸಸಿ ಮತ್ತು ಸ್ಥಳೀಯವಾಗಿ ಶಿಫಾರಸು ಮಾಡಿದ ನಿರೋಧಕ ಅಥವಾ ಸಹಿಷ್ಣು ತಳಿ ಬಳಸಿ.",
+            "ಸೂಕ್ತವಾದಲ್ಲಿ ನರ್ಸರಿ ಸಸಿಗೆ ಕೀಟ ತಡೆ ಬಲೆ ಬಳಸಿ; ಕಳೆ ಮತ್ತು ತಾನಾಗಿ ಬೆಳೆದ ಆಶ್ರಯ ಗಿಡ ನಿರ್ವಹಿಸಿ."
+          ],
+          "escalation": [
+            "ವಿಶೇಷವಾಗಿ ಚಿಕ್ಕ ಬೆಳೆಗೆ ಶೀಘ್ರ ಸಲಹೆ ಪಡೆಯಿರಿ; ಹೊಸ ಗಿಡ ಕುಂಠಿತವಾಗುವುದು ಅಥವಾ ಬಿಳಿನೊಣದಿಂದ ಹರಡುವಿಕೆ ಇದ್ದರೆ ಇನ್ನಷ್ಟು ಬೇಗ ಗಮನ ಅಗತ್ಯ."
+          ]
+        },
+        "hi": {
+          "overview": "ऊपर मुड़ी पीली पत्तियाँ, छोटी नई पत्तियाँ और रुकी वृद्धि येलो लीफ कर्ल वायरस के संकेत हो सकते हैं; दूसरे तनाव भी ऐसे दिख सकते हैं।",
+          "curability": "संक्रमित पौधे से इस वायरस को हटाने वाला उपचार नहीं है। फफूंदनाशक इसे ठीक नहीं करते; प्रबंधन असंक्रमित पौधों और सफेद मक्खी से फैलाव को नियंत्रित करता है।",
+          "do_now": [
+            "नई पत्तियाँ और वृद्धि देखें; पत्तियों के नीचे सफेद मक्खी जाँचें।",
+            "पौधे हटाने या कीटनाशक चुनने से पहले सलाहकार से कारण की पुष्टि कराएँ।"
+          ],
+          "management": [
+            "स्थानीय उपयुक्त सफेद मक्खी समेकित प्रबंधन अपनाएँ; लाभकारी कीट बचाएँ और संक्रमित पौध न ले जाएँ।",
+            "संक्रमण पक्का होने पर पूछें कि सफेद मक्खी को पहले सीमित करके प्रभावित पौधे हटाने चाहिए या नहीं; सिर्फ पौधे हटाने से फैलाव नहीं रुक सकता।"
+          ],
+          "prevention": [
+            "स्वस्थ पौध और स्थानीय अनुशंसित प्रतिरोधी या सहनशील किस्में लें।",
+            "उपयुक्त हो तो नर्सरी में कीटरोधी जाली लगाएँ और खरपतवार/स्वयं उगे मेजबान पौधे संभालें।"
+          ],
+          "escalation": [
+            "खासकर छोटी फसल में जल्द सलाह लें; नए पौधों की रुकी वृद्धि या सफेद मक्खी से फैलाव हो तो अधिक तेजी से ध्यान दें।"
+          ]
+        }
+      }
+    },
+    "tomato_mosaic_virus": {
+      "crop_id": "tomato",
+      "kind": "viral",
+      "risk": "virus",
+      "source_ids": [
+        "umn_tomato_virus"
+      ],
+      "translations": {
+        "en": {
+          "overview": "Mottled light and dark green leaves, distortion and uneven growth can fit mosaic virus; visual symptoms do not identify the exact virus.",
+          "curability": "There is no treatment that clears mosaic virus from an infected plant. Fungicide sprays do not cure it; management limits contact transmission and protects clean plants.",
+          "do_now": [
+            "Avoid handling suspect plants before healthy plants; wash hands and clean tools before working elsewhere.",
+            "Photograph new growth and ask an adviser to confirm the cause before removing a plant."
+          ],
+          "management": [
+            "Do not use suspect plants for cuttings or save their seed.",
+            "After diagnosis, follow an adviser’s plan for containment, tool disinfection and removal of confirmed infected plants where appropriate. Do not mix cleaning chemicals."
+          ],
+          "prevention": [
+            "Use tested disease-free seed or transplants and suitable resistant varieties.",
+            "Keep hands, tools, stakes and work areas clean; avoid tobacco handling around tomato plants."
+          ],
+          "escalation": [
+            "Seek prompt advice if new plants show mosaic or stunting, especially after pruning or transplant work."
+          ]
+        },
+        "kn": {
+          "overview": "ತಿಳಿ ಮತ್ತು ಕಡು ಹಸಿರು ಮಚ್ಚೆ, ವಿಕೃತ ಎಲೆ ಮತ್ತು ಅಸಮಾನ ಬೆಳವಣಿಗೆ ಮೊಸಾಯಿಕ್ ವೈರಸ್ ಸೂಚನೆ ಆಗಬಹುದು; ಕಣ್ಣಿಗೆ ಕಂಡ ಲಕ್ಷಣದಿಂದ ವೈರಸ್ ಪ್ರಕಾರ ಖಚಿತವಾಗುವುದಿಲ್ಲ.",
+          "curability": "ಬಾಧಿತ ಗಿಡದಿಂದ ಮೊಸಾಯಿಕ್ ವೈರಸ್ ತೆಗೆದುಹಾಕುವ ಚಿಕಿತ್ಸೆ ಇಲ್ಲ. ಶಿಲೀಂಧ್ರನಾಶಕ ಗುಣಪಡಿಸುವುದಿಲ್ಲ; ನಿರ್ವಹಣೆ ಸಂಪರ್ಕದಿಂದ ಹರಡುವಿಕೆ ಕಡಿಮೆ ಮಾಡಿ ಆರೋಗ್ಯಕರ ಗಿಡ ಉಳಿಸುತ್ತದೆ.",
+          "do_now": [
+            "ಆರೋಗ್ಯಕರ ಗಿಡಗಳ ಮೊದಲು ಅನುಮಾನಿತ ಗಿಡ ಮುಟ್ಟಬೇಡಿ; ಬೇರೆಡೆ ಕೆಲಸಕ್ಕೂ ಮೊದಲು ಕೈ ತೊಳೆದು ಉಪಕರಣ ಸ್ವಚ್ಛಗೊಳಿಸಿ.",
+            "ಹೊಸ ಬೆಳವಣಿಗೆಯ ಚಿತ್ರ ತೆಗೆದು ಗಿಡ ತೆಗೆಯುವ ಮೊದಲು ತಜ್ಞರಿಂದ ಕಾರಣ ಖಚಿತಪಡಿಸಿ."
+          ],
+          "management": [
+            "ಅನುಮಾನಿತ ಗಿಡದಿಂದ ಕಡ್ಡಿ ಸಸಿ ಮಾಡಬೇಡಿ ಅಥವಾ ಬೀಜ ಉಳಿಸಬೇಡಿ.",
+            "ಖಚಿತ ಗುರುತಿನ ಬಳಿಕ ಹರಡುವಿಕೆ ತಡೆ, ಉಪಕರಣ ಸೋಂಕು ನಿವಾರಣೆ ಮತ್ತು ಅಗತ್ಯವಿದ್ದರೆ ಖಚಿತ ಬಾಧಿತ ಗಿಡ ತೆಗೆಯುವ ತಜ್ಞರ ಯೋಜನೆ ಪಾಲಿಸಿ. ಸ್ವಚ್ಛತಾ ರಾಸಾಯನಿಕ ಮಿಶ್ರಣ ಮಾಡಬೇಡಿ."
+          ],
+          "prevention": [
+            "ಪರೀಕ್ಷಿತ ರೋಗರಹಿತ ಬೀಜ ಅಥವಾ ಸಸಿ ಮತ್ತು ಸೂಕ್ತ ರೋಗನಿರೋಧಕ ತಳಿ ಬಳಸಿ.",
+            "ಕೈ, ಉಪಕರಣ, ಕಂಬ ಮತ್ತು ಕೆಲಸದ ಸ್ಥಳ ಸ್ವಚ್ಛವಾಗಿಡಿ; ಟೊಮ್ಯಾಟೊ ಬಳಿ ತಂಬಾಕು ಮುಟ್ಟುವುದನ್ನು ತಪ್ಪಿಸಿ."
+          ],
+          "escalation": [
+            "ವಿಶೇಷವಾಗಿ ಕತ್ತರಿಸುವ ಅಥವಾ ನಾಟಿ ಕೆಲಸದ ಬಳಿಕ ಹೊಸ ಗಿಡಗಳಲ್ಲಿ ಮಚ್ಚೆ ಅಥವಾ ಕುಂಠಿತ ಬೆಳವಣಿಗೆ ಕಂಡರೆ ಶೀಘ್ರ ಸಲಹೆ ಪಡೆಯಿರಿ."
+          ]
+        },
+        "hi": {
+          "overview": "हल्के और गहरे हरे चितकबरे धब्बे, विकृत पत्तियाँ और असमान वृद्धि मोज़ेक वायरस के संकेत हो सकते हैं; सिर्फ लक्षण से सही वायरस नहीं पहचाना जाता।",
+          "curability": "संक्रमित पौधे से मोज़ेक वायरस हटाने वाला उपचार नहीं है। फफूंदनाशक इसे ठीक नहीं करते; प्रबंधन संपर्क से फैलाव घटाता है और स्वच्छ पौधों को बचाता है।",
+          "do_now": [
+            "स्वस्थ पौधों से पहले संदिग्ध पौधे न छुएँ; दूसरी जगह काम करने से पहले हाथ धोएँ और औजार साफ करें।",
+            "नई वृद्धि की फोटो लें और पौधा हटाने से पहले सलाहकार से पुष्टि कराएँ।"
+          ],
+          "management": [
+            "संदिग्ध पौधों से कटिंग न लें और उनका बीज न बचाएँ।",
+            "पुष्टि के बाद रोकथाम, औजार कीटाणुशोधन और जरूरत पर पुष्ट संक्रमित पौधों को हटाने की सलाह मानें। सफाई के रसायन आपस में न मिलाएँ।"
+          ],
+          "prevention": [
+            "जाँचे हुए रोगमुक्त बीज या पौध और उपयुक्त प्रतिरोधी किस्में लें।",
+            "हाथ, औजार, खूँटे और कार्यस्थल साफ रखें; टमाटर के आसपास तंबाकू सँभालने से बचें।"
+          ],
+          "escalation": [
+            "खासकर छँटाई या रोपाई के बाद नए पौधों में मोज़ेक या रुकी वृद्धि दिखे तो जल्द सलाह लें।"
+          ]
+        }
+      }
+    },
+    "tomato_healthy": {
+      "crop_id": "tomato",
+      "kind": "healthy",
+      "risk": "routine",
+      "source_ids": [
+        "plantvillage_taxonomy"
+      ],
+      "translations": {
+        "en": {
+          "overview": "The photographed leaf looks closest to a healthy training example. One photo cannot rule out pests, root problems, nutrient stress or hidden infection.",
+          "curability": "No disease treatment is indicated by a healthy-looking photo alone. If the plant has symptoms, assess those symptoms rather than trusting the healthy label.",
+          "do_now": [
+            "Check new and old leaves, stems and nearby plants; record any real symptoms.",
+            "Continue normal irrigation and crop-specific nutrition without preventive pesticide spraying based on this result."
+          ],
+          "management": [
+            "If symptoms are present, retake a clear photo of the affected part and ask for diagnosis.",
+            "Keep a dated observation and compare the same plants over the next two days."
+          ],
+          "prevention": [
+            "Use healthy planting material, clean tools and balanced irrigation and nutrition.",
+            "Scout routinely and increase checks during weather that favors local diseases."
+          ],
+          "escalation": [
+            "Get advice if plants wilt, new damage spreads quickly, or fruit or stems are affected despite a healthy-looking result."
+          ]
+        },
+        "kn": {
+          "overview": "ಚಿತ್ರದ ಎಲೆ ಆರೋಗ್ಯಕರ ತರಬೇತಿ ಉದಾಹರಣೆಗೆ ಹೆಚ್ಚು ಹೋಲುತ್ತದೆ. ಒಂದು ಚಿತ್ರದಿಂದ ಕೀಟ, ಬೇರು ಸಮಸ್ಯೆ, ಪೋಷಕಾಂಶ ಒತ್ತಡ ಅಥವಾ ಗುಪ್ತ ಸೋಂಕು ಇಲ್ಲವೆಂದು ಹೇಳಲಾಗುವುದಿಲ್ಲ.",
+          "curability": "ಆರೋಗ್ಯಕರವಾಗಿ ಕಾಣುವ ಚಿತ್ರದ ಆಧಾರದಿಂದ ಮಾತ್ರ ರೋಗದ ಚಿಕಿತ್ಸೆ ಅಗತ್ಯವಿಲ್ಲ. ನಿಜವಾದ ಲಕ್ಷಣ ಇದ್ದರೆ ಆರೋಗ್ಯಕರ ಎಂಬ ಫಲಿತಾಂಶಕ್ಕಿಂತ ಆ ಲಕ್ಷಣ ಪರಿಶೀಲಿಸಿ.",
+          "do_now": [
+            "ಹೊಸ ಮತ್ತು ಹಳೆಯ ಎಲೆ, ಕಾಂಡ ಮತ್ತು ಪಕ್ಕದ ಗಿಡ ನೋಡಿ; ನಿಜವಾದ ಲಕ್ಷಣ ದಾಖಲಿಸಿ.",
+            "ಈ ಫಲಿತಾಂಶದ ಕಾರಣಕ್ಕೆ ಮುಂಜಾಗ್ರತಾ ಕೀಟನಾಶಕ ಸಿಂಪಡಿಸದೆ ಸಾಮಾನ್ಯ ನೀರಾವರಿ ಮತ್ತು ಬೆಳೆಗೆ ಸೂಕ್ತ ಪೋಷಣೆ ಮುಂದುವರಿಸಿ."
+          ],
+          "management": [
+            "ಲಕ್ಷಣ ಇದ್ದರೆ ಬಾಧಿತ ಭಾಗದ ಸ್ಪಷ್ಟ ಚಿತ್ರ ಮತ್ತೆ ತೆಗೆದು ರೋಗ ಗುರುತಿಸುವ ಸಲಹೆ ಪಡೆಯಿರಿ.",
+            "ದಿನಾಂಕದೊಂದಿಗೆ ದಾಖಲಿಸಿ ಮುಂದಿನ ಎರಡು ದಿನ ಅದೇ ಗಿಡಗಳನ್ನು ಹೋಲಿಸಿ."
+          ],
+          "prevention": [
+            "ಆರೋಗ್ಯಕರ ನಾಟಿ ಸಾಮಗ್ರಿ, ಸ್ವಚ್ಛ ಉಪಕರಣ ಮತ್ತು ಸಮತೋಲನ ನೀರು-ಪೋಷಕಾಂಶ ಬಳಸಿ.",
+            "ನಿಯಮಿತವಾಗಿ ಪರಿಶೀಲಿಸಿ; ಸ್ಥಳೀಯ ರೋಗಕ್ಕೆ ಅನುಕೂಲ ವಾತಾವರಣದಲ್ಲಿ ಪರಿಶೀಲನೆ ಹೆಚ್ಚಿಸಿ."
+          ],
+          "escalation": [
+            "ಆರೋಗ್ಯಕರ ಫಲಿತಾಂಶ ಬಂದರೂ ಗಿಡ ಬಾಡಿದರೆ, ಹೊಸ ಹಾನಿ ವೇಗವಾಗಿ ಹರಡಿದರೆ ಅಥವಾ ಹಣ್ಣು/ಕಾಂಡ ಬಾಧಿತವಾದರೆ ಸಲಹೆ ಪಡೆಯಿರಿ."
+          ]
+        },
+        "hi": {
+          "overview": "फोटो की पत्ती स्वस्थ प्रशिक्षण उदाहरण से अधिक मिलती है। एक फोटो से कीट, जड़ की समस्या, पोषक तनाव या छिपा संक्रमण खारिज नहीं होता।",
+          "curability": "केवल स्वस्थ दिखती फोटो से रोग-उपचार की जरूरत नहीं बनती। पौधे में लक्षण हों तो स्वस्थ लेबल पर भरोसा करने के बजाय उन लक्षणों को जाँचें।",
+          "do_now": [
+            "नई और पुरानी पत्तियाँ, तने और पास के पौधे देखें; वास्तविक लक्षण लिखें।",
+            "इस नतीजे के आधार पर रोकथाम वाला कीटनाशक छिड़काव किए बिना सामान्य सिंचाई और फसल के अनुसार पोषण जारी रखें।"
+          ],
+          "management": [
+            "लक्षण हों तो प्रभावित भाग की साफ फोटो दोबारा लें और सही पहचान कराएँ।",
+            "तारीख सहित रिकॉर्ड रखें और अगले दो दिन उन्हीं पौधों की तुलना करें।"
+          ],
+          "prevention": [
+            "स्वस्थ रोपण सामग्री, स्वच्छ औजार और संतुलित सिंचाई व पोषण अपनाएँ।",
+            "नियमित निगरानी करें; स्थानीय रोग के अनुकूल मौसम में जाँच बढ़ाएँ।"
+          ],
+          "escalation": [
+            "स्वस्थ नतीजे के बावजूद पौधे मुरझाएँ, नई क्षति तेजी से फैले या फल/तने प्रभावित हों तो सलाह लें।"
+          ]
+        }
+      }
+    }
+  }
+}

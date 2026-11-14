@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "model_version": "offline-advisory-v1",
+  "model_type": "expert_decision_model",
+  "profile_sha256": "efc2270f58827db3ae611861919857956210d649aa6c28ce0e8a88cec2e8d290",
+  "profile_count": 17,
+  "languages": [
+    "en",
+    "kn",
+    "hi"
+  ],
+  "trained": false,
+  "field_validated": false,
+  "agronomist_reviewed": false,
+  "implementation_sha256": {
+    "frontend/src/lib/advisory.ts": "ce768eb70287daf4821389783e8cca328690d97004562d746fad2c3076b78e25",
+    "android/app/src/main/java/com/debuggers/crophealth/domain/AdvisoryDecisionModel.kt": "2efb78314ffb99f813373f2573f1afd402463d334aad8d02be043992a89535fd"
+  },
+  "behavior_cases_sha256": "b9a9728bc46046638f511c557107c1d01784e74ffbb74d33c4aea1dfdd594bd5",
+  "scope": "Disease-specific draft knowledge plus deterministic farmer-reported triage. Behavior tests do not establish agricultural correctness or treatment efficacy."
+}
