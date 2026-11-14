@@ -371,5 +371,7 @@
   "Please photograph a crop leaf": "कृपया फसल की पत्ती की तस्वीर लें",
   "No supported crop leaf was detected. Take a close-up of one tomato, potato or maize leaf.": "समर्थित फसल की पत्ती नहीं मिली। टमाटर, आलू या मक्के की एक पत्ती की नज़दीकी तस्वीर लें।",
   "No clear leaf detected": "साफ़ पत्ती नहीं मिली",
-  "This does not look like a clear leaf photo. Take a close-up of one tomato, potato or maize leaf.": "यह पत्ती की साफ़ तस्वीर जैसी नहीं लगती। टमाटर, आलू या मक्के की एक पत्ती की नज़दीकी तस्वीर लें।"
+  "This does not look like a clear leaf photo. Take a close-up of one tomato, potato or maize leaf.": "यह पत्ती की साफ़ तस्वीर जैसी नहीं लगती। टमाटर, आलू या मक्के की एक पत्ती की नज़दीकी तस्वीर लें।",
+  "Uncertain model candidate": "मॉडल का अनिश्चित अनुमान",
+  "A leaf was detected. This is the closest model match, but the photo differs from its training examples. Check the result with a clearer photo or a crop expert.": "पत्ती मिली है। यह मॉडल का सबसे निकट अनुमान है, लेकिन तस्वीर उसके प्रशिक्षण के उदाहरणों से अलग है। अधिक साफ़ तस्वीर या कृषि विशेषज्ञ से परिणाम की जाँच करें।"
 }
