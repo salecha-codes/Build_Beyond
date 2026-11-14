@@ -19,13 +19,14 @@ async function walk(folder) {
 }
 await walk(directory);
 entries.sort();
+const template = await readFile(new URL('./service-worker.template.js', import.meta.url), 'utf8');
 const hash = createHash('sha256');
+hash.update(template);
 for (const entry of entries) {
   hash.update(entry);
   hash.update(await readFile(path.join(directory, entry)));
 }
 const version = hash.digest('hex').slice(0, 16);
-const template = await readFile(new URL('./service-worker.template.js', import.meta.url), 'utf8');
 await writeFile(
   path.join(directory, 'sw.js'),
   template

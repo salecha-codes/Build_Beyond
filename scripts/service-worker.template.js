@@ -31,7 +31,8 @@ self.addEventListener('activate', (event) => {
       // Older pages do not know about the leaf-check output. Reload once when
       // replacing their offline bundle so stale JS cannot bypass new checks.
       if (oldCaches.length) for (const client of await self.clients.matchAll({ type: 'window' }))
-        await client.navigate(client.url).catch(() => undefined);
+        // Navigation may wait for activation; awaiting it here would deadlock.
+        void client.navigate(client.url).catch(() => undefined);
     })(),
   );
 });
